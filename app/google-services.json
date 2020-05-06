@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "382299732619",
+    "firebase_url": "https://lindoor-45065.firebaseio.com",
+    "project_id": "lindoor-45065",
+    "storage_bucket": "lindoor-45065.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382299732619:android:eb00de9201d4db8c34728e",
+        "android_client_info": {
+          "package_name": "org.lindoor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382299732619-u1huukgumhgl9dg0n84635msdujiu9mi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAia90sYUmSVV6c1t8ksKX3muPvjk_NhXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382299732619-u1huukgumhgl9dg0n84635msdujiu9mi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

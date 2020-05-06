@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:gravity="center"
+    gradientBackground='@{"dark_light_vertical_gradient"}'
+    >
+
+
+    <ImageView
+        android:id="@+id/lindoor_icon"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/lindoor_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        src='@{"others/lindoor_icon"}'
+        />
+
+    <ImageView
+        android:id="@+id/lindoor_text"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/lindoor_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lindoor_icon"
+        src='@{"others/lindoor_text"}'
+        />
+
+    <TextView
+        android:id="@+id/lindoor_title"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lindoor_text"
+        style='@{"splash_title"}'
+        text='@{"splash_title"}'
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

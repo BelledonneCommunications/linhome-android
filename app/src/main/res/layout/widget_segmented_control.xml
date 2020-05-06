@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="owner"
+            type="org.lindoor.ui.widgets.LSegmentedControl" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style='@{"form_input_title"}'
+        />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            app:singleSelection="true"
+            android:layout_marginTop="5dp"
+            android:layout_height="40dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option1"
+                style="@null"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cornerRadius="10dp"
+                app:elevation="0dp"
+                textstyle='@{"segmented_control"}'
+                selection_effect_background='@{"segmented_control_background"}'
+                selection_effect_text='@{"segmented_control_text"}'
+               />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option2"
+                style="@null"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:elevation="0dp"
+                textstyle='@{"segmented_control"}'
+                selection_effect_background='@{"segmented_control_background"}'
+                selection_effect_text='@{"segmented_control_text"}'
+                />
+            <com.google.android.material.button.MaterialButton
+                style="@null"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:id="@+id/option3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cornerRadius="10dp"
+                app:elevation="0dp"
+                textstyle='@{"segmented_control"}'
+                selection_effect_background='@{"segmented_control_background"}'
+                selection_effect_text='@{"segmented_control_text"}'
+                />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            style='@{"text_input_error"}'
+            />
+
+
+
+    </LinearLayout>
+</layout>

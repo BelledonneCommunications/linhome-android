@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragments_navigation"
+    app:startDestination="@+id/navigation_devices">
+
+    <fragment
+        android:id="@+id/navigation_devices"
+        android:name="org.lindoor.ui.devices.DevicesFragment"
+        tools:layout="@layout/fragment_devices" />
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="org.lindoor.ui.history.HitsoryFragment"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_assistant_root"
+        android:name="org.lindoor.ui.assistant.AssistantRootFragment"
+        tools:layout="@layout/fragment_assistant_root" />
+
+    <fragment
+        android:id="@+id/navigation_assistant_create_lindoor"
+        android:name="org.lindoor.ui.assistant.createlindoor.CreateLindoorAccountFragment"
+        tools:layout="@layout/fragment_assistant_create_lindoor" />
+
+
+    <fragment
+        android:id="@+id/navigation_assistant_login_lindoor"
+        android:name="org.lindoor.ui.assistant.loginlindoor.LoginLindoorAccountFragment"
+        tools:layout="@layout/fragment_assistant_login_lindoor" />
+
+
+    <fragment
+        android:id="@+id/navigation_assistant_login_sip"
+        android:name="org.lindoor.ui.assistant.loginsip.LoginSipAccountFragment"
+        tools:layout="@layout/fragment_assistant_login_sip" />
+
+    <fragment
+        android:id="@+id/navigation_assistant_remote_root"
+        android:name="org.lindoor.ui.assistant.remote.RemoteRootFragment"
+        tools:layout="@layout/fragment_assistant_remote_root" />
+
+    <fragment
+        android:id="@+id/navigation_assistant_remote_url"
+        android:name="org.lindoor.ui.assistant.remote.RemoteUrlAccountFragment"
+        tools:layout="@layout/fragment_assistant_remote_url" />
+
+    <fragment
+        android:id="@+id/navigation_assistant_remote_qr"
+        android:name="org.lindoor.ui.assistant.remote.RemoteQrAccountFragment"
+        tools:layout="@layout/fragment_assistant_remote_qr" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="org.lindoor.ui.devices.DevicesFragment"
+        tools:layout="@layout/fragment_devices" />
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="org.lindoor.ui.devices.DevicesFragment"
+        tools:layout="@layout/fragment_devices" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="org.lindoor.ui.devices.DevicesFragment"
+        tools:layout="@layout/fragment_devices" />
+
+    <fragment
+        android:id="@+id/navigation_disconnect"
+        android:name="org.lindoor.ui.devices.DevicesFragment"
+        tools:layout="@layout/fragment_devices" />
+
+
+</navigation>

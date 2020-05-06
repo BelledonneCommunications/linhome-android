@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="viewmodel" type="org.lindoor.ui.toolbar.ToolbarViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:contentInsetStart="0dp"
+                android:contentInsetLeft="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/toolbar_burger_button"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp"
+                        android:padding="10dp"
+                        android:scaleType="centerInside"
+                        android:layout_marginStart="9dp"
+                        android:src="@drawable/ic_lindoor_icon"
+                        android:background="@color/transparent"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        selection_effect='@{"primary_color"}'
+                        src='@{"icons/burger_menu"}'/>
+
+                    <ImageView
+                        android:id="@+id/toolbar_back_button"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp"
+                        android:padding="10dp"
+                        android:scaleType="centerInside"
+                        android:layout_marginStart="9dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_lindoor_icon"
+                        android:background="@color/transparent"
+                        android:visibility="gone"
+                        android:layout_alignParentStart="true"
+                        selection_effect='@{"primary_color"}'
+                        src='@{"icons/back"}'/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        style='@{"toolbar_title"}'
+                        />
+
+                    <ImageView
+                        android:id="@+id/toolbar_right_button"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp"
+                        android:padding="10dp"
+                        android:scaleType="centerInside"
+                        android:layout_marginEnd="9dp"
+                        android:src="@drawable/ic_lindoor_icon"
+                        android:background="@color/transparent"
+                        android:layout_centerVertical="true"
+                        android:visibility="gone"
+                        selection_effect='@{"primary_color"}'
+                        >
+                    </ImageView>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@color/transparent"
+                        android:layout_alignParentBottom="true"
+                        visibility="@{viewmodel.activityInprogress ? View.VISIBLE : View.GONE }"
+                        >
+                        <androidx.core.widget.ContentLoadingProgressBar
+                            android:id="@+id/progress"
+                            android:background="@color/cardview_dark_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:indeterminate="true"
+                            android:layout_marginTop="-21dp"
+                            android:visibility="visible"
+                            />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include layout="@layout/content_main" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

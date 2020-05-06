@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.InputType"/>
+        <variable name="model" type="org.lindoor.ui.assistant.createlindoor.CreateLindoorAccountViewModel" />
+        <variable name="validators" type="org.lindoor.ui.validators.ValidatorFactory.Companion" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            tools:context=".ui.assistant.createlindoor.CreateLindoorAccountFragment">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toTopOf="@id/username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style='@{"view_main_title"}'
+                app:layout_constraintVertical_chainStyle="packed"
+                text='@{"assistant_create_lindoor_account"}' />
+
+            <org.lindoor.ui.widgets.LTextInput
+                android:id="@+id/username"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintBottom_toTopOf="@id/email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"username"}'
+                liveString="@{model.username.first}"
+                liveValidity="@{model.username.second}"
+                validator="@{validators.nonEmptyStringValidator}"
+                android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_NORMAL}"/>
+
+            <org.lindoor.ui.widgets.LTextInput
+                android:id="@+id/email"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/username"
+                app:layout_constraintBottom_toTopOf="@id/password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"email"}'
+                liveString="@{model.email.first}"
+                liveValidity="@{model.email.second}"
+                validator="@{validators.nonEmptyStringValidator}"
+                android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS}"
+                />
+
+            <org.lindoor.ui.widgets.LTextInput
+                android:id="@+id/password"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/email"
+                app:layout_constraintBottom_toTopOf="@id/password_confirmation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"password"}'
+                liveValidity="@{model.pass1.second}"
+                validator="@{validators.nonEmptyStringValidator}"
+                liveString="@{model.pass1.first}"
+                android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD}"
+                />
+
+            <org.lindoor.ui.widgets.LTextInput
+                android:id="@+id/password_confirmation"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/password"
+                app:layout_constraintBottom_toTopOf="@id/create"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"password_confirmation"}'
+                android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD}"
+                liveString="@{model.pass2.first}"
+                liveValidity="@{model.pass2.second}"
+                passConfirmValidatorOf="@{password}"
+                />
+
+            <org.lindoor.ui.widgets.LRoundRectButton
+                android:id="@+id/create"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="23dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/password_confirmation"
+                primary='@{true}'
+                text='@{"create_account"}'
+              />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</layout>

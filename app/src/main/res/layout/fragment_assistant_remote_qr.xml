@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextureView
+            android:id="@+id/qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+
+        <RelativeLayout
+            android:id="@+id/header_opaque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:paddingBottom="60dp"
+            tools:context=".ui.assistant.remote.RemoteQrAccountFragment">
+
+            <TextView
+                android:id="@+id/title"
+                style='@{"view_main_title"}'
+                text='@{"assistant_remote_from_qr"}'
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toTopOf="@id/subtitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+
+            <TextView
+                android:id="@+id/subtitle"
+                style='@{"view_sub_title"}'
+                text='@{"assistant_remote_from_qr_desc"}'
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginTop="33dp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/mask_container"
+            android:layout_width="match_parent"
+            android:layout_height="233dp"
+            android:layout_below="@+id/header_opaque"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:gravity="center">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layout_toLeftOf="@id/mask">
+            </View>
+
+            <ImageView
+                android:id="@+id/mask"
+                src='@{"icons/qrcode_mask"}'
+                android:layout_width="233dp"
+                android:layout_height="233dp"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                >
+            </ImageView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layout_toRightOf="@id/mask">
+            </View>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_below="@id/mask_container">
+        </View>
+
+    </RelativeLayout>
+
+</layout>

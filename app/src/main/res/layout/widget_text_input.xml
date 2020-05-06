@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="owner"
+            type="org.lindoor.ui.widgets.LTextInput" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/input"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        style='@{"form_input_title"}'
+        />
+
+    <org.lindoor.ui.widgets.LEditText
+        android:id="@+id/text"
+        android:layout_width="320dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:lines="1"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:textCursorDrawable="@null"
+        android:focusableInTouchMode="true"
+        android:inputType='@{owner.inputType}'
+        style='@{"text_input_text"}'
+        android:text="@={owner.liveString}"
+       />
+
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        style='@{"text_input_error"}'
+        />
+
+</LinearLayout>
+</layout>

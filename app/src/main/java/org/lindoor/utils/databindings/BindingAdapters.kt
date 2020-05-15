@@ -1,4 +1,4 @@
-package org.lindoor.utils
+package org.lindoor.utils.databindings
 
 import android.view.ViewGroup
 import android.widget.Button
@@ -42,10 +42,18 @@ fun style(textView: TextView, name: String) {
     Theme.apply(name,textView)
 }
 
-@BindingAdapter("text")
-fun text(textView: TextView, textKey: String) {
-    textView.text = Texts.get(textKey)
+@BindingAdapter(
+    "text",
+    "text_args",
+    requireAll = false
+)
+fun text(textView: TextView, textKey: String, textArgs: String?) {
+    if (textArgs != null) {
+        textView.text = Texts.get(textKey,textArgs.split(",").toTypedArray())
+    } else
+        textView.text = Texts.get(textKey)
 }
+
 
 ///////////////////////
 /// LEditText

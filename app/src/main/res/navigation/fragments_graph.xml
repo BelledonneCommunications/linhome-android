@@ -5,6 +5,12 @@
     android:id="@+id/fragments_navigation"
     app:startDestination="@+id/navigation_devices">
 
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="org.lindoor.ui.about.AboutFragment"
+        tools:layout="@layout/fragment_about" />
+
     <fragment
         android:id="@+id/navigation_devices"
         android:name="org.lindoor.ui.devices.DevicesFragment"
@@ -54,11 +60,6 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="org.lindoor.ui.devices.DevicesFragment"
-        tools:layout="@layout/fragment_devices" />
-
-    <fragment
-        android:id="@+id/navigation_about"
         android:name="org.lindoor.ui.devices.DevicesFragment"
         tools:layout="@layout/fragment_devices" />
 

@@ -165,6 +165,7 @@ class MainActivity : LindoorActivity() {
             R.id.navigation_assistant_remote_url -> Texts.get("assistant")
             R.id.navigation_devices -> Texts.get("devices")
             R.id.navigation_history -> Texts.get("history")
+            R.id.navigation_about -> Texts.get("about")
             else -> null
         }
     }

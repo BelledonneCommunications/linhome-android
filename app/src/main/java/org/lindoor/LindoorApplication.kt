@@ -3,6 +3,7 @@ package org.lindoor
 import android.app.Application
 import android.content.Context
 import org.lindoor.customisation.Customisation
+import org.lindoor.customisation.Texts
 import org.lindoor.linphonecore.CoreContext
 import org.lindoor.linphonecore.CorePreferences
 import org.linphone.core.Factory
@@ -16,7 +17,6 @@ class LindoorApplication : Application() {
             private set
         lateinit var corePreferences: CorePreferences
         lateinit var coreContext: CoreContext
-        lateinit var appName: String
 
         fun ensureCoreExists(context: Context) {
             if (::coreContext.isInitialized && !coreContext.stopped) {
@@ -29,11 +29,10 @@ class LindoorApplication : Application() {
             corePreferences = CorePreferences(context)
             corePreferences.copyAssetsFromPackage() // TODO Move in the zip - attention not to overwrite .linphone_rc
 
-
             val config = Factory.instance().createConfigWithFactory(corePreferences.configPath, corePreferences.factoryConfigPath)
             corePreferences.config = config
 
-            Factory.instance().setDebugMode(corePreferences.debugLogs, appName)
+            Factory.instance().setDebugMode(corePreferences.debugLogs, Texts.appName)
             Log.i("[Application] Core context created")
             coreContext = CoreContext(context, config)
             coreContext.start()
@@ -42,8 +41,8 @@ class LindoorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        appName = getString(R.string.app_name)
         Customisation
+        Texts
         ensureCoreExists(applicationContext)
     }
 

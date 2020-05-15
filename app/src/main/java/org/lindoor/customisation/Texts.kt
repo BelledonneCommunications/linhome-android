@@ -2,11 +2,13 @@ package org.lindoor.customisation
 
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.textsConfig
+import org.linphone.core.Factory
 import org.linphone.mediastream.Log
 import java.util.*
 
 object Texts {
-    private var textsError: Boolean = false
+
+    val appName = pureGet("appname")
 
     private fun formatText(
         textKey: String,
@@ -19,18 +21,15 @@ object Texts {
         return text
     }
 
-    fun get(key: String): String {
+    private fun pureGet(key: String):String {
         val deviceLanguage = Locale.getDefault().language.toLowerCase(Locale.ROOT)
-        textsConfig.also { config ->
+        return textsConfig.let { config ->
             config.getString(key,deviceLanguage,null)?.also { translation ->
-                return translation.replace("{appname}",LindoorApplication.appName)
+                return translation
             } ?: config.getString(key,"default",null)?.also {default ->
-                return default.replace("{appname}",LindoorApplication.appName)
-            }
+                return default
+            } ?: key
         }
-        Log.e("[Texts] Failed retrieving text:$key")
-        textsError = true
-        return key
     }
 
     fun get(textKey: String, args: Array<String>? = null): String {
@@ -39,6 +38,10 @@ object Texts {
 
     fun get(textKey: String, oneArg: String): String {
         return get(textKey, arrayOf(oneArg))
+    }
+
+    fun get(key: String): String {
+        return pureGet(key).replace("{appname}",appName).replace("\n",System.lineSeparator())
     }
 
 }

@@ -58,13 +58,11 @@ class MainActivity : LindoorActivity() {
             when (destination.id) {
                 R.id.navigation_devices,R.id.navigation_history -> {
                     exitNonRootFragment()
-                    toolbar_title.text = null
                 } else -> {
                     enterNonRootFragment()
-                    toolbar_title.text = titleForNavigationFragment(destination.id)
                 }
             }
-
+            toolbar_title.text = titleForNavigationFragment(destination.id)
         }
 
         navControllerSideMenu.addOnDestinationChangedListener {
@@ -165,6 +163,8 @@ class MainActivity : LindoorActivity() {
             R.id.navigation_assistant_remote_root,
             R.id.navigation_assistant_remote_qr,
             R.id.navigation_assistant_remote_url -> Texts.get("assistant")
+            R.id.navigation_devices -> Texts.get("devices")
+            R.id.navigation_history -> Texts.get("history")
             else -> null
         }
     }

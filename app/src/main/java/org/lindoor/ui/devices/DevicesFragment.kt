@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.lindoor.LindoorFragment
 import org.lindoor.R
+import org.lindoor.databinding.FragmentAssistantRootBinding
+import org.lindoor.databinding.FragmentDevicesBinding
 
 class DevicesFragment :LindoorFragment() {
 
@@ -19,12 +21,10 @@ class DevicesFragment :LindoorFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        val binding = FragmentDevicesBinding.inflate(inflater, container, false)
         devicesViewModel =
                 ViewModelProvider(this).get(DevicesViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_devices, container, false)
-        devicesViewModel.text.observe(viewLifecycleOwner, Observer {
-            root.text_dashboard.text = it
-        })
-        return root
+
+        return binding.root
     }
 }

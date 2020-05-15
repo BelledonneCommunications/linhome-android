@@ -8,7 +8,7 @@ import java.io.File
 class Device {
 
     companion object {
-        private var devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml")
+        private var devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml") // Todo leave in config export/import
         private var devicesConfig: Config
 
         init {

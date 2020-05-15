@@ -22,7 +22,8 @@ object Account {
     }
 
     fun configured(): Boolean { // TODO WIP - instead use special refkey in proxyconfig
-        return accountConfig.getString("account","proxy_refkey",null) != null
+        return true
+        //return accountConfig.getString("account","proxy_refkey",null) != null
     }
 
     fun configure(accountCreator:AccountCreator, type:AccountType) { // TODO WIP - set special refkey
@@ -45,8 +46,6 @@ object Account {
         accountConfig.setString("account","proxy_refkey",proxyConfig.refKey)
         accountConfig.setString("account","type",type)
     }
-
-
 
     fun clear() {
     }

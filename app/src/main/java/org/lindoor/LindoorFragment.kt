@@ -37,11 +37,9 @@ abstract class LindoorFragment: Fragment(),
         super.onPause()
     }
 
-    override fun onBackButtonClicked() {
-    }
+    override fun onBackButtonClicked() {}
 
-    override fun onRightButtonClicked() {
-    }
+    override fun onRightButtonClicked() {}
 
     fun hideKeyboard() {
         mainactivity.currentFocus?.also {

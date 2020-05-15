@@ -1,5 +1,6 @@
 package org.lindoor.ui.sidemenu
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_sidemenu.view.*
 import kotlinx.android.synthetic.main.item_sidemenu.view.*
 import org.lindoor.MainActivity
+import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.FragmentSidemenuBinding
+import org.lindoor.entities.Account
+import org.lindoor.utils.DialogUtil
 
 class SideMenuFragment : Fragment() {
 
@@ -44,6 +48,18 @@ class SideMenuFragment : Fragment() {
         binding.root.bottom_separator.visibility = View.GONE
         binding.root.disconnect.background = Theme.selectionEffectAsStateListDrawable("sidemenu_option")
         binding.root.setBackgroundColor(Theme.getColor("color_b"))
+
+        binding.root.disconnect.setOnClickListener {
+            DialogUtil.confirm(
+                "menu_disconnect",
+                "disconnect_confirm_message",
+                { dialog: DialogInterface, which: Int ->
+                    Account.disconnect()
+                    getMainActivity().navControllerSideMenu.navigateUp()
+                    getMainActivity().navController.navigate(R.id.navigation_assistant_root)
+                })
+        }
+
         return binding.root
     }
 

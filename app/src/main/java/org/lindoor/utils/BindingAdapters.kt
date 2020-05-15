@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
@@ -78,6 +79,27 @@ fun effect(control: AppCompatButton, effectKey: String) {
 @BindingAdapter("selection_effect_background")
 fun effectbg(control: AppCompatButton, effectKey: String) {
     control.backgroundTintList = Theme.selectionEffectAsColorStateList(effectKey,android.R.attr.state_activated)
+}
+
+
+///////////////////////
+/// FloatingActionButton
+///////////////////////
+
+
+@BindingAdapter("icon")
+fun icon(button: FloatingActionButton, name: String) {
+    Theme.setImage(name,button)
+}
+
+@BindingAdapter("background")
+fun background(button: FloatingActionButton, name: String) {
+    button.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
+}
+
+@BindingAdapter("tint")
+fun tint(button: FloatingActionButton, name: String) {
+    button.imageTintList = Theme.buildSingleColorStateList(name)
 }
 
 ///////////////////////

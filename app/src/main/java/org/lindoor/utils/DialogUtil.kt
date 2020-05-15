@@ -1,21 +1,22 @@
 package org.lindoor.utils
 
 import android.content.Context
+import android.content.DialogInterface
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.lindoor.customisation.Texts
+import org.lindoor.entities.Account
 
 
 class DialogUtil() {
     companion object {
 
         var context: Context? = null // Multi context as activity can change during calls/idle transition
-        val okText = Texts.get("ok")
 
         fun info(textKey: String, args: Array<String>? = null) {
             context?.also {
                 MaterialAlertDialogBuilder(it)
                     .setMessage(Texts.get(textKey, args))
-                    .setPositiveButton(okText,null)
+                    .setPositiveButton(Texts.get("ok"),null)
                     .show()
             }
         }
@@ -29,7 +30,7 @@ class DialogUtil() {
                 MaterialAlertDialogBuilder(it)
                     .setTitle(Texts.get(titleKey, args))
                     .setMessage(Texts.get(textKey, args))
-                    .setPositiveButton(okText,null)
+                    .setPositiveButton(Texts.get("ok"),null)
                     .show()
             }
         }
@@ -38,8 +39,15 @@ class DialogUtil() {
             error(textKey, arrayOf(oneArg))
         }
 
-        fun confirm(textKey: String, confirmText: String, cancelText: String) {
-
+        fun confirm(titleKey: String, messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel") {
+            context?.also {
+                MaterialAlertDialogBuilder(it)
+                    .setTitle(Texts.get(titleKey))
+                    .setMessage(Texts.get(messageKey))
+                    .setPositiveButton(Texts.get(confirmTextKey!!),DialogInterface.OnClickListener(function = confirmFonction))
+                    .setNegativeButton(Texts.get(cancelTextKey!!),DialogInterface.OnClickListener(function = cancelFunction!!))
+                    .show()
+            }
         }
     }
 

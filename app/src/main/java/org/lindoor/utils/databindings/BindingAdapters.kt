@@ -1,19 +1,43 @@
 package org.lindoor.utils.databindings
 
+import android.text.TextUtils
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
+import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
+import org.lindoor.ui.settings.SettingListener
 import org.lindoor.ui.validators.NonEmptyStringMatcherValidator
 import org.lindoor.ui.widgets.*
+
+
+////////////////////////
+// ViewGroup
+////////////////////////
+
+@BindingAdapter("backgoundcolor")
+fun color(view: ViewGroup, colorKey: String) {
+    view.setBackgroundColor(Theme.getColor(colorKey))
+}
+
+
+////////////////////////
+/// Spinner
+///////////////////////
+
+
+@BindingAdapter("popupBackgoundColor", "popupBackgoundRadius")
+fun background(view: Spinner, colorKey: String, radius:Float) {
+    view.setPopupBackgroundDrawable(Theme.roundRectGradientDrawable(Theme.getColor(colorKey),radius))
+}
+
 
 ////////////////////////
 // LTextInput
@@ -40,6 +64,15 @@ fun hint(textInput: LTextInput,hintKey: String) {
 @BindingAdapter("style")
 fun style(textView: TextView, name: String) {
     Theme.apply(name,textView)
+}
+
+@BindingAdapter("marquee")
+fun marquee(textView: TextView, enabled: Boolean) {
+    if (enabled) {
+        textView.ellipsize = TextUtils.TruncateAt.MARQUEE
+        textView.marqueeRepeatLimit = -0x1
+        textView.isSelected = true
+    }
 }
 
 @BindingAdapter(
@@ -133,7 +166,7 @@ fun src(image: ImageView, name: String) {
 }
 
 @BindingAdapter("selection_effect")
-fun selection_effect(image: ImageView, key: String) {
+fun selection_effect(image: View, key: String) {
     image.background = Theme.selectionEffectAsStateListDrawable(key)
 }
 
@@ -187,7 +220,45 @@ fun enabled(b: LRoundRectButtonWithIcon, enabled:Boolean) {
 /// ViewGroup
 ///////////////////////
 
+private fun pxFromDp(dp: Int): Int {
+    return (dp * LindoorApplication.instance.resources.displayMetrics.density).toInt()
+}
+
 @BindingAdapter("gradientBackground")
 fun gradientBackground(view: ViewGroup, themeGradientName: String) {
     view.background = Theme.getGradientColor(themeGradientName)
 }
+
+
+@BindingAdapter("shouldSetPaddingStartOnly", "paddingStartOnlyDp")
+fun paddingStartOnly(view: ViewGroup, shouldAdd: Boolean, padding: Int
+) {
+    if (shouldAdd) {
+        view.setPadding(pxFromDp(padding), 0, 0, 0)
+    }
+}
+
+/////////////////////
+/// Linphone Imports
+/////////////////////
+
+
+@BindingAdapter("selectedIndex", "settingListener")
+fun spinnerSetting(spinner: Spinner, selectedIndex: Int, listener: SettingListener) {
+    spinner.setSelection(selectedIndex, true)
+
+    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            listener.onListValueChanged(position)
+        }
+    }
+}
+
+@BindingAdapter("onClickToggleSwitch")
+fun switchSetting(view: View, switchId: Int) {
+    val switch: Switch = view.findViewById(switchId)
+    view.setOnClickListener { switch.isChecked = !switch.isChecked }
+}
+

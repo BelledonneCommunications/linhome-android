@@ -8,7 +8,6 @@ import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.resource.SimpleResource
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder
 import com.caverock.androidsvg.SVG
-import org.lindoor.utils.svgloader.SvgBitmapTranscoder
 
 class SvgDrawableTranscoder(private val context: Context) : ResourceTranscoder<SVG, Drawable> {
     private val bitmapTranscoder = SvgBitmapTranscoder()

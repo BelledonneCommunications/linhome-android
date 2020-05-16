@@ -1,6 +1,5 @@
 package org.lindoor.utils
 
-import org.linphone.mediastream.Log
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream

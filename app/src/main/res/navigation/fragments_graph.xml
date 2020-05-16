@@ -60,8 +60,8 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="org.lindoor.ui.devices.DevicesFragment"
-        tools:layout="@layout/fragment_devices" />
+        android:name="org.lindoor.ui.settings.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_account"

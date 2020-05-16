@@ -2,9 +2,9 @@ package org.lindoor.utils
 
 import android.content.Context
 import android.content.DialogInterface
+import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.lindoor.customisation.Texts
-import org.lindoor.entities.Account
 
 
 class DialogUtil() {
@@ -48,6 +48,10 @@ class DialogUtil() {
                     .setNegativeButton(Texts.get(cancelTextKey!!),DialogInterface.OnClickListener(function = cancelFunction!!))
                     .show()
             }
+        }
+
+        fun toast(textKey: String, long:Boolean = false) {
+            Toast.makeText(context,Texts.get(textKey),if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
         }
     }
 

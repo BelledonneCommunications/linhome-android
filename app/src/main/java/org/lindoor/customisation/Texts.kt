@@ -1,9 +1,6 @@
 package org.lindoor.customisation
 
-import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.textsConfig
-import org.linphone.core.Factory
-import org.linphone.mediastream.Log
 import java.util.*
 
 object Texts {

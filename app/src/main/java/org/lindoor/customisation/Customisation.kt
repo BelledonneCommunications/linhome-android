@@ -8,8 +8,6 @@ import org.lindoor.R
 import org.lindoor.utils.zip
 import org.linphone.core.Config
 import org.linphone.core.Factory
-import org.linphone.mediastream.Log
-
 import java.io.File
 
 object Customisation {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="checked"
+            type="Boolean" />
+        <variable
+            name="enabled"
+            type="Boolean" />
+        <variable
+            name="hideseparator"
+            type="Boolean" />
+        <variable
+            name="subsection"
+            type="Boolean" />
+        <variable
+            name="listener"
+            type="org.lindoor.ui.settings.SettingListener" />
+    </data>
+
+    <RelativeLayout
+        android:enabled="@{enabled ?? true}"
+        onClickToggleSwitch="@{@id/setting_switch}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        shouldSetPaddingStartOnly="@{subsection}"
+        paddingStartOnlyDp='@{30}'
+        android:gravity="center_vertical|start">
+
+        <Switch
+            android:id="@+id/setting_switch"
+            android:enabled="@{enabled ?? true}"
+            android:checked="@={checked}"
+            android:onCheckedChanged="@{(switch, value) -> listener.onBoolValueChanged(value)}"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            android:enabled="@{enabled ?? true}"
+            android:visibility="@{title.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:singleLine="true"
+            android:layout_toStartOf="@id/setting_switch"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_title"}'
+            app:marquee='@{true}'
+            />
+
+        <TextView
+            android:id="@+id/settings_subtitle"
+            android:text="@{subtitle}"
+            android:enabled="@{enabled ?? true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{subtitle.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:singleLine="true"
+            android:layout_below="@id/settings_title"
+            android:layout_toStartOf="@id/setting_switch"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_subtitle"}'
+            app:marquee='@{true}'
+
+            />
+
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/settings_subtitle"
+            android:visibility='@{hideseparator ? View.INVISIBLE : View.VISIBLE}'
+            backgoundcolor='@{"color_h"}'
+            />
+
+    </RelativeLayout>
+
+</layout>

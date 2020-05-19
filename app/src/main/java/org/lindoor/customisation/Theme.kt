@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
 import org.lindoor.ui.widgets.LEditText
+import org.lindoor.utils.stackStrace
 import org.lindoor.utils.svgloader.GlideApp
 import org.linphone.mediastream.Log
 import java.io.File
@@ -58,7 +59,7 @@ object Theme {
             }
         }
         Log.e("[Theme] Failed retrieving gradient color:$key")
-        themeError = true
+        themeError()
         return null
     }
 
@@ -71,7 +72,7 @@ object Theme {
             return Color.parseColor(color)
         }
         Log.e("[Theme] Failed retrieving color:$key")
-        themeError = true
+        themeError()
         return 0
     }
 
@@ -79,7 +80,7 @@ object Theme {
         var result:String? = themeConfig.getString("arbitrary-values", key, null)
         if (result == null) {
             Log.e("[Theme] Failed retrieving arbitrary value:$key")
-            themeError = true
+            themeError()
             result = default
         }
         return result
@@ -126,6 +127,12 @@ object Theme {
         return shape
     }
 
+
+    fun roundRectInputBackgroundWithColorKey(colorKey:String): GradientDrawable {
+        val radius = themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f)
+        return roundRectGradientDrawable(getColor(colorKey), radius)
+    }
+
     fun apply(textEditKey: String, textEdit: LEditText) {
         apply(textEditKey, textEdit as EditText, true)
         textEdit.normalBackground = textEdit.background
@@ -133,7 +140,7 @@ object Theme {
         val section = "textedit-style.$textEditKey"
         themeConfig.getString(section, "error-background-color", null)?.let { colorString ->
             val color = getColor(colorString)
-            val radius = themeConfig.getFloat(section, "corner-radius", 0.0f)
+            val radius = themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f)
             textEdit.errorBackground = roundRectGradientDrawable(color, radius)
         }
         themeConfig.getString(section, "error-text-color", null)?.let { color ->
@@ -152,7 +159,7 @@ object Theme {
         }
         themeConfig.getString(section, "background-color", null)?.let { colorString ->
             val color =  getColor(colorString)
-            val radius = themeConfig.getFloat(section, "corner-radius",0.0f)
+            val radius = if (editable) themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f) else 0.0f
             textView.background = roundRectGradientDrawable(color,radius)
         }
         textView.isAllCaps = themeConfig.getBool(section, "allcaps", false)
@@ -268,7 +275,7 @@ object Theme {
             }
         }
         Log.e("[Theme] Failed retrieving selection-effect color:$key")
-        themeError = true
+        themeError()
         return null
     }
 
@@ -286,4 +293,8 @@ object Theme {
         return null
     }
 
+    private fun themeError() {
+        themeError = true
+        stackStrace("Theme")
+    }
 }

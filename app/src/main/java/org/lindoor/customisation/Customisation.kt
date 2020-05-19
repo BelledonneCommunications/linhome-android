@@ -14,8 +14,15 @@ object Customisation {
     private const val zipbrand = "lindoor.zip"
     private var themeXml = File(LindoorApplication.instance.filesDir, "theme.xml")
     private var textsXml = File(LindoorApplication.instance.filesDir, "texts.xml")
+    private var deviceTypesXml = File(LindoorApplication.instance.filesDir, "device_types.xml")
+    private var actionsTypesXml = File(LindoorApplication.instance.filesDir, "action_types.xml")
+    private var methodTypesXml = File(LindoorApplication.instance.filesDir, "method_types.xml")
+
     var themeConfig: Config
     var textsConfig: Config
+    var deviceTypesConfig: Config
+    var actionTypesConfig: Config
+    var actionsMethodTypesConfig: Config
 
 
     init {
@@ -26,6 +33,16 @@ object Customisation {
 
         textsConfig = Factory.instance().createConfig(null)
         textsConfig.loadFromXmlFile(textsXml.absolutePath)
+
+        deviceTypesConfig = Factory.instance().createConfig(null)
+        deviceTypesConfig.loadFromXmlFile(deviceTypesXml.absolutePath)
+
+        actionTypesConfig = Factory.instance().createConfig(null)
+        actionTypesConfig.loadFromXmlFile(actionsTypesXml.absolutePath)
+
+        actionsMethodTypesConfig = Factory.instance().createConfig(null)
+        actionsMethodTypesConfig.loadFromXmlFile(methodTypesXml.absolutePath)
+
 
     }
 

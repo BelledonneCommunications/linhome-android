@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ViewDataBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
@@ -27,11 +29,16 @@ fun color(view: ViewGroup, colorKey: String) {
     view.setBackgroundColor(Theme.getColor(colorKey))
 }
 
+@BindingAdapter("roundRectInput")
+fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
+    if (enabled)
+        view.background = Theme.roundRectInputBackgroundWithColorKey("color_c")
+}
+
 
 ////////////////////////
 /// Spinner
 ///////////////////////
-
 
 @BindingAdapter("popupBackgoundColor", "popupBackgoundRadius")
 fun background(view: Spinner, colorKey: String, radius:Float) {
@@ -111,6 +118,7 @@ fun ldstyle(button: Button, name: String) {
     Theme.apply(name,button)
 }
 
+
 @BindingAdapter("selection_effect_text")
 fun effect(control: AppCompatButton, effectKey: String) {
     control.setTextColor(Theme.selectionEffectAsColorStateList(effectKey,android.R.attr.state_activated))
@@ -150,10 +158,12 @@ fun tint(button: FloatingActionButton, name: String) {
 @BindingAdapter("title")
 fun title(control: LSegmentedControl, name: String) {
     control.titleTextView.text = Texts.get(name)
-
 }
 
-
+@BindingAdapter("background")
+fun background(spinner: LSpinner, name: String) {
+    spinner.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
+}
 
 
 ///////////////////////
@@ -168,6 +178,11 @@ fun src(image: ImageView, name: String) {
 @BindingAdapter("selection_effect")
 fun selection_effect(image: View, key: String) {
     image.background = Theme.selectionEffectAsStateListDrawable(key)
+}
+
+@BindingAdapter("foreground_selection_effect")
+fun foreground_selection_effect(image: ImageView, key: String) {
+    image.imageTintList =  Theme.selectionEffectAsColorStateList(key,android.R.attr.state_activated)
 }
 
 ///////////////////////
@@ -237,6 +252,27 @@ fun paddingStartOnly(view: ViewGroup, shouldAdd: Boolean, padding: Int
         view.setPadding(pxFromDp(padding), 0, 0, 0)
     }
 }
+
+
+@BindingAdapter("items")
+fun items(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>) {
+    viewgroup.removeAllViews()
+    items.forEach {
+        viewgroup.addView(it.root)
+    }
+}
+
+@BindingAdapter("items", "refreshOn")
+fun refresh(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>, refresh:Boolean) {
+    if (refresh) {
+        viewgroup.removeAllViews()
+        items.forEach {
+            viewgroup.addView(it.root)
+        }
+    }
+}
+
+
 
 /////////////////////
 /// Linphone Imports

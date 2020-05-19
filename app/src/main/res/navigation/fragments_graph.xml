@@ -14,7 +14,12 @@
     <fragment
         android:id="@+id/navigation_devices"
         android:name="org.lindoor.ui.devices.DevicesFragment"
-        tools:layout="@layout/fragment_devices" />
+        tools:layout="@layout/fragment_devices">
+            <action
+                android:id="@+id/edit_device"
+                app:destination="@id/navigation_device_edit"
+                />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_history"
@@ -67,6 +72,18 @@
         android:id="@+id/navigation_account"
         android:name="org.lindoor.ui.devices.DevicesFragment"
         tools:layout="@layout/fragment_devices" />
+
+
+    <fragment
+        android:id="@+id/navigation_device_edit"
+        android:name="org.lindoor.ui.devices.create.DeviceEditorFragment"
+        tools:layout="@layout/fragment_device_edit" >
+        <argument
+            android:name="device"
+            app:argType="org.lindoor.entities.Device"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_disconnect"

@@ -13,7 +13,8 @@ import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemSidemenuBinding
 
-class SideMenuAdapter(private val options: ArrayList<OptionMenu>, navController:NavController) : RecyclerView.Adapter<SideMenuAdapter.ViewHolder>() {
+class MenuOption (val textKey: String, val iconFile: String, val targetFragmentId: Int)
+class SideMenuAdapter(private val options: ArrayList<MenuOption>, navController:NavController) : RecyclerView.Adapter<SideMenuAdapter.ViewHolder>() {
 
     val navigationController = navController
 
@@ -36,7 +37,7 @@ class SideMenuAdapter(private val options: ArrayList<OptionMenu>, navController:
             itemView.background = Theme.selectionEffectAsStateListDrawable("sidemenu_option")
         }
 
-        fun bindItems(option: OptionMenu) {
+        fun bindItems(option: MenuOption) {
             optionLabelTV.text = Texts.get(option.textKey)
             Theme.setImage(option.iconFile,optionIconIV)
             itemView.setOnClickListener {

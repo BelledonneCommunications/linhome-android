@@ -24,7 +24,7 @@ class MainActivity : LindoorActivity() {
     lateinit var navControllerSideMenu: NavController
     lateinit var toolbarViewModel: ToolbarViewModel
 
-    var toobarButtonClickedListener: ToobarButtonClickedListener?=null
+    var toobarButtonClickedListener: ToobarButtonClickedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,10 @@ class MainActivity : LindoorActivity() {
         }
 
         toolbar_right_button.setOnClickListener {
-            onToolbarRightButtonClicked()
+            toobarButtonClickedListener?.onToolbarRightButtonClicked()
+        }
+        toolbar_left_button.setOnClickListener {
+            toobarButtonClickedListener?.onToolbarLeftButtonClicked()
         }
         toolbar_burger_button.setOnClickListener {
             onToolbarBurgerButtonClicked()
@@ -139,16 +142,13 @@ class MainActivity : LindoorActivity() {
     }
 
     private fun onToolbarBackButtonClicked() {
-        toobarButtonClickedListener?.onBackButtonClicked()
         if (sideMenuOpened()) {
             navControllerSideMenu.navigateUp()
         } else
             navController.navigateUp()
     }
 
-    private fun onToolbarRightButtonClicked() {
-        toobarButtonClickedListener?.onRightButtonClicked()
-    }
+
 
     fun sideMenuOpened(): Boolean {
         return navControllerSideMenu.currentDestination?.id != R.id.fragment_empty
@@ -163,7 +163,7 @@ class MainActivity : LindoorActivity() {
             R.id.navigation_assistant_remote_root,
             R.id.navigation_assistant_remote_qr,
             R.id.navigation_assistant_remote_url -> Texts.get("assistant")
-            R.id.navigation_devices -> Texts.get("devices")
+            R.id.navigation_devices, R.id.navigation_device_edit -> Texts.get("devices")
             R.id.navigation_history -> Texts.get("history")
             R.id.navigation_about -> Texts.get("about")
             R.id.navigation_settings -> Texts.get("settings")

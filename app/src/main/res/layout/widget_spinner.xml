@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="owner"
+            type="org.lindoor.ui.widgets.LSpinner" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/input"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style='@{"form_input_title"}'
+            />
+
+        <Spinner
+            android:id="@+id/spinner"
+            popupBackgoundColor='@{"color_d"}'
+            popupBackgoundRadius='@{7.0f}'
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            roundRectInput='@{true}'
+
+            />
+
+    </LinearLayout>
+</layout>

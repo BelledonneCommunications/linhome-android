@@ -6,12 +6,17 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.app_bar_main.*
+import org.lindoor.customisation.Texts
+import org.lindoor.customisation.Theme
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 
 abstract class LindoorFragment: Fragment(),
     ToobarButtonClickedListener {
 
     val mainactivity get() = activity as MainActivity
+
+    var editorMode: Boolean = false
 
     override fun onResume() {
         super.onResume()
@@ -29,17 +34,25 @@ abstract class LindoorFragment: Fragment(),
                 return v?.onTouchEvent(event) ?: true
             }
         })
+        if (editorMode) {
+            mainactivity.toolbar_left_button.visibility = View.VISIBLE
+            mainactivity.toolbar_right_button.visibility = View.VISIBLE
+            mainactivity.toolbar_back_button.visibility = View.GONE
+        }
     }
 
     override fun onPause() {
-        (activity as MainActivity).toobarButtonClickedListener = null
         hideKeyboard()
+        if (editorMode) {
+            mainactivity.toolbar_left_button.visibility = View.GONE
+            mainactivity.toolbar_right_button.visibility = View.GONE
+        }
         super.onPause()
     }
 
-    override fun onBackButtonClicked() {}
+    override fun onToolbarLeftButtonClicked() {}
 
-    override fun onRightButtonClicked() {}
+    override fun onToolbarRightButtonClicked() {}
 
     fun hideKeyboard() {
         mainactivity.currentFocus?.also {
@@ -55,5 +68,12 @@ abstract class LindoorFragment: Fragment(),
         mainactivity.toolbarViewModel.activityInprogress.value = false
     }
 
+    fun editionMode() {
+        editorMode = true
+        Theme.setImage("icons/save", mainactivity.toolbar_right_button_image)
+        Theme.setImage("icons/cancel", mainactivity.toolbar_left_button_image)
+        mainactivity.toolbar_left_button_title.text = Texts.get("cancel")
+        mainactivity.toolbar_right_button_title.text = Texts.get("save")
+    }
 
 }

@@ -3,12 +3,14 @@ package org.lindoor.ui.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater.from
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import kotlinx.android.synthetic.main.widget_text_input.view.*
 import org.lindoor.R
+import org.lindoor.customisation.Texts
 import org.lindoor.databinding.WidgetTextInputBinding
 import org.lindoor.ui.validators.GenericStringValidator
 
@@ -40,6 +42,11 @@ class LTextInput : LinearLayout {
                         clearError()
                     }
             }
+        }
+
+    var hint: String? = null
+        set(value) {
+            binding.root.text.hint = value?.let { Texts.get(it) }
         }
 
     private fun init(

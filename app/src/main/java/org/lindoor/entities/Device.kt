@@ -1,42 +1,20 @@
 package org.lindoor.entities
 
+import android.content.Context
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
+import org.lindoor.managers.DeviceManager
 import org.linphone.core.Config
 import org.linphone.core.Factory
 import java.io.File
 
-class Device {
-
-    companion object {
-        private var devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml") // Todo leave in config export/import
-        private var devicesConfig: Config
-
-        init {
-            if (!devicesXml.exists())
-                devicesXml.createNewFile()
-            devicesConfig = Factory.instance().createConfig(null)
-            devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
-        }
-    }
-
-    fun add() {
-
-    }
+@Parcelize
+data class Device(var id:String?, var type:String?, var name:String?, var address:String?, var actionsMethodType:String?, var actions:ArrayList<Action>? ) :
+    Parcelable {
 
     fun remove() {
-
-    }
-
-    fun export()  {
-
-    }
-
-    fun import() {
-
-    }
-
-    fun getActions() {
-
+        DeviceManager.removeDevice(this)
     }
 
 }

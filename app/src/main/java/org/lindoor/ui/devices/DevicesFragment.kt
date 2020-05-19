@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.fragment_devices.view.*
+import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.lindoor.LindoorFragment
+import org.lindoor.R
 import org.lindoor.databinding.FragmentDevicesBinding
 
 class DevicesFragment :LindoorFragment() {
@@ -21,6 +24,13 @@ class DevicesFragment :LindoorFragment() {
         devicesViewModel =
                 ViewModelProvider(this).get(DevicesViewModel::class.java)
 
+        binding.root.new_device.setOnClickListener{
+            val actionDetail = DevicesFragmentDirections.editDevice()
+            //actionDetail.setDevice(null)
+            mainactivity.navController.navigate(actionDetail)
+        }
+
         return binding.root
     }
+
 }

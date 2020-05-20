@@ -14,5 +14,24 @@ object DeviceTypes {
                 )
             }
         }
-}
+    }
+
+    fun iconNameForDeviceType(typeKey:String):String {
+        return deviceTypesConfig.let { config ->
+             config.getString(typeKey,"icon",null)
+        }
+    }
+
+    fun supportsAudio(typeKey:String):Boolean  {
+        return deviceTypesConfig.let { config ->
+            config.getBool(typeKey,"hasaudio",true)
+        }
+    }
+
+    fun supportsVideo(typeKey:String):Boolean  {
+        return deviceTypesConfig.let { config ->
+            config.getBool(typeKey,"hasvideo",false)
+        }
+    }
+
 }

@@ -70,8 +70,8 @@ abstract class LindoorFragment: Fragment(),
 
     fun editionMode() {
         editorMode = true
-        Theme.setImage("icons/save", mainactivity.toolbar_right_button_image)
-        Theme.setImage("icons/cancel", mainactivity.toolbar_left_button_image)
+        Theme.setIcon("icons/save", mainactivity.toolbar_right_button_image)
+        Theme.setIcon("icons/cancel", mainactivity.toolbar_left_button_image)
         mainactivity.toolbar_left_button_title.text = Texts.get("cancel")
         mainactivity.toolbar_right_button_title.text = Texts.get("save")
     }

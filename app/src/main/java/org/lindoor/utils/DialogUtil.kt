@@ -39,15 +39,28 @@ class DialogUtil() {
             error(textKey, arrayOf(oneArg))
         }
 
-        fun confirm(titleKey: String, messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel") {
+        fun confirm(titleKey: String? = null, messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel", oneArg:String? = null) {
             context?.also {
-                MaterialAlertDialogBuilder(it)
-                    .setTitle(Texts.get(titleKey))
-                    .setMessage(Texts.get(messageKey))
+                val dialog = MaterialAlertDialogBuilder(it)
+                    .setMessage(if (oneArg != null) Texts.get(messageKey,oneArg) else  Texts.get(messageKey))
                     .setPositiveButton(Texts.get(confirmTextKey!!),DialogInterface.OnClickListener(function = confirmFonction))
                     .setNegativeButton(Texts.get(cancelTextKey!!),DialogInterface.OnClickListener(function = cancelFunction!!))
-                    .show()
+                titleKey?.also {
+                    dialog.setTitle(Texts.get(it))
+                }
+                dialog.setOnDismissListener { dialog ->
+                    cancelFunction.invoke(dialog,0)
+                }
+                dialog.show()
             }
+        }
+
+        fun confirm(messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel", oneArg:String? = null) {
+            confirm(null,messageKey,confirmFonction,cancelFunction,confirmTextKey,cancelTextKey,oneArg)
+        }
+
+        fun confirm(messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, oneArg:String? = null,cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> }) {
+            confirm(null,messageKey,confirmFonction, cancelFunction,"confirm","cancel",oneArg)
         }
 
         fun toast(textKey: String, long:Boolean = false) {

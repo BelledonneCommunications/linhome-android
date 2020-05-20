@@ -1,4 +1,4 @@
-package org.lindoor.ui.devices.create
+package org.lindoor.ui.devices.edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -65,7 +65,7 @@ class DeviceEditorFragment : LindoorFragment() {
         binding.root.name.validate()
         binding.root.address.validate()
         model.actionsViewModels.forEach {
-            if (it.binding.root.type.liveIndex?.value != 0)
+            if (it.type?.value != 0)
                 it.binding.root.code.validate()
         }
         if (model.saveDevice()) {

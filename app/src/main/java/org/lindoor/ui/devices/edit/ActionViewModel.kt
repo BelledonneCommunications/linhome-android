@@ -1,8 +1,9 @@
-package org.lindoor.ui.devices.create
+package org.lindoor.ui.devices.edit
 
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.lindoor.ui.widgets.LSpinnerListener
 
 class ActionViewModel (val owningViewModel: DeviceEditorViewModel, val binding: ViewDataBinding, val displayIndex:Int): ViewModel() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
@@ -13,6 +14,13 @@ class ActionViewModel (val owningViewModel: DeviceEditorViewModel, val binding: 
     }
     fun removeAction() {
         owningViewModel.removeActionViewModel(this)
+    }
+
+
+    val actionTypeListener = object : LSpinnerListener {
+        override fun onItemSelected(position: Int) {
+            type.value = position
+        }
     }
 
 

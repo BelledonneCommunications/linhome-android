@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import kotlinx.android.synthetic.main.widget_spinner.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.title
 import org.lindoor.R
@@ -17,6 +16,10 @@ import org.lindoor.databinding.WidgetSpinnerBinding
 import java.lang.reflect.Method
 import java.util.*
 
+
+interface LSpinnerListener {
+    fun onItemSelected(position: Int)
+}
 
 class LSpinner : LinearLayout {
     constructor(context: Context) : this(context, null)
@@ -59,7 +62,7 @@ class LSpinner : LinearLayout {
                 binding.root.error.visibility = if (value!!) View.VISIBLE else View.GONE
             }
 
-    var liveIndex: MutableLiveData<Int>? = null
+    var listener:LSpinnerListener ? = null
 
     private fun init(
         context: Context
@@ -71,7 +74,7 @@ class LSpinner : LinearLayout {
                 hideSpinnerDropDown(binding.root.spinner)
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                liveIndex?.value = position
+                listener?.onItemSelected(position)
                 hideSpinnerDropDown(binding.root.spinner)
             }
         }

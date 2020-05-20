@@ -42,7 +42,7 @@ class SideMenuFragment : Fragment() {
         binding.root.list.adapter = SideMenuAdapter(sideMenuViewModel.sideMenuOptions,getMainActivity().navController)
 
         binding.root.label.text = Texts.get(sideMenuViewModel.sideMenuDisconnectOption.textKey)
-        Theme.setImage(sideMenuViewModel.sideMenuDisconnectOption.iconFile,binding.root.icon)
+        Theme.setIcon(sideMenuViewModel.sideMenuDisconnectOption.iconFile,binding.root.icon)
         binding.root.top_separator.setBackgroundColor(Theme.getColor("color_h"))
         binding.root.top_separator.visibility = View.VISIBLE
         binding.root.bottom_separator.visibility = View.GONE

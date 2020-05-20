@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/navigation_device_edit"
-        android:name="org.lindoor.ui.devices.create.DeviceEditorFragment"
+        android:name="org.lindoor.ui.devices.edit.DeviceEditorFragment"
         tools:layout="@layout/fragment_device_edit" >
         <argument
             android:name="device"

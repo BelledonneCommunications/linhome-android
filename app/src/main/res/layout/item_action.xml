@@ -4,7 +4,7 @@
         <import type="android.view.View"/>
         <import type="android.text.InputType"/>
         <import type="android.text.TextUtils"/>
-        <variable name="actionmodel" type="org.lindoor.ui.devices.create.ActionViewModel" />
+        <variable name="actionmodel" type="org.lindoor.ui.devices.edit.ActionViewModel" />
         <variable name="validators" type="org.lindoor.ui.validators.ValidatorFactory.Companion" />
     </data>
 
@@ -23,8 +23,9 @@
         items="@{actionmodel.owningViewModel.availableActionTypes}"
         missingText='@{"action_type_missing"}'
         showMissingText = "@{!TextUtils.isEmpty(actionmodel.code.first) &amp;&amp; actionmodel.type== 0}"
-        liveIndex="@{actionmodel.type}"
-        titletext='@{actionmodel.owningViewModel.getText("action") + " "+actionmodel.displayIndex}' />
+        titletext='@{actionmodel.owningViewModel.getText("action") + " "+actionmodel.displayIndex}'
+        listener="@{actionmodel.actionTypeListener}"
+        />
 
     <org.lindoor.ui.widgets.LTextInput
         android:id="@+id/code"

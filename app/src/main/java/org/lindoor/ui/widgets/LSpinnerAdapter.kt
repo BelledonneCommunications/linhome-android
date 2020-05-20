@@ -61,7 +61,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         if (option.iconFile == null) {
             viewHolder.optionIconIV.visibility = View.GONE
         } else {
-            Theme.setImage(option.iconFile, viewHolder.optionIconIV)
+            Theme.setIcon(option.iconFile, viewHolder.optionIconIV)
         }
         view.setOnClickListener {
             spinner.performClick()
@@ -69,7 +69,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         }
         view.isPressed = true
         if (isDropDown)
-            view.background = Theme.roundRectInputBackgroundWithColorKey("color_i")
+            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_i")
         if (!isDropDown && position == 0) {
             view.getLayoutParams().height = 1
             view.visibility = View.GONE

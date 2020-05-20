@@ -31,14 +31,13 @@ fun color(view: ViewGroup, colorKey: String) {
 @BindingAdapter("roundRectInput")
 fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
     if (enabled)
-        view.background = Theme.roundRectInputBackgroundWithColorKey("color_c")
+        view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_c")
 }
 
 @BindingAdapter("roundRectInputWithColor")
 fun roundRectInputWithColor(view: ViewGroup, color: String) {
-    view.background = Theme.roundRectInputBackgroundWithColorKey(color)
+    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(color)
 }
-
 
 
 ////////////////////////
@@ -143,7 +142,7 @@ fun effectbg(control: AppCompatButton, effectKey: String) {
 
 @BindingAdapter("icon")
 fun icon(button: FloatingActionButton, name: String) {
-    Theme.setImage(name,button)
+    Theme.setIcon(name,button)
 }
 
 @BindingAdapter("background")
@@ -177,7 +176,7 @@ fun background(spinner: LSpinner, name: String) {
 
 @BindingAdapter("src")
 fun src(image: ImageView, name: String) {
-    Theme.setImage(name,image)
+    Theme.setIcon(name,image)
 }
 
 @BindingAdapter("selection_effect")
@@ -196,7 +195,7 @@ fun foreground_selection_effect(image: ImageView, key: String) {
 
 @BindingAdapter("icon") // Todo move into class
 fun icon(b: LRoundRectButtonWithIcon, name: String) {
-    Theme.setImage(name, b.icon)
+    Theme.setIcon(name, b.icon)
 }
 
 @BindingAdapter("text") // Todo move into class

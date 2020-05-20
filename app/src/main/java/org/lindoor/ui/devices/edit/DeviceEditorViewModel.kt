@@ -1,4 +1,4 @@
-package org.lindoor.ui.devices.create
+package org.lindoor.ui.devices.edit
 
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,9 @@ import org.lindoor.customisation.ActionsMethodTypes
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
+import org.lindoor.managers.DeviceManager
 import org.lindoor.ui.validators.ValidatorFactory
+import org.lindoor.ui.widgets.LSpinnerListener
 import org.lindoor.ui.widgets.SpinnerItem
 import org.lindoor.utils.databindings.ViewModelWithTools
 
@@ -21,7 +23,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableMethodTypes: ArrayList<SpinnerItem> = ArrayList()
-    private var actionMethods: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    private var actionsMethod: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableActionTypes: ArrayList<SpinnerItem> = ArrayList()
     val actionBindings = MutableLiveData<ArrayList<ViewDataBinding>>()
@@ -34,13 +36,24 @@ class DeviceEditorViewModel : ViewModelWithTools() {
             value?.also {
                 name.first.value = it.name
                 address.first.value = it.address
-                actionMethods.value = ActionsMethodTypes.spinnerIndexByKey(it.actionsMethodType)
+                actionsMethod.value = ActionsMethodTypes.spinnerIndexByKey(it.actionsMethodType)
             }
         }
 
 
     var refreshActions = MutableLiveData(true)
 
+    val deviceTypeListener = object : LSpinnerListener {
+        override fun onItemSelected(position: Int) {
+            type.value = position
+        }
+    }
+
+    val actionsMethodListener = object : LSpinnerListener {
+        override fun onItemSelected(position: Int) {
+            actionsMethod.value = position
+        }
+    }
 
     init {
 
@@ -67,6 +80,17 @@ class DeviceEditorViewModel : ViewModelWithTools() {
         actionsViewModels.forEach {
             if (!it.valid())
                 return false
+        }
+
+        if (device == null)
+            device = Device(
+                if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey,
+                name.first.value!!,
+                address.first.value!!,
+                    if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
+                null)
+        device?.also {
+            DeviceManager.addDevice(it)
         }
         return true
     }

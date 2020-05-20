@@ -22,6 +22,11 @@ package org.linphone.compatibility
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Vibrator
 import android.view.WindowManager
 import androidx.core.app.NotificationManagerCompat
@@ -104,6 +109,16 @@ class Compatibility {
                 }
         }
 
+        fun setColorFilter(
+            drawable: Drawable,
+            color: Int
+        ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                drawable.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+            } else {
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            }
+        }
 
     }
 }

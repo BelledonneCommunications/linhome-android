@@ -6,7 +6,7 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.InputType"/>
-        <variable name="model" type="org.lindoor.ui.devices.create.DeviceEditorViewModel" />
+        <variable name="model" type="org.lindoor.ui.devices.edit.DeviceEditorViewModel" />
         <variable name="validators" type="org.lindoor.ui.validators.ValidatorFactory.Companion" />
     </data>
 
@@ -89,6 +89,7 @@
                 app:layout_constraintBottom_toTopOf="@id/select_method_section_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                listener="@{model.deviceTypeListener}"
                 items="@{model.availableDeviceTypes}"
              />
 
@@ -116,6 +117,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 items="@{model.availableMethodTypes}"
+                listener="@{model.actionsMethodListener}"
                 titlekey='@{"action_method"}' />
 
            <LinearLayout

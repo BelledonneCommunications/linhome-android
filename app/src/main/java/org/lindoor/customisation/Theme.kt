@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.PictureDrawable
 import android.graphics.drawable.StateListDrawable
 import android.util.StateSet
 import android.view.Gravity
@@ -16,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
+import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
 import org.lindoor.ui.widgets.LEditText
@@ -29,7 +31,7 @@ object Theme {
 
     private var typeFaces = hashMapOf<String, Typeface?>()
     private var glidesvg = GlideApp.with(LindoorApplication.instance)
-    private var glidepng = Glide.with(LindoorApplication.instance)
+    var glidegeneric = Glide.with(LindoorApplication.instance)
 
     private var themeError: Boolean = false
 
@@ -65,7 +67,7 @@ object Theme {
 
     fun getColor(key: String): Int {
 
-        if (key == "tp")
+        if (key == "transparent")
             return Color.TRANSPARENT
 
         themeConfig.getString("colors", key, null)?.let { color ->
@@ -86,12 +88,12 @@ object Theme {
         return result
     }
 
-    fun setImage(imageName: String, imageView: ImageView) {
-        val svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
+    fun setIcon(imageName: String, imageView: ImageView) {
+        var svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
         if (svg.exists())
             glidesvg.load(svg).into(imageView)
         else {
-           glidepng.load(File(LindoorApplication.instance.filesDir, "images/$imageName.png")).into(imageView)
+            glidegeneric.load(File(LindoorApplication.instance.filesDir, "images/$imageName.png")).into(imageView)
         }
     }
 
@@ -128,8 +130,7 @@ object Theme {
     }
 
 
-    fun roundRectInputBackgroundWithColorKey(colorKey:String): GradientDrawable {
-        val radius = themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f)
+    fun roundRectInputBackgroundWithColorKeyAndRadius(colorKey:String, radius:Float = themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f)): GradientDrawable {
         return roundRectGradientDrawable(getColor(colorKey), radius)
     }
 
@@ -297,4 +298,11 @@ object Theme {
         themeError = true
         stackStrace("Theme")
     }
+
+    fun svgAsPictureDrawable(imageName:String):PictureDrawable {
+        val svgFile = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
+        val svg: SVG = SVG.getFromString(svgFile.readText())
+        return PictureDrawable(svg.renderToPicture())
+    }
+
 }

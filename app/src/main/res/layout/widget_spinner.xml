@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
         <variable
@@ -30,7 +31,17 @@
             android:layout_marginTop="5dp"
             android:background="@null"
             roundRectInput='@{true}'
+            android:visibility='visible'
+            />
 
+
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            style='@{"text_input_error"}'
+            android:visibility='gone'
             />
 
     </LinearLayout>

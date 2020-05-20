@@ -1,7 +1,6 @@
 package org.lindoor.ui.widgets
 
 import android.database.DataSetObserver
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,8 @@ import org.lindoor.databinding.ItemSpinnerBinding
 class SpinnerItem (val textKey: String, val iconFile: String? = null, val backingKey:String? = null)
 class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Spinner) :
     SpinnerAdapter {
+
+    var height:Int? = null
 
     class ViewHolder(itemView: View) {
         val optionIconIV = itemView.icon
@@ -48,6 +49,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         var view = convertView
         if (view == null) {
             view = (DataBindingUtil.inflate(LayoutInflater.from(parent?.context),R.layout.item_spinner,parent,false) as ItemSpinnerBinding).root
+            height = view.getLayoutParams().height
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else
@@ -68,6 +70,14 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         view.isPressed = true
         if (isDropDown)
             view.background = Theme.roundRectInputBackgroundWithColorKey("color_i")
+        if (!isDropDown && position == 0) {
+            view.getLayoutParams().height = 1
+            view.visibility = View.GONE
+        } else {
+            view.getLayoutParams().height = this.height!!
+            view.visibility = View.VISIBLE
+        }
+
         return view
     }
 

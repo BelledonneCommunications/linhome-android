@@ -4,8 +4,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import org.lindoor.BR
 import org.lindoor.customisation.ActionTypes
-import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.ActionsMethodTypes
+import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.ui.validators.ValidatorFactory
@@ -18,10 +18,10 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     var address: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(),MutableLiveData<Boolean>(false))
 
     var availableDeviceTypes: ArrayList<SpinnerItem> = ArrayList()
-    var type: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableMethodTypes: ArrayList<SpinnerItem> = ArrayList()
-    private var actionMethods: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    private var actionMethods: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableActionTypes: ArrayList<SpinnerItem> = ArrayList()
     val actionBindings = MutableLiveData<ArrayList<ViewDataBinding>>()
@@ -44,13 +44,13 @@ class DeviceEditorViewModel : ViewModelWithTools() {
 
     init {
 
-        availableDeviceTypes.add(SpinnerItem("select"))
+        availableDeviceTypes.add(SpinnerItem("device_type_select_prompt"))
         availableDeviceTypes.addAll(DeviceTypes.spinnerItems)
 
-        availableMethodTypes.add(SpinnerItem("select"))
+        availableMethodTypes.add(SpinnerItem("action_method_prompt"))
         availableMethodTypes.addAll(ActionsMethodTypes.spinnerItems)
 
-        availableActionTypes.add(SpinnerItem("select"))
+        availableActionTypes.add(SpinnerItem("action_prompt"))
         availableActionTypes.addAll(ActionTypes.spinnerItems)
 
         actionBindings.value = ArrayList()
@@ -73,13 +73,13 @@ class DeviceEditorViewModel : ViewModelWithTools() {
 
     fun addAction(action: Action?, binding:ViewDataBinding) {
         val actionViewModel =  ActionViewModel(this,binding,actionsViewModels.size+1)
+        binding.setVariable(BR.actionmodel, actionViewModel)
+        binding.setVariable(BR.validators, ValidatorFactory.Companion)
         action?.also {
             actionViewModel.code.first.value = action.code
             actionViewModel.type.value = ActionTypes.spinnerIndexByKey(action.type)
         }
         actionsViewModels.add(actionViewModel)
-        binding.setVariable(BR.actionmodel, actionViewModel)
-        binding.setVariable(BR.validators, ValidatorFactory.Companion)
         actionBindings.value?.add(binding)
         refreshActions.postValue(true)
     }

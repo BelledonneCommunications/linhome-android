@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,6 +33,12 @@ fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
     if (enabled)
         view.background = Theme.roundRectInputBackgroundWithColorKey("color_c")
 }
+
+@BindingAdapter("roundRectInputWithColor")
+fun roundRectInputWithColor(view: ViewGroup, color: String) {
+    view.background = Theme.roundRectInputBackgroundWithColorKey(color)
+}
+
 
 
 ////////////////////////
@@ -235,7 +240,7 @@ fun enabled(b: LRoundRectButtonWithIcon, enabled:Boolean) {
 /// ViewGroup
 ///////////////////////
 
-private fun pxFromDp(dp: Int): Int {
+fun pxFromDp(dp: Int): Int {
     return (dp * LindoorApplication.instance.resources.displayMetrics.density).toInt()
 }
 

@@ -48,13 +48,24 @@ class LSpinner : LinearLayout {
             binding.root.spinner.adapter = value?.let { LSpinnerAdapter(it,binding.root.spinner) }
         }
 
+
+    var missingText : String? = null
+        set(value) {
+            binding.root.error.text = value?.let { Texts.get(it) }
+        }
+
+    var showMissingText : Boolean? =  null
+            set(value) {
+                binding.root.error.visibility = if (value!!) View.VISIBLE else View.GONE
+            }
+
     var liveIndex: MutableLiveData<Int>? = null
+
     private fun init(
         context: Context
     ) {
         binding = DataBindingUtil.inflate(from(context), R.layout.widget_spinner,this, true)
         binding.owner = this
-
         binding.root.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 hideSpinnerDropDown(binding.root.spinner)
@@ -66,7 +77,7 @@ class LSpinner : LinearLayout {
         }
     }
 
-    fun hideSpinnerDropDown(spinner: Spinner?) { // Work around protected method
+    fun hideSpinnerDropDown(spinner: Spinner?) { // Work around protected method : onDetachedFromWindow
         try {
             val method: Method = Spinner::class.java.getDeclaredMethod("onDetachedFromWindow")
             method.setAccessible(true)

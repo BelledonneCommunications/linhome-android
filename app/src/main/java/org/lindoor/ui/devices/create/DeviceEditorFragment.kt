@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_device_edit.view.*
@@ -17,7 +16,6 @@ import org.lindoor.R
 import org.lindoor.databinding.FragmentDeviceEditBinding
 import org.lindoor.entities.Action
 import org.lindoor.ui.validators.ValidatorFactory
-import org.lindoor.databinding.ItemActionBinding
 
 class DeviceEditorFragment : LindoorFragment() {
 
@@ -67,7 +65,8 @@ class DeviceEditorFragment : LindoorFragment() {
         binding.root.name.validate()
         binding.root.address.validate()
         model.actionsViewModels.forEach {
-            it.binding.root.code.validate()
+            if (it.binding.root.type.liveIndex?.value != 0)
+                it.binding.root.code.validate()
         }
         if (model.saveDevice()) {
             mainactivity.navController.navigateUp()

@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         items="@{actionmodel.owningViewModel.availableActionTypes}"
+        missingText='@{"action_type_missing"}'
+        showMissingText = "@{!TextUtils.isEmpty(actionmodel.code.first) &amp;&amp; actionmodel.type== 0}"
         liveIndex="@{actionmodel.type}"
         titletext='@{actionmodel.owningViewModel.getText("action") + " "+actionmodel.displayIndex}' />
 
@@ -48,7 +50,7 @@
         foreground_selection_effect='@{"primary_color"}'
         src='@{"icons/delete"}'
         android:onClick='@{()->actionmodel.removeAction()}'
-        android:enabled="@{!TextUtils.isEmpty(actionmodel.code.first) || actionmodel.type!= -1}"
+        android:enabled="@{!TextUtils.isEmpty(actionmodel.code.first) || actionmodel.type!= 0, default=false}"
         >
     </ImageView>
 

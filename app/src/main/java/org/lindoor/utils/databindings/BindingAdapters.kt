@@ -47,7 +47,7 @@ fun roundRectWithColor(view: ViewGroup, colorKey: String, radiusKey:String) {
 
 @BindingAdapter("cornerRadius")
 fun cornerRadius(view: CardView, radius: String) {
-    view.radius = Theme.radius(radius)
+    view.radius = pxFromDp(Theme.radius(radius).toInt()).toFloat()
 }
 
 ////////////////////////

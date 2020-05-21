@@ -33,7 +33,7 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     lateinit var deleteIcon:PictureDrawable
 
     private fun init() {
-        background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_e")
+        background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_e","device_in_device_list_corner_radius")
         deleteIcon = Theme.svgAsPictureDrawable("icons/delete")
         Compatibility.setColorFilter(deleteIcon,Theme.getColor("color_c"))
         deleteViewMargin = 20
@@ -156,7 +156,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
 
             device.firstImageFileName?.also {
                 deviceImage.visibility = View.VISIBLE
-                Theme.glidegeneric.load(it).transform(RoundedCorners(50)).into(deviceImage)
+                Theme.glidegeneric.load(it).into(deviceImage)
                 view.layoutParams.height = pxFromDp(180) // Todo themize
             }
 

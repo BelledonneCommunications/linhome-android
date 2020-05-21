@@ -51,6 +51,7 @@ class DialogUtil() {
                 dialog.setOnDismissListener { dialog ->
                     cancelFunction.invoke(dialog,0)
                 }
+                dialog.setCancelable(false)
                 dialog.show()
             }
         }

@@ -69,7 +69,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         }
         view.isPressed = true
         if (isDropDown)
-            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_i")
+            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_i","user_input_corner_radius")
         if (!isDropDown && position == 0) {
             view.getLayoutParams().height = 1
             view.visibility = View.GONE

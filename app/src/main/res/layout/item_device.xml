@@ -5,18 +5,27 @@
     android:layout_height="120dp"
     android:orientation="vertical"
     android:gravity="bottom"
-    roundRectInputWithColor='@{"color_i"}'
+    roundRectWithColor='@{"color_i"}'
+    andRadius='@{"device_in_device_list_corner_radius"}'
     android:layout_marginTop="7dp"
     >
 
-    <ImageView
-        android:id="@+id/device_image"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:scaleType="centerCrop"
-        android:alpha="0.3">
-    </ImageView>
+        android:id="@+id/device_image_card"
+        cornerRadius='@{"device_in_device_list_corner_radius"}'
+        >
+        <ImageView
+            android:id="@+id/device_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:alpha="0.3">
+        </ImageView>
+    </androidx.cardview.widget.CardView>
+
+
 
 
     <ImageView

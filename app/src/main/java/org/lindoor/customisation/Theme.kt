@@ -88,12 +88,19 @@ object Theme {
         return result
     }
 
-    fun setIcon(imageName: String, imageView: ImageView) {
-        var svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
+    fun setIcon(imageName: String, imageView: ImageView) { // Preferred SVG, fallback PNG or full name.
+        val svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
         if (svg.exists())
             glidesvg.load(svg).into(imageView)
         else {
-            glidegeneric.load(File(LindoorApplication.instance.filesDir, "images/$imageName.png")).into(imageView)
+            val png = File(LindoorApplication.instance.filesDir, "images/$imageName.png")
+            if (png.exists())
+                glidegeneric.load(png).into(imageView)
+            else {
+                val plain = File(LindoorApplication.instance.filesDir, "images/$imageName")
+                if (plain.exists())
+                    glidegeneric.load(png).into(imageView)
+            }
         }
     }
 
@@ -129,9 +136,12 @@ object Theme {
         return shape
     }
 
+    fun radius(key:String, default:Float = 0.0f): Float {
+        return  themeConfig.getFloat("arbitrary-values", key, default)
+    }
 
-    fun roundRectInputBackgroundWithColorKeyAndRadius(colorKey:String, radius:Float = themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f)): GradientDrawable {
-        return roundRectGradientDrawable(getColor(colorKey), radius)
+    fun roundRectInputBackgroundWithColorKeyAndRadius(colorKey:String, radiusKey:String): GradientDrawable {
+        return roundRectGradientDrawable(getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f))
     }
 
     fun apply(textEditKey: String, textEdit: LEditText) {

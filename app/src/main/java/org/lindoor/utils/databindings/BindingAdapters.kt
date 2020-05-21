@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
+import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,14 +32,23 @@ fun color(view: ViewGroup, colorKey: String) {
 @BindingAdapter("roundRectInput")
 fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
     if (enabled)
-        view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_c")
+        view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_c","user_input_corner_radius")
 }
 
 @BindingAdapter("roundRectInputWithColor")
 fun roundRectInputWithColor(view: ViewGroup, color: String) {
-    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(color)
+    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(color,"user_input_corner_radius")
 }
 
+@BindingAdapter("roundRectWithColor","andRadius")
+fun roundRectWithColor(view: ViewGroup, colorKey: String, radiusKey:String) {
+    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(colorKey,radiusKey)
+}
+
+@BindingAdapter("cornerRadius")
+fun cornerRadius(view: CardView, radius: String) {
+    view.radius = Theme.radius(radius)
+}
 
 ////////////////////////
 /// Spinner

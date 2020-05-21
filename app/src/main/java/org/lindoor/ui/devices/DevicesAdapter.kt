@@ -128,12 +128,12 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val background = itemView.device_row
         private val name = itemView.name
         private val typeIcon = itemView.type_icon
         private val address = itemView.address
         private val call = itemView.call
         private val deviceImage = itemView.device_image
+
         private val view = itemView
 
         fun bindItems(device: Device) {

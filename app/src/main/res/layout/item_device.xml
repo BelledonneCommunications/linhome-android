@@ -1,80 +1,83 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/device_row"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:orientation="vertical"
-    android:gravity="bottom"
-    roundRectWithColor='@{"color_i"}'
-    andRadius='@{"device_in_device_list_corner_radius"}'
-    android:layout_marginTop="7dp"
-    >
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/device_image_card"
-        cornerRadius='@{"device_in_device_list_corner_radius"}'
-        >
-        <ImageView
-            android:id="@+id/device_image"
+
+        <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:alpha="0.3">
-        </ImageView>
-    </androidx.cardview.widget.CardView>
+            android:layout_height="120dp"
+            android:id="@+id/device_image_card"
+            roundRectWithColor='@{"color_i"}'
+            andRadius='@{"device_in_device_list_corner_radius"}'
+            android:visibility="visible"
+            android:layout_marginBottom="7dp"
+            android:elevation="0dp"
+            >
+            <ImageView
+                android:id="@+id/device_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:alpha="0.3">
+            </ImageView>
 
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/type_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_lindoor_icon"
-        android:layout_above="@+id/name"
-        android:visibility="gone"
-        android:layout_marginStart="20dp"
-        />
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/address"
+                    android:layout_marginTop="7dp"
+                    style='@{"device_list_device_name"}'
+                    android:layout_marginStart="20dp"
+                    android:text="Name" />
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/address"
-        android:layout_marginTop="7dp"
-        style='@{"device_list_device_name"}'
-        android:layout_marginStart="20dp"
-        android:text="Name" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="17dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginStart="20dp"
-        style='@{"device_list_device_address"}'
-        android:text="Address" />
+                <ImageView
+                    android:id="@+id/type_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_lindoor_icon"
+                    android:layout_above="@+id/name"
+                    android:visibility="gone"
+                    android:layout_marginStart="20dp"
+                    />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/call"
-        background='@{"primary_color"}'
-        tint='@{"color_c"}'
-        app:fabCustomSize="50dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="13dp"
-        android:layout_gravity="end"
-        android:layout_marginEnd="13dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-         />
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="17dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginStart="20dp"
+                    style='@{"device_list_device_address"}'
+                    android:text="Address" />
 
 
-</RelativeLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/call"
+                    background='@{"primary_color"}'
+                    tint='@{"color_c"}'
+                    app:fabCustomSize="50dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="13dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="13dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    />
+            </RelativeLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
 </layout>

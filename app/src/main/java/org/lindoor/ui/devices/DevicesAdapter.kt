@@ -7,6 +7,7 @@ import android.graphics.drawable.PictureDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -20,7 +21,6 @@ import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.entities.Device
 import org.lindoor.managers.DeviceManager
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.databindings.pxFromDp
 import org.linphone.compatibility.Compatibility
 
 
@@ -128,13 +128,14 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val name = itemView.name
         private val typeIcon = itemView.type_icon
         private val address = itemView.address
         private val call = itemView.call
         private val deviceImage = itemView.device_image
-
         private val view = itemView
+
 
         fun bindItems(device: Device) {
             name.text = device.name
@@ -157,13 +158,17 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             device.firstImageFileName?.also {
                 deviceImage.visibility = View.VISIBLE
                 Theme.glidegeneric.load(it).into(deviceImage)
-                view.layoutParams.height = pxFromDp(180) // Todo themize
+                view.post {
+                    view.layoutParams.height = (view.measuredWidth*Theme.arbitraryValue("device_first_image_aspect_ratio","0.75").toFloat()).toInt()
+                    view.requestLayout()
+                }
             }
 
             view.setOnClickListener {
                 val actionDetail = DevicesFragmentDirections.deviceInfo(device)
                 view.findNavController().navigate(actionDetail)
             }
+
 
         }
     }

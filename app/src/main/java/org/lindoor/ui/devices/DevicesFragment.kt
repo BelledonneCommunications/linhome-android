@@ -26,8 +26,7 @@ class DevicesFragment :LindoorFragment() {
         binding.model = devicesViewModel
 
         binding.root.new_device.setOnClickListener{
-            val actionDetail = DevicesFragmentDirections.editDevice()
-            //actionDetail.setDevice(null)
+            val actionDetail = DevicesFragmentDirections.deviceNew()
             mainactivity.navController.navigate(actionDetail)
         }
 

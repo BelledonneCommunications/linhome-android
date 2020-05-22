@@ -58,6 +58,7 @@ object DeviceManager {
                 val separator =  if (actionString.isEmpty()) "" else "|"
                 actionString += separator+it.type+","+it.code
             }
+            devicesConfig.setString(device.id,"actions",actionString)
         }
         devicesXml.writeText(devicesConfig.dumpAsXml())
         System.out.println("devices: "+ devicesConfig.dumpAsXml())

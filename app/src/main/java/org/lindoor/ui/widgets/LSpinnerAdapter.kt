@@ -115,3 +115,11 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         return options.size
     }
 }
+
+fun indexByBackingKey(key:String?, items:ArrayList<SpinnerItem>):Int {
+    items.forEachIndexed { index, spinnerItem ->
+        if (spinnerItem.backingKey == key)
+            return index
+    }
+    return 0
+}

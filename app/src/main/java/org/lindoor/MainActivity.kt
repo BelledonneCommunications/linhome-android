@@ -28,7 +28,7 @@ class MainActivity : LindoorActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var binding:ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding:ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         toolbarViewModel = ViewModelProvider(this).get(ToolbarViewModel::class.java)
         binding.toobarviewmodel = toolbarViewModel
@@ -57,7 +57,7 @@ class MainActivity : LindoorActivity() {
             }
             when (destination.id) {
                 R.id.navigation_devices,R.id.navigation_history -> {
-                    exitNonRootFragment()
+                    enterRootFragment()
                 } else -> {
                     enterNonRootFragment()
                 }
@@ -72,7 +72,7 @@ class MainActivity : LindoorActivity() {
                     enterNonRootFragment()
                     toolbar_title.text = null
                 } else -> {
-                    exitNonRootFragment()
+                    enterRootFragment()
                     toolbar_title.text = titleForNavigationFragment(navController.currentDestination?.id)
                 }
             }
@@ -98,15 +98,26 @@ class MainActivity : LindoorActivity() {
     }
 
     private fun enterNonRootFragment() {
-        toolbar_back_button.visibility = View.VISIBLE
-        toolbar_burger_button.visibility = View.GONE
+        toolbarViewModel.backButtonVisible.value = true
+        toolbarViewModel.burgerButtonVisible.value = false
         tabbar.visibility = View.GONE
     }
 
-    private fun exitNonRootFragment() {
+    private fun enterRootFragment() {
         tabbar.visibility = View.VISIBLE
-        toolbar_back_button.visibility = View.GONE
-        toolbar_burger_button.visibility = View.VISIBLE
+        toolbarViewModel.backButtonVisible.value = false
+        toolbarViewModel.burgerButtonVisible.value = true
+        toolbarViewModel.leftButtonVisible.value = false
+        toolbarViewModel.rightButtonVisible.value = false
+    }
+
+    fun pauseNavigation() {
+        toolbarViewModel.backButtonVisible.value = false
+    }
+
+    fun resumeNavigation() {
+        toolbarViewModel.backButtonVisible.value = true
+        toolbarViewModel.leftButtonVisible.value = false
     }
 
 
@@ -163,7 +174,7 @@ class MainActivity : LindoorActivity() {
             R.id.navigation_assistant_remote_root,
             R.id.navigation_assistant_remote_qr,
             R.id.navigation_assistant_remote_url -> Texts.get("assistant")
-            R.id.navigation_devices, R.id.navigation_device_edit -> Texts.get("devices")
+            R.id.navigation_devices, R.id.navigation_device_edit, R.id.navigation_device_info -> Texts.get("devices")
             R.id.navigation_history -> Texts.get("history")
             R.id.navigation_about -> Texts.get("about")
             R.id.navigation_settings -> Texts.get("settings")

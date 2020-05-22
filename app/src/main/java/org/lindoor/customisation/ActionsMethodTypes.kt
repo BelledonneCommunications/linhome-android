@@ -15,12 +15,5 @@ object ActionsMethodTypes {
             }
         }
     }
-    fun spinnerIndexByKey(key:String?):Int {
-        spinnerItems.forEachIndexed { index, spinnerItem ->
-            if (spinnerItem.backingKey == key)
-                return index
-        }
-        return -1
-    }
 
 }

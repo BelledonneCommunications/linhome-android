@@ -90,6 +90,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 listener="@{model.deviceTypeListener}"
+                initialIndex="@{model.type}"
                 items="@{model.availableDeviceTypes}"
              />
 
@@ -117,6 +118,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 items="@{model.availableMethodTypes}"
+                initialIndex="@{model.actionsMethod}"
                 listener="@{model.actionsMethodListener}"
                 titlekey='@{"action_method"}' />
 
@@ -164,7 +166,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 primary='@{true}'
                 text='@{"delete_device"}'
-                android:onClick="@{() -> model.device.remove()}"
                 android:visibility='@{model.device != null ? View.VISIBLE : View.GONE}'
                 />
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="device" type="org.lindoor.entities.Device" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+       >
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            tools:context="org.lindoor.ui.devices.info.DeviceInfoFragment">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintBottom_toTopOf="@id/address"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style='@{"view_main_title"}'
+                app:layout_constraintVertical_chainStyle="spread"
+                android:text='@{device.name}'
+                 />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toTopOf="@id/type_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                style='@{"view_device_info_address"}'
+                android:text='@{device.address}' />
+
+
+            <ImageView
+                android:id="@+id/type_icon"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:src="@drawable/ic_lindoor_icon"
+                android:layout_above="@+id/name"
+                android:visibility='@{device.type != null ? View.VISIBLE : View.GONE}'
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@id/address"
+                app:layout_constraintBottom_toTopOf="@id/type_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                deviceTypeIcon='@{device.type}'
+
+                />
+
+            <TextView
+                android:id="@+id/type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@id/type_icon"
+                app:layout_constraintBottom_toTopOf="@id/actions_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style='@{"view_device_info_type_name"}'
+                android:visibility='@{device.type != null ? View.VISIBLE : View.GONE}'
+                android:text='@{device.typeName()}' />
+
+
+            <TextView
+                android:id="@+id/actions_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="55dp"
+                app:layout_constraintTop_toBottomOf="@id/type_name"
+                app:layout_constraintBottom_toTopOf="@id/actions_list"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style='@{"view_device_info_actions_title"}'
+                android:visibility='@{device.actions != null &amp;&amp; device.actions.size() > 0  ? View.VISIBLE : View.GONE}'
+                text='@{"device_info_actions_title"}' />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/actions_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:layout_constraintTop_toBottomOf="@id/actions_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility='@{device.actions != null &amp;&amp; device.actions.size() > 0  ? View.VISIBLE : View.GONE}'
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</layout>

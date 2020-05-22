@@ -4,7 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
-import org.lindoor.managers.DeviceManager
 import org.linphone.core.Call
 import org.linphone.core.CallParams
 import java.io.File
@@ -23,11 +22,6 @@ data class Device(var id:String, var type:String?, var name:String, var address:
                 else
                     return null
             }
-
-    fun remove() {
-        DeviceManager.removeDevice(this)
-    }
-
 
     fun supportsVideo ():Boolean {
         return type?.let {
@@ -52,6 +46,11 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         } ?: null
     }
 
+    fun typeName():String? {
+        return type?.let {
+            DeviceTypes.typeNameForDeviceType(it)
+        } ?: null
+    }
 
 
 

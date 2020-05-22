@@ -64,6 +64,14 @@ class LSpinner : LinearLayout {
 
     var listener:LSpinnerListener ? = null
 
+
+    var initialIndex:Int ? = null
+        set(value) {
+            if (value != null) {
+                binding.root.spinner.setSelection(value)
+            }
+        }
+
     private fun init(
         context: Context
     ) {

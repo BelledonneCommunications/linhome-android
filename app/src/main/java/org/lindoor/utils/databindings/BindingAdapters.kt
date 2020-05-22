@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
 import org.lindoor.LindoorApplication
+import org.lindoor.customisation.ActionTypes
+import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.ui.settings.SettingListener
@@ -187,6 +189,16 @@ fun background(spinner: LSpinner, name: String) {
 @BindingAdapter("src")
 fun src(image: ImageView, name: String) {
     Theme.setIcon(name,image)
+}
+
+@BindingAdapter("deviceTypeIcon")
+fun deviceTypeIcon(image: ImageView, type: String) {
+    Theme.setIcon(DeviceTypes.iconNameForDeviceType(type), image)
+}
+
+@BindingAdapter("actionTypeIcon")
+fun actionTypeIcon(image: ImageView, type: String) {
+    Theme.setIcon(ActionTypes.iconNameForActionType(type), image)
 }
 
 @BindingAdapter("selection_effect")

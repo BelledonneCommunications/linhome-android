@@ -1,0 +1,66 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/list_item"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:focusable="true">
+
+        <RelativeLayout
+            android:id="@+id/top_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            backgoundcolor='@{"color_h"}'
+            app:layout_constraintBottom_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_lindoor_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            style='@{"dropdown_list"}'
+            app:layout_constraintLeft_toRightOf="@id/icon"
+            android:text="Label" />
+
+
+
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="30dp"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            style='@{"dropdown_list"}'
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="Label" />
+
+        <RelativeLayout
+            android:id="@+id/bottom_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            backgoundcolor='@{"color_h"}'
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

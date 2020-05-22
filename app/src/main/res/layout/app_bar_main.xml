@@ -44,8 +44,7 @@
                         android:background="@color/transparent"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
-                        android:visibility="gone"
-
+                        android:visibility='@{viewmodel.visibility(viewmodel.burgerButtonVisible)}'
                         selection_effect='@{"primary_color"}'
                         src='@{"icons/burger_menu"}'/>
 
@@ -59,7 +58,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_lindoor_icon"
                         android:background="@color/transparent"
-                        android:visibility="gone"
+                        android:visibility='@{viewmodel.visibility(viewmodel.backButtonVisible)}'
                         android:layout_alignParentStart="true"
                         selection_effect='@{"primary_color"}'
                         src='@{"icons/back"}'/>
@@ -75,7 +74,7 @@
                         android:layout_centerVertical="true"
                         android:clickable="true"
                         android:focusable="true"
-                        android:visibility="gone"
+                        android:visibility='@{viewmodel.visibility(viewmodel.leftButtonVisible)}'
                         >
                         <ImageView
                             android:id="@+id/toolbar_left_button_image"
@@ -119,7 +118,7 @@
                         android:layout_centerVertical="true"
                         android:clickable="true"
                         android:focusable="true"
-                        android:visibility="gone"
+                        android:visibility='@{viewmodel.visibility(viewmodel.rightButtonVisible)}'
                         android:layout_alignParentEnd="true"
 
                         >

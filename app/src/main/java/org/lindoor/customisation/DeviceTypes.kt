@@ -22,6 +22,12 @@ object DeviceTypes {
         }
     }
 
+    fun typeNameForDeviceType(typeKey:String):String {
+        return deviceTypesConfig.let { config ->
+            Texts.get(config.getString(typeKey,"textkey",null))
+        }
+    }
+
     fun supportsAudio(typeKey:String):Boolean  {
         return deviceTypesConfig.let { config ->
             config.getBool(typeKey,"hasaudio",true)

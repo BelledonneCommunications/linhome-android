@@ -15,11 +15,17 @@ object ActionTypes {
             }
         }
     }
-    fun spinnerIndexByKey(key:String?):Int {
-        ActionsMethodTypes.spinnerItems.forEachIndexed { index, spinnerItem ->
-            if (spinnerItem.backingKey == key)
-                return index
+
+    fun typeNameForActionType(typeKey:String):String {
+        return actionTypesConfig.let { config ->
+            Texts.get(config.getString(typeKey,"textkey",null))
         }
-        return -1
     }
+
+    fun iconNameForActionType(typeKey:String):String {
+        return actionTypesConfig.let { config ->
+            config.getString(typeKey,"icon",null)
+        }
+    }
+
 }

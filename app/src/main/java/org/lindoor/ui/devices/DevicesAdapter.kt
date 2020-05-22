@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import kotlinx.android.synthetic.main.item_device.view.*
 import org.lindoor.R
 import org.lindoor.customisation.DeviceTypes
@@ -158,6 +158,11 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                 deviceImage.visibility = View.VISIBLE
                 Theme.glidegeneric.load(it).into(deviceImage)
                 view.layoutParams.height = pxFromDp(180) // Todo themize
+            }
+
+            view.setOnClickListener {
+                val actionDetail = DevicesFragmentDirections.deviceInfo(device)
+                view.findNavController().navigate(actionDetail)
             }
 
         }

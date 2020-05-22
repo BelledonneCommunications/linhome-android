@@ -15,11 +15,45 @@
         android:id="@+id/navigation_devices"
         android:name="org.lindoor.ui.devices.DevicesFragment"
         tools:layout="@layout/fragment_devices">
-            <action
-                android:id="@+id/edit_device"
-                app:destination="@id/navigation_device_edit"
-                />
+        <action
+            android:id="@+id/device_info"
+            app:destination="@id/navigation_device_info"
+            />
+        <action
+            android:id="@+id/device_new"
+            app:destination="@id/navigation_device_edit"
+            />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_device_info"
+        android:name="org.lindoor.ui.devices.edit.DeviceInfoFragment"
+        tools:layout="@layout/fragment_device_info">
+        <argument
+            android:name="device"
+            app:argType="org.lindoor.entities.Device"
+            app:nullable="false" />
+        <action
+            android:id="@+id/device_edit"
+            app:destination="@id/navigation_device_edit"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_device_edit"
+        android:name="org.lindoor.ui.devices.edit.DeviceEditorFragment"
+        tools:layout="@layout/fragment_device_edit" >
+        <argument
+            android:name="device"
+            app:argType="org.lindoor.entities.Device"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/device_deleted"
+            app:destination="@id/navigation_devices"
+            />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_history"
@@ -73,17 +107,6 @@
         android:name="org.lindoor.ui.devices.DevicesFragment"
         tools:layout="@layout/fragment_devices" />
 
-
-    <fragment
-        android:id="@+id/navigation_device_edit"
-        android:name="org.lindoor.ui.devices.edit.DeviceEditorFragment"
-        tools:layout="@layout/fragment_device_edit" >
-        <argument
-            android:name="device"
-            app:argType="org.lindoor.entities.Device"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
 
     <fragment
         android:id="@+id/navigation_disconnect"

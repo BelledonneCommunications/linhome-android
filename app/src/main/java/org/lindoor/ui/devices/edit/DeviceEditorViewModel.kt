@@ -12,6 +12,7 @@ import org.lindoor.managers.DeviceManager
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.ui.widgets.LSpinnerListener
 import org.lindoor.ui.widgets.SpinnerItem
+import org.lindoor.ui.widgets.indexByBackingKey
 import org.lindoor.utils.databindings.ViewModelWithTools
 
 class DeviceEditorViewModel : ViewModelWithTools() {
@@ -23,11 +24,11 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableMethodTypes: ArrayList<SpinnerItem> = ArrayList()
-    private var actionsMethod: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    var actionsMethod: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableActionTypes: ArrayList<SpinnerItem> = ArrayList()
     val actionBindings = MutableLiveData<ArrayList<ViewDataBinding>>()
-    val actionsViewModels = ArrayList<ActionViewModel>()
+    val actionsViewModels = ArrayList<DeviceEditorActionViewModel>()
 
 
     var device: Device ? = null
@@ -36,7 +37,8 @@ class DeviceEditorViewModel : ViewModelWithTools() {
             value?.also {
                 name.first.value = it.name
                 address.first.value = it.address
-                actionsMethod.value = ActionsMethodTypes.spinnerIndexByKey(it.actionsMethodType)
+                type.value = indexByBackingKey(it.type,availableDeviceTypes)
+                actionsMethod.value = indexByBackingKey(it.actionsMethodType,availableMethodTypes)
             }
         }
 
@@ -82,26 +84,44 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                 return false
         }
 
-        if (device == null)
+        if (device == null) {
             device = Device(
                 if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey,
                 name.first.value!!,
                 address.first.value!!,
-                    if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
-                null)
-        device?.also {
-            DeviceManager.addDevice(it)
+                if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
+                ArrayList()
+            )
+            actionsViewModels.forEach {
+                if (it.notEmpty())
+                    device?.actions?.add(Action(availableActionTypes.get(it.type.value!!).backingKey,it.code.first.value!!))
+            }
+            DeviceManager.addDevice(device!!)
+        } else {
+            device?.also {
+                it.type = if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
+                it.name = name.first.value!!
+                it.address = address.first.value!!
+                it.actionsMethodType = if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey
+                it.actions = ArrayList()
+                actionsViewModels.forEach {action ->
+                    if (action.notEmpty())
+                        it.actions?.add(Action(availableActionTypes.get(action.type.value!!).backingKey,action.code.first.value!!))
+                }
+            }
+            DeviceManager.syncToXml()
         }
+
         return true
     }
 
     fun addAction(action: Action?, binding:ViewDataBinding) {
-        val actionViewModel =  ActionViewModel(this,binding,actionsViewModels.size+1)
+        val actionViewModel =  DeviceEditorActionViewModel(this,binding,actionsViewModels.size+1)
         binding.setVariable(BR.actionmodel, actionViewModel)
         binding.setVariable(BR.validators, ValidatorFactory.Companion)
         action?.also {
             actionViewModel.code.first.value = action.code
-            actionViewModel.type.value = ActionTypes.spinnerIndexByKey(action.type)
+            actionViewModel.type.value =indexByBackingKey(action.type,availableActionTypes)
         }
         actionsViewModels.add(actionViewModel)
         actionBindings.value?.add(binding)
@@ -109,7 +129,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     }
 
 
-    fun removeActionViewModel(viewModel:ActionViewModel) {
+    fun removeActionViewModel(viewModel:DeviceEditorActionViewModel) {
         actionsViewModels.remove(viewModel)
         actionBindings.value?.remove(viewModel.binding)
         refreshActions.postValue(true)

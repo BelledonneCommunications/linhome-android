@@ -203,8 +203,10 @@ fun src(image: ImageView, name: String) {
 }
 
 @BindingAdapter("deviceTypeIcon")
-fun deviceTypeIcon(image: ImageView, type: String) {
-    Theme.setIcon(DeviceTypes.iconNameForDeviceType(type), image)
+fun deviceTypeIcon(image: ImageView, type: String?) {
+    type?.also {
+        Theme.setIcon(DeviceTypes.iconNameForDeviceType(it), image)
+    }
 }
 
 @BindingAdapter("actionTypeIcon")

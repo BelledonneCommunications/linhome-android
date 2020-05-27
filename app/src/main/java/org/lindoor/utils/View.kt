@@ -9,6 +9,10 @@ fun View.toogleVisible() {
         visibility = View.VISIBLE
 }
 
+fun View.invisible() {
+    visibility = View.INVISIBLE
+}
+
 fun View.toogleGone() {
     if (visibility == View.VISIBLE)
         visibility = View.GONE

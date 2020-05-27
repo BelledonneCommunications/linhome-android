@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <data>
         <import type="android.view.View"/>
@@ -17,7 +18,7 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 style='@{"view_main_title"}'
@@ -26,7 +27,7 @@
 
             <org.lindoor.ui.widgets.LTextInput
                 android:id="@+id/url"
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true"
@@ -61,12 +62,12 @@
                 tint='@{"color_c"}'
                 android:scaleType="centerInside"
                 app:elevation="10dp"
-                app:fabCustomSize="13dp"
+                app:fabCustomSize="20dp"
                 app:maxImageSize="9dp"
                 android:layout_marginTop="-21dp"
-                android:layout_marginStart="-11dp"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="20dp"
+                android:layout_marginStart="-10dp"
+                android:layout_height="20dp"
                 android:layout_toEndOf="@+id/title"
                 android:layout_alignTop="@+id/title" />
 

@@ -28,7 +28,7 @@
                 android:id="@+id/title"
                 style='@{"view_main_title"}'
                 text='@{"assistant_remote_from_qr"}'
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:layout_centerHorizontal="true"/>
@@ -41,22 +41,21 @@
                 tint='@{"color_c"}'
                 android:scaleType="centerInside"
                 app:elevation="10dp"
-                app:fabCustomSize="13dp"
+                app:fabCustomSize="20dp"
                 app:maxImageSize="9dp"
                 android:layout_marginTop="-21dp"
-                android:layout_marginStart="-11dp"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="20dp"
+                android:layout_marginStart="-10dp"
+                android:layout_height="20dp"
                 android:layout_toEndOf="@+id/title"
                 android:layout_alignTop="@+id/title" />
-
 
 
             <TextView
                 android:id="@+id/subtitle"
                 style='@{"view_sub_title"}'
                 text='@{"assistant_remote_from_qr_desc"}'
-                android:layout_width="320dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"

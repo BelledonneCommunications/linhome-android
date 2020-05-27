@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextureView
             android:id="@+id/qrcode"
             android:layout_width="match_parent"
@@ -20,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:gravity="center_horizontal"
             android:paddingBottom="60dp"
             tools:context=".ui.assistant.remote.RemoteQrAccountFragment">
 
@@ -31,21 +31,49 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                app:layout_constraintBottom_toTopOf="@id/subtitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread" />
+                android:layout_centerHorizontal="true"/>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/infobutton"
+                icon='@{"icons/informations"}'
+                backgroundeffect='@{"info_bubble"}'
+                tint='@{"color_c"}'
+                android:scaleType="centerInside"
+                app:elevation="10dp"
+                app:fabCustomSize="13dp"
+                app:maxImageSize="9dp"
+                android:layout_marginTop="-21dp"
+                android:layout_marginStart="-11dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_toEndOf="@+id/title"
+                android:layout_alignTop="@+id/title" />
+
 
 
             <TextView
                 android:id="@+id/subtitle"
                 style='@{"view_sub_title"}'
                 text='@{"assistant_remote_from_qr_desc"}'
-                android:layout_width="300dp"
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="33dp" />
+
+            <TextView
+                android:id="@+id/infotext"
+                android:padding="10dp"
+                style='@{"info_bubble"}'
+                text='@{"assistant_remote_prov_from_qr_infobubble"}'
+                backgoundcolor='@{"color_n"}'
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infobutton"
+                android:layout_alignEnd="@+id/title"
+                android:visibility="invisible"
+                />
 
         </RelativeLayout>
 
@@ -90,6 +118,8 @@
             android:background="@color/white"
             android:layout_below="@id/mask_container">
         </View>
+
+
 
     </RelativeLayout>
 

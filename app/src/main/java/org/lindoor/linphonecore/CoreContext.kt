@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.AudioManager
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
@@ -36,6 +37,7 @@ import org.lindoor.SplashActivity
 
 
 import org.lindoor.notifications.NotificationsManager
+import org.lindoor.ui.call.incoming.CallIncomingActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
@@ -130,9 +132,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 }
 
                 // Starting SDK 24 (Android 7.0) we rely on the fullscreen intent of the call incoming notification
-                if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70)) {
-                    onIncomingReceived()
-                }
+                // TODO if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70)) {
+                    onIncomingReceived(call)
+                //}
 
                 if (corePreferences.autoAnswerEnabled) {
                     val autoAnswerDelay = corePreferences.autoAnswerDelay
@@ -367,9 +369,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
     /* Start call related activities */
 
-    private fun onIncomingReceived() {
-        val intent = Intent(context, SplashActivity::class.java)
-        // This flag is required to start an Activity from a Service context
+    private fun onIncomingReceived(call:Call) {
+        val intent = Intent(context, CallIncomingActivity::class.java)
+        intent.putExtra("call",call)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }

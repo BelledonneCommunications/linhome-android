@@ -30,7 +30,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                style='@{"view_main_title"}'
+                style='@{"view_device_info_name"}'
                 app:layout_constraintVertical_chainStyle="spread"
                 android:text='@{device.name}'
                  />

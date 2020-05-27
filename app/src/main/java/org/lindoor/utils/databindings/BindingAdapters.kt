@@ -27,7 +27,7 @@ import org.lindoor.ui.widgets.*
 ////////////////////////
 
 @BindingAdapter("backgoundcolor")
-fun color(view: ViewGroup, colorKey: String) {
+fun color(view: View, colorKey: String) {
     view.setBackgroundColor(Theme.getColor(colorKey))
 }
 
@@ -157,7 +157,7 @@ fun icon(button: FloatingActionButton, name: String) {
     Theme.setIcon(name,button)
 }
 
-@BindingAdapter("background")
+@BindingAdapter("backgroundeffect")
 fun background(button: FloatingActionButton, name: String) {
     button.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
 }
@@ -179,6 +179,17 @@ fun title(control: LSegmentedControl, name: String) {
 @BindingAdapter("background")
 fun background(spinner: LSpinner, name: String) {
     spinner.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
+}
+
+
+///////////////////////
+/// ImageButton
+///////////////////////
+
+@BindingAdapter("tint","bg")
+fun backgroundColorWithPressEffect(button: ImageView, tint: String, background:String) {
+    button.backgroundTintList = Theme.selectionEffectAsColorStateList(background,android.R.attr.state_activated)
+    //button.imageTintList =  Theme.selectionEffectAsColorStateList(tint,android.R.attr.state_activated)
 }
 
 

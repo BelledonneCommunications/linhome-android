@@ -1,0 +1,60 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/icons"
+            backgoundcolor='@{"color_c"}'
+             />
+
+        <LinearLayout
+            android:id="@+id/icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginEnd="19dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_lindoor_icon"
+            src='@{"others/lindoor_icon"}'
+            />
+
+        <ImageView
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_lindoor_icon"
+            src='@{"others/lindoor_text"}'
+            />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/icons"
+            backgoundcolor='@{"color_c"}'
+            />
+
+    </RelativeLayout>
+</layout>
+

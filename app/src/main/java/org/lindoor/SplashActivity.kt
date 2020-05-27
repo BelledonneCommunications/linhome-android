@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivitySplashBinding
+import org.lindoor.ui.call.incoming.CallIncomingActivity
 
 class SplashActivity : AppCompatActivity () {
     override fun onCreate(savedInstanceState: Bundle?) {

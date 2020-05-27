@@ -59,7 +59,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/new_device"
             icon='@{"icons/more"}'
-            background='@{"primary_color"}'
+            backgroundeffect='@{"primary_color"}'
             tint='@{"color_c"}'
             app:fabCustomSize="50dp"
             android:layout_width="50dp"

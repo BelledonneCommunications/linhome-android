@@ -15,6 +15,7 @@ import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteUrlBinding
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.toogleVisible
 import org.linphone.core.ConfiguringState
 
 class RemoteUrlAccountFragment :LindoorFragment() {
@@ -58,6 +59,10 @@ class RemoteUrlAccountFragment :LindoorFragment() {
                 coreContext.core.stop()
                 coreContext.core.start()
             }
+        }
+
+        binding.root.infobutton.setOnClickListener {
+            binding.root.infotext.toogleVisible()
         }
 
         return binding.root

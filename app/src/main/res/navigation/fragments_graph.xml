@@ -5,7 +5,6 @@
     android:id="@+id/fragments_navigation"
     app:startDestination="@+id/navigation_devices">
 
-
     <fragment
         android:id="@+id/navigation_about"
         android:name="org.lindoor.ui.about.AboutFragment"
@@ -104,8 +103,8 @@
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="org.lindoor.ui.devices.DevicesFragment"
-        tools:layout="@layout/fragment_devices" />
+        android:name="org.lindoor.ui.account.AccountFragment"
+        tools:layout="@layout/fragment_account" />
 
 
     <fragment

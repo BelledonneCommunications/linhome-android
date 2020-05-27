@@ -36,7 +36,7 @@
                     <ImageButton
                         android:id="@+id/toolbar_burger_button"
                         android:layout_width="43dp"
-                        android:layout_height="43dp"
+                        android:layout_height="match_parent"
                         android:padding="10dp"
                         android:scaleType="centerInside"
                         android:layout_marginStart="9dp"
@@ -51,7 +51,7 @@
                     <ImageButton
                         android:id="@+id/toolbar_back_button"
                         android:layout_width="43dp"
-                        android:layout_height="43dp"
+                        android:layout_height="match_parent"
                         android:padding="10dp"
                         android:scaleType="centerInside"
                         android:layout_marginStart="9dp"

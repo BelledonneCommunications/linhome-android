@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.fragment_assistant_remote_qr.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteQrBinding
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.toogleVisible
 import org.linphone.core.ConfiguringState
 import org.linphone.core.tools.Log
 
@@ -49,6 +51,10 @@ class RemoteQrAccountFragment :LindoorFragment() {
             coreContext.core.start()
         })
 
+        binding.root.infobutton.setOnClickListener {
+            binding.root.infotext.toogleVisible()
+        }
+
         return binding.root
     }
 
@@ -85,4 +91,6 @@ class RemoteQrAccountFragment :LindoorFragment() {
 
 
 }
+
+
 

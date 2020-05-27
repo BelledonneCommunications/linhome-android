@@ -3,6 +3,7 @@ package org.lindoor.managers
 import org.lindoor.LindoorApplication
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
+import org.linphone.core.Address
 import org.linphone.core.Config
 import org.linphone.core.Factory
 import org.linphone.mediastream.Log
@@ -73,5 +74,13 @@ object DeviceManager {
     fun removeDevice(device:Device) {
         devices.remove(device)
         syncToXml()
+    }
+
+    fun findDeviceByAddress(address:Address) : Device? {
+        devices.forEach {
+            if (it.address.equals(address.asStringUriOnly()))
+                return it
+        }
+        return null
     }
 }

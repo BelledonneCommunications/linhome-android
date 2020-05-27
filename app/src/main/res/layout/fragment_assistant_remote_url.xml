@@ -10,11 +10,7 @@
         <variable name="validators" type="org.lindoor.ui.validators.ValidatorFactory.Companion" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:context=".ui.assistant.remote.RemoteUrlAccountFragment">
@@ -24,12 +20,8 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                app:layout_constraintBottom_toTopOf="@id/url"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 style='@{"view_main_title"}'
-                app:layout_constraintVertical_chainStyle="spread"
+                android:layout_centerHorizontal="true"
                 text='@{"assistant_remote_prov_from_url"}' />
 
             <org.lindoor.ui.widgets.LTextInput
@@ -37,16 +29,13 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:layout_constraintBottom_toTopOf="@id/apply"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_centerHorizontal="true"
+                 android:layout_below="@+id/title"
                 title='@{"url"}'
                 liveString="@{model.url.first}"
                 liveValidity="@{model.url.second}"
                 validator="@{validators.uriValidator}"
                 android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_URI}"/>
-
 
 
             <org.lindoor.ui.widgets.LRoundRectButton
@@ -57,16 +46,44 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/url"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/url"
                 primary='@{true}'
                 text='@{"apply"}'
               />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </ScrollView>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/infobutton"
+                icon='@{"icons/informations"}'
+                backgroundeffect='@{"info_bubble"}'
+                tint='@{"color_c"}'
+                android:scaleType="centerInside"
+                app:elevation="10dp"
+                app:fabCustomSize="13dp"
+                app:maxImageSize="9dp"
+                android:layout_marginTop="-21dp"
+                android:layout_marginStart="-11dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_toEndOf="@+id/title"
+                android:layout_alignTop="@+id/title" />
+
+
+            <TextView
+                android:id="@+id/infotext"
+                android:padding="10dp"
+                style='@{"info_bubble"}'
+                text='@{"assistant_remote_prov_from_url_infobubble"}'
+                backgoundcolor='@{"color_n"}'
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infobutton"
+                android:layout_alignEnd="@+id/title"
+                android:visibility="invisible"
+                />
+
+        </RelativeLayout>
 
 </layout>

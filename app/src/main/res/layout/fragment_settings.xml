@@ -16,6 +16,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        backgoundcolor='@{"color_c"}'
         android:layout_height="match_parent">
 
     <LinearLayout

@@ -12,6 +12,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        backgoundcolor='@{"color_c"}'
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"

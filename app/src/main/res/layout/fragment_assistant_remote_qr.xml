@@ -21,7 +21,7 @@
             android:id="@+id/header_opaque"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/color_c"
             android:paddingBottom="60dp"
             tools:context=".ui.assistant.remote.RemoteQrAccountFragment">
 
@@ -90,7 +90,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
+                android:background="@color/color_c"
                 android:layout_toLeftOf="@id/mask">
             </View>
 
@@ -107,7 +107,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
+                android:background="@color/color_c"
                 android:layout_toRightOf="@id/mask">
             </View>
         </RelativeLayout>
@@ -115,7 +115,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/color_c"
             android:layout_below="@id/mask_container">
         </View>
 

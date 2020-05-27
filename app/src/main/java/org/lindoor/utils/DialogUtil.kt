@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.lindoor.R
 import org.lindoor.customisation.Texts
 
 
@@ -14,7 +15,7 @@ class DialogUtil() {
 
         fun info(textKey: String, args: Array<String>? = null) {
             context?.also {
-                MaterialAlertDialogBuilder(it)
+                MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
                     .setMessage(Texts.get(textKey, args))
                     .setPositiveButton(Texts.get("ok"),null)
                     .show()
@@ -27,7 +28,7 @@ class DialogUtil() {
 
         fun error(textKey: String,args: Array<String>? = null, titleKey:String = "generic_dialog_error_title") {
             context?.also {
-                MaterialAlertDialogBuilder(it)
+                MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
                     .setTitle(Texts.get(titleKey, args))
                     .setMessage(Texts.get(textKey, args))
                     .setPositiveButton(Texts.get("ok"),null)
@@ -41,7 +42,7 @@ class DialogUtil() {
 
         fun confirm(titleKey: String? = null, messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel", oneArg:String? = null) {
             context?.also {
-                val dialog = MaterialAlertDialogBuilder(it)
+                val dialog = MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
                     .setMessage(if (oneArg != null) Texts.get(messageKey,oneArg) else  Texts.get(messageKey))
                     .setPositiveButton(Texts.get(confirmTextKey!!),DialogInterface.OnClickListener(function = confirmFonction))
                     .setNegativeButton(Texts.get(cancelTextKey!!),DialogInterface.OnClickListener(function = cancelFunction!!))

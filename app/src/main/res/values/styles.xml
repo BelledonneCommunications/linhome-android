@@ -1,16 +1,46 @@
 <resources>
     <!-- This ais the minimal set that need to be copied from the theme.xml as they are used by system for example when showing task list -->
     <style name="LindoorTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorPrimary">@color/color_a</item>
+        <item name="colorPrimaryDark">@color/color_a</item>
+        <item name="colorAccent">@color/color_a</item>
+        <item name="colorSurface">@color/color_c</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="windowActionBar">false</item>
+
     </style>
+
+
+
+
+    <style name="LindoorDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MaterialAlertDialog.Rounded
+        </item>
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/TitleMaterialAlertDialog.MaterialComponents.Title.Text
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/BodyMaterialAlertDialog.MaterialComponents.Body.Text
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Rounded" parent="">
+    </style>
+
+    <style name="TitleMaterialAlertDialog.MaterialComponents.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/color_b</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BodyMaterialAlertDialog.MaterialComponents.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/color_b</item>
+    </style>
+
 
 </resources>

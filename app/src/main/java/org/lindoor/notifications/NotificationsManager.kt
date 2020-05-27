@@ -250,7 +250,7 @@ class NotificationsManager(private val context: Context) {
             .setWhen(System.currentTimeMillis())
             .setShowWhen(true)
             .setOngoing(true)
-            .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            .setColor(ContextCompat.getColor(context, R.color.color_a))
             .build()
     }
     /*

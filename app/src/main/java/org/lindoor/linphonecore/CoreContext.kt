@@ -19,11 +19,11 @@
  */
 package org.lindoor.linphonecore
 
+
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.AudioManager
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
@@ -34,14 +34,11 @@ import android.view.*
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.R
 import org.lindoor.SplashActivity
-
-
 import org.lindoor.notifications.NotificationsManager
 import org.lindoor.ui.call.incoming.CallIncomingActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
-import org.linphone.mediastream.Version
 import java.io.File
 import java.util.*
 import kotlin.math.abs

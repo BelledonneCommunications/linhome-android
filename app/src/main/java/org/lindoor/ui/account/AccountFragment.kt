@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.lindoor.LindoorApplication
-import org.lindoor.databinding.FragmentAboutBinding
 import org.lindoor.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {

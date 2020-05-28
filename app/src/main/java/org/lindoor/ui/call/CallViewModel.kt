@@ -3,12 +3,12 @@ package org.lindoor.ui.call
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Device
 import org.lindoor.managers.DeviceManager
-import org.linphone.core.*
-import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.managers.RecordingsManager
+import org.linphone.core.*
 
 class CallViewModelFactory(private val call: Call,val acceptEarlyMedia:Boolean = true, val record:Boolean = true) :
     ViewModelProvider.NewInstanceFactory() {
@@ -22,7 +22,8 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
     val device: MutableLiveData<Device?> = MutableLiveData(DeviceManager.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.detaultType())
     var callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
-    var videoContent: MutableLiveData<Boolean> = MutableLiveData(hasVideoContent())
+    var videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var aVideoFrameWasReceived = false
 
 
     private var callListener = object : CallListenerStub() {
@@ -40,15 +41,17 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
 
         override fun onNextVideoFrameDecoded(call: Call?) {
             super.onNextVideoFrameDecoded(call)
+            aVideoFrameWasReceived = true
+            videoContent.value = hasVideoContent()
             device.value?.also {d ->
                 if (d.snapshotImage == null)
-                    call?.takeVideoSnapshot("${DeviceManager.snapshotsPath.absolutePath}/{$d.id}.jpg")
+                    call?.takeVideoSnapshot("${DeviceManager.snapshotsPath.absolutePath}/"+d.id+"+.jpg")
             }
         }
     }
 
     private fun hasVideoContent():Boolean {
-        return (call.remoteParams?.videoEnabled() ?: false) && (call.state == Call.State.IncomingEarlyMedia || call.state == Call.State.StreamsRunning)
+        return (call.remoteParams?.videoEnabled() ?: false) && aVideoFrameWasReceived && (call.state == Call.State.IncomingEarlyMedia || call.state == Call.State.StreamsRunning)
     }
 
     init {
@@ -64,7 +67,7 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         earlyMediaCallParams.audioDirection = MediaDirection.Inactive
         if (record)
             earlyMediaCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = true)
-        requestDeviceSnapshotIfNeeded()
+        call.requestNotifyNextVideoFrameDecoded()
         call.acceptEarlyMediaWithParams(earlyMediaCallParams)
         if (record)
             call.startRecording()
@@ -76,7 +79,7 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         inCallParams.audioDirection = MediaDirection.SendRecv
         if (record)
             inCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = false)
-        requestDeviceSnapshotIfNeeded()
+        call.requestNotifyNextVideoFrameDecoded()
         call.acceptWithParams(inCallParams)
         if (record)
             call.startRecording()
@@ -91,11 +94,5 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         super.onCleared()
     }
 
-    private fun requestDeviceSnapshotIfNeeded() {
-        device.value?.also {
-            if (it.supportsVideo() && it.snapshotImage == null)
-                call.requestNotifyNextVideoFrameDecoded()
-        }
-    }
 
 }

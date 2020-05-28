@@ -17,7 +17,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig

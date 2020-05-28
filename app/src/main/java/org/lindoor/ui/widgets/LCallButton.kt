@@ -1,22 +1,16 @@
 package org.lindoor.ui.widgets
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import kotlinx.android.synthetic.main.item_action_info.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.text
-import kotlinx.android.synthetic.main.widget_text_input.view.*
 import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.WidgetCallButtonBinding
-import org.lindoor.databinding.WidgetRoundRectButtonBinding
-import org.lindoor.databinding.WidgetSegmentedControlBinding
 
 
 class LCallButton : LinearLayout {

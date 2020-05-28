@@ -111,7 +111,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
             message: String
         ) {
             Log.i("[Context] Call state changed [$state]")
-            if (state == Call.State.IncomingReceived || state == Call.State.IncomingEarlyMedia) {
+            if (state == Call.State.IncomingReceived) {
                 if (gsmCallActive) {
                     Log.w("[Context] Refusing the call with reason busy because a GSM call is active")
                     call.decline(Reason.Busy)

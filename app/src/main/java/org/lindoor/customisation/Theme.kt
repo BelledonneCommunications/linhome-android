@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
@@ -103,6 +104,7 @@ object Theme {
             }
         }
     }
+
 
     private fun getTypeFace(key: String): Typeface { // Try form assets in first place, best place as big in side, if not found from the ZIP.
         val path = "fonts/$key.ttf"

@@ -1,30 +1,24 @@
 package org.lindoor.ui.call.incoming
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navArgs
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.activity_call_incoming.view.*
+import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
+import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
-import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivityCallIncomingBinding
-import org.lindoor.databinding.ActivityMainBinding
-import org.lindoor.databinding.ActivitySplashBinding
 import org.lindoor.ui.call.CallViewModel
 import org.lindoor.ui.call.CallViewModelFactory
-import org.lindoor.ui.devices.edit.DeviceEditorFragmentArgs
-import org.lindoor.ui.toolbar.ToolbarViewModel
 import org.linphone.core.Call
 
+
 class CallIncomingActivity : AppCompatActivity () {
+
+    lateinit var binding : ActivityCallIncomingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +28,7 @@ class CallIncomingActivity : AppCompatActivity () {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         decorView.setSystemUiVisibility(uiOptions)
 
-        val binding = DataBindingUtil.setContentView(this, R.layout.activity_call_incoming) as ActivityCallIncomingBinding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_call_incoming) as ActivityCallIncomingBinding
         binding.lifecycleOwner = this
 
         intent.getSerializableExtra("call")?.let {
@@ -43,12 +37,19 @@ class CallIncomingActivity : AppCompatActivity () {
             callViewModel.callState?.observe(this, Observer { callState ->
                 when (callState) {
                     Call.State.End -> finish()
-                    Call.State.IncomingEarlyMedia -> finish()
-                    Call.State.Connected -> finish()
                 }
             })
         }  ?: finish()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        coreContext.core.nativeVideoWindowId = binding.root.video
+    }
+
+    override fun onPause() {
+        coreContext.core.nativeVideoWindowId = null
+        super.onPause()
     }
 
 }

@@ -1,0 +1,33 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable name="callmodel" type="org.lindoor.ui.call.CallViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/chunk_call_video_or_icon"
+        android:layout_width="match_parent"
+        android:layout_height="222dp"
+        android:gravity="center">
+
+        <ImageView
+            deviceTypeIconCircle="@{callmodel.device != null &amp;&amp; callmodel.device.type != null ? callmodel.device.type : callmodel.defaultDeviceType}"
+            android:scaleType="fitXY"
+            android:layout_width="187dp"
+            android:visibility='@{callmodel.videoContent ? View.GONE : View.VISIBLE, default = "visible"}'
+            android:layout_height="187dp">
+        </ImageView>
+
+
+        <TextureView
+            android:id="@+id/video"
+            android:layout_width="296dp"
+            android:layout_height="222dp"
+            android:visibility='@{callmodel.videoContent ? View.VISIBLE : View.GONE, default = "gone"}'/>
+
+    </LinearLayout>
+
+
+
+</layout>
+

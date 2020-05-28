@@ -7,7 +7,6 @@ import android.graphics.drawable.PictureDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -141,7 +140,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             name.text = device.name
             address.text = device.address
             if (device.type != null) {
-                Theme.setIcon(DeviceTypes.iconNameForDeviceType(device.type!!), typeIcon)
+                DeviceTypes.iconNameForDeviceType(device.type!!)?.let { Theme.setIcon(it, typeIcon) }
                 typeIcon.visibility = View.VISIBLE
                 if (device.supportsVideo()) {
                     Theme.setIcon("icons/eye", call)
@@ -155,7 +154,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                 device.call()
             }
 
-            device.firstImageFileName?.also {
+            device.snapshotImage?.also {
                 deviceImage.visibility = View.VISIBLE
                 Theme.glidegeneric.load(it).into(deviceImage)
                 view.post {

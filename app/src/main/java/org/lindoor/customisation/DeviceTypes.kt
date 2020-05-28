@@ -16,13 +16,13 @@ object DeviceTypes {
         }
     }
 
-    fun iconNameForDeviceType(typeKey:String):String {
+    fun iconNameForDeviceType(typeKey:String, circle:Boolean = false):String? {
         return deviceTypesConfig.let { config ->
-             config.getString(typeKey,"icon",null)
+             config.getString(typeKey,"icon"+(if (circle) "_circle" else ""),null)
         }
     }
 
-    fun typeNameForDeviceType(typeKey:String):String {
+    fun typeNameForDeviceType(typeKey:String):String? {
         return deviceTypesConfig.let { config ->
             Texts.get(config.getString(typeKey,"textkey",null))
         }
@@ -37,6 +37,12 @@ object DeviceTypes {
     fun supportsVideo(typeKey:String):Boolean  {
         return deviceTypesConfig.let { config ->
             config.getBool(typeKey,"hasvideo",false)
+        }
+    }
+
+    fun detaultType():String? {
+        return deviceTypesConfig.let { config ->
+            config.getString("default","type",null)
         }
     }
 

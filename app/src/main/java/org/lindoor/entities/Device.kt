@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
+import org.lindoor.managers.DeviceManager
 import org.linphone.core.Call
 import org.linphone.core.CallParams
 import java.io.File
@@ -13,15 +14,22 @@ import java.util.*
 data class Device(var id:String, var type:String?, var name:String, var address:String, var actionsMethodType:String?, var actions:ArrayList<Action>? ) :
     Parcelable {
 
+
     constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(UUID.randomUUID().toString().replace("-", "").toLowerCase(),type,name,address,actionsMethodType,actions)
 
-    var firstImageFileName: File?  = null
+
+    var snapshotImage: File?  = null
             get() {
-                if (supportsVideo())
-                    return File(LindoorApplication.instance.filesDir, "images/demo-image.jpg")
+                if (supportsVideo()) {
+                    File(LindoorApplication.instance.filesDir, "${DeviceManager.snapshotsPath.absolutePath}/{$id}.jpg").also {
+                        return if (it.exists()) it else null
+                    }
+                }
                 else
                     return null
             }
+
+
 
     fun supportsVideo ():Boolean {
         return type?.let {
@@ -51,7 +59,5 @@ data class Device(var id:String, var type:String?, var name:String, var address:
             DeviceTypes.typeNameForDeviceType(it)
         } ?: null
     }
-
-
 
 }

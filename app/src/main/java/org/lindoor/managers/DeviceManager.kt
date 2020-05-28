@@ -12,6 +12,8 @@ import java.io.File
 object DeviceManager {
 
     private var devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml")
+    var snapshotsPath = File(LindoorApplication.instance.filesDir, "snapshots")
+
     private var devicesConfig: Config
 
     var devices:ArrayList<Device>
@@ -22,6 +24,7 @@ object DeviceManager {
         devicesConfig = Factory.instance().createConfig(null)
         devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
         devices = readFromXml()
+        snapshotsPath.mkdir()
         Log.i("devices: "+ devicesConfig.dumpAsXml())
     }
 

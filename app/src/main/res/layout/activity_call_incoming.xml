@@ -2,45 +2,108 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
+
     <data>
-        <import type="android.view.View"/>
-        <variable name="callmodel" type="org.lindoor.ui.call.CallViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="org.linphone.core.Call.State" />
+
+        <variable
+            name="callmodel"
+            type="org.lindoor.ui.call.CallViewModel" />
     </data>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    gradientBackground='@{"dark_light_vertical_gradient"}'
-    android:orientation="horizontal">
 
-    <include
-        android:id="@+id/chunk_call_top"
-        layout="@layout/chunk_call_top"
+    <RelativeLayout
+        gradientBackground='@{"dark_light_vertical_gradient"}'
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
 
-    <include
-        android:id="@+id/chunk_call_name_address"
-        layout="@layout/chunk_call_name_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_below="@+id/top"
-        bind:callmodel="@{callmodel}"
-        />
+        <LinearLayout
+            android:id="@+id/chunk_call_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp">
 
-    <include
-        layout="@layout/chunk_call_device_icon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/chunk_call_name_address"
-        />
+            <include
+                layout="@layout/chunk_call_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/chunk_call_top"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content">
 
 
-</RelativeLayout>
+            <LinearLayout
+                android:id="@+id/chunk_call_name_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <include
+                    layout="@layout/chunk_call_name_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chunk_call_video_or_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_name_address"
+                android:layout_marginTop="17dp"
+                android:gravity="center">
+                <include
+                    layout="@layout/chunk_call_device_icon_or_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/chunk_some_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_video_or_icon"
+                android:gravity="center"
+                android:layout_marginTop="27dp">
+                <TextView
+                    style='@{"view_call_device_address"}'
+                    text='@{"incoming_someone_at_your_door"}'
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="29dp"
+            android:gravity="center"
+            >
+            <include
+                layout="@layout/chunk_call_incoming_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
 </layout>

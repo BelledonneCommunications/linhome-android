@@ -8,6 +8,8 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
@@ -197,6 +199,14 @@ fun backgroundColorWithPressEffect(button: ImageView, tint: String, background:S
 /// ImageView
 ///////////////////////
 
+@BindingAdapter("deviceTypeIconCircle")
+fun deviceTypeIconCircle(image: ImageView, type: String?) {
+    type?.also {
+        DeviceTypes.iconNameForDeviceType(it,circle = true)?.let { it1 -> Theme.setIcon(it1, image) }
+    }
+}
+
+
 @BindingAdapter("src")
 fun src(image: ImageView, name: String) {
     Theme.setIcon(name,image)
@@ -205,7 +215,7 @@ fun src(image: ImageView, name: String) {
 @BindingAdapter("deviceTypeIcon")
 fun deviceTypeIcon(image: ImageView, type: String?) {
     type?.also {
-        Theme.setIcon(DeviceTypes.iconNameForDeviceType(it), image)
+        DeviceTypes.iconNameForDeviceType(it)?.let { it1 -> Theme.setIcon(it1, image) }
     }
 }
 

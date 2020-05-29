@@ -1,64 +1,97 @@
 package org.lindoor.entities
 
+import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication
+import org.lindoor.LindoorApplication.Companion.coreContext
+import org.lindoor.utils.extensions.sixDigitsUUID
 import org.linphone.core.AccountCreator
-import org.linphone.core.Config
-import org.linphone.core.Factory
+import org.linphone.core.AccountCreatorListenerStub
 import org.linphone.core.ProxyConfig
-import java.io.File
-
-enum class AccountType { Lindoor, External }
+import java.util.*
 
 object Account {
 
-    private var accountXml = File(LindoorApplication.instance.filesDir, "account.xml")
-    private var accountConfig: Config
+    private const val PUSH_GW_REF_KEY = "lindoor_pushgateway"
+    private const val PUSH_GW_USER_PREFIX = "lindoor_generated"
+    private const val PUSH_GW_DISPLAY_NAME = "Lindoor"
 
-    init {
-        if (!accountXml.exists())
-            accountXml.createNewFile()
-        accountConfig = Factory.instance().createConfig(null)
-        accountConfig.loadFromXmlFile(accountXml.absolutePath)
+    fun configured(): Boolean {
+        return coreContext.core.proxyConfigList.isNotEmpty()
     }
 
-    fun configured(): Boolean { // TODO WIP - instead use special refkey in proxyconfig
-        return true
-        //return accountConfig.getString("account","proxy_refkey",null) != null
+    fun lindoorAccountCreate(accountCreator:AccountCreator) {
+        accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
     }
 
-    fun configure(accountCreator:AccountCreator, type:AccountType) { // TODO WIP - set special refkey
-        val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
-        accountConfig.setString("account","proxy_refkey",proxyConfig?.refKey)
-        accountConfig.setString("account","type",type)
+    fun lindoorAccountLogin(accountCreator:AccountCreator) {
+        accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
     }
 
-    fun configure(accountCreator:AccountCreator, type:AccountType, proxy:String?, expiration:String) { // TODO WIP - set special refkey
+    fun sipAccountLogin(accountCreator:AccountCreator, proxy:String?, expiration:String, pushReady:MutableLiveData<Boolean>) {
         val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
         proxyConfig?.expires = expiration.toInt()
         proxy?.also {
-            proxyConfig?.setServerAddr(it)
+            proxyConfig?.serverAddr = it
         }
-        accountConfig.setString("account","proxy_refkey",proxyConfig?.refKey)
-        accountConfig.setString("account","type",type)
+        if (pushGateway() != null)
+            linkProxiesWithPushGateway()
+        else
+            createPushGateway(pushReady)
     }
 
-    fun configure(proxyConfig:ProxyConfig, type:AccountType) { // TODO WIP - set special refkey
-        accountConfig.setString("account","proxy_refkey",proxyConfig.refKey)
-        accountConfig.setString("account","type",type)
+    fun pushGateway():ProxyConfig? {
+        return coreContext.core.getProxyConfigByIdkey(PUSH_GW_REF_KEY)
     }
 
-    fun clear() {
+    fun createPushGateway(pushReady:MutableLiveData<Boolean>) {
+        coreContext.core.loadConfigFromXml(LindoorApplication.corePreferences.lindoorAccountDefaultValuesPath)
+        val accountCreator = coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
+        accountCreator.language = Locale.getDefault().language
+        val user: String = PUSH_GW_USER_PREFIX + sixDigitsUUID()
+        val pass = UUID.randomUUID().toString()
+        accountCreator.username = user
+        accountCreator.password = pass
+        accountCreator.email = "$user@${accountCreator.domain}"
+        accountCreator.displayName = PUSH_GW_DISPLAY_NAME
+        accountCreator.addListener(object : AccountCreatorListenerStub() {
+            override fun onCreateAccount(creator: AccountCreator?, status: AccountCreator.Status?, resp: String?) {
+                if (status == AccountCreator.Status.AccountCreated) // TODO Adjust when server setup
+                    creator?.also {
+                        val pushGw = it.createProxyConfig()
+                        pushGw.refKey = PUSH_GW_REF_KEY
+                        pushGw.enableRegister(true)
+                        pushGw.enablePublish(false)
+                        pushGw.expires = 31536000
+                        pushGw.serverAddr = "sips:${it.domain}:5061;transport=tls"
+                        pushGw.route = pushGw.serverAddr
+                        pushGw.isPushNotificationAllowed = true
+                        linkProxiesWithPushGateway()
+                        pushReady.value = true
+                    }
+            }
+        })
+        accountCreator.createAccount()
     }
+
+    fun  linkProxiesWithPushGateway() {
+        pushGateway()?.also { pgw ->
+            coreContext.core.proxyConfigList.forEach {
+                if (it.refKey != PUSH_GW_REF_KEY) {
+                    it.dependency = pgw
+                }
+            }
+        }
+    }
+
 
     fun disconnect() {
+        coreContext.core.proxyConfigList.forEach {
+            it.edit()
+            it.expires = 0
+            it.isPushNotificationAllowed = false
+            it.done()
+            coreContext.core.removeProxyConfig(it)
+        }
     }
 
-}
-
-private fun Config.setString(s: String, s1: String, type: AccountType) {
-    when (type) {
-        AccountType.Lindoor -> setString(s,s1,"lindoor")
-        AccountType.External -> setString(s,s1,"external")
-
-    }
 }

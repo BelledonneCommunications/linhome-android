@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.entities.Account
-import org.lindoor.entities.AccountType
 import org.linphone.core.ConfiguringState
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
+
 
 class RemoteAnyAccountViewModel : ViewModel() {
 
@@ -15,12 +15,18 @@ class RemoteAnyAccountViewModel : ViewModel() {
 
     var configurationResult = MutableLiveData<ConfiguringState>()
     var qrCodeFound = MutableLiveData<String>()
+    var pushReady = MutableLiveData(false)
 
 
     private val coreListener = object : CoreListenerStub() {
         override fun onConfiguringStatus(core: Core, status: ConfiguringState, message: String?) {
-            coreContext.core.defaultProxyConfig?.also {
-                Account.configure(it, AccountType.External)
+            if (status == ConfiguringState.Successful) {
+                if (Account.pushGateway() != null) {
+                    Account.linkProxiesWithPushGateway()
+                    pushReady.postValue( true)
+                }
+                else
+                    Account.createPushGateway(pushReady)
             }
             configurationResult.postValue(status)
         }

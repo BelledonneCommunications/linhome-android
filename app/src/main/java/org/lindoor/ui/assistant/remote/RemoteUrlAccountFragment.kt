@@ -42,15 +42,11 @@ class RemoteUrlAccountFragment :LindoorFragment() {
                     hideProgress()
                     apply.root.isEnabled = true
                     when (status) {
-                        ConfiguringState.Successful -> {
-                            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                            DialogUtil.info("lindoor_account_remote_url_success")
-                        }
                         ConfiguringState.Failed -> {
-                            DialogUtil.error("lindoor_account_remote_url_failed")
+                            DialogUtil.error("remote_configuration_failed")
                         }
                         ConfiguringState.Skipped -> {
-                            DialogUtil.error("lindoor_account_remote_url_skipped")
+                            DialogUtil.error("remote_configuration_skipped")
                         }
                     }
                 })
@@ -61,6 +57,14 @@ class RemoteUrlAccountFragment :LindoorFragment() {
                 coreContext.core.start()
             }
         }
+
+        model.pushReady.observe(viewLifecycleOwner, Observer { status ->
+            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+            if (status) {
+                DialogUtil.info("remote_configuration_success")
+            } else
+                DialogUtil.error("failed_creating_pushgateway")
+        })
 
         binding.root.infobutton.setOnClickListener {
             binding.root.infotext.toogleVisible()

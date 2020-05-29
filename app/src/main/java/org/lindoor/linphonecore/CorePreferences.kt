@@ -20,7 +20,6 @@
 package org.lindoor.linphonecore
 
 import android.content.Context
-import com.google.android.gms.common.util.IOUtils.toByteArray
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Config

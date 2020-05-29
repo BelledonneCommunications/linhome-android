@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_assistant_login_sip.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantLoginSipBinding
 import org.lindoor.entities.Account
-import org.lindoor.entities.AccountType
 import org.lindoor.ui.assistant.CreatorAssistantFragment
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
@@ -47,11 +47,16 @@ class LoginSipAccountFragment :CreatorAssistantFragment() {
             model.setTransport(TransportType.values()[model.transport.value!!])
             if (model.valid()) {
                 hideKeyboard()
-                Account.configure(model.accountCreator,AccountType.External,model.proxy.first.value,model.expiration.first.value!!)
-                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                DialogUtil.info("sip_account_configured")
+                Account.sipAccountLogin(model.accountCreator,model.proxy.first.value,model.expiration.first.value!!,model.pushReady)
             }
         }
+        model.pushReady.observe(viewLifecycleOwner, Observer { status ->
+            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+            if (status) {
+                DialogUtil.info("sip_account_created")
+            } else
+                DialogUtil.error("failed_creating_pushgateway")
+        })
 
         return binding.root
     }

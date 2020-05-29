@@ -33,7 +33,6 @@ import android.util.TypedValue
 import android.view.*
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.R
-import org.lindoor.SplashActivity
 import org.lindoor.notifications.NotificationsManager
 import org.lindoor.ui.call.CallInProgressActivity
 import org.lindoor.ui.call.CallIncomingActivity

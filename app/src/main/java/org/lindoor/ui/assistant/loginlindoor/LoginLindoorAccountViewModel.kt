@@ -1,13 +1,8 @@
 package org.lindoor.ui.assistant.loginlindoor
 
 import androidx.lifecycle.MutableLiveData
-import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.ui.assistant.CreatorAssistantViewModel
-import org.linphone.core.XmlRpcArgType
-import org.linphone.core.XmlRpcRequest
-import org.linphone.core.XmlRpcRequestListener
-import org.linphone.mediastream.Log
 
 class LoginLindoorAccountViewModel : CreatorAssistantViewModel(corePreferences.lindoorAccountDefaultValuesPath) {
 

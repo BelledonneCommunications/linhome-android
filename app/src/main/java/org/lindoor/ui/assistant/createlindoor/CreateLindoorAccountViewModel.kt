@@ -3,7 +3,6 @@ package org.lindoor.ui.assistant.createlindoor
 import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.entities.Account
-import org.lindoor.entities.AccountType
 import org.lindoor.ui.assistant.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
@@ -21,7 +20,7 @@ class CreateLindoorAccountViewModel : CreatorAssistantViewModel(corePreferences.
         override fun onCreateAccount(creator: AccountCreator?, status: AccountCreator.Status?, resp: String?) {
             if (status == AccountCreator.Status.AccountCreated)
                 creator?.also {
-                    Account.configure(creator,AccountType.Lindoor)
+                    Account.lindoorAccountCreate(creator)
                 }
             creationResult.postValue(status)
         }

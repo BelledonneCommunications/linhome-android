@@ -14,6 +14,7 @@ class LoginSipAccountViewModel : CreatorAssistantViewModel(corePreferences.sipAc
     var expiration: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(corePreferences.config.getString("proxy_default_values","reg_expires","31536000")),MutableLiveData<Boolean>(false))
 
     val moreOptionsOpened = MutableLiveData(false)
+    var pushReady = MutableLiveData(false)
 
 
     fun valid(): Boolean {

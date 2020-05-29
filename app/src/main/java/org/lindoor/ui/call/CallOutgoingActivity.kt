@@ -6,11 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_call_incoming.view.*
-import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
-import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
-import org.lindoor.databinding.ActivityCallIncomingBinding
 import org.lindoor.databinding.ActivityCallOutgoingBinding
 import org.linphone.core.Call
 

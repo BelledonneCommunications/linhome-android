@@ -32,17 +32,20 @@ class RemoteQrAccountFragment :LindoorFragment() {
         model.configurationResult.observe(viewLifecycleOwner, Observer { status ->
             hideProgress()
             when (status) {
-                ConfiguringState.Successful -> {
-                    mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                    DialogUtil.info("lindoor_account_remote_url_success")
-                }
                 ConfiguringState.Failed -> {
-                    DialogUtil.error("lindoor_account_remote_url_failed")
+                    DialogUtil.error("remote_configuration_failed")
                 }
                 ConfiguringState.Skipped -> {
-                    DialogUtil.error("lindoor_account_remote_url_skipped")
+                    DialogUtil.error("remote_configuration_skipped")
                 }
             }
+        })
+        model.pushReady.observe(viewLifecycleOwner, Observer { status ->
+            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+            if (status) {
+                DialogUtil.info("remote_configuration_success")
+            } else
+                DialogUtil.error("failed_creating_pushgateway")
         })
         model.qrCodeFound.observe(viewLifecycleOwner, Observer { url ->
             showProgress()

@@ -17,8 +17,6 @@ import org.lindoor.ui.assistant.CreatorAssistantFragment
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
 import org.linphone.core.XmlRpcArgType
-import org.linphone.core.XmlRpcRequest
-import org.linphone.core.XmlRpcRequestListener
 
 
 class LoginLindoorAccountFragment :CreatorAssistantFragment() {
@@ -45,23 +43,20 @@ class LoginLindoorAccountFragment :CreatorAssistantFragment() {
                 hideKeyboard()
                 showProgress()
                 val xmlRpcSession = LindoorApplication.coreContext.core.createXmlRpcSession(
-                    LindoorApplication.corePreferences.xmlRpcServerUrl);
+                    corePreferences.xmlRpcServerUrl)
                 val xmlRpcRequest = xmlRpcSession.createRequest(XmlRpcArgType.String, "check_authentication")
-                xmlRpcRequest.setListener(object: XmlRpcRequestListener {
-                    @Override
-                    override fun onResponse(request: XmlRpcRequest?) {
-                        hideProgress()
-                        if (request != null) {
-                            if (request.stringResponse == "OK") {
-                                Account.lindoorAccountLogin(model.accountCreator)
-                                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                                DialogUtil.info("lindoor_account_loggedin")
-                            } else {
-                                binding.root.username.setError(Texts.get("lindoor_account_login_failed_unknown_user_or_wroong_password"))
-                            }
+                xmlRpcRequest.setListener { request ->
+                    hideProgress()
+                    if (request != null) {
+                        if (request.stringResponse == "OK") {
+                            Account.lindoorAccountLogin(model.accountCreator)
+                            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+                            DialogUtil.info("lindoor_account_loggedin")
+                        } else {
+                            binding.root.username.setError(Texts.get("lindoor_account_login_failed_unknown_user_or_wroong_password"))
                         }
                     }
-                })
+                }
                 xmlRpcRequest.addStringArg(model.username.first.value)
                 xmlRpcRequest.addStringArg(corePreferences.encryptedPass(model.username.first.value!!,model.pass1.first.value!!))
                 xmlRpcRequest.addStringArg(corePreferences.loginDomain)

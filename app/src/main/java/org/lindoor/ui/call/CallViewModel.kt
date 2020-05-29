@@ -88,6 +88,10 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         call.decline(Reason.Declined)
     }
 
+    fun cancel() {
+        call.terminate()
+    }
+
     fun terminate() {
         call.terminate()
     }

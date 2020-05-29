@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="org.linphone.core.Call.State" />
+        <variable
+            name="callmodel"
+            type="org.lindoor.ui.call.CallViewModel" />
+    </data>
+
+    <RelativeLayout
+        gradientBackground='@{"dark_light_vertical_gradient"}'
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/chunk_call_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp">
+            <include
+                layout="@layout/chunk_call_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chunk_call_top"
+            android:layout_marginTop="40dp">
+            <LinearLayout
+                android:id="@+id/chunk_call_name_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    layout="@layout/chunk_call_name_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chunk_call_video_or_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_name_address"
+                android:layout_marginTop="17dp"
+                android:gravity="center">
+                <include
+                    layout="@layout/chunk_call_device_icon_or_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/chunk_some_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_video_or_icon"
+                android:layout_marginTop="27dp"
+                android:gravity="center">
+                <com.github.ybq.android.spinkit.SpinKitView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    style="@style/SpinKitView.ThreeBounce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:SpinKit_Color="@color/color_a" />
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="29dp"
+            android:gravity="center">
+            <include
+                layout="@layout/chunk_call_outgoing_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

@@ -8,7 +8,7 @@ import android.view.View
 fun View.toogleVisible() {
     animate()
         .alpha(if (visibility == View.VISIBLE) 0f else 1f)
-        .setDuration(500)
+        .setDuration(250)
         .setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 if (visibility == View.VISIBLE)
@@ -17,7 +17,6 @@ fun View.toogleVisible() {
                     visibility = View.VISIBLE
             }
         })
-
 }
 
 fun View.invisible() {

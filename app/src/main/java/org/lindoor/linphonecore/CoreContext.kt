@@ -37,6 +37,7 @@ import org.lindoor.SplashActivity
 import org.lindoor.notifications.NotificationsManager
 import org.lindoor.ui.call.CallInProgressActivity
 import org.lindoor.ui.call.CallIncomingActivity
+import org.lindoor.ui.call.CallOutgoingActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
@@ -151,7 +152,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
                     }
                 }
             } else if (state == Call.State.OutgoingInit) {
-                onOutgoingStarted()
+                onOutgoingStarted(call)
             } else if (state == Call.State.Connected) {
                 if (isVibrating) {
                     Log.i("[Context] Stopping vibration")
@@ -376,11 +377,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
         context.startActivity(intent)
     }
 
-
-
-    private fun onOutgoingStarted() {
-        val intent = Intent(context, SplashActivity::class.java)
-        // This flag is required to start an Activity from a Service context
+    private fun onOutgoingStarted(call:Call) {
+        val intent = Intent(context, CallOutgoingActivity::class.java)
+        intent.putExtra("call",call)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }

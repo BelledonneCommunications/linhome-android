@@ -18,8 +18,8 @@ data class Device(var id:String, var type:String?, var name:String, var address:
     constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(UUID.randomUUID().toString().replace("-", "").toLowerCase(),type,name,address,actionsMethodType,actions)
 
 
-    var snapshotImage: File?  = null
-            get() {
+    val snapshotImage: File?
+        get() {
                 if (supportsVideo()) {
                     File(LindoorApplication.instance.filesDir, "${DeviceManager.snapshotsPath.absolutePath}/{$id}.jpg").also {
                         return if (it.exists()) it else null
@@ -51,13 +51,13 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         }
         return LindoorApplication.coreContext.core.createAddress(address)?.let {
             LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
-        } ?: null
+        }
     }
 
     fun typeName():String? {
         return type?.let {
             DeviceTypes.typeNameForDeviceType(it)
-        } ?: null
+        }
     }
 
 }

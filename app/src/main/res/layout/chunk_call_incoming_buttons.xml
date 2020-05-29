@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View"/>
@@ -12,29 +13,32 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <org.lindoor.ui.widgets.LCallButton
-            icon='@{"icons/decline"}'
-            backgroundeffect='@{"decline_call_button"}'
-            tint='@{"color_c"}'
-            text='@{"call_button_decline"}'
+
+        <include
+            layout="@layout/widget_call_button"
+            bind:icon='@{"icons/decline"}'
+            bind:text='@{"call_button_decline"}'
+            bind:backgroundeffect='@{"decline_call_button"}'
+            bind:tint='@{"color_c"}'
+            bind:outline='@{false}'
+            bind:onClick="@{()->callmodel.decline()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
-            onClick="@{()->callmodel.decline()}"
             />
 
-        <org.lindoor.ui.widgets.LCallButton
-            icon='@{"icons/phone"}'
-            backgroundeffect='@{"accept_call_button"}'
-            tint='@{"color_c"}'
-            text='@{"call_button_accept"}'
+        <include
+            layout="@layout/widget_call_button"
+            bind:icon='@{"icons/phone"}'
+            bind:text='@{"call_button_accept"}'
+            bind:backgroundeffect='@{"accept_call_button"}'
+            bind:tint='@{"color_c"}'
+            bind:outline='@{false}'
+            bind:onClick="@{()->callmodel.accept()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
-            onClick="@{()->callmodel.accept()}"
             />
-
-
 
     </LinearLayout>
 </layout>

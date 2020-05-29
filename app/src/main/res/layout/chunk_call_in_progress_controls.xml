@@ -1,0 +1,65 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="callmodel" type="org.lindoor.ui.call.CallViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <include
+            layout="@layout/widget_call_button"
+            bind:icon='@{"icons/mic"}'
+            bind:text='@{"call_button_mute"}'
+            bind:textOff='@{"call_button_unmute"}'
+            bind:backgroundeffect='@{"incall_call_button"}'
+            bind:tint='@{"color_c"}'
+            bind:outline='@{true}'
+            bind:onClick="@{()->callmodel.toggleMute()}"
+            bind:off="@{callmodel.microphoneMuted}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            />
+
+
+        <include
+            layout="@layout/widget_call_button"
+            bind:icon='@{"icons/decline"}'
+            bind:text='@{"call_button_hangup"}'
+            bind:backgroundeffect='@{"decline_call_button"}'
+            bind:tint='@{"color_c"}'
+            bind:outline='@{false}'
+            bind:onClick="@{()->callmodel.terminate()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            />
+
+        <include
+            layout="@layout/widget_call_button"
+            bind:icon='@{"icons/speaker"}'
+            bind:text='@{"call_button_enable_speaker"}'
+            bind:textOff='@{"call_button_disable_speaker"}'
+            bind:backgroundeffect='@{"incall_call_button"}'
+            bind:tint='@{"color_c"}'
+            bind:outline='@{true}'
+            bind:onClick="@{()->callmodel.toggleSpeaker()}"
+            bind:off="@{callmodel.speakerMuted}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+</layout>

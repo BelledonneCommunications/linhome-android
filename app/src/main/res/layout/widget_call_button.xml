@@ -1,32 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="off"
+            type="androidx.lifecycle.MutableLiveData&lt;Boolean>" />
+        <variable
+            name="icon"
+            type="String" />
+        <variable
+            name="text"
+            type="String" />
+        <variable
+            name="textOff"
+            type="String" />
+        <variable
+            name="backgroundeffect"
+            type="String" />
+        <variable
+            name="tint"
+            type="String" />
+        <variable
+            name="outline"
+            type="Boolean" />
+        <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
+    </data>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/icon"
-            app:fabCustomSize="60dp"
+        <RelativeLayout
+            android:id="@+id/border"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:elevation="0dp"
-            app:elevation="0dp"
-            android:src="@drawable/ic_lindoor_icon"
-            app:maxImageSize="32dp"
-            />
+            android:background="@{outline ? @drawable/round_shape_outline : @drawable/round_shape}"
+            android:padding="2dp">
 
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="@drawable/round_shape"
+                icon='@{icon}'
+                backgroundeffect='@{backgroundeffect}'
+                tint='@{tint}'
+                android:onClick="@{onClick}"
+                />
+
+            <LinearLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="4dp"
+                android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
+                android:orientation="horizontal" >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/strike_trhough"
+                    />
+            </LinearLayout>
+
+        </RelativeLayout>
         <TextView
             android:id="@+id/text"
-            android:layout_marginTop="6dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="xxxxxx"
             style='@{"call_action_button"}'
-            />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:visibility='@{off ? View.GONE : View.VISIBLE, default = "visible"}'
+            android:singleLine="true"
+            marquee='@{true}'
+            text='@{text}'
+            android:text="xxxxxx" />
+
+        <TextView
+            android:id="@+id/textOff"
+            style='@{"call_action_button"}'
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
+            android:singleLine="true"
+            marquee='@{true}'
+            text='@{textOff}'
+            android:text="xxxxxx" />
 
     </LinearLayout>
 </layout>

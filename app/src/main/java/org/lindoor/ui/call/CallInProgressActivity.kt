@@ -1,4 +1,4 @@
-package org.lindoor.ui.call.incoming
+package org.lindoor.ui.call
 
 import android.os.Bundle
 import android.view.View
@@ -9,15 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
-import org.lindoor.databinding.ActivityCallIncomingBinding
-import org.lindoor.ui.call.CallViewModel
-import org.lindoor.ui.call.CallViewModelFactory
+import org.lindoor.databinding.ActivityCallInProgressBinding
 import org.linphone.core.Call
 
 
-class CallIncomingActivity : AppCompatActivity () {
+class CallInProgressActivity : AppCompatActivity () {
 
-    lateinit var binding : ActivityCallIncomingBinding
+    lateinit var binding : ActivityCallInProgressBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +25,7 @@ class CallIncomingActivity : AppCompatActivity () {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         decorView.setSystemUiVisibility(uiOptions)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_call_incoming) as ActivityCallIncomingBinding
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_call_in_progress) as ActivityCallInProgressBinding
         binding.lifecycleOwner = this
 
         intent.getSerializableExtra("call")?.let {

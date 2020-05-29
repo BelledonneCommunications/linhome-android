@@ -21,15 +21,16 @@ class CallViewModelFactory(private val call: Call,val acceptEarlyMedia:Boolean =
 class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:Boolean) : ViewModel() {
     val device: MutableLiveData<Device?> = MutableLiveData(DeviceManager.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.detaultType())
-    var callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
-    var videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
-    private var aVideoFrameWasReceived = false
 
+    val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
+    val videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    val speakerMuted: MutableLiveData<Boolean> = MutableLiveData(call.speakerMuted)
+    val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(call.microphoneMuted)
 
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
-            callState.value = cstate
-            videoContent.value = hasVideoContent()
+            callState.postValue(cstate)
 
             if (autoAcceptEarlyMedia && cstate == Call.State.IncomingReceived) {
                 acceptEarlyMedia ()
@@ -41,17 +42,12 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
 
         override fun onNextVideoFrameDecoded(call: Call?) {
             super.onNextVideoFrameDecoded(call)
-            aVideoFrameWasReceived = true
-            videoContent.value = hasVideoContent()
+            videoContent.value = true
             device.value?.also {d ->
                 if (d.snapshotImage == null)
                     call?.takeVideoSnapshot("${DeviceManager.snapshotsPath.absolutePath}/"+d.id+"+.jpg")
             }
         }
-    }
-
-    private fun hasVideoContent():Boolean {
-        return (call.remoteParams?.videoEnabled() ?: false) && aVideoFrameWasReceived && (call.state == Call.State.IncomingEarlyMedia || call.state == Call.State.StreamsRunning)
     }
 
     init {
@@ -76,7 +72,7 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
     fun accept() {
         val inCallParams:CallParams = coreContext.core.createCallParams(call)
         inCallParams.videoDirection = MediaDirection.RecvOnly
-        inCallParams.audioDirection = MediaDirection.SendRecv
+        inCallParams.audioDirection = MediaDirection.SendRecv // TODO Future - put device type dependent
         if (record)
             inCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = false)
         call.requestNotifyNextVideoFrameDecoded()
@@ -89,10 +85,25 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         call.decline(Reason.Declined)
     }
 
+    fun terminate() {
+        call.terminate()
+    }
+
     override fun onCleared() {
         call.removeListener(callListener)
         super.onCleared()
     }
 
+
+    fun toggleMute() {
+        call.microphoneMuted = !call.microphoneMuted
+        microphoneMuted.value = call.microphoneMuted
+    }
+
+
+    fun toggleSpeaker() {
+        call.speakerMuted = !call.speakerMuted
+        speakerMuted.value = call.speakerMuted
+    }
 
 }

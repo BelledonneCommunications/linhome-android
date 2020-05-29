@@ -21,6 +21,7 @@ import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
 import org.lindoor.ui.widgets.LEditText
+import org.lindoor.utils.databindings.pxFromDp
 import org.lindoor.utils.stackStrace
 import org.lindoor.utils.svgloader.GlideApp
 import org.linphone.mediastream.Log
@@ -136,6 +137,15 @@ object Theme {
         shape.cornerRadius = pxFromDp(radius)
         return shape
     }
+
+    fun circleGradientDrawable(colorKey:String): GradientDrawable {
+        val shape = GradientDrawable()
+        shape.shape = GradientDrawable.OVAL
+        shape.setColor(Color.TRANSPARENT)
+        shape.setStroke(pxFromDp(5.0f).toInt(), getColor(colorKey))
+        return shape
+    }
+
 
     fun radius(key:String, default:Float = 0.0f): Float {
         return  themeConfig.getFloat("arbitrary-values", key, default)

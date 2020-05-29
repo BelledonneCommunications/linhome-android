@@ -103,11 +103,11 @@ fun marquee(textView: TextView, enabled: Boolean) {
     "text_args",
     requireAll = false
 )
-fun text(textView: TextView, textKey: String, textArgs: String?) {
+fun text(textView: TextView, textKey: String?, textArgs: String?) {
     if (textArgs != null) {
-        textView.text = Texts.get(textKey,textArgs.split(",").toTypedArray())
+        textView.text = textKey?.let { Texts.get(it,textArgs.split(",").toTypedArray()) }
     } else
-        textView.text = Texts.get(textKey)
+        textView.text = textKey?.let { Texts.get(it) }
 }
 
 
@@ -204,6 +204,20 @@ fun deviceTypeIconCircle(image: ImageView, type: String?) {
     }
 }
 
+@BindingAdapter("icon")
+fun icon(button: ImageView, name: String) {
+    Theme.setIcon(name,button)
+}
+
+@BindingAdapter("tint")
+fun tint(button: ImageView, name: String) {
+    button.imageTintList = Theme.buildSingleColorStateList(name)
+}
+
+@BindingAdapter("backgroundeffect")
+fun background(button: ImageView, name: String) {
+    button.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_pressed)
+}
 
 @BindingAdapter("src")
 fun src(image: ImageView, name: String) {

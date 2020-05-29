@@ -35,7 +35,8 @@ import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.R
 import org.lindoor.SplashActivity
 import org.lindoor.notifications.NotificationsManager
-import org.lindoor.ui.call.incoming.CallIncomingActivity
+import org.lindoor.ui.call.CallIncomingActivity
+import org.lindoor.ui.call.CallInProgressActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
@@ -159,7 +160,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
                     isVibrating = false
                 }
 
-                onCallStarted()
+                onCallStarted(call)
             } else if (state == Call.State.End || state == Call.State.Error || state == Call.State.Released) {
                 if (core.callsNb == 0) {
                     if (isVibrating) {
@@ -342,7 +343,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 }
                 MotionEvent.ACTION_UP -> {
                     if (abs(overlayX - params.x) < 5 && abs(overlayY - params.y) < 5) {
-                        onCallStarted()
+                        core.currentCall?.also {
+                            onCallStarted(it)
+                        }
                     }
                     overlayX = params.x.toFloat()
                     overlayY = params.y.toFloat()
@@ -373,6 +376,8 @@ class CoreContext(val context: Context, coreConfig: Config) {
         context.startActivity(intent)
     }
 
+
+
     private fun onOutgoingStarted() {
         val intent = Intent(context, SplashActivity::class.java)
         // This flag is required to start an Activity from a Service context
@@ -380,10 +385,10 @@ class CoreContext(val context: Context, coreConfig: Config) {
         context.startActivity(intent)
     }
 
-    private fun onCallStarted() {
-        val intent = Intent(context, SplashActivity::class.java)
-        // This flag is required to start an Activity from a Service context
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+    private fun onCallStarted(call:Call) {
+        val intent = Intent(context, CallInProgressActivity::class.java)
+        intent.putExtra("call",call)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 }

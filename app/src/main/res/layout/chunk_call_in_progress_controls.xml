@@ -57,7 +57,7 @@
             android:layout_weight="1"
             bind:backgroundeffect='@{"incall_call_button"}'
             bind:icon='@{"icons/speaker"}'
-            bind:off="@{callmodel.speakerMuted}"
+            bind:off="@{callmodel.speakerEnabled}"
             bind:onClick="@{()->callmodel.toggleSpeaker()}"
             bind:outline='@{true}'
             bind:text='@{"call_button_enable_speaker"}'

@@ -60,7 +60,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     init {
 
         availableDeviceTypes.add(SpinnerItem("device_type_select_prompt"))
-        availableDeviceTypes.addAll(DeviceTypes.spinnerItems)
+        availableDeviceTypes.addAll(DeviceTypes.deviceTypes)
 
         availableMethodTypes.add(SpinnerItem("action_method_prompt"))
         availableMethodTypes.addAll(ActionsMethodTypes.spinnerItems)

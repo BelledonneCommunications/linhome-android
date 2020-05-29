@@ -7,6 +7,8 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
+import org.lindoor.linphonecore.forceEarpieceAudioRoute
+import org.lindoor.linphonecore.forceSpeakerAudioRoute
 import org.lindoor.managers.DeviceManager
 import org.lindoor.managers.RecordingsManager
 import org.linphone.core.*
@@ -21,14 +23,14 @@ class CallViewModelFactory(private val call: Call, private val acceptEarlyMedia:
 
 class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:Boolean) : ViewModel() {
     val device: MutableLiveData<Device?> = MutableLiveData(DeviceManager.findDeviceByAddress(call.remoteAddress))
-    val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.detaultType())
+    val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.defaultType)
 
     val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
     val videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
     val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val speakerMuted: MutableLiveData<Boolean> = MutableLiveData(call.speakerMuted)
-    val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(call.microphoneMuted)
+    val speakerEnabled: MutableLiveData<Boolean> = MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
+    val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
@@ -75,11 +77,11 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
     fun accept() {
         val inCallParams:CallParams = coreContext.core.createCallParams(call)
         inCallParams.videoDirection = MediaDirection.RecvOnly
-        inCallParams.audioDirection = MediaDirection.SendRecv // TODO Future - put device type dependent
+        inCallParams.audioDirection = MediaDirection.SendRecv
         if (record)
             inCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = false)
-        call.requestNotifyNextVideoFrameDecoded()
         call.acceptWithParams(inCallParams)
+        call.requestNotifyNextVideoFrameDecoded()
         if (record)
             call.startRecording()
     }
@@ -103,14 +105,23 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
 
 
     fun toggleMute() {
-        call.microphoneMuted = !call.microphoneMuted
-        microphoneMuted.value = call.microphoneMuted
+        val micEnabled = coreContext.core.micEnabled()
+        coreContext.core.enableMic(!micEnabled)
+        microphoneMuted.value = micEnabled
     }
 
+
     fun toggleSpeaker() {
-        call.speakerMuted = !call.speakerMuted
-        speakerMuted.value = call.speakerMuted
+        val audioDevice = coreContext.core.outputAudioDevice
+        if (audioDevice?.type == AudioDevice.Type.Speaker) {
+            coreContext.core.forceEarpieceAudioRoute()
+            speakerEnabled.value = false
+        } else {
+            coreContext.core.forceSpeakerAudioRoute()
+            speakerEnabled.value = true
+        }
     }
+
 
     fun toggleVideoFullScreen() {
         videoFullScreen.value = !videoFullScreen.value!!

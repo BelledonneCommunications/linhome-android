@@ -5,11 +5,15 @@ import org.lindoor.ui.widgets.SpinnerItem
 import java.util.*
 
 object DeviceTypes {
-    var spinnerItems: ArrayList<SpinnerItem> = ArrayList()
+    var deviceTypes: ArrayList<SpinnerItem> = ArrayList()
+    lateinit var defaultType:String
+
     init {
         deviceTypesConfig.let { config ->
             config.sectionsNamesList.forEach {
-                spinnerItems.add(
+                if (config.getBool(it,"default",false))
+                    defaultType = it
+                deviceTypes.add(
                     SpinnerItem(config.getString(it,"textkey","missing"),config.getString(it,"icon",null),it)
                 )
             }
@@ -24,7 +28,7 @@ object DeviceTypes {
 
     fun typeNameForDeviceType(typeKey:String):String? {
         return deviceTypesConfig.let { config ->
-            Texts.get(config.getString(typeKey,"textkey",null))
+            Texts.get(config.getString(typeKey,"textkey", deviceTypes.get(0).backingKey))
         }
     }
 
@@ -37,12 +41,6 @@ object DeviceTypes {
     fun supportsVideo(typeKey:String):Boolean  {
         return deviceTypesConfig.let { config ->
             config.getBool(typeKey,"hasvideo",false)
-        }
-    }
-
-    fun detaultType():String? {
-        return deviceTypesConfig.let { config ->
-            config.getString("default","type",null)
         }
     }
 

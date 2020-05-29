@@ -31,6 +31,8 @@ enabled=1
 
 [assistant]
 xmlrpc_url=https://subscribe.linphone.org:444/wizard.php
-
+; MD5 / SHA-256
+password_algo=SHA-256
+domain=sip.linphone.org
 
 ## End of factory rc

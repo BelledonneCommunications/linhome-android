@@ -22,6 +22,9 @@ import org.lindoor.utils.DialogUtil
 import org.linphone.core.XmlRpcArgType
 import org.linphone.core.XmlRpcRequest
 import org.linphone.core.XmlRpcRequestListener
+import org.lindoor.LindoorApplication.Companion.coreContext
+import org.lindoor.LindoorApplication.Companion.corePreferences
+
 
 class LoginLindoorAccountFragment :CreatorAssistantFragment() {
 
@@ -64,13 +67,15 @@ class LoginLindoorAccountFragment :CreatorAssistantFragment() {
                         }
                     }
                 })
-                xmlRpcRequest.addStringArg("${model.username.first.value}@sip.linphone.org")
-                xmlRpcRequest.addStringArg(model.pass1.first.value)
+                xmlRpcRequest.addStringArg(model.username.first.value)
+                xmlRpcRequest.addStringArg(corePreferences.encryptedPass(model.username.first.value!!,model.pass1.first.value!!))
+                xmlRpcRequest.addStringArg(corePreferences.loginDomain)
                 xmlRpcSession.sendRequest(xmlRpcRequest)
             }
         }
 
         return binding.root
     }
+
 
 }

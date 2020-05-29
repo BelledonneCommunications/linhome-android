@@ -12,7 +12,7 @@ import org.lindoor.LindoorFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteQrBinding
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.toogleVisible
+import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 import org.linphone.core.tools.Log
 

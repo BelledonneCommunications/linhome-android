@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.ActivityCallInProgressBinding
-import org.lindoor.utils.toogleVisible
+import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.Call
 
 

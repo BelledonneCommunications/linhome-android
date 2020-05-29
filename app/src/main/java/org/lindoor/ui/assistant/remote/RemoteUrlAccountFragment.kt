@@ -15,8 +15,8 @@ import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteUrlBinding
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.invisible
-import org.lindoor.utils.toogleVisible
+import org.lindoor.utils.extensions.invisible
+import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 
 class RemoteUrlAccountFragment :LindoorFragment() {

@@ -20,12 +20,15 @@
 package org.lindoor.linphonecore
 
 import android.content.Context
+import com.google.android.gms.common.util.IOUtils.toByteArray
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Config
 import org.linphone.mediastream.Log
 import java.io.File
 import java.io.FileOutputStream
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class CorePreferences constructor(private val context: Context) { // Todo - review necessary portion (copied from Linphone)
     private var _config: Config? = null
@@ -178,6 +181,18 @@ class CorePreferences constructor(private val context: Context) { // Todo - revi
             config.setString("assistant", "xmlrpc_url", value)
         }
 
+    var passwordAlgo: String?
+        get() = config.getString("assistant", "password_algo", null)
+        set(value) {
+            config.setString("assistant", "password_algo", value)
+        }
+
+    var loginDomain: String?
+        get() = config.getString("assistant", "domain", null)
+        set(value) {
+            config.setString("assistant", "domain", value)
+        }
+
     /* Dialog related */
 
     var limeSecurityPopupEnabled: Boolean
@@ -281,5 +296,10 @@ class CorePreferences constructor(private val context: Context) { // Todo - revi
         inFile.close()
         outStream.flush()
         outStream.close()
+    }
+
+    fun encryptedPass(user:String,clearPass:String) : String {
+        val md = MessageDigest.getInstance(passwordAlgo?.toUpperCase())
+        return BigInteger(1, md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())).toString(16).padStart(32, '0')
     }
 }

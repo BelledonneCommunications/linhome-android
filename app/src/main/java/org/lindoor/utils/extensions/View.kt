@@ -1,4 +1,4 @@
-package org.lindoor.utils
+package org.lindoor.utils.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

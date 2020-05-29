@@ -35,8 +35,8 @@ import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.R
 import org.lindoor.SplashActivity
 import org.lindoor.notifications.NotificationsManager
-import org.lindoor.ui.call.CallIncomingActivity
 import org.lindoor.ui.call.CallInProgressActivity
+import org.lindoor.ui.call.CallIncomingActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log

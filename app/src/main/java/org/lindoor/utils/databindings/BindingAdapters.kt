@@ -23,6 +23,10 @@ import org.lindoor.ui.widgets.*
 
 
 ////////////////////////
+// Call Elements fading out
+////////////////////////
+
+////////////////////////
 // ViewGroup
 ////////////////////////
 
@@ -205,8 +209,10 @@ fun deviceTypeIconCircle(image: ImageView, type: String?) {
 }
 
 @BindingAdapter("icon")
-fun icon(button: ImageView, name: String) {
-    Theme.setIcon(name,button)
+fun icon(button: ImageView, name: String?) {
+    if (name != null) {
+        Theme.setIcon(name,button)
+    }
 }
 
 @BindingAdapter("tint")

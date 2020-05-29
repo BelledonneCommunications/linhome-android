@@ -13,5 +13,16 @@ data class Action(val type:String?,val code:String?) : Parcelable {
         } ?: null
     }
 
+    fun iconName():String? {
+        return type?.let {
+            ActionTypes.iconNameForActionType(it)
+        } ?: null
+    }
+
+    fun actionTextKey():String? {
+        return type?.let {
+            ActionTypes.typeNameForActionType(it)
+        } ?: null
+    }
 
 }

@@ -1,9 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-        <variable name="callmodel" type="org.lindoor.ui.call.CallViewModel" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="callmodel"
+            type="org.lindoor.ui.call.CallViewModel" />
     </data>
 
     <LinearLayout
@@ -12,6 +16,53 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+
+        <include
+            android:id="@+id/action1"
+            layout="@layout/widget_call_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? View.VISIBLE : View.GONE}'
+            bind:backgroundeffect='@{"incall_call_button"}'
+            bind:icon='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? callmodel.device.actions.get(0).iconName() : null}'
+            bind:onClick="@{()->callmodel.performAction(callmodel.device.actions.get(0))}"
+            bind:outline='@{true}'
+            bind:text='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? callmodel.device.actions.get(0).actionTextKey() : null}'
+            bind:tint='@{"color_c"}' />
+
+
+        <include
+            layout="@layout/widget_call_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>1 ? View.VISIBLE : View.GONE}'
+            bind:backgroundeffect='@{"incall_call_button"}'
+            bind:icon='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>1 ? callmodel.device.actions.get(1).iconName() : null}'
+            bind:onClick="@{()->callmodel.performAction(callmodel.device.actions.get(1))}"
+            bind:outline='@{true}'
+            bind:text='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>1 ? callmodel.device.actions.get(1).actionTextKey() : null}'
+            bind:tint='@{"color_c"}' />
+
+        <include
+            layout="@layout/widget_call_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>2 ? View.VISIBLE : View.GONE}'
+            bind:backgroundeffect='@{"incall_call_button"}'
+            bind:icon='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>2 ? callmodel.device.actions.get(2).iconName() : null}'
+            bind:onClick="@{()->callmodel.performAction(callmodel.device.actions.get(2))}"
+            bind:outline='@{true}'
+            bind:text='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>2 ? callmodel.device.actions.get(2).actionTextKey() : null}'
+            bind:tint='@{"color_c"}' />
 
     </LinearLayout>
 </layout>

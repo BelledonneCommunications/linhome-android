@@ -21,7 +21,6 @@ import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
 import org.lindoor.ui.widgets.LEditText
-import org.lindoor.utils.databindings.pxFromDp
 import org.lindoor.utils.stackStrace
 import org.lindoor.utils.svgloader.GlideApp
 import org.linphone.mediastream.Log

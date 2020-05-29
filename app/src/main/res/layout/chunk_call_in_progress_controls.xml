@@ -1,10 +1,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-        <variable name="callmodel" type="org.lindoor.ui.call.CallViewModel" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="callmodel"
+            type="org.lindoor.ui.call.CallViewModel" />
     </data>
 
     <LinearLayout
@@ -16,50 +19,50 @@
 
         <include
             layout="@layout/widget_call_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            bind:backgroundeffect='@{"incall_call_button"}'
             bind:icon='@{"icons/mic"}'
+            bind:off="@{callmodel.microphoneMuted}"
+            bind:onClick="@{()->callmodel.toggleMute()}"
+            bind:outline='@{true}'
             bind:text='@{"call_button_mute"}'
             bind:textOff='@{"call_button_unmute"}'
-            bind:backgroundeffect='@{"incall_call_button"}'
-            bind:tint='@{"color_c"}'
-            bind:outline='@{true}'
-            bind:onClick="@{()->callmodel.toggleMute()}"
-            bind:off="@{callmodel.microphoneMuted}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            />
+            bind:tint='@{"color_c"}' />
 
 
         <include
             layout="@layout/widget_call_button"
-            bind:icon='@{"icons/decline"}'
-            bind:text='@{"call_button_hangup"}'
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
             bind:backgroundeffect='@{"decline_call_button"}'
-            bind:tint='@{"color_c"}'
-            bind:outline='@{false}'
+            bind:icon='@{"icons/decline"}'
             bind:onClick="@{()->callmodel.terminate()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            />
+            bind:outline='@{false}'
+            bind:text='@{"call_button_hangup"}'
+            bind:tint='@{"color_c"}' />
 
         <include
             layout="@layout/widget_call_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            bind:backgroundeffect='@{"incall_call_button"}'
             bind:icon='@{"icons/speaker"}'
+            bind:off="@{callmodel.speakerMuted}"
+            bind:onClick="@{()->callmodel.toggleSpeaker()}"
+            bind:outline='@{true}'
             bind:text='@{"call_button_enable_speaker"}'
             bind:textOff='@{"call_button_disable_speaker"}'
-            bind:backgroundeffect='@{"incall_call_button"}'
-            bind:tint='@{"color_c"}'
-            bind:outline='@{true}'
-            bind:onClick="@{()->callmodel.toggleSpeaker()}"
-            bind:off="@{callmodel.speakerMuted}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            />
+            bind:tint='@{"color_c"}' />
 
     </LinearLayout>
 </layout>

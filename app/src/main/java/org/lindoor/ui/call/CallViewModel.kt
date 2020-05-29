@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.customisation.DeviceTypes
+import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.managers.DeviceManager
 import org.lindoor.managers.RecordingsManager
 import org.linphone.core.*
 
-class CallViewModelFactory(private val call: Call,val acceptEarlyMedia:Boolean = true, val record:Boolean = true) :
+class CallViewModelFactory(private val call: Call, private val acceptEarlyMedia:Boolean = true, val record:Boolean = true) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -24,6 +25,7 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
 
     val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
     val videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
+    val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val speakerMuted: MutableLiveData<Boolean> = MutableLiveData(call.speakerMuted)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(call.microphoneMuted)
@@ -52,12 +54,13 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
 
     init {
         call.addListener(callListener)
+        call.requestNotifyNextVideoFrameDecoded()
         if (autoAcceptEarlyMedia && call.state ==  Call.State.IncomingReceived)
             acceptEarlyMedia ()
+
     }
 
     fun acceptEarlyMedia() {
-        call.requestNotifyNextVideoFrameDecoded()
         val earlyMediaCallParams:CallParams = coreContext.core.createCallParams(call)
         earlyMediaCallParams.videoDirection = MediaDirection.RecvOnly
         earlyMediaCallParams.audioDirection = MediaDirection.Inactive
@@ -100,10 +103,37 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
         microphoneMuted.value = call.microphoneMuted
     }
 
-
     fun toggleSpeaker() {
         call.speakerMuted = !call.speakerMuted
         speakerMuted.value = call.speakerMuted
+    }
+
+    fun toggleVideoFullScreen() {
+        videoFullScreen.value = !videoFullScreen.value!!
+    }
+
+    fun performAction(action: Action) {
+        device.value?.also {d ->
+            coreContext.core.useInfoForDtmf = true
+            when (d.actionsMethodType) {
+                "method_dtmf_sip_info" -> {
+                    coreContext.core.useInfoForDtmf = true
+                    call.sendDtmfs(action.code)
+                }
+                "method_dtmf_rfc_4733" -> {
+                    coreContext.core.useRfc2833ForDtmf = true
+                    call.sendDtmfs(action.code)
+                }
+                "method_sip_message" -> {
+                    val message = coreContext.core.createInfoMessage()
+                    val content = coreContext.core.createContent()
+                    content.type = "text/plain"
+                    action.code?.length?.let { content.setBuffer(action.code.toByteArray(), it) }
+                    message.content = content
+                    call.sendInfoMessage(message)
+                }
+            }
+        }
     }
 
 }

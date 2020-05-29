@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_call_incoming.view.*
 import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
@@ -16,6 +17,7 @@ import org.linphone.core.Call
 class CallIncomingActivity : AppCompatActivity () {
 
     lateinit var binding : ActivityCallIncomingBinding
+    private lateinit var callViewModel: CallViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,26 +25,34 @@ class CallIncomingActivity : AppCompatActivity () {
         val decorView: View = window.decorView
         val uiOptions: Int =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        decorView.setSystemUiVisibility(uiOptions)
+        decorView.systemUiVisibility = uiOptions
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call_incoming) as ActivityCallIncomingBinding
         binding.lifecycleOwner = this
 
         intent.getSerializableExtra("call")?.let {
-            val callViewModel = ViewModelProvider(this, CallViewModelFactory(it as Call))[CallViewModel::class.java]
+            callViewModel = ViewModelProvider(this, CallViewModelFactory(it as Call))[CallViewModel::class.java]
             binding.callmodel = callViewModel
-            callViewModel.callState?.observe(this, Observer { callState ->
+            callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
                     Call.State.IncomingEarlyMedia,Call.State.IncomingReceived -> return@Observer
                     else -> finish()
                 }
             })
+            binding.root.videotogglecollapsed.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.root.videofullscreen
+                callViewModel.toggleVideoFullScreen()
+            }
+            binding.root.videotogglefullscreen.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.root.videocollapsed
+                callViewModel.toggleVideoFullScreen()
+            }
         }  ?: finish()
     }
 
     override fun onResume() {
         super.onResume()
-        coreContext.core.nativeVideoWindowId = binding.root.video
+        coreContext.core.nativeVideoWindowId = if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
     }
 
     override fun onPause() {

@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="54dp"
+            android:layout_alignParentTop="true"
             android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
 
             <include
@@ -58,20 +59,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chunk_call_top"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
-
 
             <LinearLayout
                 android:id="@+id/chunk_call_name_address"
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content">
-
                 <include
                     layout="@layout/chunk_call_name_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="60dp"
                     bind:callmodel="@{callmodel}" />
             </LinearLayout>
 

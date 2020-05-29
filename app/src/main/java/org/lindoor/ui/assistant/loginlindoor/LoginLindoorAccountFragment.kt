@@ -5,15 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.fragment_assistant_create_lindoor.view.*
 import kotlinx.android.synthetic.main.fragment_assistant_login_lindoor.view.*
+import kotlinx.android.synthetic.main.fragment_assistant_login_lindoor.view.password
+import kotlinx.android.synthetic.main.fragment_assistant_login_lindoor.view.username
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
+import org.lindoor.LindoorApplication
 import org.lindoor.R
+import org.lindoor.customisation.Texts
 import org.lindoor.databinding.FragmentAssistantLoginLindoorBinding
 import org.lindoor.entities.Account
 import org.lindoor.entities.AccountType
 import org.lindoor.ui.assistant.CreatorAssistantFragment
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
+import org.linphone.core.XmlRpcArgType
+import org.linphone.core.XmlRpcRequest
+import org.linphone.core.XmlRpcRequestListener
 
 class LoginLindoorAccountFragment :CreatorAssistantFragment() {
 
@@ -35,11 +43,30 @@ class LoginLindoorAccountFragment :CreatorAssistantFragment() {
             binding.root.password.validate()
             updateField(model.setUsername(model.username),binding.root.username)
             updateField(model.setPassword(model.pass1),binding.root.password)
-            if (model.valid()) {
+            if (model.fieldsValid()) {
                 hideKeyboard()
-                Account.configure(model.accountCreator,AccountType.Lindoor) // TODO Check api availbility to check user / pass instead of creating proxy config & doing SIP Register
-                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                DialogUtil.info("lindoor_account_loggedin")
+                showProgress()
+                val xmlRpcSession = LindoorApplication.coreContext.core.createXmlRpcSession(
+                    LindoorApplication.corePreferences.xmlRpcServerUrl);
+                val xmlRpcRequest = xmlRpcSession.createRequest(XmlRpcArgType.String, "check_authentication")
+                xmlRpcRequest.setListener(object: XmlRpcRequestListener {
+                    @Override
+                    override fun onResponse(request: XmlRpcRequest?) {
+                        hideProgress()
+                        if (request != null) {
+                            if (request.stringResponse == "OK") {
+                                Account.configure(model.accountCreator,AccountType.Lindoor)
+                                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+                                DialogUtil.info("lindoor_account_loggedin")
+                            } else {
+                                binding.root.username.setError(Texts.get("lindoor_account_login_failed_unknown_user_or_wroong_password"))
+                            }
+                        }
+                    }
+                })
+                xmlRpcRequest.addStringArg("${model.username.first.value}@sip.linphone.org")
+                xmlRpcRequest.addStringArg(model.pass1.first.value)
+                xmlRpcSession.sendRequest(xmlRpcRequest)
             }
         }
 

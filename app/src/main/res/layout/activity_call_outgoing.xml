@@ -37,13 +37,14 @@
             <LinearLayout
                 android:id="@+id/chunk_call_name_address"
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+
                 android:layout_height="wrap_content">
 
                 <include
                     layout="@layout/chunk_call_name_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="60dp"
                     bind:callmodel="@{callmodel}" />
             </LinearLayout>
 
@@ -75,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:SpinKit_Color="@color/color_a" />
+                    app:SpinKit_Color="@color/color_c" />
             </LinearLayout>
         </RelativeLayout>
 

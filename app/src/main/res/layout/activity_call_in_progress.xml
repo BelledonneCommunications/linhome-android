@@ -61,20 +61,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chunk_call_top"
+            android:layout_above="@+id/actions"
             android:layout_marginTop="12dp">
-
 
             <LinearLayout
                 android:id="@+id/chunk_call_name_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
 
                 <include
                     layout="@layout/chunk_call_name_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="60dp"
                     bind:callmodel="@{callmodel}" />
             </LinearLayout>
 
@@ -93,13 +93,12 @@
                     bind:callmodel="@{callmodel}" />
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/timer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/chunk_call_video_or_icon"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center">
 
                 <Chronometer
@@ -116,8 +115,8 @@
             android:id="@+id/actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/centerbundle"
-            android:layout_marginTop="40dp"
+            android:layout_above="@+id/controls"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"
             android:gravity="center">
 
@@ -133,7 +132,7 @@
             android:id="@+id/controls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/actions"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="29dp"
             android:gravity="center">
 

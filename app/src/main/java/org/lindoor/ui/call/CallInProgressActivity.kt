@@ -1,5 +1,6 @@
 package org.lindoor.ui.call
 
+import android.Manifest
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
@@ -13,18 +14,23 @@ import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.ActivityCallInProgressBinding
+import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.Call
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.RuntimePermissions
 
-
+@RuntimePermissions
 class CallInProgressActivity : AppCompatActivity () {
 
     lateinit var binding : ActivityCallInProgressBinding
     lateinit var callViewModel: CallViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         val decorView: View = window.decorView
         val uiOptions: Int =
@@ -60,7 +66,7 @@ class CallInProgressActivity : AppCompatActivity () {
                 }
                 true
             }
-
+            startWithPermissionCheck()
         }  ?: finish()
     }
 
@@ -72,6 +78,24 @@ class CallInProgressActivity : AppCompatActivity () {
     override fun onPause() {
         coreContext.core.nativeVideoWindowId = null
         super.onPause()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    @NeedsPermission(Manifest.permission.RECORD_AUDIO)
+    fun start() {}
+
+    @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
+    fun onCameraDenied() {
+        DialogUtil.error("record_audio_permission_denied")
+    }
+
+    @OnNeverAskAgain(Manifest.permission.RECORD_AUDIO)
+    fun onCameraNeverAskAgain() {
+        DialogUtil.error("record_audio_permission_denied_dont_ask_again")
     }
 
 }

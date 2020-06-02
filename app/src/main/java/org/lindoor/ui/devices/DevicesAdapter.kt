@@ -18,8 +18,9 @@ import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.entities.Device
-import org.lindoor.managers.DeviceManager
+import org.lindoor.store.DeviceStore
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.cdlog
 import org.linphone.compatibility.Compatibility
 
 
@@ -27,9 +28,9 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     var background: Drawable? = null
-    var deleteViewMargin = 0
+    private var deleteViewMargin = 0
     var initiated = false
-    lateinit var deleteIcon:PictureDrawable
+    private lateinit var deleteIcon:PictureDrawable
 
     private fun init() {
         background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_e","device_in_device_list_corner_radius")
@@ -46,7 +47,6 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     ): Boolean {
         return false
     }
-
 
     override fun onChildDraw(
         c: Canvas, recyclerView: RecyclerView,
@@ -70,34 +70,34 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
             itemView.right,
             itemView.bottom
         )
-        background!!.draw(c!!)
+        background!!.draw(c)
 
         val itemHeight = itemView.bottom - itemView.top
 
         val redWidth = itemView.right - (itemView.right + myDx)
-        val xMarkLeft = itemView.right + myDx  +redWidth/2- deleteIcon!!.intrinsicWidth/2 + deleteViewMargin/2
-        val xMarkRight = itemView.right + myDx  + redWidth/2+deleteIcon!!.intrinsicWidth/2 + deleteViewMargin/2
-        val xMarkTop = itemView.top + (itemHeight - deleteIcon!!.intrinsicHeight) / 2
-        val xMarkBottom = xMarkTop + deleteIcon!!.intrinsicHeight
-        deleteIcon!!.setBounds(xMarkLeft.toInt(), xMarkTop, xMarkRight.toInt(), xMarkBottom)
-        deleteIcon!!.draw(c)
+        val xMarkLeft = itemView.right + myDx  +redWidth/2- deleteIcon.intrinsicWidth/2 + deleteViewMargin/2
+        val xMarkRight = itemView.right + myDx  + redWidth/2+ deleteIcon.intrinsicWidth/2 + deleteViewMargin/2
+        val xMarkTop = itemView.top + (itemHeight - deleteIcon.intrinsicHeight) / 2
+        val xMarkBottom = xMarkTop + deleteIcon.intrinsicHeight
+        deleteIcon.setBounds(xMarkLeft.toInt(), xMarkTop, xMarkRight.toInt(), xMarkBottom)
+        deleteIcon.draw(c)
         super.onChildDraw(
             c,
-            recyclerView!!, viewHolder, dX, dY, actionState, isCurrentlyActive
+            recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
         )
     }
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-       val device = adapter.devices.value!!.get(viewHolder.adapterPosition)
+       val device = adapter.devices.value!![viewHolder.adapterPosition]
         DialogUtil.confirm(
             "delete_device_confirm_message",
-            { dialog: DialogInterface, which: Int ->
-               DeviceManager.removeDevice(device)
-                adapter.devices.value = DeviceManager.devices
+            { _: DialogInterface, _: Int ->
+               DeviceStore.removeDevice(device)
+                adapter.devices.value = DeviceStore.devices
                 adapter.notifyDataSetChanged()
             },device.name,
-            { dialog: DialogInterface, which: Int ->
+            { _: DialogInterface, _: Int ->
                 adapter.notifyDataSetChanged()
             }
         )
@@ -154,12 +154,25 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                 device.call()
             }
 
-            device.snapshotImage?.also {
-                deviceImage.visibility = View.VISIBLE
-                Theme.glidegeneric.load(it).into(deviceImage)
-                view.post {
-                    view.layoutParams.height = (view.measuredWidth*Theme.arbitraryValue("device_first_image_aspect_ratio","0.75").toFloat()).toInt()
-                    view.requestLayout()
+            device.getThumbnail().also {
+                cdlog("cdes"+it.absolutePath+it.length())
+                if (it.exists() && it.length() > 0) {
+                    deviceImage.visibility = View.VISIBLE
+                    Theme.glidegeneric.load(it).into(deviceImage)
+                    view.post {
+                        if (view.measuredWidth < view.measuredHeight) {
+                            view.layoutParams.height = (view.measuredWidth * Theme.arbitraryValue(
+                                "device_first_image_aspect_ratio",
+                                "0.75"
+                            ).toFloat()).toInt()
+                        } else {
+                            view.layoutParams.height = (view.measuredWidth / Theme.arbitraryValue(
+                                "device_first_image_aspect_ratio",
+                                "0.75"
+                            ).toFloat()).toInt()
+                        }
+                        view.requestLayout()
+                    }
                 }
             }
 

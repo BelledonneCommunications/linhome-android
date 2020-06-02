@@ -37,6 +37,10 @@ object Texts {
         return get(textKey, arrayOf(oneArg))
     }
 
+    fun get(textKey: String, arg1: String, arg2:String): String {
+        return get(textKey, arrayOf(arg1,arg2))
+    }
+
     fun get(key: String): String {
         return pureGet(key).replace("{appname}",appName).replace("\n",System.lineSeparator())
     }

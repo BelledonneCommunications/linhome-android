@@ -1,5 +1,6 @@
 package org.lindoor
 
+import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -14,10 +15,16 @@ import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivityMainBinding
 import org.lindoor.entities.Account
+import org.lindoor.store.StorageManager
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 import org.lindoor.ui.toolbar.ToolbarViewModel
+import org.lindoor.utils.DialogUtil
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.RuntimePermissions
 
-
+@RuntimePermissions
 class MainActivity : LindoorActivity() {
 
     lateinit var navController: NavController
@@ -94,6 +101,9 @@ class MainActivity : LindoorActivity() {
         if (!Account.configured()) {
             navController.navigate(R.id.navigation_assistant_root)
         }
+
+        if (!StorageManager.storePrivately)
+            startWithPermissionCheck()
 
     }
 
@@ -180,6 +190,26 @@ class MainActivity : LindoorActivity() {
             R.id.navigation_settings -> Texts.get("settings")
             else -> null
         }
+    }
+
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun start() {}
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onStorageDenied() {
+        DialogUtil.error("write_external_storage_permission_denied")
+    }
+
+    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onStorageDeniedNeverAsk() {
+        DialogUtil.error("write_external_storage_permission_denied_dont_ask_again")
     }
 
 

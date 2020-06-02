@@ -4,10 +4,8 @@ import android.R
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.PictureDrawable
-import android.graphics.drawable.StateListDrawable
+import android.graphics.drawable.*
+import android.graphics.drawable.GradientDrawable.LINEAR_GRADIENT
 import android.util.StateSet
 import android.view.Gravity
 import android.view.View
@@ -21,6 +19,7 @@ import com.caverock.androidsvg.SVG
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Customisation.themeConfig
 import org.lindoor.ui.widgets.LEditText
+import org.lindoor.utils.pxFromDp
 import org.lindoor.utils.stackStrace
 import org.lindoor.utils.svgloader.GlideApp
 import org.linphone.mediastream.Log
@@ -88,6 +87,16 @@ object Theme {
         return result
     }
 
+    fun arbitraryValue(key: String, default: Boolean): Boolean {
+        var result:Boolean? = themeConfig.getBool("arbitrary-values", key, default)
+        if (result == null) {
+            Log.e("[Theme] Failed retrieving arbitrary value:$key")
+            themeError()
+            result = default
+        }
+        return result
+    }
+
     fun setIcon(imageName: String, imageView: ImageView) { // Preferred SVG, fallback PNG or full name.
         val svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
         if (svg.exists())
@@ -124,15 +133,21 @@ object Theme {
         )
     }
 
-    private fun pxFromDp(dp: Float): Float {
-        return dp * LindoorApplication.instance.resources.displayMetrics.density
-    }
 
 
     fun roundRectGradientDrawable(color:Int, radius:Float): GradientDrawable {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.setColor(color)
+        shape.cornerRadius = pxFromDp(radius)
+        return shape
+    }
+
+    fun roundRectGradientDrawableWithStroke(color:Int, radius:Float, strokeColor:Int, strokeWidth:Int): GradientDrawable {
+        val shape = GradientDrawable()
+        shape.shape = GradientDrawable.RECTANGLE
+        shape.setColor(color)
+        shape.setStroke(strokeWidth,strokeColor)
         shape.cornerRadius = pxFromDp(radius)
         return shape
     }
@@ -152,6 +167,11 @@ object Theme {
 
     fun roundRectInputBackgroundWithColorKeyAndRadius(colorKey:String, radiusKey:String): GradientDrawable {
         return roundRectGradientDrawable(getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f))
+    }
+
+    fun roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey:String, radiusKey:String,strokeColorKey:String, strokeWidthDp: Int): GradientDrawable {
+        return roundRectGradientDrawableWithStroke(getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f),
+            getColor(strokeColorKey), pxFromDp(strokeWidthDp))
     }
 
     fun apply(textEditKey: String, textEdit: LEditText) {
@@ -239,6 +259,31 @@ object Theme {
 
     fun roundRectButtonBackgroundStates(key:String): GradientDrawable? {
         return roundRectShapeDrawableDualColorState(key,themeConfig.getFloat("arbitrary-values", "round_rect_button_corner_radius", 0.0f))
+    }
+
+
+    fun buildStateListDrawable(
+        drawableIdle: Drawable,
+        drawablePressed: Drawable
+    ): StateListDrawable {
+
+        val states =
+            StateListDrawable()
+
+        states.addState(
+            intArrayOf(R.attr.state_pressed),
+            drawablePressed
+        )
+        states.addState(
+            intArrayOf(-R.attr.state_enabled),
+            drawableIdle
+        )
+        states.addState(
+            intArrayOf(R.attr.state_enabled),
+            drawableIdle
+        )
+        states.addState(StateSet.WILD_CARD, drawableIdle)
+        return states
     }
 
     private fun buildStateListDrawable(

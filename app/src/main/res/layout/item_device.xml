@@ -15,11 +15,9 @@
                 android:id="@+id/device_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:alpha="0.3">
+                android:scaleType="fitXY"
+                android:alpha="0.5"> <!-- 0.3 -->
             </ImageView>
-
-
 
             <RelativeLayout
                 android:layout_width="match_parent"

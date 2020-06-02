@@ -8,7 +8,7 @@ import org.lindoor.customisation.ActionsMethodTypes
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
-import org.lindoor.managers.DeviceManager
+import org.lindoor.store.DeviceStore
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.ui.widgets.LSpinnerListener
 import org.lindoor.ui.widgets.SpinnerItem
@@ -96,7 +96,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                 if (it.notEmpty())
                     device?.actions?.add(Action(availableActionTypes.get(it.type.value!!).backingKey,it.code.first.value!!))
             }
-            DeviceManager.addDevice(device!!)
+            DeviceStore.persistDevice(device!!)
         } else {
             device?.also {
                 it.type = if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
@@ -109,7 +109,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                         it.actions?.add(Action(availableActionTypes.get(action.type.value!!).backingKey,action.code.first.value!!))
                 }
             }
-            DeviceManager.syncToXml()
+            DeviceStore.sync()
         }
 
         return true

@@ -6,7 +6,7 @@ import org.lindoor.customisation.Customisation
 import org.lindoor.customisation.Texts
 import org.lindoor.linphonecore.CoreContext
 import org.lindoor.linphonecore.CorePreferences
-import org.lindoor.managers.DeviceManager
+import org.lindoor.store.DeviceStore
 import org.linphone.core.Factory
 import org.linphone.core.LogCollectionState
 import org.linphone.mediastream.Log
@@ -45,7 +45,7 @@ class LindoorApplication : Application() {
         Customisation
         Texts
         ensureCoreExists(applicationContext)
-        DeviceManager
+        DeviceStore
     }
 
 

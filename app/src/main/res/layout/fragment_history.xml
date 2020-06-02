@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    backgoundcolor='@{"color_c"}'
-    tools:context=".ui.history.HitsoryFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable name="model" type="org.lindoor.ui.history.HistoryViewModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/text_home"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        tools:context=".ui.devices.DevicesFragment"
+        android:orientation="vertical"
+        backgoundcolor='@{"color_c"}'
+        >
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            style='@{"view_sub_title"}'
+            text='@{"history_empty_list_title"}'
+            android:visibility="@{model.history.size() == 0 ? View.VISIBLE : View.GONE}"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/loglist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="@{model.history.size() > 0 ? View.VISIBLE : View.GONE}"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="7dp"
+            />
+
+    </LinearLayout>
+
+</layout>

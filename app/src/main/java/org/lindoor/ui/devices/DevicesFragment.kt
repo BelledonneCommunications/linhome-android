@@ -11,7 +11,8 @@ import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.lindoor.LindoorFragment
 import org.lindoor.databinding.FragmentDevicesBinding
 
-class DevicesFragment :LindoorFragment() {
+
+class DevicesFragment : LindoorFragment() {
 
     private lateinit var devicesViewModel: DevicesViewModel
 
@@ -32,7 +33,6 @@ class DevicesFragment :LindoorFragment() {
 
         binding.root.device_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.root.device_list.adapter = DevicesAdapter(devicesViewModel.devices,binding.root.device_list)
-
         return binding.root
     }
 

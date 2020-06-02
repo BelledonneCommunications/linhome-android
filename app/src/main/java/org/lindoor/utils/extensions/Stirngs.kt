@@ -14,6 +14,6 @@ fun String.sha256(): String {
     return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
 }
 
-fun sixDigitsUUID():String {
-    return UUID.randomUUID().toString().replace("-".toRegex(), "").toLowerCase().substring(0, 6)
+fun xDigitsUUID(count:Int = 10):String {
+    return UUID.randomUUID().toString().replace("-".toRegex(), "").toLowerCase().substring(0, count)
 }

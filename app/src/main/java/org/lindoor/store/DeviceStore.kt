@@ -1,18 +1,13 @@
-package org.lindoor.managers
+package org.lindoor.store
 
-import org.lindoor.LindoorApplication
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
+import org.lindoor.store.StorageManager.devicesXml
 import org.linphone.core.Address
 import org.linphone.core.Config
 import org.linphone.core.Factory
-import org.linphone.mediastream.Log
-import java.io.File
 
-object DeviceManager {
-
-    private var devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml")
-    var snapshotsPath = File(LindoorApplication.instance.filesDir, "snapshots")
+object DeviceStore {
 
     private var devicesConfig: Config
 
@@ -24,8 +19,6 @@ object DeviceManager {
         devicesConfig = Factory.instance().createConfig(null)
         devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
         devices = readFromXml()
-        snapshotsPath.mkdir()
-        Log.i("devices: "+ devicesConfig.dumpAsXml())
     }
 
     fun readFromXml():ArrayList<Device> {
@@ -48,7 +41,7 @@ object DeviceManager {
         return result
     }
 
-    fun syncToXml() {
+    fun sync() {
         devicesConfig.sectionsNamesList.forEach {
             devicesConfig.cleanSection(it)
         }
@@ -65,18 +58,17 @@ object DeviceManager {
             devicesConfig.setString(device.id,"actions",actionString)
         }
         devicesXml.writeText(devicesConfig.dumpAsXml())
-        System.out.println("devices: "+ devicesConfig.dumpAsXml())
 
     }
 
-    fun addDevice(device:Device) {
+    fun persistDevice(device:Device) {
         devices.add(device)
-        syncToXml()
+        sync()
     }
 
     fun removeDevice(device:Device) {
         devices.remove(device)
-        syncToXml()
+        sync()
     }
 
     fun findDeviceByAddress(address:Address) : Device? {

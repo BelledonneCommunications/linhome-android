@@ -8,18 +8,18 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
-import org.lindoor.LindoorApplication
-import org.lindoor.customisation.ActionTypes
-import org.lindoor.customisation.DeviceTypes
-import org.lindoor.customisation.Texts
-import org.lindoor.customisation.Theme
+import org.lindoor.customisation.*
 import org.lindoor.ui.settings.SettingListener
 import org.lindoor.ui.validators.NonEmptyStringMatcherValidator
 import org.lindoor.ui.widgets.*
+import org.lindoor.utils.pxFromDp
+import java.io.File
 
 
 ////////////////////////
@@ -27,12 +27,14 @@ import org.lindoor.ui.widgets.*
 ////////////////////////
 
 ////////////////////////
-// ViewGroup
+// ViewGroup/View
 ////////////////////////
 
 @BindingAdapter("backgoundcolor")
-fun color(view: View, colorKey: String) {
-    view.setBackgroundColor(Theme.getColor(colorKey))
+fun color(view: View, colorKey: String?) {
+    colorKey?.let {
+        view.setBackgroundColor(Theme.getColor(it))
+    }
 }
 
 @BindingAdapter("roundRectInput")
@@ -47,8 +49,15 @@ fun roundRectInputWithColor(view: ViewGroup, color: String) {
 }
 
 @BindingAdapter("roundRectWithColor","andRadius")
-fun roundRectWithColor(view: ViewGroup, colorKey: String, radiusKey:String) {
+fun roundRectWithColor(view: View, colorKey: String, radiusKey:String) {
     view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(colorKey,radiusKey)
+}
+
+@BindingAdapter("roundRectWithColor","andRadius","andStrokeWidth","andStrokeColor","selected_stroke_color")
+fun roundRectWithColor(view: View, colorKey: String, radiusKey:String, strokeWidth:Int, strokeColorKey:String, selectedStrokeColor:String) {
+    val drawableIdle = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey,radiusKey,strokeColorKey,strokeWidth)
+    val drawablePressed = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey,radiusKey,selectedStrokeColor,strokeWidth)
+    view.background = Theme.buildStateListDrawable(drawableIdle,drawablePressed)
 }
 
 @BindingAdapter("cornerRadius")
@@ -162,9 +171,19 @@ fun icon(button: FloatingActionButton, name: String) {
 }
 
 @BindingAdapter("backgroundeffect")
-fun background(button: FloatingActionButton, name: String) {
-    button.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
+fun background(button: ViewGroup, name: String?) {
+    name?.let {
+        button.backgroundTintList = Theme.selectionEffectAsColorStateList(it,android.R.attr.state_activated)
+    }
 }
+
+@BindingAdapter("backgroundcolor")
+fun color(view: FloatingActionButton, colorKey: String?) {
+    colorKey?.let {
+        view.setBackgroundColor(Theme.getColor(it))
+    }
+}
+
 
 @BindingAdapter("tint")
 fun tint(button: FloatingActionButton, name: String) {
@@ -213,6 +232,18 @@ fun icon(button: ImageView, name: String?) {
     if (name != null) {
         Theme.setIcon(name,button)
     }
+}
+
+@BindingAdapter(value = ["glidewith", "cornerradius"], requireAll = false)
+fun glidewith(image: ImageView, file: File?,cornerradius:String?) {
+   file?.also{
+       if (cornerradius != null) {
+           val floatRadius = pxFromDp(Customisation.themeConfig.getFloat("arbitrary-values", cornerradius, 0.0f))
+           Theme.glidegeneric.load(it).transform(CenterCrop(), RoundedCorners(floatRadius.toInt())).into(image)
+       }
+       else
+           Theme.glidegeneric.load(it).into(image)
+   }
 }
 
 @BindingAdapter("tint")
@@ -301,10 +332,6 @@ fun enabled(b: LRoundRectButtonWithIcon, enabled:Boolean) {
 ////////////////////////
 /// ViewGroup
 ///////////////////////
-
-fun pxFromDp(dp: Int): Int {
-    return (dp * LindoorApplication.instance.resources.displayMetrics.density).toInt()
-}
 
 @BindingAdapter("gradientBackground")
 fun gradientBackground(view: ViewGroup, themeGradientName: String) {

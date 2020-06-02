@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
-import org.lindoor.managers.DeviceManager
-import org.linphone.core.Call
+import org.lindoor.store.StorageManager
+import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import java.io.File
 import java.util.*
@@ -14,22 +14,18 @@ import java.util.*
 data class Device(var id:String, var type:String?, var name:String, var address:String, var actionsMethodType:String?, var actions:ArrayList<Action>? ) :
     Parcelable {
 
+    constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(
+        xDigitsUUID(),type,name,address,actionsMethodType,actions)
 
-    constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(UUID.randomUUID().toString().replace("-", "").toLowerCase(),type,name,address,actionsMethodType,actions)
+    fun getThumbnail() : File {
+        return File(StorageManager.devicesThumnailPath,"${id}.jpg")
+    }
 
-
-    val snapshotImage: File?
-        get() {
-                if (supportsVideo()) {
-                    File(LindoorApplication.instance.filesDir, "${DeviceManager.snapshotsPath.absolutePath}/{$id}.jpg").also {
-                        return if (it.exists()) it else null
-                    }
-                }
-                else
-                    return null
-            }
-
-
+    fun hasThumbnail() : Boolean {
+        return getThumbnail().let {
+            it.exists() && it.length() > 0
+        }
+    }
 
     fun supportsVideo ():Boolean {
         return type?.let {
@@ -43,14 +39,17 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         }?:true
     }
 
-    fun call(): Call? {
+    fun call() {
         val params : CallParams = LindoorApplication.coreContext.core.createCallParams(null)
         type?.also {
             params.enableVideo(DeviceTypes.supportsVideo(it))
             params.enableAudio(DeviceTypes.supportsAudio(it))
         }
-        return LindoorApplication.coreContext.core.createAddress(address)?.let {
-            LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
+        val historyEvent  = HistoryEvent()
+        params.recordFile = historyEvent.mediaFileName
+        LindoorApplication.coreContext.core.createAddress(address)?.let {
+            val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
+           call.callLog.userData = historyEvent // Retrieved in CallViewModel and bound with call ID when available
         }
     }
 
@@ -59,5 +58,7 @@ data class Device(var id:String, var type:String?, var name:String, var address:
             DeviceTypes.typeNameForDeviceType(it)
         }
     }
+
+
 
 }

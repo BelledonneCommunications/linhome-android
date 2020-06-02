@@ -7,22 +7,25 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
+import org.lindoor.entities.HistoryEvent
 import org.lindoor.linphonecore.forceEarpieceAudioRoute
 import org.lindoor.linphonecore.forceSpeakerAudioRoute
-import org.lindoor.managers.DeviceManager
-import org.lindoor.managers.RecordingsManager
+import org.lindoor.store.DeviceStore
+import org.lindoor.store.HistoryEventStore
+import org.lindoor.utils.cdlog
 import org.linphone.core.*
 
-class CallViewModelFactory(private val call: Call, private val acceptEarlyMedia:Boolean = true, val record:Boolean = true) :
+
+class CallViewModelFactory(private val call: Call) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CallViewModel(call,acceptEarlyMedia,record) as T
+        return CallViewModel(call) as T
     }
 }
 
-class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:Boolean) : ViewModel() {
-    val device: MutableLiveData<Device?> = MutableLiveData(DeviceManager.findDeviceByAddress(call.remoteAddress))
+class CallViewModel(val call:Call) : ViewModel() {
+    val device: MutableLiveData<Device?> = MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.defaultType)
 
     val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
@@ -32,15 +35,14 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
     val speakerEnabled: MutableLiveData<Boolean> = MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
+    lateinit var historyEvent: HistoryEvent
+
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
-            callState.postValue(cstate)
-
-            if (autoAcceptEarlyMedia && cstate == Call.State.IncomingReceived) {
-                acceptEarlyMedia ()
-            }
-            if (cstate == Call.State.Released) {
-                call?.removeListener(this)
+            if (cstate != null) {
+                attemptBindHistoryEventWithCallId()
+                callState.postValue(cstate)
+                updateWithCallState(cstate)
             }
         }
 
@@ -48,42 +50,74 @@ class CallViewModel(val call:Call, val autoAcceptEarlyMedia:Boolean,val record:B
             super.onNextVideoFrameDecoded(call)
             videoContent.value = true
             device.value?.also {d ->
-                if (d.snapshotImage == null)
-                    call?.takeVideoSnapshot("${DeviceManager.snapshotsPath.absolutePath}/"+d.id+"+.jpg")
+                d.getThumbnail().also {
+                    if (!it.exists() || it.length() == 0L) {
+                        call?.takeVideoSnapshot(it.absolutePath)
+                    }
+                }
+            }
+            historyEvent.mediaThumbnail.also {
+                if (!it.exists()) {
+                    call?.takeVideoSnapshot(it.absolutePath)
+                }
             }
         }
     }
 
     init {
-        call.addListener(callListener)
-        call.requestNotifyNextVideoFrameDecoded()
-        if (autoAcceptEarlyMedia && call.state ==  Call.State.IncomingReceived)
-            acceptEarlyMedia ()
 
+        if (call.callLog.callId != null) {
+            historyEvent = HistoryEventStore.findHistoryEventByCallId(call.callLog.callId) ?: HistoryEvent()
+        } else { // outgoing call
+            historyEvent = call.callLog.userData?.let {
+                it as HistoryEvent
+            } ?: HistoryEvent()
+        }
+
+        attemptBindHistoryEventWithCallId()
+
+        call.addListener(callListener)
+        updateWithCallState(call.state)
+        if (call.state ==  Call.State.IncomingReceived)
+            acceptEarlyMedia ()
+    }
+
+    private fun updateWithCallState(cstate:Call.State) {
+        if (cstate == Call.State.IncomingReceived) {
+            acceptEarlyMedia ()
+        }
+        if (cstate == Call.State.StreamsRunning && call?.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
+            call.startRecording()
+            call.requestNotifyNextVideoFrameDecoded()
+        }
+    }
+
+    private fun attemptBindHistoryEventWithCallId() {
+        if (historyEvent.callId == null && call.callLog.callId != null) {
+            historyEvent.callId = call.callLog.callId
+            HistoryEventStore.persistHistoryEvent(historyEvent)
+            cdlog("Bound ${historyEvent.id} with ${call.callLog.callId}")
+        }
     }
 
     fun acceptEarlyMedia() {
         val earlyMediaCallParams:CallParams = coreContext.core.createCallParams(call)
         earlyMediaCallParams.videoDirection = MediaDirection.RecvOnly
         earlyMediaCallParams.audioDirection = MediaDirection.Inactive
-        if (record)
-            earlyMediaCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = true)
+        earlyMediaCallParams.recordFile = historyEvent.mediaFileName
         call.requestNotifyNextVideoFrameDecoded()
         call.acceptEarlyMediaWithParams(earlyMediaCallParams)
-        if (record)
-            call.startRecording()
+        call.startRecording()
     }
 
     fun accept() {
         val inCallParams:CallParams = coreContext.core.createCallParams(call)
         inCallParams.videoDirection = MediaDirection.RecvOnly
         inCallParams.audioDirection = MediaDirection.SendRecv
-        if (record)
-            inCallParams.recordFile = RecordingsManager.recordingPath(call,earlyMedia = false)
+        inCallParams.recordFile = historyEvent.mediaFileName
         call.acceptWithParams(inCallParams)
         call.requestNotifyNextVideoFrameDecoded()
-        if (record)
-            call.startRecording()
+        call.startRecording()
     }
 
     fun decline() {

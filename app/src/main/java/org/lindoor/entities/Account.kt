@@ -3,7 +3,7 @@ package org.lindoor.entities
 import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
-import org.lindoor.utils.extensions.sixDigitsUUID
+import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
 import org.linphone.core.ProxyConfig
@@ -47,7 +47,7 @@ object Account {
         coreContext.core.loadConfigFromXml(LindoorApplication.corePreferences.lindoorAccountDefaultValuesPath)
         val accountCreator = coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
         accountCreator.language = Locale.getDefault().language
-        val user: String = PUSH_GW_USER_PREFIX + sixDigitsUUID()
+        val user: String = PUSH_GW_USER_PREFIX + xDigitsUUID()
         val pass = UUID.randomUUID().toString()
         accountCreator.username = user
         accountCreator.password = pass

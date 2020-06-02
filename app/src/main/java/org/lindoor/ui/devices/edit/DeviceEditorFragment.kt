@@ -19,7 +19,7 @@ import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.FragmentDeviceEditBinding
 import org.lindoor.entities.Action
-import org.lindoor.managers.DeviceManager
+import org.lindoor.store.DeviceStore
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
 
@@ -62,7 +62,7 @@ class DeviceEditorFragment : LindoorFragment() {
             DialogUtil.confirm(
                 "delete_device_confirm_message",
                 { dialog: DialogInterface, which: Int ->
-                    model.device?.let { it1 -> DeviceManager.removeDevice(it1) }
+                    model.device?.let { it1 -> DeviceStore.removeDevice(it1) }
                     mainactivity.navController.navigate(R.id.device_deleted)
                 },model.device?.name
             )

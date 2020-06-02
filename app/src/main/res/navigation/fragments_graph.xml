@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="org.lindoor.ui.history.HitsoryFragment"
+        android:name="org.lindoor.ui.history.HistoryFragment"
         tools:layout="@layout/fragment_history" />
 
     <fragment

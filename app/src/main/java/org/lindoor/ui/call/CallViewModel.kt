@@ -10,9 +10,10 @@ import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
 import org.lindoor.linphonecore.forceEarpieceAudioRoute
 import org.lindoor.linphonecore.forceSpeakerAudioRoute
+import org.lindoor.linphonecore.historyEvent
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
-import org.lindoor.utils.cdlog
+import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.core.*
 
 
@@ -35,7 +36,7 @@ class CallViewModel(val call:Call) : ViewModel() {
     val speakerEnabled: MutableLiveData<Boolean> = MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
-    lateinit var historyEvent: HistoryEvent
+    private var historyEvent:HistoryEvent
 
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
@@ -44,12 +45,14 @@ class CallViewModel(val call:Call) : ViewModel() {
                 callState.postValue(cstate)
                 updateWithCallState(cstate)
             }
-            if (cstate == Call.State.End) {
+            if (cstate == Call.State.End) { // Copy call media file to device file if there is none.
                 device.value?.also {d ->
                     d.thumbNail.also { deviceThumb ->
-                        historyEvent.mediaThumbnail.also {mediaThumb ->
-                            if ((!deviceThumb.exists() || deviceThumb.length() == 0L) && (mediaThumb.exists() &&mediaThumb.length() > 0)) {
-                                mediaThumb.copyTo(deviceThumb)
+                        if (!deviceThumb.existsAndIsNotEmpty()) {
+                            call?.callLog?.historyEvent()?.also { event ->
+                                if (event.mediaThumbnail.existsAndIsNotEmpty()) {
+                                    event.mediaThumbnail?.copyTo(deviceThumb)
+                                }
                             }
                         }
                     }
@@ -60,9 +63,9 @@ class CallViewModel(val call:Call) : ViewModel() {
         override fun onNextVideoFrameDecoded(call: Call?) {
             super.onNextVideoFrameDecoded(call)
             videoContent.value = true
-            historyEvent.mediaThumbnail.also {
-                if (!it.exists()) {
-                    call?.takeVideoSnapshot(it.absolutePath)
+            call?.callLog?.historyEvent()?.also { event ->
+                if (!event.mediaThumbnail.existsAndIsNotEmpty()) {
+                    call?.takeVideoSnapshot(event.mediaThumbnail.absolutePath)
                 }
             }
         }
@@ -96,11 +99,10 @@ class CallViewModel(val call:Call) : ViewModel() {
         }
     }
 
-    private fun attemptBindHistoryEventWithCallId() {
+    private fun attemptBindHistoryEventWithCallId() { // For outgoing call history event is created before as it contains recording path.
         if (historyEvent.callId == null && call.callLog.callId != null) {
             historyEvent.callId = call.callLog.callId
             HistoryEventStore.persistHistoryEvent(historyEvent)
-            cdlog("Bound ${historyEvent.id} with ${call.callLog.callId}")
         }
     }
 
@@ -188,5 +190,6 @@ class CallViewModel(val call:Call) : ViewModel() {
             }
         }
     }
+
 
 }

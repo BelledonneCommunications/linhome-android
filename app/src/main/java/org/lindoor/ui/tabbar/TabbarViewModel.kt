@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
 import org.lindoor.linphonecore.callLogsWithCallId
+import org.lindoor.linphonecore.isNew
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.cdlog
 import org.linphone.core.Call
@@ -24,12 +25,8 @@ class TabbarViewModel   : ViewModel() {
     fun updateUnreadCount() {
         var count = 0
         LindoorApplication.coreContext.core.callLogsWithCallId().forEach{
-            if (it.dir == Call.Dir.Incoming) {
-                HistoryEventStore.findHistoryEventByCallId(it.callId)?.also {
-                    if (!it.viewedByUser)
-                        count++
-                }
-            }
+            if (it.isNew())
+                count++
         }
         unreadCount.value = count
     }

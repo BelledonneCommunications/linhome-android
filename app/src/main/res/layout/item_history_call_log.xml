@@ -44,7 +44,7 @@
             roundRectWithColor='@{"color_c"}'
             andRadius='@{"call_in_history_list_corner_radius"}'
             andStrokeWidth='@{2}'
-            andStrokeColor='@{model.historyEvent.viewedByUser ? "color_c" : "color_t"}'
+            andStrokeColor='@{!model.isNew() ? "color_c" : "color_t"}'
             selected_stroke_color='@{"color_a"}'>
 
             <androidx.cardview.widget.CardView
@@ -155,7 +155,7 @@
                         android:layout_marginEnd="5dp"
                         style='@{"history_list_new_tag"}'
                         text='@{"history_call_new"}'
-                        android:visibility='@{!model.historyEvent.viewedByUser &amp;&amp; !historymodel.editing? View.VISIBLE : View.INVISIBLE, default="gone"}'
+                        android:visibility='@{model.isNew() &amp;&amp; !historymodel.editing? View.VISIBLE : View.INVISIBLE, default="gone"}'
                         android:text="new" />
 
                     <CheckBox

@@ -6,13 +6,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs"
 
 repositories {
-    maven {
-        url file(LinphoneSdkBuildDir + '/maven_repository/')
-    }
     /*
     maven {
-        url "https://linphone.org/maven_repository"
+        url file(LinphoneSdkBuildDir + '/maven_repository/')
     }*/
+
+    maven {
+        url "https://linphone.org/maven_repository"
+    }
     maven {
         url 'https://jitpack.io'
     }

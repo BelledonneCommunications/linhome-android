@@ -2,10 +2,9 @@ package org.lindoor.linphonecore
 
 import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
-import org.linphone.core.AudioDevice
-import org.linphone.core.CallLog
-import org.linphone.core.Core
-import org.linphone.core.ProxyConfig
+import org.lindoor.entities.HistoryEvent
+import org.lindoor.store.HistoryEventStore
+import org.linphone.core.*
 import org.linphone.core.tools.Log
 
 val Core.firstProxyConfig: ProxyConfig?
@@ -46,6 +45,7 @@ fun Core.forceBluetoothAudioRoute() {
     }
     Log.e("[Call] Couldn't find bluetooth audio device")
 }
+
 
 fun Core.callLogsWithCallId():  ArrayList<CallLog> {
     return (coreContext.core.callLogs.toCollection(ArrayList()) as ArrayList<CallLog>).filterNot { it.callId == null } as ArrayList<CallLog>

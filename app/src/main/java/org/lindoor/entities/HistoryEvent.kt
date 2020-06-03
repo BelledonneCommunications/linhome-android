@@ -3,6 +3,7 @@ package org.lindoor.entities
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.store.StorageManager
+import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.lindoor.utils.extensions.xDigitsUUID
 import java.io.File
 
@@ -32,7 +33,7 @@ data class HistoryEvent(var id:String = xDigitsUUID(), // HistoryEvent for outgo
 
     fun hasMediaThumbnail() : Boolean {
         return mediaThumbnail.let {
-            it.exists() && it.length() > 0
+            it.existsAndIsNotEmpty()
         }
     }
 

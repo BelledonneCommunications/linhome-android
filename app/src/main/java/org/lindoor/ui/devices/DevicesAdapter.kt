@@ -21,6 +21,7 @@ import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.cdlog
+import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.compatibility.Compatibility
 
 
@@ -156,7 +157,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
 
             device.thumbNail.also {
                 cdlog("cdes"+it.absolutePath+it.length())
-                if (it.exists() && it.length() > 0) {
+                if (it.existsAndIsNotEmpty()) {
                     deviceImage.visibility = View.VISIBLE
                     Theme.glidegeneric.load(it).into(deviceImage)
                     view.post {

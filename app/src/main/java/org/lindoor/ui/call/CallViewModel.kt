@@ -44,18 +44,22 @@ class CallViewModel(val call:Call) : ViewModel() {
                 callState.postValue(cstate)
                 updateWithCallState(cstate)
             }
+            if (cstate == Call.State.End) {
+                device.value?.also {d ->
+                    d.thumbNail.also { deviceThumb ->
+                        historyEvent.mediaThumbnail.also {mediaThumb ->
+                            if ((!deviceThumb.exists() || deviceThumb.length() == 0L) && (mediaThumb.exists() &&mediaThumb.length() > 0)) {
+                                mediaThumb.copyTo(deviceThumb)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         override fun onNextVideoFrameDecoded(call: Call?) {
             super.onNextVideoFrameDecoded(call)
             videoContent.value = true
-            device.value?.also {d ->
-                d.getThumbnail().also {
-                    if (!it.exists() || it.length() == 0L) {
-                        call?.takeVideoSnapshot(it.absolutePath)
-                    }
-                }
-            }
             historyEvent.mediaThumbnail.also {
                 if (!it.exists()) {
                     call?.takeVideoSnapshot(it.absolutePath)
@@ -86,7 +90,7 @@ class CallViewModel(val call:Call) : ViewModel() {
         if (cstate == Call.State.IncomingReceived) {
             acceptEarlyMedia ()
         }
-        if (cstate == Call.State.StreamsRunning && call?.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
+        if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
             call.startRecording()
             call.requestNotifyNextVideoFrameDecoded()
         }

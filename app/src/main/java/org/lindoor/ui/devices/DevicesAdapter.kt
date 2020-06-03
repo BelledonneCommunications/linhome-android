@@ -154,7 +154,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                 device.call()
             }
 
-            device.getThumbnail().also {
+            device.thumbNail.also {
                 cdlog("cdes"+it.absolutePath+it.length())
                 if (it.exists() && it.length() > 0) {
                     deviceImage.visibility = View.VISIBLE

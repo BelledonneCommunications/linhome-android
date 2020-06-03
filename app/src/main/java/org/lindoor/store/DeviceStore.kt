@@ -67,6 +67,10 @@ object DeviceStore {
     }
 
     fun removeDevice(device:Device) {
+        device.thumbNail.also {
+            if (it.exists())
+                it.delete()
+        }
         devices.remove(device)
         sync()
     }

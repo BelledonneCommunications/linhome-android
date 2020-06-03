@@ -2,6 +2,7 @@ package org.lindoor.store
 
 import org.lindoor.entities.HistoryEvent
 import org.lindoor.store.StorageManager.historyEventsXml
+import org.lindoor.utils.cdlog
 import org.linphone.core.Config
 import org.linphone.core.Factory
 
@@ -53,8 +54,22 @@ object HistoryEventStore {
     }
 
     fun removeHistoryEvent(entry:HistoryEvent) {
+        entry.media.also {
+            if (it.exists())
+                it.delete()
+        }
+        entry.mediaThumbnail.also {
+            if (it.exists())
+                it.delete()
+        }
         historyEvents.remove(entry.callId)
         sync()
+    }
+
+    fun removeHistoryEventByCallId(callId:String) {
+        findHistoryEventByCallId(callId)?.also {
+            removeHistoryEvent(it)
+        }
     }
 
     fun findHistoryEventByCallId(callId:String):HistoryEvent? {
@@ -67,4 +82,5 @@ object HistoryEventStore {
         }
         sync()
     }
+
 }

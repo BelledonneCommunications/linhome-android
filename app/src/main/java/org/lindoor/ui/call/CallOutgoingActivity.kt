@@ -2,7 +2,6 @@ package org.lindoor.ui.call
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,18 +10,13 @@ import org.lindoor.databinding.ActivityCallOutgoingBinding
 import org.linphone.core.Call
 
 
-class CallOutgoingActivity : AppCompatActivity () {
+class CallOutgoingActivity : CallGenericActivity () {
 
     lateinit var binding : ActivityCallOutgoingBinding
     private lateinit var callViewModel: CallViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val decorView: View = window.decorView
-        val uiOptions: Int =
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        decorView.systemUiVisibility = uiOptions
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call_outgoing) as ActivityCallOutgoingBinding
         binding.lifecycleOwner = this

@@ -1,6 +1,5 @@
 package org.lindoor.utils
 
-import org.lindoor.LindoorApplication
 import org.lindoor.customisation.Texts
 import java.text.SimpleDateFormat
 import java.util.*

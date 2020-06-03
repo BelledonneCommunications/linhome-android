@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.*
-import android.graphics.drawable.GradientDrawable.LINEAR_GRADIENT
 import android.util.StateSet
 import android.view.Gravity
 import android.view.View

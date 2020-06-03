@@ -13,10 +13,10 @@ import org.linphone.core.CallLog
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CallLogViewModel(val callLog: CallLog, val showDate:Boolean, val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)) : ViewModelWithTools() {
+class CallLogViewModel(val callLog: CallLog, val showDate:Boolean, val historyViewModel: HistoryViewModel, val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)) : ViewModelWithTools() {
 
+    val viewMedia = MutableLiveData(false)
 
-    val deleteMode = MutableLiveData(false)
     var historyEvent:HistoryEvent? = callLog.callId?.let {
         HistoryEventStore.findHistoryEventByCallId(it)
     }
@@ -71,6 +71,18 @@ class CallLogViewModel(val callLog: CallLog, val showDate:Boolean, val device: D
 
     fun dayText():String {
         return DateUtil.todayYesterdayRealDay(callLog.startDate/86400)
+    }
+
+    fun toggleSelect() {
+        if (historyViewModel.selectedForDeletion.value!!.contains(callLog.callId))
+            historyViewModel.selectedForDeletion.value!!.remove(callLog.callId)
+        else
+            historyViewModel.selectedForDeletion.value!!.add(callLog.callId)
+        historyViewModel.notifyDeleteSelectionListUpdated()
+    }
+
+    fun viewMedia() {
+        viewMedia.value = true
     }
 
 }

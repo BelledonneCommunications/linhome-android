@@ -1,11 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <data>
         <import type="android.view.View"/>
         <variable name="model" type="org.lindoor.ui.history.CallLogViewModel" />
+        <variable name="historymodel" type="org.lindoor.ui.history.HistoryViewModel" />
+
     </data>
 
 
@@ -15,6 +16,7 @@
         android:background="@color/transparent"
         android:clipToPadding="false"
         android:padding="4dp"
+        android:alpha="@{historymodel.editing &amp;&amp; !historymodel.selectedForDeletion.contains(model.callLog.callId) ? 0.3f : 1.0f}"
         android:orientation="vertical">
 
         <TextView
@@ -30,12 +32,14 @@
 
 
         <androidx.cardview.widget.CardView
-            android:clickable='@{model.historyEvent.hasMedia() ? true : false}'
+            android:clickable='@{model.historyEvent.hasMedia()||historymodel.editing ? true : false}'
+            android:onClick="@{() -> historymodel.editing ? model.toggleSelect() : model.viewMedia()}"
             android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="95dp"
             app:contentPadding="2dp"
             android:elevation="4dp"
+            app:cardElevation="10dp"
             app:cardPreventCornerOverlap="true"
             roundRectWithColor='@{"color_c"}'
             andRadius='@{"call_in_history_list_corner_radius"}'
@@ -78,8 +82,8 @@
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/play"
-                        backgroundeffect='@{model.deleteMode ? null : "primary_color"}'
-                        backgroundcolor='@{model.deleteMode ? "color_b" : null}'
+                        backgroundeffect='@{historymodel.editing ? null : "primary_color"}'
+                        backgroundcolor='@{historymodel.editing ? "color_b" : null}'
                         tint='@{"color_c"}'
                         icon='@{"icons/play"}'
                         app:fabCustomSize="33dp"
@@ -151,8 +155,22 @@
                         android:layout_marginEnd="5dp"
                         style='@{"history_list_new_tag"}'
                         text='@{"history_call_new"}'
-                        android:visibility='@{!model.historyEvent.viewedByUser ? View.VISIBLE : View.INVISIBLE, default="visible"}'
+                        android:visibility='@{!model.historyEvent.viewedByUser &amp;&amp; !historymodel.editing? View.VISIBLE : View.INVISIBLE, default="gone"}'
                         android:text="new" />
+
+                    <CheckBox
+                        android:id="@+id/delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="-4dp"
+                        android:layout_marginEnd="-15dp"
+                        android:onClick="@{() -> model.toggleSelect()}"
+                        android:checked='@{historymodel.editing &amp;&amp; historymodel.selectedForDeletion.contains(model.callLog.callId)  ? true : false, default=false}'
+                        android:visibility='@{historymodel.editing ? View.VISIBLE : View.INVISIBLE, default="visible"}'
+                         />
+
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>

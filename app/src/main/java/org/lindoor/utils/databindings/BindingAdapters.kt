@@ -3,6 +3,8 @@ package org.lindoor.utils.databindings
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
@@ -14,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
+import org.lindoor.R
 import org.lindoor.customisation.*
 import org.lindoor.ui.settings.SettingListener
 import org.lindoor.ui.validators.NonEmptyStringMatcherValidator
@@ -36,6 +39,26 @@ fun color(view: View, colorKey: String?) {
         view.setBackgroundColor(Theme.getColor(it))
     }
 }
+
+@BindingAdapter("bounceTrigger")
+fun bounce(view: View, bounceTrigger: Boolean) {
+    if (bounceTrigger) {
+        val bounce = AnimationUtils.loadAnimation(view.context, R.anim.bounce)
+        bounce.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                bounce.reset()
+                bounce.start()
+            }
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        view.startAnimation(bounce)
+    } else {
+        view.clearAnimation()
+    }
+
+}
+
 
 @BindingAdapter("roundRectInput")
 fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
@@ -252,8 +275,8 @@ fun tint(button: ImageView, name: String) {
 }
 
 @BindingAdapter("backgroundeffect")
-fun background(button: ImageView, name: String) {
-    button.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_pressed)
+fun background(button: ImageView, name: String?) {
+    button.backgroundTintList = name?.let { Theme.selectionEffectAsColorStateList(it,android.R.attr.state_pressed) }
 }
 
 @BindingAdapter("src")

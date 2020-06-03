@@ -3,7 +3,10 @@ package org.lindoor
 import android.Manifest
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -16,6 +19,7 @@ import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivityMainBinding
 import org.lindoor.entities.Account
 import org.lindoor.store.StorageManager
+import org.lindoor.ui.tabbar.TabbarViewModel
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 import org.lindoor.ui.toolbar.ToolbarViewModel
 import org.lindoor.utils.DialogUtil
@@ -25,20 +29,35 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class MainActivity : LindoorActivity() {
+class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
     lateinit var navControllerSideMenu: NavController
     lateinit var toolbarViewModel: ToolbarViewModel
+    lateinit var tabbarViewModel: TabbarViewModel
+
 
     var toobarButtonClickedListener: ToobarButtonClickedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
+
+        val decorView: View = window.decorView
+        val uiOptions: Int =  View.SYSTEM_UI_FLAG_VISIBLE
+        decorView.setSystemUiVisibility(uiOptions)
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        applyCommonTheme()
+
+
         val binding:ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
+
         toolbarViewModel = ViewModelProvider(this).get(ToolbarViewModel::class.java)
-        binding.toobarviewmodel = toolbarViewModel
+        binding.toolbarviewmodel = toolbarViewModel
+
+        tabbarViewModel = ViewModelProvider(this).get(TabbarViewModel::class.java)
+        binding.tabbarviewmodel = tabbarViewModel
 
         setSupportActionBar(toolbar)
 
@@ -48,14 +67,14 @@ class MainActivity : LindoorActivity() {
         applyTheme()
 
         tabbar_devices.setOnClickListener {
-            if (tabBarLinearLayoutClicked(tabbar_devices,tabbar_history))
+            if (tabBarLayoutClicked(tabbar_devices,tabbar_history))
                 navController.navigate(R.id.navigation_devices, null)
         }
         tabbar_history.setOnClickListener {
-            if (tabBarLinearLayoutClicked(tabbar_history,tabbar_devices))
+            if (tabBarLayoutClicked(tabbar_history,tabbar_devices))
                 navController.navigate(R.id.navigation_history, null)
         }
-        tabBarLinearLayoutClicked(tabbar_devices,tabbar_history)
+        tabBarLayoutClicked(tabbar_devices,tabbar_history)
 
         navController.addOnDestinationChangedListener {
                 _, destination, _ ->
@@ -138,7 +157,7 @@ class MainActivity : LindoorActivity() {
         toolbar.progress.setBackgroundColor(Theme.getColor("color_j"))
     }
 
-    private fun tabBarLinearLayoutClicked(clicked: LinearLayout, unclicked: LinearLayout):Boolean {
+    private fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup):Boolean {
         if (clicked.isSelected)
             return false
         clicked.isSelected = true
@@ -210,6 +229,28 @@ class MainActivity : LindoorActivity() {
     @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun onStorageDeniedNeverAsk() {
         DialogUtil.error("write_external_storage_permission_denied_dont_ask_again")
+    }
+
+
+    // Pause / Resume
+
+    override fun onResume() {
+        super.onResume()
+        DialogUtil.context = this
+    }
+
+    override fun onPause() {
+        if (DialogUtil.context == this)
+            DialogUtil.context = null
+        super.onPause()
+    }
+
+
+    fun applyCommonTheme() {
+        getWindow().also { window ->
+            window.setStatusBarColor(Theme.getColor("color_a"))
+            window.setNavigationBarColor(Theme.getColor("color_j"))
+        }
     }
 
 

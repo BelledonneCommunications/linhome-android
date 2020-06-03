@@ -17,15 +17,12 @@ data class Device(var id:String, var type:String?, var name:String, var address:
     constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(
         xDigitsUUID(),type,name,address,actionsMethodType,actions)
 
-    fun getThumbnail() : File {
-        return File(StorageManager.devicesThumnailPath,"${id}.jpg")
-    }
 
-    fun hasThumbnail() : Boolean {
-        return getThumbnail().let {
-            it.exists() && it.length() > 0
+    val thumbNail: File
+        get() {
+            return File(StorageManager.devicesThumnailPath,"${id}.jpg")
         }
-    }
+
 
     fun supportsVideo ():Boolean {
         return type?.let {

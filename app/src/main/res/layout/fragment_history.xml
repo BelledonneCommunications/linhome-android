@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View"/>
+        <import type="org.lindoor.ui.widgets.LRoundRectButton"/>
         <variable name="model" type="org.lindoor.ui.history.HistoryViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.devices.DevicesFragment"
@@ -15,7 +16,7 @@
         >
         <TextView
             android:id="@+id/title"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             style='@{"view_sub_title"}'
@@ -34,6 +35,20 @@
             android:paddingBottom="7dp"
             />
 
-    </LinearLayout>
+        <org.lindoor.ui.widgets.LRoundRectButton
+            android:id="@+id/selectall"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="@{model.editing ? View.VISIBLE : View.GONE}"
+            primary='@{false}'
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            text='@{model.selectedForDeletion.size() == model.history.size() ? "history_deselect_all" :  "history_select_all"}'
+            />
+
+    </RelativeLayout>
 
 </layout>

@@ -4,7 +4,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="model" type="org.lindoor.ui.history.CallLogViewModel" />
+        <variable name="model" type="org.lindoor.ui.history.HistoryEventsViewModel" />
         <variable name="historymodel" type="org.lindoor.ui.history.HistoryViewModel" />
 
     </data>

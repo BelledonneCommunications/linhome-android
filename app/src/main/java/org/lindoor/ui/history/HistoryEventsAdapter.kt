@@ -9,22 +9,22 @@ import androidx.recyclerview.widget.RecyclerView
 import org.lindoor.BR
 import org.lindoor.GenericFragment
 import org.lindoor.R
-import org.lindoor.databinding.ItemHistoryCallLogBinding
+import org.lindoor.databinding.ItemHistoryBinding
 import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.ui.player.PlayerActivity
 import org.lindoor.utils.DialogUtil
 import org.linphone.core.CallLog
 
-class CallLogAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: HistoryViewModel, val lindoorFragment: GenericFragment) :
-    RecyclerView.Adapter<CallLogAdapter.ViewHolder>() {
+class HistoryEventsAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: HistoryViewModel, val lindoorFragment: GenericFragment) :
+    RecyclerView.Adapter<HistoryEventsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_history_call_log,
+            R.layout.item_history,
             parent,
             false
-        ) as ItemHistoryCallLogBinding
+        ) as ItemHistoryBinding
         return ViewHolder(binding)
     }
 
@@ -36,9 +36,9 @@ class CallLogAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: H
         return callLogs.get(position).startDate
     }
 
-    class ViewHolder(val binding: ItemHistoryCallLogBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(callLog: CallLog,showDate:Boolean, historyViewModel: HistoryViewModel,lindoorFragment: GenericFragment) {
-            val entryViewModel = CallLogViewModel(callLog,showDate,historyViewModel)
+            val entryViewModel = HistoryEventsViewModel(callLog,showDate,historyViewModel)
             binding.lifecycleOwner = lindoorFragment
             binding.setVariable(BR.model,entryViewModel)
             binding.setVariable(BR.historymodel,historyViewModel)
@@ -50,7 +50,7 @@ class CallLogAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: H
         }
         fun playMedia(callLog:CallLog,lindoorFragment: GenericFragment) {
             if (callLog.historyEvent()?.hasVideo!!) { //TODO Remove me
-                DialogUtil.toast("Unable to play back video this time (pending crash fix) - audio works ok")
+                DialogUtil.toast("Unable to play back videos (pending crash fix) - audio calls work ok")
                 return
             }
             val intent = Intent(lindoorFragment.activity, PlayerActivity::class.java)

@@ -14,7 +14,7 @@ import org.linphone.core.CallLog
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CallLogViewModel(val callLog: CallLog, val showDate:Boolean, val historyViewModel: HistoryViewModel, val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)) : ViewModelWithTools() {
+class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val historyViewModel: HistoryViewModel, val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)) : ViewModelWithTools() {
 
     val viewMedia = MutableLiveData(false)
 

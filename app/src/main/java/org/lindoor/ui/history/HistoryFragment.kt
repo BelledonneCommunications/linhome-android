@@ -38,7 +38,7 @@ class HistoryFragment : GenericFragment() {
         binding.model = historyViewModel
 
         binding.root.loglist.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.root.loglist.adapter = CallLogAdapter(historyViewModel.history.value!!,historyViewModel,this)
+        binding.root.loglist.adapter = HistoryEventsAdapter(historyViewModel.history.value!!,historyViewModel,this)
         binding.root.loglist.setHasFixedSize(true)
         showProgress()
         binding.root.loglist.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -61,7 +61,7 @@ class HistoryFragment : GenericFragment() {
 
         historyViewModel.history.observe(viewLifecycleOwner, Observer { list ->
             mainactivity.toolbarViewModel.rightButtonVisible.value = !list.isEmpty()
-            (binding.root.loglist.adapter as CallLogAdapter).callLogs = list
+            (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs = list
             binding.root.loglist.adapter?.notifyDataSetChanged()
         })
 
@@ -79,7 +79,7 @@ class HistoryFragment : GenericFragment() {
                 "delete_history_confirm_message",
                 { _: DialogInterface, _: Int ->
                     historyViewModel.deleteSelection()
-                    (binding.root.loglist.adapter as CallLogAdapter).callLogs =  historyViewModel.history.value!!
+                    (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs =  historyViewModel.history.value!!
                     binding.root.loglist.adapter?.notifyDataSetChanged()
                     mainactivity.tabbarViewModel.updateUnreadCount()
                     exitEdition()

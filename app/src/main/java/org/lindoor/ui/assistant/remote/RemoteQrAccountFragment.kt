@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_assistant_remote_qr.view.*
-import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.GenericFragment
+import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteQrBinding
 import org.lindoor.utils.DialogUtil

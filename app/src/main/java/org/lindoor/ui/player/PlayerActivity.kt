@@ -1,7 +1,9 @@
 package org.lindoor.ui.player
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.Surface
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,6 +16,7 @@ import org.lindoor.R
 import org.lindoor.databinding.ActivityPlayerBinding
 import org.lindoor.linphonecore.historyEvent
 import org.lindoor.utils.DialogUtil
+
 
 class PlayerActivity : GenericActivity() {
 
@@ -29,10 +32,16 @@ class PlayerActivity : GenericActivity() {
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         decorView.systemUiVisibility = uiOptions
 
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_player) as ActivityPlayerBinding
         binding.lifecycleOwner = this
         intent.getStringExtra("callId")?.also { callId ->
             LindoorApplication.Companion.coreContext.core.findCallLogFromCallId(callId)?.historyEvent()?.also { event ->
+                if (event.hasVideo) {
+                    DialogUtil.info("Unable to play back video this time (pending crash fix) - audio works ok")
+                    finish()
+                    return
+                }
                 LindoorApplication.Companion.coreContext.core.createLocalPlayer(null,null,if (event.hasVideo) binding.root.video else null)?.also { player ->
                     playerViewModel =
                         ViewModelProvider(this, PlayerViewModelFactory(callId,player))[PlayerViewModel::class.java]

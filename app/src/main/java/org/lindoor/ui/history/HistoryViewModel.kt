@@ -3,7 +3,7 @@ package org.lindoor.ui.history
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
-import org.lindoor.linphonecore.callLogsWithCallId
+import org.lindoor.linphonecore.callLogsWithNonEmptyCallId
 import org.lindoor.store.HistoryEventStore
 import org.linphone.core.CallLog
 import org.linphone.core.Core
@@ -18,13 +18,13 @@ class HistoryViewModel : ViewModel() {
     private val coreListener = object : CoreListenerStub() {
         override fun onCallLogUpdated(lc: Core?, newcl: CallLog?) {
             super.onCallLogUpdated(lc, newcl)
-            history.postValue(LindoorApplication.coreContext.core.callLogsWithCallId())
+            history.postValue(LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId())
         }
     }
 
     init {
         LindoorApplication.coreContext.core.addListener(coreListener)
-        history = MutableLiveData(LindoorApplication.coreContext.core.callLogsWithCallId())
+        history = MutableLiveData(LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId())
     }
 
 
@@ -55,7 +55,7 @@ class HistoryViewModel : ViewModel() {
             LindoorApplication.coreContext.core.findCallLogFromCallId(callId)?.also { log ->
                 LindoorApplication.coreContext.core.removeCallLog(log)
             }
-            history.value = LindoorApplication.coreContext.core.callLogsWithCallId()
+            history.value = LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId()
         }
     }
 }

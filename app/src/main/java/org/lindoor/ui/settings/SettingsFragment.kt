@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.lindoor.BR
-import org.lindoor.LindoorApplication
 import org.lindoor.GenericFragment
+import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.databinding.FragmentSettingsBinding

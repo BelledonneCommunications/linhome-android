@@ -2,7 +2,6 @@ package org.lindoor.store
 
 import org.lindoor.entities.HistoryEvent
 import org.lindoor.store.StorageManager.historyEventsXml
-import org.lindoor.utils.cdlog
 import org.linphone.core.Config
 import org.linphone.core.Factory
 

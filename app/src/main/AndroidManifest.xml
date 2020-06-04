@@ -80,7 +80,8 @@
             android:name=".ui.player.PlayerActivity"
             android:label="@string/app_name"
             android:theme="@style/LindoorTheme"
-            android:configChanges="orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:configChanges="orientation"
             >
         </activity>
         <!-- Receivers -->

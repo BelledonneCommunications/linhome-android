@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
 import kotlinx.android.synthetic.main.item_device.view.*
 import org.lindoor.R
@@ -22,7 +21,6 @@ import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.compatibility.Compatibility
 

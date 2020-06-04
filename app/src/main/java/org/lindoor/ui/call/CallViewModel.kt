@@ -1,18 +1,14 @@
 package org.lindoor.ui.call
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
-import org.lindoor.MainActivity
 import org.lindoor.customisation.DeviceTypes
-import org.lindoor.customisation.Theme
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
@@ -21,7 +17,6 @@ import org.lindoor.linphonecore.forceSpeakerAudioRoute
 import org.lindoor.linphonecore.historyEvent
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.core.*
 

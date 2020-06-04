@@ -1,6 +1,7 @@
 package org.lindoor
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -212,9 +213,11 @@ class MainActivity : GenericActivity() {
 
 
 
+    @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
+        if (permissions.size > 0)
+            onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

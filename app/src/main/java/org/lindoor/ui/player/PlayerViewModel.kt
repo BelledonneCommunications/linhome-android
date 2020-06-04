@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.lindoor.LindoorApplication
 import org.lindoor.linphonecore.historyEvent
-import org.lindoor.utils.cdlog
-import org.linphone.core.*
+import org.linphone.core.Player
+import org.linphone.core.PlayerListener
 import org.linphone.core.tools.Log
-import java.text.SimpleDateFormat
 import java.util.*
 
 

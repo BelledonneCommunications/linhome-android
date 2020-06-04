@@ -1,14 +1,10 @@
 package org.lindoor.ui.tabbar
 
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
-import org.lindoor.linphonecore.callLogsWithCallId
+import org.lindoor.linphonecore.callLogsWithNonEmptyCallId
 import org.lindoor.linphonecore.isNew
-import org.lindoor.store.HistoryEventStore
-import org.lindoor.utils.cdlog
-import org.linphone.core.Call
 import org.linphone.core.CallLog
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
@@ -24,7 +20,7 @@ class TabbarViewModel   : ViewModel() {
 
     fun updateUnreadCount() {
         var count = 0
-        LindoorApplication.coreContext.core.callLogsWithCallId().forEach{
+        LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId().forEach{
             if (it.isNew())
                 count++
         }

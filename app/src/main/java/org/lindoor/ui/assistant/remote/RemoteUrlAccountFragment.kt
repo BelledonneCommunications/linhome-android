@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_assistant_remote_url.*
 import kotlinx.android.synthetic.main.fragment_assistant_remote_url.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.GenericFragment
+import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteUrlBinding
 import org.lindoor.ui.validators.ValidatorFactory

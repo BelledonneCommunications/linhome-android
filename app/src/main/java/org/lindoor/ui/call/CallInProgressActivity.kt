@@ -1,10 +1,10 @@
 package org.lindoor.ui.call
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
-import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -73,9 +73,11 @@ class CallInProgressActivity : CallGenericActivity () {
         super.onPause()
     }
 
+    @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode, grantResults)
+        if (permissions.size > 0)
+            onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @NeedsPermission(Manifest.permission.RECORD_AUDIO)

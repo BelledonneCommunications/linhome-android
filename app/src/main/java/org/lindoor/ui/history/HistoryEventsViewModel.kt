@@ -20,9 +20,7 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
     val viewMedia = MutableLiveData(false)
 
     var historyEvent:HistoryEvent? = callLog.callId?.let {
-        val toto = HistoryEventStore.findHistoryEventByCallId(it)
-        cdlog("${toto}")
-        toto
+        HistoryEventStore.findHistoryEventByCallId(it)
     }
 
 

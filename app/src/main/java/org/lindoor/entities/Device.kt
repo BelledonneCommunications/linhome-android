@@ -48,7 +48,6 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         LindoorApplication.coreContext.core.createAddress(address)?.let {
             val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
            call.callLog.userData = historyEvent // Retrieved in CallViewModel and bound with call ID when available
-            cdlog("${call.callLog.callId}")
         }
     }
 

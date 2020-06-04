@@ -74,8 +74,6 @@ class CallViewModel(val call:Call) : ViewModel() {
 
     init {
 
-        cdlog("${call.callLog.callId}")
-
         historyEvent = call.callLog.userData?.let {// Outgoing call pass it through this way
             it as HistoryEvent
         } ?:  HistoryEventStore.findHistoryEventByCallId(call.callLog.callId) ?: HistoryEvent()

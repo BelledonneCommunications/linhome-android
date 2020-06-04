@@ -1,4 +1,4 @@
-package org.lindoor.linphonecore
+package org.lindoor.linphonecore.extensions
 
 import org.lindoor.entities.HistoryEvent
 import org.lindoor.store.HistoryEventStore

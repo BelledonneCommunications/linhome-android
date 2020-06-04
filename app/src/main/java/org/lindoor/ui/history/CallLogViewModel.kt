@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import org.lindoor.customisation.Texts
 import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
-import org.lindoor.linphonecore.isNew
+import org.lindoor.linphonecore.extensions.isNew
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.DateUtil

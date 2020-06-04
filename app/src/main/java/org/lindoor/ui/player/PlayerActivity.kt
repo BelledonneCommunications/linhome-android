@@ -1,9 +1,7 @@
 package org.lindoor.ui.player
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.Surface
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,7 +12,7 @@ import org.lindoor.GenericActivity
 import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.databinding.ActivityPlayerBinding
-import org.lindoor.linphonecore.historyEvent
+import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.utils.DialogUtil
 
 

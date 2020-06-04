@@ -3,7 +3,7 @@ package org.lindoor.ui.history
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
-import org.lindoor.linphonecore.callLogsWithNonEmptyCallId
+import org.lindoor.linphonecore.extensions.callLogsWithNonEmptyCallId
 import org.lindoor.store.HistoryEventStore
 import org.linphone.core.CallLog
 import org.linphone.core.Core

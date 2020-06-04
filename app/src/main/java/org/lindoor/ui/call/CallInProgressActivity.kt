@@ -33,8 +33,8 @@ class CallInProgressActivity : CallGenericActivity () {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call_in_progress) as ActivityCallInProgressBinding
         binding.lifecycleOwner = this
 
-        intent.getSerializableExtra("call")?.let {
-            callViewModel = ViewModelProvider(this, CallViewModelFactory(it as Call))[CallViewModel::class.java]
+        call?.also {
+            callViewModel = ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
             binding.callmodel = callViewModel
             binding.callTimer.base = SystemClock.elapsedRealtime() - (1000 * it.duration)
             binding.callTimer.start()

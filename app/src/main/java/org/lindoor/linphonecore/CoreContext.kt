@@ -371,21 +371,21 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
     private fun onIncomingReceived(call:Call) {
         val intent = Intent(context, CallIncomingActivity::class.java)
-        intent.putExtra("call",call)
+        intent.putExtra("callId",call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
     private fun onOutgoingStarted(call:Call) {
         val intent = Intent(context, CallOutgoingActivity::class.java)
-        intent.putExtra("call",call)
+        intent.putExtra("callId",call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
     private fun onCallStarted(call:Call) {
         val intent = Intent(context, CallInProgressActivity::class.java)
-        intent.putExtra("call",call)
+        intent.putExtra("callId",call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }

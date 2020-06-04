@@ -10,7 +10,7 @@ import org.lindoor.BR
 import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.ItemHistoryCallLogBinding
-import org.lindoor.linphonecore.historyEvent
+import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.ui.player.PlayerActivity
 import org.lindoor.utils.DialogUtil
 import org.linphone.core.CallLog

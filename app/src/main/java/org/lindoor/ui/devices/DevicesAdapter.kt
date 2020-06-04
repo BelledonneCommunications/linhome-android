@@ -7,6 +7,7 @@ import android.graphics.drawable.PictureDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -21,7 +22,9 @@ import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
+import org.lindoor.utils.getImageDimension
 import org.linphone.compatibility.Compatibility
 
 
@@ -161,20 +164,13 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                     Theme.glidegeneric.load(it)
                         .signature(ObjectKey(it.lastModified()))
                         .into(deviceImage)
+
+
                     deviceImage.post {
-                        if (view.measuredWidth < view.measuredHeight) {
-                            view.layoutParams.height = (view.measuredWidth * Theme.arbitraryValue(
-                                "device_first_image_aspect_ratio",
-                                "0.75"
-                            ).toFloat()).toInt()
-                        } else {
-                            view.layoutParams.height = (view.measuredWidth / Theme.arbitraryValue(
-                                "device_first_image_aspect_ratio",
-                                "0.75"
-                            ).toFloat()).toInt()
-                        }
+                       deviceImage.scaleType = ImageView.ScaleType.FIT_XY
                         view.requestLayout()
                     }
+
                 }
             }
 

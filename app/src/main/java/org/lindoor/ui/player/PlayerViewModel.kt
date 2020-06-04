@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.lindoor.LindoorApplication
-import org.lindoor.linphonecore.historyEvent
+import org.lindoor.linphonecore.extensions.historyEvent
 import org.linphone.core.Player
 import org.linphone.core.PlayerListener
 import org.linphone.core.tools.Log

@@ -12,9 +12,9 @@ import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
-import org.lindoor.linphonecore.forceEarpieceAudioRoute
-import org.lindoor.linphonecore.forceSpeakerAudioRoute
-import org.lindoor.linphonecore.historyEvent
+import org.lindoor.linphonecore.extensions.forceEarpieceAudioRoute
+import org.lindoor.linphonecore.extensions.forceSpeakerAudioRoute
+import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.extensions.existsAndIsNotEmpty

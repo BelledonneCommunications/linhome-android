@@ -3,8 +3,8 @@ package org.lindoor.ui.tabbar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
-import org.lindoor.linphonecore.callLogsWithNonEmptyCallId
-import org.lindoor.linphonecore.isNew
+import org.lindoor.linphonecore.extensions.callLogsWithNonEmptyCallId
+import org.lindoor.linphonecore.extensions.isNew
 import org.linphone.core.CallLog
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub

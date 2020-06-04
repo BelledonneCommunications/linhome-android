@@ -1,4 +1,4 @@
-package org.lindoor.linphonecore
+package org.lindoor.linphonecore.extensions
 
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.linphone.core.AudioDevice

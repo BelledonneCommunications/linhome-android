@@ -23,8 +23,8 @@ class CallIncomingActivity : CallGenericActivity () {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call_incoming) as ActivityCallIncomingBinding
         binding.lifecycleOwner = this
 
-        intent.getSerializableExtra("call")?.let {
-            callViewModel = ViewModelProvider(this, CallViewModelFactory(it as Call))[CallViewModel::class.java]
+        call?.also {
+            callViewModel = ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
             binding.callmodel = callViewModel
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {

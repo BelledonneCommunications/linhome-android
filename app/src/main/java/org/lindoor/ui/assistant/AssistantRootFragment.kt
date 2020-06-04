@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_assistant_root.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRootBinding
 
-class AssistantRootFragment :LindoorFragment() {
+class AssistantRootFragment :GenericFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

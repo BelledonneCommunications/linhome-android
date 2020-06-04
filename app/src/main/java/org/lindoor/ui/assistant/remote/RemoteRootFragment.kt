@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_assistant_remote_root.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteRootBinding.inflate
 import org.lindoor.utils.DialogUtil
@@ -17,7 +17,7 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class RemoteRootFragment :LindoorFragment() {
+class RemoteRootFragment :GenericFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

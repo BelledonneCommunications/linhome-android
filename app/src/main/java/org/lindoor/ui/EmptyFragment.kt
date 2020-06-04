@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 
-class EmptyFragment :LindoorFragment() {
+class EmptyFragment :GenericFragment() {
 
 
     override fun onCreateView(

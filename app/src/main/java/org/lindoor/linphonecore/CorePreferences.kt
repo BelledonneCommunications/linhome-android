@@ -29,7 +29,7 @@ import java.io.FileOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 
-class CorePreferences constructor(private val context: Context) { // Todo - review necessary portion (copied from Linphone)
+class CorePreferences constructor(private val context: Context) {
     private var _config: Config? = null
     var config: Config
         get() = _config ?: coreContext.core.config
@@ -37,6 +37,18 @@ class CorePreferences constructor(private val context: Context) { // Todo - revi
             _config = value
         }
 
+
+    /* Lindoor */
+    var showLatestSnapshot: Boolean
+        get() {
+            return config.getBool("devices", "latest_snapshot", false)
+        }
+        set(value) {
+            config.setBool("devices", "latest_snapshot", value)
+        }
+
+
+    // Todo - review necessary portion (copied from Linphone)
     /* App settings */
 
     var debugLogs: Boolean

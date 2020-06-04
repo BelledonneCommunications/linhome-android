@@ -12,6 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.signature.ObjectKey
 import kotlinx.android.synthetic.main.item_device.view.*
 import org.lindoor.R
 import org.lindoor.customisation.DeviceTypes
@@ -156,11 +158,12 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             }
 
             device.thumbNail.also {
-                cdlog("cdes"+it.absolutePath+it.length())
                 if (it.existsAndIsNotEmpty()) {
                     deviceImage.visibility = View.VISIBLE
-                    Theme.glidegeneric.load(it).into(deviceImage)
-                    view.post {
+                    Theme.glidegeneric.load(it)
+                        .signature(ObjectKey(it.lastModified()))
+                        .into(deviceImage)
+                    deviceImage.post {
                         if (view.measuredWidth < view.measuredHeight) {
                             view.layoutParams.height = (view.measuredWidth * Theme.arbitraryValue(
                                 "device_first_image_aspect_ratio",

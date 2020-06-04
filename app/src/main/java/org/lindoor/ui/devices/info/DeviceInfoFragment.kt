@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_device_info.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.FragmentDeviceInfoBinding
 import org.lindoor.ui.devices.info.DeviceInfoActionsAdapter
 
-class DeviceInfoFragment : LindoorFragment() {
+class DeviceInfoFragment : GenericFragment() {
 
     val args: DeviceEditorFragmentArgs by navArgs()
 

@@ -75,6 +75,14 @@
             android:theme="@style/LindoorTheme"
             >
         </activity>
+
+        <activity
+            android:name=".ui.player.PlayerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LindoorTheme"
+            android:configChanges="orientation|screenSize"
+            >
+        </activity>
         <!-- Receivers -->
 
         <receiver android:name=".linphonecore.CorePushReceiver">

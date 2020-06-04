@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_device_edit.view.*
 import kotlinx.android.synthetic.main.item_action_edit.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
@@ -23,7 +23,7 @@ import org.lindoor.store.DeviceStore
 import org.lindoor.ui.validators.ValidatorFactory
 import org.lindoor.utils.DialogUtil
 
-class DeviceEditorFragment : LindoorFragment() {
+class DeviceEditorFragment : GenericFragment() {
 
 
     lateinit var model:DeviceEditorViewModel

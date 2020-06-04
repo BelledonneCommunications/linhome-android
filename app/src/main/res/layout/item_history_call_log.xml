@@ -82,6 +82,8 @@
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/play"
+                        android:clickable='@{model.historyEvent.hasMedia() &amp;&amp; !historymodel.editing ? true : false}'
+                        android:onClick="@{() -> model.viewMedia()}"
                         backgroundeffect='@{historymodel.editing ? null : "primary_color"}'
                         backgroundcolor='@{historymodel.editing ? "color_b" : null}'
                         tint='@{"color_c"}'

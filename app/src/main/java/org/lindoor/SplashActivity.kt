@@ -3,7 +3,6 @@ package org.lindoor
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +11,7 @@ import kotlinx.coroutines.launch
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivitySplashBinding
 
-class SplashActivity : AppCompatActivity () {
+class SplashActivity : GenericActivity () {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val decorView: View = window.decorView

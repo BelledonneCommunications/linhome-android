@@ -8,12 +8,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 
-abstract class LindoorFragment: Fragment(),
+abstract class GenericFragment: Fragment(),
     ToobarButtonClickedListener {
 
     val mainactivity get() = activity as MainActivity
-
-
 
     override fun onResume() {
         super.onResume()

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.lindoor.BR
 import org.lindoor.LindoorApplication
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.databinding.FragmentSettingsBinding
@@ -22,7 +22,7 @@ import org.linphone.core.PayloadType
 import org.linphone.core.tools.Log
 
 
-class SettingsFragment :LindoorFragment() {
+class SettingsFragment :GenericFragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var binding: FragmentSettingsBinding

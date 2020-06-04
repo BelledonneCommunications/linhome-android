@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_history.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.FragmentHistoryBinding
@@ -21,7 +21,7 @@ import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.DialogUtil
 
 
-class HistoryFragment : LindoorFragment() {
+class HistoryFragment : GenericFragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
 

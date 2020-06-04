@@ -28,7 +28,9 @@ object HistoryEventStore {
                 historyEventsConfig.getString(it,"call_id",null),
                 historyEventsConfig.getBool(it,"viewed_by_user",false),
                 historyEventsConfig.getString(it,"media_file_name",null),
-                historyEventsConfig.getString(it,"media_thumbnail_file_name","missing")))
+                historyEventsConfig.getString(it,"media_thumbnail_file_name","missing"),
+                historyEventsConfig.getBool(it,"has_video",false)
+            ))
         }
         return result
     }
@@ -42,6 +44,7 @@ object HistoryEventStore {
             historyEventsConfig.setString(entry.value.id,"media_file_name",entry.value.mediaFileName)
             historyEventsConfig.setString(entry.value.id,"media_thumbnail_file_name",entry.value.mediaThumbnailFileName)
             historyEventsConfig.setString(entry.value.id,"call_id",entry.value.callId)
+            historyEventsConfig.setBool(entry.value.id,"has_video",entry.value.hasVideo)
         }
         historyEventsXml.writeText(historyEventsConfig.dumpAsXml())
     }

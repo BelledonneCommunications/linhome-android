@@ -1,11 +1,11 @@
 package org.lindoor.ui.assistant
 
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.customisation.Texts
 import org.lindoor.ui.widgets.LTextInput
 import org.linphone.core.AccountCreator
 
-open class CreatorAssistantFragment :LindoorFragment() {
+open class CreatorAssistantFragment :GenericFragment() {
 
     fun updateField(status: AccountCreator.UsernameStatus?, textInput:LTextInput) {
         when (status) {

@@ -1,0 +1,77 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="playermodel"
+            type="org.lindoor.ui.player.PlayerViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/restart"
+            android:onClick='@{() -> playermodel.playFromStart()}'
+            backgroundeffect='@{"primary_color"}'
+            tint='@{"color_c"}'
+            icon='@{"icons/reload"}'
+            app:fabCustomSize="40dp"
+            app:maxImageSize="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            app:elevation="0dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="10dp"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play"
+            backgroundeffect='@{"primary_color"}'
+            android:onClick='@{() -> playermodel.togglePlay()}'
+            tint='@{"color_c"}'
+            icon='@{playermodel.playing ? "icons/pause" : "icons/play"}'
+            app:fabCustomSize="40dp"
+            app:maxImageSize="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="7dp"
+            app:elevation="0dp"
+            android:layout_toEndOf="@+id/restart"
+            android:layout_marginEnd="7dp"
+            />
+
+        <SeekBar
+            android:id="@+id/seek"
+            android:enabled="false"
+            android:layout_centerInParent="true"
+            android:max="@{playermodel.duration}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/color_c"
+            android:tint="@color/color_a"
+            android:layout_toStartOf="@+id/timer"
+            android:layout_toEndOf="@+id/play"
+            android:layout_marginEnd="7dp"
+            android:progress="@{playermodel.position}"
+            android:onProgressChanged="@{(seekBar, progress, fromUser) -> fromUser ? playermodel.seek(progress) : null}"
+            android:thumbTint="@color/color_a" />
+
+
+        <Chronometer
+            android:id="@+id/timer"
+            style='@{"player_time"}'
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</layout>

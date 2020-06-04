@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_assistant_remote_url.*
 import kotlinx.android.synthetic.main.fragment_assistant_remote_url.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteUrlBinding
 import org.lindoor.ui.validators.ValidatorFactory
@@ -19,7 +19,7 @@ import org.lindoor.utils.extensions.invisible
 import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 
-class RemoteUrlAccountFragment :LindoorFragment() {
+class RemoteUrlAccountFragment :GenericFragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater,

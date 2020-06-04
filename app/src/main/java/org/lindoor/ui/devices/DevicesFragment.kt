@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_devices.view.*
-import org.lindoor.LindoorFragment
+import org.lindoor.GenericFragment
 import org.lindoor.databinding.FragmentDevicesBinding
 
 
-class DevicesFragment : LindoorFragment() {
+class DevicesFragment : GenericFragment() {
 
     private lateinit var devicesViewModel: DevicesViewModel
 

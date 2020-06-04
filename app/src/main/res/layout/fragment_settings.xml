@@ -81,6 +81,12 @@
 
         </LinearLayout>
 
+        <include
+            layout="@layout/settings_widget_switch"
+            title='@{model.getText("settings_device_show_latest_snapshot")}'
+            listener="@{model.showLatestSnapshot}"
+            checked="@={model.latestSnapshotShown}"/>
+
 
     </LinearLayout>
     </ScrollView>

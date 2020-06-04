@@ -8,6 +8,7 @@ import org.lindoor.linphonecore.extensions.isNew
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.DateUtil
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.databindings.ViewModelWithTools
 import org.linphone.core.Call
 import org.linphone.core.CallLog
@@ -19,7 +20,9 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
     val viewMedia = MutableLiveData(false)
 
     var historyEvent:HistoryEvent? = callLog.callId?.let {
-        HistoryEventStore.findHistoryEventByCallId(it)
+        val toto = HistoryEventStore.findHistoryEventByCallId(it)
+        cdlog("${toto}")
+        toto
     }
 
 

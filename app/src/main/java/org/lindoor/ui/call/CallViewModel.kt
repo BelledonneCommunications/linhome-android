@@ -17,6 +17,7 @@ import org.lindoor.linphonecore.extensions.forceSpeakerAudioRoute
 import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.core.*
 
@@ -73,13 +74,11 @@ class CallViewModel(val call:Call) : ViewModel() {
 
     init {
 
-        if (call.callLog.callId != null) {
-            historyEvent = HistoryEventStore.findHistoryEventByCallId(call.callLog.callId) ?: HistoryEvent()
-        } else { // outgoing call
-            historyEvent = call.callLog.userData?.let {
-                it as HistoryEvent
-            } ?: HistoryEvent()
-        }
+        cdlog("${call.callLog.callId}")
+
+        historyEvent = call.callLog.userData?.let {// Outgoing call pass it through this way
+            it as HistoryEvent
+        } ?:  HistoryEventStore.findHistoryEventByCallId(call.callLog.callId) ?: HistoryEvent()
 
         attemptBindHistoryEventWithCallId()
 

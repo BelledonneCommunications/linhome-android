@@ -27,7 +27,7 @@ object HistoryEventStore {
                 historyEventsConfig.getString(it,"call_id",null),
                 historyEventsConfig.getBool(it,"viewed_by_user",false),
                 historyEventsConfig.getString(it,"media_file_name",null),
-                historyEventsConfig.getString(it,"media_thumbnail_file_name","missing"),
+                historyEventsConfig.getString(it,"media_thumbnail_file_name",null),
                 historyEventsConfig.getBool(it,"has_video",false)
             ))
         }

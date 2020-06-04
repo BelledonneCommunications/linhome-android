@@ -10,7 +10,9 @@ import org.lindoor.BR
 import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.ItemHistoryCallLogBinding
+import org.lindoor.linphonecore.historyEvent
 import org.lindoor.ui.player.PlayerActivity
+import org.lindoor.utils.DialogUtil
 import org.linphone.core.CallLog
 
 class CallLogAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: HistoryViewModel, val lindoorFragment: GenericFragment) :
@@ -47,6 +49,10 @@ class CallLogAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: H
             })
         }
         fun playMedia(callLog:CallLog,lindoorFragment: GenericFragment) {
+            if (callLog.historyEvent()?.hasVideo!!) { //TODO Remove me
+                DialogUtil.toast("Unable to play back video this time (pending crash fix) - audio works ok")
+                return
+            }
             val intent = Intent(lindoorFragment.activity, PlayerActivity::class.java)
             intent.putExtra("callId",callLog.callId)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -66,7 +66,9 @@ class DialogUtil() {
         }
 
         fun toast(textKey: String, long:Boolean = false) {
-            Toast.makeText(context,Texts.get(textKey),if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+            context?.also {
+                Toast.makeText(context,Texts.get(textKey),if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

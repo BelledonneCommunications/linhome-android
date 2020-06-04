@@ -37,11 +37,6 @@ class PlayerActivity : GenericActivity() {
         binding.lifecycleOwner = this
         intent.getStringExtra("callId")?.also { callId ->
             LindoorApplication.Companion.coreContext.core.findCallLogFromCallId(callId)?.historyEvent()?.also { event ->
-                if (event.hasVideo) {
-                    DialogUtil.info("Unable to play back video this time (pending crash fix) - audio works ok")
-                    finish()
-                    return
-                }
                 LindoorApplication.Companion.coreContext.core.createLocalPlayer(null,null,if (event.hasVideo) binding.root.video else null)?.also { player ->
                     playerViewModel =
                         ViewModelProvider(this, PlayerViewModelFactory(callId,player))[PlayerViewModel::class.java]

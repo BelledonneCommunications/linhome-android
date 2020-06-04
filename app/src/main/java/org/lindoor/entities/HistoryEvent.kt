@@ -29,7 +29,7 @@ data class HistoryEvent(var id:String = xDigitsUUID(), // HistoryEvent for outgo
 
     fun hasMedia() : Boolean {
         return media.let {
-            it.exists() && it.length() > 0
+            it.existsAndIsNotEmpty()
         }
     }
 

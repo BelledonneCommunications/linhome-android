@@ -165,7 +165,6 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                         .signature(ObjectKey(it.lastModified()))
                         .into(deviceImage)
 
-
                     deviceImage.post {
                        deviceImage.scaleType = ImageView.ScaleType.FIT_XY
                         view.requestLayout()

@@ -33,8 +33,10 @@
     <ImageView
         android:id="@+id/caller_picture"
         android:contentDescription="@null"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="120dp"
+        android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:src="@drawable/ic_lindoor_icon"
         android:layout_alignParentEnd="true"
@@ -42,6 +44,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginEnd="20dp" />
+
 
 
 </RelativeLayout>

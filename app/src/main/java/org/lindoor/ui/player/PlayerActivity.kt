@@ -51,17 +51,6 @@ class PlayerActivity : GenericActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        DialogUtil.context = this
-    }
-
-    override fun onPause() {
-        if (DialogUtil.context == this)
-            DialogUtil.context = null
-        super.onPause()
-    }
-
     private fun setupPlayerControl(view:View, model:PlayerViewModel) {
         model.playing.observe(this, Observer { playing ->
             if (playing) {

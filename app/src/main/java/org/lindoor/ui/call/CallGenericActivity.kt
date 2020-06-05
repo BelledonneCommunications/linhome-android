@@ -10,7 +10,6 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 
 abstract class CallGenericActivity : GenericActivity() {
 
-
     var call: Call? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,16 +26,5 @@ abstract class CallGenericActivity : GenericActivity() {
 
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        DialogUtil.context = this
-    }
-
-    override fun onPause() {
-        if (DialogUtil.context == this)
-            DialogUtil.context = null
-        super.onPause()
-    }
 
 }

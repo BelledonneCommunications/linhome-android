@@ -24,6 +24,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.ensureCoreExists
+import org.lindoor.utils.DialogUtil
 
 abstract class GenericActivity : AppCompatActivity() {
 
@@ -35,6 +36,7 @@ abstract class GenericActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        DialogUtil.context = this
         LindoorApplication.someActivityRunning = true
 
         // Remove service notification if it has been started by device boot
@@ -46,7 +48,11 @@ abstract class GenericActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        if (DialogUtil.context == this)
+            DialogUtil.context = null
         LindoorApplication.someActivityRunning = false
         super.onPause()
     }
+
+
 }

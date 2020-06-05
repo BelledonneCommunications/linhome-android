@@ -234,18 +234,7 @@ class MainActivity : GenericActivity() {
     }
 
 
-    // Pause / Resume
 
-    override fun onResume() {
-        super.onResume()
-        DialogUtil.context = this
-    }
-
-    override fun onPause() {
-        if (DialogUtil.context == this)
-            DialogUtil.context = null
-        super.onPause()
-    }
 
 
     fun applyCommonTheme() {

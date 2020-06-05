@@ -3,6 +3,7 @@ package org.lindoor.ui.call
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -74,21 +75,18 @@ class CallViewModel(val call:Call) : ViewModel() {
 
     init {
 
-        historyEvent = call.callLog.userData?.let {// Outgoing call pass it through this way
-            it as HistoryEvent
-        } ?:  HistoryEventStore.findHistoryEventByCallId(call.callLog.callId) ?: HistoryEvent()
-
+        historyEvent = call.historyEvent()
         attemptBindHistoryEventWithCallId()
 
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
         if (call.state ==  Call.State.IncomingReceived)
-            acceptEarlyMedia ()
+            call.acceptEarlyMedia ()
     }
 
     private fun fireActionsOnCallStateChanged(cstate:Call.State) {
         if (cstate == Call.State.IncomingReceived) {
-            acceptEarlyMedia()
+            call.acceptEarlyMedia()
         }
         if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
             call.startRecording()
@@ -109,8 +107,8 @@ class CallViewModel(val call:Call) : ViewModel() {
                 d.thumbNail.also { deviceThumb ->
                     if (corePreferences.showLatestSnapshot || !deviceThumb.existsAndIsNotEmpty()) {
                         call?.callLog?.historyEvent()?.also { event ->
-                            GlobalScope.launch() { // Snapshot availability takes a little time.
-                                delay(500)
+                            GlobalScope.launch(context = Dispatchers.Main) {
+                                delay(500) // Snapshot availability takes a little time.
                                 if (event.mediaThumbnail.existsAndIsNotEmpty()) {
                                     event.mediaThumbnail?.copyTo(deviceThumb,true)
                                 }
@@ -122,25 +120,6 @@ class CallViewModel(val call:Call) : ViewModel() {
         }
     }
 
-
-
-    fun acceptEarlyMedia() {
-        val earlyMediaCallParams:CallParams = coreContext.core.createCallParams(call)
-        earlyMediaCallParams.videoDirection = MediaDirection.RecvOnly
-        earlyMediaCallParams.audioDirection = MediaDirection.Inactive
-        earlyMediaCallParams.recordFile = historyEvent.mediaFileName
-        call.acceptEarlyMediaWithParams(earlyMediaCallParams)
-        call.startRecording()
-    }
-
-    fun accept() {
-        val inCallParams:CallParams = coreContext.core.createCallParams(call)
-        inCallParams.videoDirection = MediaDirection.RecvOnly
-        inCallParams.audioDirection = MediaDirection.SendRecv
-        inCallParams.recordFile = historyEvent.mediaFileName
-        call.acceptWithParams(inCallParams)
-        call.startRecording()
-    }
 
     fun decline() {
         call.decline(Reason.Declined)

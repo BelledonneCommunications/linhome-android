@@ -25,6 +25,7 @@ import android.content.Intent
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.linphone.core.Call
 import org.linphone.core.Core
+import org.linphone.core.Reason
 import org.linphone.mediastream.Log
 
 
@@ -43,11 +44,15 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             }
 
             if (intent.action == NotificationsManager.INTENT_ANSWER_CALL_NOTIF_ACTION) {
-                coreContext.answerCall(call)
+                call.accept()
             } else {
-                if (call.state == Call.State.IncomingReceived || call.state == Call.State.IncomingEarlyMedia) coreContext.declineCall(call) else coreContext.terminateCall(call)
+                if (call.state == Call.State.IncomingReceived || call.state == Call.State.IncomingEarlyMedia)
+                    call.decline(Reason.Declined)
+                else
+                    call.terminate()
             }
         }
     }
 
 }
+

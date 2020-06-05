@@ -149,7 +149,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                 if (device.supportsVideo()) {
                     Theme.setIcon("icons/eye", call)
                 } else if (device.supportsAudio())
-                    Theme.setIcon("icons/phone", call)
+                    Theme.setIcon("icons/notification_phone", call)
             } else {
                 typeIcon.visibility = View.GONE
                 Theme.setIcon("icons/eye", call)

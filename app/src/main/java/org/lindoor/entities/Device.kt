@@ -1,15 +1,18 @@
 package org.lindoor.entities
 
+import android.R
+import android.graphics.Bitmap
 import android.os.Parcelable
+import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.store.StorageManager
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import java.io.File
 import java.util.*
+
 
 @Parcelize
 data class Device(var id:String, var type:String?, var name:String, var address:String, var actionsMethodType:String?, var actions:ArrayList<Action>? ) :
@@ -56,7 +59,6 @@ data class Device(var id:String, var type:String?, var name:String, var address:
             DeviceTypes.typeNameForDeviceType(it)
         }
     }
-
 
 
 }

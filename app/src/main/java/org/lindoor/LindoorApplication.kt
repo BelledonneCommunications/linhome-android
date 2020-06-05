@@ -19,6 +19,8 @@ class LindoorApplication : Application() {
         lateinit var corePreferences: CorePreferences
         lateinit var coreContext: CoreContext
 
+        var someActivityRunning: Boolean = false
+
         fun ensureCoreExists(context: Context) {
             if (::coreContext.isInitialized && !coreContext.stopped) {
                 return

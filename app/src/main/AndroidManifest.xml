@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.lindoor">
 
-    <!-- Helps filling phone number and country code in assistant -->
+    <!-- Helps filling notification_phone number and country code in assistant -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- Needed for auto start at boot and to ensure the service won't be killed by OS while in call -->

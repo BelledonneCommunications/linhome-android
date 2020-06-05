@@ -35,6 +35,7 @@ abstract class GenericActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        LindoorApplication.someActivityRunning = true
 
         // Remove service notification if it has been started by device boot
         coreContext.notificationsManager.stopForegroundNotificationIfPossible()
@@ -42,5 +43,10 @@ abstract class GenericActivity : AppCompatActivity() {
 
     fun isTablet(): Boolean {
         return resources.getBoolean(R.bool.isTablet)
+    }
+
+    override fun onPause() {
+        LindoorApplication.someActivityRunning = false
+        super.onPause()
     }
 }

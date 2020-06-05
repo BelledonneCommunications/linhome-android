@@ -31,6 +31,7 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.TypedValue
 import android.view.*
+import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.R
 import org.lindoor.notifications.NotificationsManager
@@ -40,6 +41,7 @@ import org.lindoor.ui.call.CallOutgoingActivity
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
+import org.linphone.mediastream.Version
 import java.io.File
 import java.util.*
 import kotlin.math.abs
@@ -130,9 +132,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 }
 
                 // Starting SDK 24 (Android 7.0) we rely on the fullscreen intent of the call incoming notification
-                // TODO if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70)) {
+                if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70) || LindoorApplication.someActivityRunning) {
                     onIncomingReceived(call)
-                //}
+                }
 
                 if (corePreferences.autoAnswerEnabled) {
                     val autoAnswerDelay = corePreferences.autoAnswerDelay
@@ -198,7 +200,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
         configureCore()
 
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        Log.i("[Context] Registering phone state listener")
+        Log.i("[Context] Registering notification_phone state listener")
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
 
@@ -206,7 +208,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
         Log.i("[Context] Stopping")
 
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        Log.i("[Context] Unregistering phone state listener")
+        Log.i("[Context] Unregistering notification_phone state listener")
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
 
         notificationsManager.destroy()

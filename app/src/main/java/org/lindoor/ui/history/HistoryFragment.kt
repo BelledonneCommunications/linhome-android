@@ -19,6 +19,7 @@ import org.lindoor.customisation.Theme
 import org.lindoor.databinding.FragmentHistoryBinding
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.DialogUtil
+import org.lindoor.LindoorApplication.Companion.coreContext
 
 
 class HistoryFragment : GenericFragment() {
@@ -101,6 +102,8 @@ class HistoryFragment : GenericFragment() {
         mainactivity.toolbar_left_button_title.text = Texts.get("cancel")
         mainactivity.toolbar_right_button_title.text = Texts.get("delete")
         mainactivity.toolbarViewModel.rightButtonVisible.value = !historyViewModel.history.value!!.isEmpty()
+        coreContext.notificationsManager.dismissMissedCallNotification()
+
     }
 
     fun enterEdition() {

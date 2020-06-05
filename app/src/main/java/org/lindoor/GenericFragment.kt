@@ -17,19 +17,6 @@ abstract class GenericFragment: Fragment(),
     override fun onResume() {
         super.onResume()
         mainactivity.toobarButtonClickedListener = this
-        view?.setOnTouchListener (object : View.OnTouchListener { // Handles close side menu when clicking outside of it
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (mainactivity.sideMenuOpened()) {
-                    val r = Rect(0, 0, 0, 0)
-                    v?.getHitRect(r)
-                    if (r.contains(event!!.x.toInt(), event.y.toInt())) {
-                        mainactivity.navControllerSideMenu.navigateUp()
-                        return false
-                    }
-                }
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
     }
 
     override fun onPause() {

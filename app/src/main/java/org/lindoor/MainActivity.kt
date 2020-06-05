@@ -2,11 +2,9 @@ package org.lindoor
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -23,10 +21,12 @@ import org.lindoor.ui.tabbar.TabbarViewModel
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 import org.lindoor.ui.toolbar.ToolbarViewModel
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.cdlog
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
+
 
 @RuntimePermissions
 class MainActivity : GenericActivity() {
@@ -234,14 +234,25 @@ class MainActivity : GenericActivity() {
     }
 
 
-
-
-
     fun applyCommonTheme() {
         getWindow().also { window ->
             window.setStatusBarColor(Theme.getColor("color_a"))
             window.setNavigationBarColor(Theme.getColor("color_j"))
         }
+    }
+
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if (sideMenuOpened()) {
+            if (event != null) {
+                if (event.x.toInt() > 0.75 * getWindow().getDecorView().getWidth()) {
+                    navControllerSideMenu.navigateUp()
+                    cdlog("la")
+                    return false
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 
 

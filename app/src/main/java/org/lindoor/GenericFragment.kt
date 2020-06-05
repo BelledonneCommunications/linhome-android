@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
+import org.lindoor.utils.cdlog
 
 abstract class GenericFragment: Fragment(),
     ToobarButtonClickedListener {

@@ -247,7 +247,6 @@ class MainActivity : GenericActivity() {
             if (event != null) {
                 if (event.x.toInt() > 0.75 * getWindow().getDecorView().getWidth()) {
                     navControllerSideMenu.navigateUp()
-                    cdlog("la")
                     return false
                 }
             }

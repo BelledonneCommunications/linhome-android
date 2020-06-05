@@ -16,6 +16,7 @@ import org.lindoor.databinding.ActivityCallInProgressBinding
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.Call
+import org.linphone.core.tools.Log
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
@@ -66,10 +67,21 @@ class CallInProgressActivity : CallGenericActivity () {
     override fun onResume() {
         super.onResume()
         coreContext.core.nativeVideoWindowId = if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
+
+        if (coreContext.core.callsNb == 0) {
+            Log.w("[Call Activity] Resuming but no call found...")
+            finish()
+        } else {
+            coreContext.removeCallOverlay()
+        }
+
     }
 
     override fun onPause() {
         coreContext.core.nativeVideoWindowId = null
+        if (coreContext.core.callsNb > 0) {
+            coreContext.createCallOverlay()
+        }
         super.onPause()
     }
 

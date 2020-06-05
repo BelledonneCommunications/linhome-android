@@ -347,7 +347,7 @@ class NotificationsManager(private val context: Context) {
             startForeground(notifiable.notificationId, notification)
         }
         //coreContext.core.nativeVideoWindowId(R.id.videonotification)
-        call.acceptEarlyMedia()
+        //call.acceptEarlyMedia()
     }
 
 

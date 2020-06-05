@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import org.lindoor.LindoorApplication.Companion.coreContext
+import org.lindoor.linphonecore.extensions.extendedAccept
 import org.linphone.core.Call
 import org.linphone.core.Core
 import org.linphone.core.Reason
@@ -44,7 +45,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             }
 
             if (intent.action == NotificationsManager.INTENT_ANSWER_CALL_NOTIF_ACTION) {
-                call.accept()
+                call.extendedAccept()
             } else {
                 if (call.state == Call.State.IncomingReceived || call.state == Call.State.IncomingEarlyMedia)
                     call.decline(Reason.Declined)

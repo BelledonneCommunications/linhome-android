@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.store.StorageManager
+import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import java.io.File
@@ -50,7 +51,10 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         params.recordFile = historyEvent.mediaFileName
         LindoorApplication.coreContext.core.createAddress(address)?.let {
             val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
-           call.callLog.userData = historyEvent // Retrieved in CallViewModel and bound with call ID when available
+            if (call != null)
+                call.callLog.userData = historyEvent // Retrieved in CallViewModel and bound with call ID when available
+            else
+                DialogUtil.toast("unable_to_call_device")
         }
     }
 

@@ -13,9 +13,7 @@ import org.lindoor.customisation.DeviceTypes
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
-import org.lindoor.linphonecore.extensions.forceEarpieceAudioRoute
-import org.lindoor.linphonecore.extensions.forceSpeakerAudioRoute
-import org.lindoor.linphonecore.extensions.historyEvent
+import org.lindoor.linphonecore.extensions.*
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.cdlog
@@ -47,7 +45,9 @@ class CallViewModel(val call:Call) : ViewModel() {
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
             cstate?.also { state ->
-                attemptBindHistoryEventWithCallId()
+                if (call != null) {
+                    historyEvent = call.callLog.historyEvent()
+                }
                 fireActionsOnCallStateChanged(state)
                 attemptSetDeviceThumbnail(state)
                 call?.remoteParams?.videoEnabled()?.also {
@@ -74,31 +74,23 @@ class CallViewModel(val call:Call) : ViewModel() {
     }
 
     init {
-
-        historyEvent = call.historyEvent()
-        attemptBindHistoryEventWithCallId()
-
+        historyEvent = call.callLog.historyEvent()
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
         if (call.state ==  Call.State.IncomingReceived)
-            call.acceptEarlyMedia ()
+            call.extendedAcceptEarlyMedia()
     }
 
     private fun fireActionsOnCallStateChanged(cstate:Call.State) {
         if (cstate == Call.State.IncomingReceived) {
-            call.acceptEarlyMedia()
+            call.extendedAcceptEarlyMedia()
         }
         if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
             call.startRecording()
         }
     }
 
-    private fun attemptBindHistoryEventWithCallId() { // For outgoing call history event is created before as it contains recording path.
-        if (historyEvent.callId == null && call.callLog.callId != null) {
-            historyEvent.callId = call.callLog.callId
-            HistoryEventStore.persistHistoryEvent(historyEvent)
-        }
-    }
+
 
 
     private fun attemptSetDeviceThumbnail(cstate: Call.State) {
@@ -186,5 +178,8 @@ class CallViewModel(val call:Call) : ViewModel() {
         }
     }
 
+    fun extendedAccept() {
+        call.extendedAccept()
+    }
 
 }

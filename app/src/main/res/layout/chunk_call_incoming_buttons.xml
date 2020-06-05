@@ -39,7 +39,7 @@
             android:layout_weight="1"
             bind:backgroundeffect='@{"accept_call_button"}'
             bind:icon='@{"icons/phone"}'
-            bind:onClick="@{()->callmodel.call.accept()}"
+            bind:onClick="@{()->callmodel.extendedAccept()}"
             bind:outline='@{false}'
             bind:text='@{"call_button_accept"}'
             bind:tint='@{"color_c"}'

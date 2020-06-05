@@ -61,7 +61,7 @@ class SettingsViewModel : ViewModelWithTools() {
 
     val showLatestSnapshot = object : SettingListenerStub() {
         override fun onBoolValueChanged(newValue: Boolean) {
-            corePref.showLatestSnapshot = true
+            corePref.showLatestSnapshot = newValue
         }
     }
 

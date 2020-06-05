@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
+import android.os.FileObserver
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +23,8 @@ import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
-import org.lindoor.utils.getImageDimension
+import org.lindoor.utils.fileObserverWithMainThreadRunnable
 import org.linphone.compatibility.Compatibility
 
 
@@ -138,9 +138,10 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
         private val call = itemView.call
         private val deviceImage = itemView.device_image
         private val view = itemView
+        private var deviceImageObserver:FileObserver? = null
 
 
-        fun bindItems(device: Device) {
+        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>) {
             name.text = device.name
             address.text = device.address
             if (device.type != null) {
@@ -169,7 +170,11 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
                        deviceImage.scaleType = ImageView.ScaleType.FIT_XY
                         view.requestLayout()
                     }
-
+                    deviceImageObserver = fileObserverWithMainThreadRunnable(it,Runnable {
+                        adapter.notifyItemChanged(adapterPosition)
+                    })?.also {
+                        it.startWatching()
+                    }
                 }
             }
 
@@ -183,6 +188,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(devices.value!![position])
+        holder.bindItems(devices.value!![position],this)
     }
+
 }

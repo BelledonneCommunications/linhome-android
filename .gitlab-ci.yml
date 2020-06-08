@@ -1,0 +1,16 @@
+job-android:
+
+  stage: build
+  tags: [ "docker-android" ]
+  image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:29
+
+  script:
+    - ./gradlew "--build-file" "./build.gradle"  assembleDebug "--stacktrace" "--no-daemon"
+    - cp ./app/release/app-release.apk lindoor-debug-unsigned.apk
+
+  artifacts:
+    paths:
+      - lindoor-debug-unsigned.apk 
+    when: always
+    expire_in: 1 week
+

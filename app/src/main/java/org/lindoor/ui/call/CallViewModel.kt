@@ -59,7 +59,6 @@ class CallViewModel(val call:Call) : ViewModel() {
         }
 
         override fun onNextVideoFrameDecoded(call: Call?) {
-            super.onNextVideoFrameDecoded(call)
             videoContent.value = true
             call?.callLog?.historyEvent()?.also { event ->
                 if (!event.hasVideo) {

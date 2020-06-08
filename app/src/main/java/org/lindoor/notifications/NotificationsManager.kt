@@ -25,15 +25,19 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.TextureView
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.AppWidgetTarget
-import com.bumptech.glide.request.transition.Transition
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.MainActivity
@@ -41,17 +45,24 @@ import org.lindoor.R
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.linphonecore.CoreService
+import org.lindoor.linphonecore.extensions.extendedAcceptEarlyMedia
+import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.store.DeviceStore
 import org.lindoor.ui.call.CallInProgressActivity
 import org.lindoor.ui.call.CallIncomingActivity
 import org.lindoor.ui.call.CallOutgoingActivity
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.lindoor.utils.pxFromDp
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
+import org.linphone.core.CallListenerStub
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 import org.linphone.core.tools.Log
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.fixedRateTimer
 
 
 private class Notifiable(val notificationId: Int) {
@@ -95,7 +106,7 @@ class NotificationsManager(private val context: Context) {
     private var serviceNotification: Notification? = null
     var service: CoreService? = null
 
-    private val listener: CoreListenerStub = object : CoreListenerStub() {
+    private val coreListener: CoreListenerStub = object : CoreListenerStub() {
         override fun onCallStateChanged(
             core: Core?,
             call: Call?,
@@ -116,8 +127,43 @@ class NotificationsManager(private val context: Context) {
                 else -> displayCallNotification(call)
             }
         }
+    }
 
 
+
+    var fileLenght = 0L
+    var incomingCallSnapshotTimer : Timer? = null
+    lateinit private  var notificationBuilder: NotificationCompat.Builder
+    private var callListener = object : CallListenerStub() {
+        override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
+            if (cstate != Call.State.IncomingEarlyMedia || cstate != Call.State.IncomingReceived)
+                incomingCallSnapshotTimer?.cancel()
+        }
+        override fun onNextVideoFrameDecoded(call: Call?) {
+            cdlog("got a frame")
+            if (call != null) {
+                call.takeVideoSnapshot(call.callLog.historyEvent().mediaThumbnail.absolutePath)
+                    GlobalScope.launch(context = Dispatchers.Main) {
+                        delay(1000)
+                        call.callLog.historyEvent().mediaThumbnail.also {
+                            if (it.existsAndIsNotEmpty() && it.length() != fileLenght && !LindoorApplication.someActivityRunning) {
+                                fileLenght = it.length()
+                                val notificationLayoutHeadsUp = fillIncomingRemoteViewsForCall(call,true)
+                                val awt = AppWidgetTarget(
+                                    context.applicationContext,
+                                    R.id.caller_picture,
+                                    notificationLayoutHeadsUp,
+                                    0)
+                                Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
+                                notificationBuilder.setCustomHeadsUpContentView(notificationLayoutHeadsUp)
+                                val notification = notificationBuilder.build()
+                                if (!LindoorApplication.someActivityRunning && call.state == Call.State.IncomingEarlyMedia)
+                                    notify(getNotifiableForCall(call).notificationId, notification)
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     init {
@@ -127,7 +173,7 @@ class NotificationsManager(private val context: Context) {
     }
 
     fun onCoreReady() {
-        coreContext.core.addListener(listener)
+        coreContext.core.addListener(coreListener)
     }
 
     fun destroy() {
@@ -146,7 +192,7 @@ class NotificationsManager(private val context: Context) {
         }
 
         stopForegroundNotification()
-        coreContext.core.removeListener(listener)
+        coreContext.core.removeListener(coreListener)
     }
 
     private fun notify(id: Int, notification: Notification) {
@@ -157,15 +203,6 @@ class NotificationsManager(private val context: Context) {
     fun cancel(id: Int) {
         Log.i("[Notifications Manager] Canceling $id")
         notificationManager.cancel(id)
-    }
-
-    fun getSipUriForChatNotificationId(notificationId: Int): String? {
-        for (address in chatNotificationsMap.keys) {
-            if (chatNotificationsMap[address]?.notificationId == notificationId) {
-                return address
-            }
-        }
-        return null
     }
 
     fun getSipUriForCallNotificationId(notificationId: Int): String? {
@@ -199,7 +236,7 @@ class NotificationsManager(private val context: Context) {
                 val call = coreContext.core.currentCall ?: coreContext.core.calls[0]
                 when (call.state) {
                     Call.State.IncomingReceived, Call.State.IncomingEarlyMedia -> {
-                        displayIncomingCallNotification(call, true)
+                        //displayIncomingCallNotification(call, true)
                     }
                     else -> displayCallNotification(call, true)
                 }
@@ -282,12 +319,25 @@ class NotificationsManager(private val context: Context) {
     }
 
 
+    private fun fillIncomingRemoteViewsForCall(call:Call, hasSnapShot:Boolean):RemoteViews {
+        val address = call.remoteAddress.asStringUriOnly()
+        val displayName = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
+        val notificationLayoutHeadsUp =
+            if (hasSnapShot)
+                RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up_snapshot)
+            else
+                RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up)
+
+        notificationLayoutHeadsUp.setTextViewText(R.id.caller, displayName)
+        notificationLayoutHeadsUp.setTextViewText(R.id.sip_uri, address)
+        notificationLayoutHeadsUp.setTextViewText(R.id.incoming_call_info, Texts.get("notif_incoming_call_title"))
+        return notificationLayoutHeadsUp
+    }
+
 
     private fun displayIncomingCallNotification(call: Call, useAsForeground: Boolean = false) {
 
-        val address = call.remoteAddress.asStringUriOnly()
         val notifiable = getNotifiableForCall(call)
-
         val displayName = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
 
         val incomingCallNotificationIntent = Intent(context, CallIncomingActivity::class.java)
@@ -295,34 +345,8 @@ class NotificationsManager(private val context: Context) {
         incomingCallNotificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val pendingIntent = PendingIntent.getActivity(context, 0, incomingCallNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notificationLayoutHeadsUp = RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up)
-        notificationLayoutHeadsUp.setTextViewText(R.id.caller, displayName)
-        notificationLayoutHeadsUp.setTextViewText(R.id.sip_uri, address)
-        notificationLayoutHeadsUp.setTextViewText(R.id.incoming_call_info, Texts.get("notif_incoming_call_title"))
 
-
-        DeviceStore.findDeviceByAddress(call.remoteAddress)?.thumbNail?.also {
-            if (it.existsAndIsNotEmpty()) {
-                val awt: AppWidgetTarget = object : AppWidgetTarget(
-                    context.applicationContext,
-                    R.id.caller_picture,
-                    notificationLayoutHeadsUp,
-                    0
-                ) {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        super.onResourceReady(resource, transition)
-                    }
-                }
-                var options = RequestOptions().override(pxFromDp(48), pxFromDp(48))
-                Glide.with(context.applicationContext).asBitmap().load(it).apply(options)
-                    .into(awt)
-            }
-        }
-
-        val notification = NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
+        notificationBuilder = NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setSmallIcon(R.drawable.notification_phone)
             .setContentTitle(displayName)
@@ -338,16 +362,35 @@ class NotificationsManager(private val context: Context) {
             .setFullScreenIntent(pendingIntent, true)
             .addAction(getCallDeclineAction(notifiable.notificationId))
             .addAction(getCallAnswerAction(notifiable.notificationId))
-            .setCustomHeadsUpContentView(notificationLayoutHeadsUp)
-            .build()
+            .setCustomHeadsUpContentView(fillIncomingRemoteViewsForCall(call,false))
 
-        notify(notifiable.notificationId, notification)
+        val notification = notificationBuilder.build()
+
+        if (!LindoorApplication.someActivityRunning)
+            notify(notifiable.notificationId, notification)
+
 
         if (useAsForeground) {
             startForeground(notifiable.notificationId, notification)
         }
-        //coreContext.core.nativeVideoWindowId(R.id.videonotification)
-        //call.acceptEarlyMedia()
+
+        val fakeTextureView = TextureView(LindoorApplication.instance.applicationContext)
+        coreContext.core.nativeVideoWindowId = fakeTextureView
+        call.addListener(callListener)
+        call.extendedAcceptEarlyMedia()
+        scheduleSnapShots(call)
+    }
+
+
+    fun scheduleSnapShots(call:Call) {
+        incomingCallSnapshotTimer = fixedRateTimer("timer",false,1000,1000){
+            GlobalScope.launch(context = Dispatchers.Main) {
+                if (call.state == Call.State.IncomingEarlyMedia) {
+                    call.requestNotifyNextVideoFrameDecoded()
+                    cdlog("requesting video frame")
+                }
+            }
+        }
     }
 
 

@@ -44,7 +44,7 @@
             android:padding="2dp">
 
             <ImageView
-                android:id="@+id/icon"
+                android:id="@+id/button_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="12dp"
@@ -72,7 +72,7 @@
 
         </RelativeLayout>
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/button_text"
             style='@{"call_action_button"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"

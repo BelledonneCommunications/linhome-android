@@ -40,6 +40,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="sensor"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/LindoorTheme">
             <nav-graph android:value="@navigation/fragments_graph" />
@@ -47,6 +48,8 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
+            android:screenOrientation="sensor"
+            android:configChanges="orientation"
             android:theme="@style/LindoorTheme"
             >
             <intent-filter>

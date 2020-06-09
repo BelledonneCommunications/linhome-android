@@ -16,7 +16,7 @@ import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.utils.DialogUtil
 
 
-class PlayerActivity : GenericActivity() {
+class PlayerActivity : GenericActivity(allowsLandcapeOnSmartPhones = true) {
 
 
     lateinit var binding : ActivityPlayerBinding
@@ -24,7 +24,7 @@ class PlayerActivity : GenericActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LindoorApplication.ensureCoreExists(applicationContext)
+
         val decorView: View = window.decorView
         val uiOptions: Int =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

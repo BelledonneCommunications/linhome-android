@@ -1,5 +1,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <data>
+        <import type="android.view.View"/>
+        <variable name="device" type="org.lindoor.entities.Device" />
+    </data>
 
         <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
@@ -33,7 +36,7 @@
                     android:layout_marginTop="7dp"
                     style='@{"device_list_device_name"}'
                     android:layout_marginStart="20dp"
-                    android:text="Name" />
+                    android:text="@{device.name}" />
 
                 <ImageView
                     android:id="@+id/type_icon"
@@ -41,8 +44,9 @@
                     android:layout_height="40dp"
                     android:src="@drawable/ic_lindoor_icon"
                     android:layout_above="@+id/name"
-                    android:visibility="gone"
+                    android:visibility='@{device.typeIcon() != null ? View.VISIBLE : View.GONE}'
                     android:layout_marginStart="20dp"
+                    icon='@{device.typeIcon()}'
                     />
 
 
@@ -56,14 +60,14 @@
                     android:layout_marginTop="1dp"
                     android:layout_marginStart="20dp"
                     style='@{"device_list_device_address"}'
-                    android:text="Address" />
-
-
+                    android:text="@{device.address}"
+                     />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/call"
                     backgroundeffect='@{"primary_color"}'
                     tint='@{"color_c"}'
+                    icon='@{device.supportsVideo() ? "icons/eye" : "icons/notification_phone"}'
                     app:fabCustomSize="50dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -72,6 +76,7 @@
                     android:layout_marginEnd="13dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
+                    android:onClick="@{() -> device.call()}"
                     />
             </RelativeLayout>
 

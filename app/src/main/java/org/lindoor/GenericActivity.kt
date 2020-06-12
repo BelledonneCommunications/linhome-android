@@ -43,13 +43,9 @@ abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false
         // Remove service notification if it has been started by device boot
         coreContext.notificationsManager.stopForegroundNotificationIfPossible()
 
-        if(!allowsLandscapeOnSmartPhones && !tablet()) {
+        if(!allowsLandscapeOnSmartPhones && !LindoorApplication.instance.tablet()) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
-    }
-
-    fun tablet(): Boolean {
-        return resources.getBoolean(R.bool.tablet)
     }
 
     override fun onPause() {

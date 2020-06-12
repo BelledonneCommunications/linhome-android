@@ -17,12 +17,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.signature.ObjectKey
 import kotlinx.android.synthetic.main.item_device.view.*
+import org.lindoor.BR
+import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemDeviceBinding
+import org.lindoor.databinding.ItemHistoryBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
+import org.lindoor.ui.history.HistoryEventsViewModel
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.lindoor.utils.fileObserverWithMainThreadRunnable
@@ -109,7 +113,7 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     }
 }
 
-class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val navController:NavController) :
+class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val selectedDevice:MutableLiveData<Device>, val lindoorFragment: GenericFragment) :
     RecyclerView.Adapter<DevicesAdapter.ViewHolder>() {
 
     init {
@@ -124,41 +128,24 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             parent,
             false
         ) as ItemDeviceBinding
-        return ViewHolder(binding.root)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return devices.value!!.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(val binding: ItemDeviceBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val name = itemView.name
-        private val typeIcon = itemView.type_icon
-        private val address = itemView.address
-        private val call = itemView.call
-        private val deviceImage = itemView.device_image
+        private val deviceImage = binding.root.device_image
         private val view = itemView
         private var deviceImageObserver:FileObserver? = null
 
-
-        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>,navController:NavController) {
-            name.text = device.name
-            address.text = device.address
-            if (device.type != null) {
-                DeviceTypes.iconNameForDeviceType(device.type!!)?.let { Theme.setIcon(it, typeIcon) }
-                typeIcon.visibility = View.VISIBLE
-                if (device.supportsVideo()) {
-                    Theme.setIcon("icons/eye", call)
-                } else if (device.supportsAudio())
-                    Theme.setIcon("icons/notification_phone", call)
-            } else {
-                typeIcon.visibility = View.GONE
-                Theme.setIcon("icons/eye", call)
-            }
-            call.setOnClickListener {
-                device.call()
-            }
+        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>,selectedDevice:MutableLiveData<Device>,lindoorFragment: GenericFragment) {
+            binding.lifecycleOwner = lindoorFragment
+            binding.setVariable(BR.device,device)
+            binding.setVariable(BR.selectedDevice,selectedDevice)
+            binding.executePendingBindings()
 
             device.thumbNail.also {
                 if (it.existsAndIsNotEmpty()) {
@@ -180,15 +167,14 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             }
 
             view.setOnClickListener {
-                val actionDetail = DevicesFragmentDirections.deviceInfo(device)
-                navController.navigate(actionDetail)
+                selectedDevice.value = device
             }
 
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(devices.value!![position],this, navController)
+        holder.bindItems(devices.value!![position],this,selectedDevice,lindoorFragment)
     }
 
 }

@@ -40,6 +40,8 @@ class LindoorApplication : Application() {
             coreContext = CoreContext(context, config)
             coreContext.start()
         }
+
+
     }
     override fun onCreate() {
         super.onCreate()
@@ -50,5 +52,12 @@ class LindoorApplication : Application() {
         DeviceStore
     }
 
+    fun tablet(): Boolean {
+        return resources.getBoolean(R.bool.tablet)
+    }
+
+    fun smartPhone(): Boolean {
+        return !tablet()
+    }
 
 }

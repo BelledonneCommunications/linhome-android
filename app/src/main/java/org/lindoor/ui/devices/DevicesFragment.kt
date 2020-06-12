@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.lindoor.GenericFragment
-import org.lindoor.R
+import org.lindoor.LindoorApplication
 import org.lindoor.databinding.FragmentDevicesBinding
 
 
@@ -38,9 +37,15 @@ class DevicesFragment : GenericFragment() {
 
         binding.root.device_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
-        val navController = mainactivity.navController
+        binding.root.device_list.adapter = DevicesAdapter(devicesViewModel.devices,binding.root.device_list,devicesViewModel.selectedDevice,this)
 
-        binding.root.device_list.adapter = DevicesAdapter(devicesViewModel.devices,binding.root.device_list,navController)
+        if (LindoorApplication.instance.smartPhone()) {
+            devicesViewModel.selectedDevice.observe(viewLifecycleOwner, Observer { device ->
+                val actionDetail = DevicesFragmentDirections.deviceInfo(device)
+                mainactivity.navController.navigate(actionDetail)
+            })
+        }
+
 
         return binding.root
     }

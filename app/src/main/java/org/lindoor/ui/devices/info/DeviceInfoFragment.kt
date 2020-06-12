@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_device_info.view.*
 import org.lindoor.GenericFragment
 import org.lindoor.customisation.Texts
@@ -34,7 +35,6 @@ class DeviceInfoFragment : GenericFragment() {
             binding.root.actions_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             binding.root.actions_list.adapter = DeviceInfoActionsAdapter(them)
         }
-
         return binding.root
     }
 

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController

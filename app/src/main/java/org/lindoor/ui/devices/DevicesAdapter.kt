@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -108,7 +109,7 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     }
 }
 
-class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView) :
+class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val navController:NavController) :
     RecyclerView.Adapter<DevicesAdapter.ViewHolder>() {
 
     init {
@@ -141,7 +142,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
         private var deviceImageObserver:FileObserver? = null
 
 
-        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>) {
+        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>,navController:NavController) {
             name.text = device.name
             address.text = device.address
             if (device.type != null) {
@@ -180,15 +181,14 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
 
             view.setOnClickListener {
                 val actionDetail = DevicesFragmentDirections.deviceInfo(device)
-                view.findNavController().navigate(actionDetail)
+                navController.navigate(actionDetail)
             }
-
 
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(devices.value!![position],this)
+        holder.bindItems(devices.value!![position],this, navController)
     }
 
 }

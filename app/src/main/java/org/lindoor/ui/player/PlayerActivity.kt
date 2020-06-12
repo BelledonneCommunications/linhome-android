@@ -13,10 +13,9 @@ import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.databinding.ActivityPlayerBinding
 import org.lindoor.linphonecore.extensions.historyEvent
-import org.lindoor.utils.DialogUtil
 
 
-class PlayerActivity : GenericActivity(allowsLandcapeOnSmartPhones = true) {
+class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
 
 
     lateinit var binding : ActivityPlayerBinding

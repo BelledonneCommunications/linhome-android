@@ -4,45 +4,30 @@ import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
-import android.os.FileObserver
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.signature.ObjectKey
-import kotlinx.android.synthetic.main.fragment_device_info.view.*
-import kotlinx.android.synthetic.main.item_device.view.*
 import org.lindoor.BR
 import org.lindoor.GenericFragment
 import org.lindoor.LindoorApplication
 import org.lindoor.R
-import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemDeviceBinding
-import org.lindoor.databinding.ItemHistoryBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
-import org.lindoor.ui.devices.info.DeviceInfoActionsAdapter
-import org.lindoor.ui.history.HistoryEventsViewModel
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.extensions.existsAndIsNotEmpty
-import org.lindoor.utils.fileObserverWithMainThreadRunnable
 import org.linphone.compatibility.Compatibility
 
 
-class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
+class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     var background: Drawable? = null
     private var deleteViewMargin = 0
-    var initiated = false
+    private var initiated = false
     private lateinit var deleteIcon:PictureDrawable
 
     private fun init() {
@@ -117,7 +102,7 @@ class SwipeToDeleteCallback(var adapter: DevicesAdapter) :
     }
 }
 
-class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val selectedDevice:MutableLiveData<Device>, val lindoorFragment: GenericFragment) :
+class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val selectedDevice:MutableLiveData<Device>, private val lindoorFragment: GenericFragment) :
     RecyclerView.Adapter<DevicesAdapter.ViewHolder>() {
 
     init {
@@ -141,35 +126,17 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
 
     class ViewHolder(val binding: ItemDeviceBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val deviceImage = binding.root.device_image
         private val view = itemView
-        private var deviceImageObserver:FileObserver? = null
 
-        fun bindItems(device: Device,adapter:RecyclerView.Adapter<ViewHolder>,selectedDevice:MutableLiveData<Device>,lindoorFragment: GenericFragment) {
+        fun bindItems(
+            device: Device,
+            selectedDevice: MutableLiveData<Device>,
+            lindoorFragment: GenericFragment
+        ) {
             binding.lifecycleOwner = lindoorFragment
             binding.setVariable(BR.device,device)
             binding.setVariable(BR.selectedDevice,selectedDevice)
             binding.executePendingBindings()
-
-            device.thumbNail.also {
-                if (it.existsAndIsNotEmpty()) {
-                    deviceImage.visibility = View.VISIBLE
-                    Theme.glidegeneric.load(it)
-                        .signature(ObjectKey(it.lastModified()))
-                        .into(deviceImage)
-
-                    deviceImage.post {
-                       deviceImage.scaleType = ImageView.ScaleType.FIT_XY
-                        view.requestLayout()
-                    }
-                    deviceImageObserver = fileObserverWithMainThreadRunnable(it,Runnable {
-                        adapter.notifyItemChanged(adapterPosition)
-                    })?.also {
-                        it.startWatching()
-                    }
-                }
-            }
-
             view.setOnClickListener {
                 selectedDevice.value = device
             }
@@ -177,7 +144,7 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(devices.value!![position],this,selectedDevice,lindoorFragment)
+        holder.bindItems(devices.value!![position], selectedDevice, lindoorFragment)
         if (LindoorApplication.instance.tablet() && position == 0 && selectedDevice.value == null)
             selectedDevice.value = devices.value!![position]
     }

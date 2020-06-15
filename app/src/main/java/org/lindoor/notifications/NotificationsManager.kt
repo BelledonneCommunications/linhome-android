@@ -24,6 +24,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.TextureView
 import android.widget.RemoteViews
@@ -33,6 +34,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -456,16 +459,6 @@ class NotificationsManager(private val context: Context) {
         callNotificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val pendingIntent = PendingIntent.getActivity(context, 0, callNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val roundPicture =  DeviceStore.findDeviceByAddress(call.remoteAddress)?.thumbNail?.let {
-            if (it.existsAndIsNotEmpty()) {
-                Glide.with(context)
-                    .asBitmap()
-                    .load(it)
-                    .submit(pxFromDp(48), pxFromDp(48))
-                    .get()
-            } else
-                null
-        }
 
 
         val notification = NotificationCompat.Builder(
@@ -473,7 +466,6 @@ class NotificationsManager(private val context: Context) {
             .setContentTitle(DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username)
             .setContentText(stringResourceId)
             .setSmallIcon(iconResourceId)
-            .setLargeIcon(roundPicture)
             .setAutoCancel(false)
             .setContentIntent(pendingIntent)
             .setCategory(Notification.CATEGORY_CALL)

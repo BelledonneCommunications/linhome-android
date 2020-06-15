@@ -1,5 +1,6 @@
 package org.lindoor.store
 
+import org.lindoor.LindoorApplication
 import org.lindoor.entities.Action
 import org.lindoor.entities.Device
 import org.lindoor.store.StorageManager.devicesXml
@@ -82,4 +83,13 @@ object DeviceStore {
         }
         return null
     }
+
+    fun findDeviceByAddress(address:String?) : Device? {
+        return address?.let {addressString ->
+            LindoorApplication.coreContext.core.createAddress(addressString)?.let { addressAddress ->
+                return findDeviceByAddress(addressAddress)
+            }
+        }
+    }
+
 }

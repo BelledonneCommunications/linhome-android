@@ -15,14 +15,15 @@
             android:layout_marginBottom="7dp"
             android:elevation="0dp"
             >
-            <ImageView
+            <org.lindoor.ui.widgets.LDeviceImageView
                 android:id="@+id/device_image"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"> <!-- 0.3 -->
-            </ImageView>
+                device='@{device}'
+                android:alpha="0.5">
+            </org.lindoor.ui.widgets.LDeviceImageView>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -67,7 +68,7 @@
                     android:id="@+id/call"
                     backgroundeffect='@{"primary_color"}'
                     tint='@{"color_c"}'
-                    icon='@{device.supportsVideo() ? "icons/eye" : "icons/notification_phone"}'
+                    icon='@{device.supportsVideo() ? "icons/eye" : "icons/phone"}'
                     app:fabCustomSize="50dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.lindoor.GenericFragment
 import org.lindoor.LindoorApplication
 import org.lindoor.databinding.FragmentDevicesBinding
-import org.lindoor.ui.devices.edit.DeviceInfoFragmentDirections
+import org.lindoor.entities.Device
 
 
 class DevicesFragment : GenericFragment() {
@@ -29,6 +30,7 @@ class DevicesFragment : GenericFragment() {
     ): View? {
         val binding = FragmentDevicesBinding.inflate(inflater, container, false)
         devicesViewModel = ViewModelProvider(this).get(DevicesViewModel::class.java)
+        devicesViewModel.selectedDevice =  MutableLiveData<Device>() // Android bug - onCreateView called on navigateUp()
         binding.lifecycleOwner = this
         binding.model = devicesViewModel
 
@@ -49,7 +51,7 @@ class DevicesFragment : GenericFragment() {
         }
 
         if (LindoorApplication.instance.tablet()) {
-            binding.root.edit_device.setOnClickListener {
+            binding.root.edit_device?.setOnClickListener {
                 val actionDetail = DevicesFragmentDirections.deviceEditTablet()
                 actionDetail.device = devicesViewModel.selectedDevice.value
                 mainactivity.navController.navigate(actionDetail)

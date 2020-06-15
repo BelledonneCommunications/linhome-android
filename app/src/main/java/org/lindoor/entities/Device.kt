@@ -10,6 +10,7 @@ import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Theme
 import org.lindoor.store.StorageManager
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import java.io.File
@@ -69,6 +70,10 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         return type?.let {
             DeviceTypes.iconNameForDeviceType(it)
         }
+    }
+
+    fun hasThumbNail():Boolean {
+        return thumbNail?.existsAndIsNotEmpty()
     }
 
 

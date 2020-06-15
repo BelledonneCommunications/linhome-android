@@ -9,27 +9,28 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:visibility="visible"
                 backgoundcolor='@{device == selectedDevice ? "color_i" : "color_d"}'
                 >
 
                 <ImageView
                     android:id="@+id/type_icon"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/ic_lindoor_icon"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
                     android:visibility='@{device.typeIcon() != null ? View.VISIBLE : View.INVISIBLE}'
                     icon='@{device.typeIcon()}'
-                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_below="@+id/type_icon"
+                    android:layout_toEndOf="@+id/type_icon"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:layout_height="match_parent">
 
@@ -49,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="11dp"
+                        android:layout_marginBottom="17dp"
                         android:layout_marginTop="1dp"
                         android:layout_marginStart="20dp"
                         style='@{"device_list_device_address"}'

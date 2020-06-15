@@ -28,7 +28,7 @@ import java.io.File
 object Theme {
 
     private var typeFaces = hashMapOf<String, Typeface?>()
-    private var glidesvg = GlideApp.with(LindoorApplication.instance)
+    var glidesvg = GlideApp.with(LindoorApplication.instance)
     var glidegeneric = Glide.with(LindoorApplication.instance)
 
     private var themeError: Boolean = false

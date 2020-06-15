@@ -9,6 +9,6 @@ class DevicesViewModel : ViewModel() {
     val devices = MutableLiveData<ArrayList<Device>>().apply {
         value = DeviceStore.devices
     }
-    val selectedDevice = MutableLiveData<Device>()
+    var selectedDevice = MutableLiveData<Device>()
 
 }

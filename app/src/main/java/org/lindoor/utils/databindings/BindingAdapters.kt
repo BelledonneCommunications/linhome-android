@@ -1,5 +1,6 @@
 package org.lindoor.utils.databindings
 
+import android.os.FileObserver
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_device_info.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
@@ -27,6 +29,8 @@ import org.lindoor.ui.devices.info.DeviceInfoActionsAdapter
 import org.lindoor.ui.settings.SettingListener
 import org.lindoor.ui.validators.NonEmptyStringMatcherValidator
 import org.lindoor.ui.widgets.*
+import org.lindoor.utils.extensions.existsAndIsNotEmpty
+import org.lindoor.utils.fileObserverWithMainThreadRunnable
 import org.lindoor.utils.pxFromDp
 import java.io.File
 

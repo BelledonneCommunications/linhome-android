@@ -119,10 +119,13 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 }
 
                 if (core.callsNb == 1 && corePreferences.vibrateWhileIncomingCall) {
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    val audioManager =
+                        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     if ((audioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE ||
-                                audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL)) {
-                        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL)
+                    ) {
+                        val vibrator =
+                            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         if (vibrator.hasVibrator()) {
                             Log.i("[Context] Starting incoming call vibration")
                             Compatibility.vibrate(vibrator)
@@ -152,7 +155,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
                         }, autoAnswerDelay.toLong())
                     }
                 }
-            } else if (state == Call.State.OutgoingInit) {
+            } else if (state == Call.State.OutgoingInit || state == Call.State.OutgoingProgress) {
                 onOutgoingStarted(call)
             } else if (state == Call.State.Connected) {
                 if (isVibrating) {
@@ -167,7 +170,8 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 if (core.callsNb == 0) {
                     if (isVibrating) {
                         Log.i("[Context] Stopping vibration")
-                        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                        val vibrator =
+                            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         vibrator.cancel()
                         isVibrating = false
                     }
@@ -199,7 +203,8 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
         configureCore()
 
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         Log.i("[Context] Registering notification_phone state listener")
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
     }
@@ -207,7 +212,8 @@ class CoreContext(val context: Context, coreConfig: Config) {
     fun stop() {
         Log.i("[Context] Stopping")
 
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         Log.i("[Context] Unregistering notification_phone state listener")
         telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
 
@@ -320,8 +326,13 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
         if (overlayY == 0f) overlayY = pixelsToDp(40f)
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val params: WindowManager.LayoutParams = WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
-            Compatibility.getOverlayType(), WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT)
+        val params: WindowManager.LayoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            Compatibility.getOverlayType(),
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
         params.x = overlayX.toInt()
         params.y = overlayY.toInt()
         params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
@@ -371,23 +382,23 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
     /* Start call related activities */
 
-    private fun onIncomingReceived(call:Call) {
+    private fun onIncomingReceived(call: Call) {
         val intent = Intent(context, CallIncomingActivity::class.java)
-        intent.putExtra("callId",call.callLog.callId)
+        intent.putExtra("callId", call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
-    private fun onOutgoingStarted(call:Call) {
+    private fun onOutgoingStarted(call: Call) {
         val intent = Intent(context, CallOutgoingActivity::class.java)
-        intent.putExtra("callId",call.callLog.callId)
+        intent.putExtra("callId", call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
-    private fun onCallStarted(call:Call) {
+    private fun onCallStarted(call: Call) {
         val intent = Intent(context, CallInProgressActivity::class.java)
-        intent.putExtra("callId",call.callLog.callId)
+        intent.putExtra("callId", call.callLog.callId)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }

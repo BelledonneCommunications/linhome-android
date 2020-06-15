@@ -86,8 +86,8 @@ class MainActivity : GenericActivity() {
                 R.id.navigation_devices,R.id.navigation_history -> {
                     enterRootFragment()
                 } else -> {
-                    enterNonRootFragment()
-                }
+                enterNonRootFragment()
+            }
             }
             toolbar_title.text = titleForNavigationFragment(destination.id)
         }
@@ -99,9 +99,9 @@ class MainActivity : GenericActivity() {
                     enterNonRootFragment()
                     toolbar_title.text = null
                 } else -> {
-                    enterRootFragment()
-                    toolbar_title.text = titleForNavigationFragment(navController.currentDestination?.id)
-                }
+                enterRootFragment()
+                toolbar_title.text = titleForNavigationFragment(navController.currentDestination?.id)
+            }
             }
         }
 
@@ -246,7 +246,12 @@ class MainActivity : GenericActivity() {
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (sideMenuOpened()) {
             if (event != null) {
-                if (event.x.toInt() > 0.75 * getWindow().getDecorView().getWidth()) {
+                val overFlowPct =
+                    if (LindoorApplication.instance.smartPhone())  0.75
+                    else if (LindoorApplication.instance.landcape())  0.3
+                    else 0.5
+
+                if (event.x.toInt() > overFlowPct * getWindow().getDecorView().getWidth()) {
                     navControllerSideMenu.navigateUp()
                     return false
                 }

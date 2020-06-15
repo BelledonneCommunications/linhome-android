@@ -17,14 +17,8 @@
             name="textOff"
             type="String" />
         <variable
-            name="backgroundeffect"
-            type="String" />
-        <variable
             name="tint"
             type="String" />
-        <variable
-            name="outline"
-            type="Boolean" />
         <variable
             name="onClick"
             type="android.view.View.OnClickListener" />
@@ -40,7 +34,7 @@
             android:id="@+id/border"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@{outline ? @drawable/round_shape_outline_color_c : @drawable/round_shape}"
+            android:background="@drawable/round_shape_outline_color_b"
             android:padding="2dp">
 
             <ImageView
@@ -52,7 +46,6 @@
                 android:clickable="true"
                 android:background="@drawable/round_shape"
                 icon='@{icon}'
-                backgroundeffect='@{backgroundeffect}'
                 tint='@{tint}'
                 android:onClick="@{onClick}"
                 />
@@ -73,7 +66,7 @@
         </RelativeLayout>
         <TextView
             android:id="@+id/button_text"
-            style='@{"call_action_button"}'
+            style='@{"device_info_action_button_tablet"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="6dp"
@@ -86,7 +79,7 @@
 
         <TextView
             android:id="@+id/textOff"
-            style='@{"call_action_button"}'
+            style='@{"device_info_action_button_tablet"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="6dp"

@@ -23,30 +23,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical"
+            backgoundcolor='@{"color_d"}'
             >
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style='@{"view_sub_title"}'
-            text='@{"devices_empty_list_title"}'
-            android:visibility='@{model.devices.size() == 0 ? View.VISIBLE : View.GONE}' />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style='@{"view_sub_title"}'
+                text='@{"devices_empty_list_title"}'
+                android:visibility='@{model.devices.size() == 0 ? View.VISIBLE : View.GONE}' />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/device_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility='@{model.devices.size() > 0 ? View.VISIBLE : View.GONE}'
-            />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/device_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility='@{model.devices.size() > 0 ? View.VISIBLE : View.GONE}'
+                />
+        </LinearLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/new_device"
@@ -58,9 +61,11 @@
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="17dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent" />
-        </LinearLayout>
+
+
+
 
         <LinearLayout
             android:id="@+id/deviceinfo"
@@ -75,7 +80,7 @@
             <include
                 layout="@layout/fragment_device_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 bind:device="@{model.selectedDevice}"/>
         </LinearLayout>
 

@@ -1,0 +1,59 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="device"
+            type="org.lindoor.entities.Device" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <include
+            android:id="@+id/action1"
+            layout="@layout/widget_device_action_info_tablet_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{device.actions.size()>0 ? View.VISIBLE : View.GONE}'
+            bind:icon='@{device.actions.size()>0 ? device.actions.get(0).iconName() : null}'
+            bind:text="@{device.actions.size()>0 ? device.actions.get(0).actionTextWithCode() : null}"
+            bind:tint='@{"color_b"}' />
+
+
+        <include
+            layout="@layout/widget_device_action_info_tablet_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{device.actions.size()>1 ? View.VISIBLE : View.GONE}'
+            bind:icon='@{device.actions.size()>1 ? device.actions.get(1).iconName() : null}'
+            bind:text="@{device.actions.size()>1 ? device.actions.get(1).actionTextWithCode() : null}"
+            bind:tint='@{"color_b"}' />
+
+        <include
+            layout="@layout/widget_device_action_info_tablet_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:visibility='@{device.actions.size()>2 ? View.VISIBLE : View.GONE}'
+            bind:icon='@{device.actions.size()>2 ? device.actions.get(2).iconName() : null}'
+            bind:text="@{device.actions.size()>2 ? device.actions.get(2).actionTextWithCode() : null}"
+            bind:tint='@{"color_b"}' />
+
+    </LinearLayout>
+</layout>

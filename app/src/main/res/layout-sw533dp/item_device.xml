@@ -16,8 +16,8 @@
 
                 <ImageView
                     android:id="@+id/type_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/ic_lindoor_icon"
                     android:layout_marginStart="20dp"
                     android:visibility='@{device.typeIcon() != null ? View.VISIBLE : View.INVISIBLE}'
@@ -26,31 +26,39 @@
                     />
 
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_toEndOf="@+id/type_icon"
-                    style='@{"device_list_device_name"}'
-                    android:layout_marginStart="20dp"
                     android:layout_centerVertical="true"
-                    android:text="@{device.name}" />
-
-
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="17dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@+id/type_icon"
-                    style='@{"device_list_device_address"}'
-                    android:layout_below="@+id/name"
-                    android:text="@{device.address}"
-                     />
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style='@{"device_list_device_name"}'
+                        android:layout_marginStart="20dp"
+                        android:text="@{device.name}" />
+
+
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginStart="20dp"
+                        style='@{"device_list_device_address"}'
+                        android:text="@{device.address}"
+                        />
+                </LinearLayout>
+
+
 
             </RelativeLayout>
 

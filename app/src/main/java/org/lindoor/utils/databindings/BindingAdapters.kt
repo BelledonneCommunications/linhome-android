@@ -10,14 +10,20 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_device_info.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
 import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import kotlinx.android.synthetic.main.widget_text_input.view.*
+import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.customisation.*
+import org.lindoor.entities.Device
+import org.lindoor.ui.devices.info.DeviceInfoActionsAdapter
 import org.lindoor.ui.settings.SettingListener
 import org.lindoor.ui.validators.NonEmptyStringMatcherValidator
 import org.lindoor.ui.widgets.*
@@ -389,6 +395,13 @@ fun refresh(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>, refresh:Bool
     }
 }
 
+@BindingAdapter("device")
+fun refresh(view: RecyclerView, device: Device?) {
+    device?.actions?.also { them ->
+        view.layoutManager = LinearLayoutManager(LindoorApplication.instance.applicationContext, RecyclerView.VERTICAL, false)
+        view.adapter = DeviceInfoActionsAdapter(them)
+    }
+}
 
 
 /////////////////////

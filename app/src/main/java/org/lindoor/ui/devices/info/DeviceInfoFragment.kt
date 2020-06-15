@@ -31,10 +31,6 @@ class DeviceInfoFragment : GenericFragment() {
         binding.lifecycleOwner = this
         binding.device = args.device
 
-        args.device?.actions?.also { them ->
-            binding.root.actions_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-            binding.root.actions_list.adapter = DeviceInfoActionsAdapter(them)
-        }
         return binding.root
     }
 

@@ -89,8 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 style='@{"view_device_info_actions_title"}'
-                android:visibility='@{device.actions != null &amp;&amp; device.actions.size() > 0  ? View.VISIBLE : View.GONE}'
-                text='@{"device_info_actions_title"}' />
+                text='@{device.actions != null &amp;&amp; device.actions.size() > 0 ? "device_info_actions_title" : "device_info_no_actions_title" }' />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -103,6 +102,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:visibility='@{device.actions != null &amp;&amp; device.actions.size() > 0  ? View.VISIBLE : View.GONE}'
+                device='@{device}'
+
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

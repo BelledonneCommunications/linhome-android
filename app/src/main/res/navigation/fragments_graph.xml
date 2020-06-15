@@ -22,6 +22,10 @@
             android:id="@+id/device_new"
             app:destination="@id/navigation_device_edit"
             />
+        <action
+            android:id="@+id/device_edit_tablet"
+            app:destination="@id/navigation_device_edit"
+            />
     </fragment>
 
     <fragment

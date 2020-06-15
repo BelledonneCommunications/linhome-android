@@ -8,10 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_device_info.view.*
 import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.lindoor.GenericFragment
 import org.lindoor.LindoorApplication
 import org.lindoor.databinding.FragmentDevicesBinding
+import org.lindoor.ui.devices.edit.DeviceInfoFragmentDirections
 
 
 class DevicesFragment : GenericFragment() {
@@ -46,6 +48,13 @@ class DevicesFragment : GenericFragment() {
             })
         }
 
+        if (LindoorApplication.instance.tablet()) {
+            binding.root.edit_device.setOnClickListener {
+                val actionDetail = DevicesFragmentDirections.deviceEditTablet()
+                actionDetail.device = devicesViewModel.selectedDevice.value
+                mainactivity.navController.navigate(actionDetail)
+            }
+        }
 
         return binding.root
     }

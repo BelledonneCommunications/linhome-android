@@ -2,6 +2,7 @@ package org.lindoor
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
 import org.lindoor.customisation.Customisation
 import org.lindoor.customisation.Texts
 import org.lindoor.linphonecore.CoreContext
@@ -58,6 +59,11 @@ class LindoorApplication : Application() {
 
     fun smartPhone(): Boolean {
         return !tablet()
+    }
+
+    fun landcape(): Boolean {
+        val orientation = resources.configuration.orientation
+        return orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
 }

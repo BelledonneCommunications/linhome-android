@@ -14,11 +14,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.signature.ObjectKey
+import kotlinx.android.synthetic.main.fragment_device_info.view.*
 import kotlinx.android.synthetic.main.item_device.view.*
 import org.lindoor.BR
 import org.lindoor.GenericFragment
+import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Theme
@@ -26,6 +29,7 @@ import org.lindoor.databinding.ItemDeviceBinding
 import org.lindoor.databinding.ItemHistoryBinding
 import org.lindoor.entities.Device
 import org.lindoor.store.DeviceStore
+import org.lindoor.ui.devices.info.DeviceInfoActionsAdapter
 import org.lindoor.ui.history.HistoryEventsViewModel
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
@@ -169,12 +173,13 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             view.setOnClickListener {
                 selectedDevice.value = device
             }
-
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(devices.value!![position],this,selectedDevice,lindoorFragment)
+        if (LindoorApplication.instance.tablet() && position == 0 && selectedDevice.value == null)
+            selectedDevice.value = devices.value!![position]
     }
 
 }

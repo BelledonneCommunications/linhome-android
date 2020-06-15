@@ -56,7 +56,7 @@ class SideMenuFragment : Fragment() {
             DialogUtil.confirm(
                 "menu_disconnect",
                 "disconnect_confirm_message",
-                { dialog: DialogInterface, which: Int ->
+                { _: DialogInterface, _: Int ->
                     Account.disconnect()
                     getMainActivity().navControllerSideMenu.navigateUp()
                     getMainActivity().navController.navigate(R.id.navigation_assistant_root)

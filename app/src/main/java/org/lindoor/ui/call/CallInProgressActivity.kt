@@ -56,7 +56,7 @@ class CallInProgressActivity : CallGenericActivity() {
                 coreContext.core.nativeVideoWindowId = binding.root.videocollapsed
                 callViewModel.toggleVideoFullScreen()
             }
-            binding.root.videofullscreen.setOnTouchListener { v, event ->
+            binding.root.videofullscreen.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
                     binding.root.actions.toogleVisible()
                     binding.root.controls.toogleVisible()

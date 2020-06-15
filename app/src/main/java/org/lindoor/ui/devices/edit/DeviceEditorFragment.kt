@@ -61,7 +61,7 @@ class DeviceEditorFragment : GenericFragment() {
         binding.root.delete.root.setOnClickListener {
             DialogUtil.confirm(
                 "delete_device_confirm_message",
-                { dialog: DialogInterface, which: Int ->
+                { _: DialogInterface, _: Int ->
                     model.device?.let { it1 -> DeviceStore.removeDevice(it1) }
                     mainactivity.navController.navigate(R.id.device_deleted)
                 }, model.device?.name

@@ -35,7 +35,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val notificationId = intent.getIntExtra(NotificationsManager.INTENT_NOTIF_ID, 0)
 
         if (intent.action == NotificationsManager.INTENT_ANSWER_CALL_NOTIF_ACTION || intent.action == NotificationsManager.INTENT_HANGUP_CALL_NOTIF_ACTION) {
-            val remoteAddress: String? = coreContext.notificationsManager.getSipUriForCallNotificationId(notificationId)
+            val remoteAddress: String? =
+                coreContext.notificationsManager.getSipUriForCallNotificationId(notificationId)
             val core: Core = coreContext.core
 
             val call = core.findCallFromUri(remoteAddress)

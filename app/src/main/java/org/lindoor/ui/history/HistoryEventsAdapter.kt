@@ -15,7 +15,11 @@ import org.lindoor.ui.player.PlayerActivity
 import org.lindoor.utils.DialogUtil
 import org.linphone.core.CallLog
 
-class HistoryEventsAdapter(var callLogs: MutableList<CallLog>, val historyViewModel: HistoryViewModel, val lindoorFragment: GenericFragment) :
+class HistoryEventsAdapter(
+    var callLogs: MutableList<CallLog>,
+    val historyViewModel: HistoryViewModel,
+    val lindoorFragment: GenericFragment
+) :
     RecyclerView.Adapter<HistoryEventsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,24 +41,30 @@ class HistoryEventsAdapter(var callLogs: MutableList<CallLog>, val historyViewMo
     }
 
     class ViewHolder(val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(callLog: CallLog,showDate:Boolean, historyViewModel: HistoryViewModel,lindoorFragment: GenericFragment) {
-            val entryViewModel = HistoryEventsViewModel(callLog,showDate,historyViewModel)
+        fun bind(
+            callLog: CallLog,
+            showDate: Boolean,
+            historyViewModel: HistoryViewModel,
+            lindoorFragment: GenericFragment
+        ) {
+            val entryViewModel = HistoryEventsViewModel(callLog, showDate, historyViewModel)
             binding.lifecycleOwner = lindoorFragment
-            binding.setVariable(BR.model,entryViewModel)
-            binding.setVariable(BR.historymodel,historyViewModel)
+            binding.setVariable(BR.model, entryViewModel)
+            binding.setVariable(BR.historymodel, historyViewModel)
             binding.executePendingBindings()
             entryViewModel.viewMedia.observe(lindoorFragment, Observer { play ->
                 if (play)
-                    playMedia(callLog,lindoorFragment)
+                    playMedia(callLog, lindoorFragment)
             })
         }
-        fun playMedia(callLog:CallLog,lindoorFragment: GenericFragment) {
-            if (callLog.historyEvent()?.hasVideo!!) { //TODO Remove me
+
+        fun playMedia(callLog: CallLog, lindoorFragment: GenericFragment) {
+            if (callLog.historyEvent().hasVideo) { //TODO Remove me
                 DialogUtil.toast("Unable to play back videos (pending crash fix) - audio calls work ok")
                 return
             }
             val intent = Intent(lindoorFragment.activity, PlayerActivity::class.java)
-            intent.putExtra("callId",callLog.callId)
+            intent.putExtra("callId", callLog.callId)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             lindoorFragment.activity?.startActivity(intent)
         }
@@ -62,9 +72,13 @@ class HistoryEventsAdapter(var callLogs: MutableList<CallLog>, val historyViewMo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val callLog = callLogs.get(position)
-        holder.bind(callLog,position == 0 || (callLogs.get(position-1).startDate / 86400 != callLog.startDate/86400),historyViewModel,lindoorFragment)
+        holder.bind(
+            callLog,
+            position == 0 || (callLogs.get(position - 1).startDate / 86400 != callLog.startDate / 86400),
+            historyViewModel,
+            lindoorFragment
+        )
     }
-
 
 
 }

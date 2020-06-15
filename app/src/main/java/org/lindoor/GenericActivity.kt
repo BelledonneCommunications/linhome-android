@@ -27,7 +27,8 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.ensureCoreExists
 import org.lindoor.utils.DialogUtil
 
-abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false) : AppCompatActivity() {
+abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false) :
+    AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false
         // Remove service notification if it has been started by device boot
         coreContext.notificationsManager.stopForegroundNotificationIfPossible()
 
-        if(!allowsLandscapeOnSmartPhones && !LindoorApplication.instance.tablet()) {
+        if (!allowsLandscapeOnSmartPhones && !LindoorApplication.instance.tablet()) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ActivitySplashBinding
 
-class SplashActivity : GenericActivity () {
+class SplashActivity : GenericActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val decorView: View = window.decorView
@@ -22,7 +22,7 @@ class SplashActivity : GenericActivity () {
         DataBindingUtil.setContentView(this, R.layout.activity_splash) as ActivitySplashBinding
 
         GlobalScope.launch(context = Dispatchers.Main) {
-            delay(Theme.arbitraryValue("splash_display_duration_ms","2000").toLong())
+            delay(Theme.arbitraryValue("splash_display_duration_ms", "2000").toLong())
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()

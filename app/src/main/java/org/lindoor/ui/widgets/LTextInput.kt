@@ -17,13 +17,17 @@ import org.lindoor.ui.validators.GenericStringValidator
 class LTextInput : LinearLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context)
     }
 
-    private lateinit var title : TextView
-    lateinit var text : LEditText
-    private lateinit var error : TextView
+    private lateinit var title: TextView
+    lateinit var text: LEditText
+    private lateinit var error: TextView
 
     lateinit var binding: WidgetTextInputBinding
     var liveString: MutableLiveData<String>? = null
@@ -31,15 +35,15 @@ class LTextInput : LinearLayout {
     var inputType: Int? = null
 
 
-    var validator:GenericStringValidator?= null
+    var validator: GenericStringValidator? = null
         set(value) {
             field = value
-            text.setOnFocusChangeListener { _ , hasFocus ->
-                    if (!hasFocus && !text.virgin) {
-                        validate()
-                    } else {
-                        clearError()
-                    }
+            text.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus && !text.virgin) {
+                    validate()
+                } else {
+                    clearError()
+                }
             }
         }
 
@@ -51,7 +55,7 @@ class LTextInput : LinearLayout {
     private fun init(
         context: Context
     ) {
-        binding = DataBindingUtil.inflate(from(context), R.layout.widget_text_input,this, true)
+        binding = DataBindingUtil.inflate(from(context), R.layout.widget_text_input, this, true)
         binding.owner = this
 
         title = binding.root.title
@@ -78,7 +82,7 @@ class LTextInput : LinearLayout {
         }
     }
 
-    fun setError(message:String) {
+    fun setError(message: String) {
         text.errorMode()
         error.text = message
     }

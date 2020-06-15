@@ -100,13 +100,13 @@ class Compatibility {
         }
 
         fun vibrateOneShot() {
-                val v =
-                    LindoorApplication.coreContext.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
-                    Api26Compatibility.vibrateOneShot(v)
-                } else {
-                    Api23Compatibility.vibrateOneShot(v)
-                }
+            val v =
+                LindoorApplication.coreContext.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
+                Api26Compatibility.vibrateOneShot(v)
+            } else {
+                Api23Compatibility.vibrateOneShot(v)
+            }
         }
 
         fun setColorFilter(

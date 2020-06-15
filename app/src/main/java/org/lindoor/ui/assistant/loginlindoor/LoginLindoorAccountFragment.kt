@@ -19,12 +19,12 @@ import org.lindoor.utils.DialogUtil
 import org.linphone.core.XmlRpcArgType
 
 
-class LoginLindoorAccountFragment :CreatorAssistantFragment() {
+class LoginLindoorAccountFragment : CreatorAssistantFragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         val binding = FragmentAssistantLoginLindoorBinding.inflate(inflater, container, false)
@@ -32,19 +32,21 @@ class LoginLindoorAccountFragment :CreatorAssistantFragment() {
 
         val model = ViewModelProvider(this).get(LoginLindoorAccountViewModel::class.java)
         binding.model = model
-        binding.validators  = ValidatorFactory.Companion
+        binding.validators = ValidatorFactory.Companion
 
-        binding.root.login.root.setOnClickListener{
+        binding.root.login.root.setOnClickListener {
             binding.root.username.validate()
             binding.root.password.validate()
-            updateField(model.setUsername(model.username),binding.root.username)
-            updateField(model.setPassword(model.pass1),binding.root.password)
+            updateField(model.setUsername(model.username), binding.root.username)
+            updateField(model.setPassword(model.pass1), binding.root.password)
             if (model.fieldsValid()) {
                 hideKeyboard()
                 showProgress()
                 val xmlRpcSession = LindoorApplication.coreContext.core.createXmlRpcSession(
-                    corePreferences.xmlRpcServerUrl)
-                val xmlRpcRequest = xmlRpcSession.createRequest(XmlRpcArgType.String, "check_authentication")
+                    corePreferences.xmlRpcServerUrl
+                )
+                val xmlRpcRequest =
+                    xmlRpcSession.createRequest(XmlRpcArgType.String, "check_authentication")
                 xmlRpcRequest.setListener { request ->
                     hideProgress()
                     if (request != null) {
@@ -58,7 +60,12 @@ class LoginLindoorAccountFragment :CreatorAssistantFragment() {
                     }
                 }
                 xmlRpcRequest.addStringArg(model.username.first.value)
-                xmlRpcRequest.addStringArg(corePreferences.encryptedPass(model.username.first.value!!,model.pass1.first.value!!))
+                xmlRpcRequest.addStringArg(
+                    corePreferences.encryptedPass(
+                        model.username.first.value!!,
+                        model.pass1.first.value!!
+                    )
+                )
                 xmlRpcRequest.addStringArg(corePreferences.loginDomain)
                 xmlRpcSession.sendRequest(xmlRpcRequest)
             }

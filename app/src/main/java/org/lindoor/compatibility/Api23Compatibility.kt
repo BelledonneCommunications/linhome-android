@@ -58,8 +58,8 @@ class Api23Compatibility {
             return Settings.canDrawOverlays(context)
         }
 
-        fun vibrateOneShot(v:Vibrator) {
-            v!!.vibrate(500)
+        fun vibrateOneShot(v: Vibrator) {
+            v.vibrate(500)
         }
     }
 

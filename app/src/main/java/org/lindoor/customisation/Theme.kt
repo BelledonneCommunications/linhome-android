@@ -33,7 +33,11 @@ object Theme {
 
     private var themeError: Boolean = false
 
-    private fun makeGradientDrawable(fromColor: Int, toColor: Int, orientation: String): GradientDrawable {
+    private fun makeGradientDrawable(
+        fromColor: Int,
+        toColor: Int,
+        orientation: String
+    ): GradientDrawable {
         val realOrientation = when (orientation) {
             "top_bottom" -> GradientDrawable.Orientation.TOP_BOTTOM
             "bottom_top" -> GradientDrawable.Orientation.BOTTOM_TOP
@@ -46,8 +50,8 @@ object Theme {
 
     fun getGradientColor(key: String): GradientDrawable? {
         val entireKey = "gradient-color.$key"
-        themeConfig.getString(entireKey,"from",null)?.let { from ->
-            themeConfig.getString(entireKey,"to",null)?.let { to ->
+        themeConfig.getString(entireKey, "from", null)?.let { from ->
+            themeConfig.getString(entireKey, "to", null)?.let { to ->
                 return themeConfig.getString(entireKey, "orientation", null)
                     ?.let { orientation ->
                         makeGradientDrawable(
@@ -77,7 +81,7 @@ object Theme {
     }
 
     fun arbitraryValue(key: String, default: String): String {
-        var result:String? = themeConfig.getString("arbitrary-values", key, null)
+        var result: String? = themeConfig.getString("arbitrary-values", key, null)
         if (result == null) {
             Log.e("[Theme] Failed retrieving arbitrary value:$key")
             themeError()
@@ -87,7 +91,7 @@ object Theme {
     }
 
     fun arbitraryValue(key: String, default: Boolean): Boolean {
-        var result:Boolean? = themeConfig.getBool("arbitrary-values", key, default)
+        var result: Boolean? = themeConfig.getBool("arbitrary-values", key, default)
         if (result == null) {
             Log.e("[Theme] Failed retrieving arbitrary value:$key")
             themeError()
@@ -96,7 +100,10 @@ object Theme {
         return result
     }
 
-    fun setIcon(imageName: String, imageView: ImageView) { // Preferred SVG, fallback PNG or full name.
+    fun setIcon(
+        imageName: String,
+        imageView: ImageView
+    ) { // Preferred SVG, fallback PNG or full name.
         val svg = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
         if (svg.exists())
             glidesvg.load(svg).into(imageView)
@@ -121,7 +128,7 @@ object Theme {
             )
             if (fromAssets != Typeface.DEFAULT)
                 return fromAssets
-        } catch (exception:Exception) {
+        } catch (exception: Exception) {
             Log.i("[Theme] font $key is not on assets, trying from zip. be optimized putting in assets.")
         }
         return Typeface.createFromFile(
@@ -133,8 +140,7 @@ object Theme {
     }
 
 
-
-    fun roundRectGradientDrawable(color:Int, radius:Float): GradientDrawable {
+    fun roundRectGradientDrawable(color: Int, radius: Float): GradientDrawable {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.setColor(color)
@@ -142,16 +148,21 @@ object Theme {
         return shape
     }
 
-    fun roundRectGradientDrawableWithStroke(color:Int, radius:Float, strokeColor:Int, strokeWidth:Int): GradientDrawable {
+    fun roundRectGradientDrawableWithStroke(
+        color: Int,
+        radius: Float,
+        strokeColor: Int,
+        strokeWidth: Int
+    ): GradientDrawable {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.setColor(color)
-        shape.setStroke(strokeWidth,strokeColor)
+        shape.setStroke(strokeWidth, strokeColor)
         shape.cornerRadius = pxFromDp(radius)
         return shape
     }
 
-    fun circleGradientDrawable(colorKey:String): GradientDrawable {
+    fun circleGradientDrawable(colorKey: String): GradientDrawable {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.OVAL
         shape.setColor(Color.TRANSPARENT)
@@ -160,17 +171,30 @@ object Theme {
     }
 
 
-    fun radius(key:String, default:Float = 0.0f): Float {
-        return  themeConfig.getFloat("arbitrary-values", key, default)
+    fun radius(key: String, default: Float = 0.0f): Float {
+        return themeConfig.getFloat("arbitrary-values", key, default)
     }
 
-    fun roundRectInputBackgroundWithColorKeyAndRadius(colorKey:String, radiusKey:String): GradientDrawable {
-        return roundRectGradientDrawable(getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f))
+    fun roundRectInputBackgroundWithColorKeyAndRadius(
+        colorKey: String,
+        radiusKey: String
+    ): GradientDrawable {
+        return roundRectGradientDrawable(
+            getColor(colorKey),
+            themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f)
+        )
     }
 
-    fun roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey:String, radiusKey:String,strokeColorKey:String, strokeWidthDp: Int): GradientDrawable {
-        return roundRectGradientDrawableWithStroke(getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f),
-            getColor(strokeColorKey), pxFromDp(strokeWidthDp))
+    fun roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(
+        colorKey: String,
+        radiusKey: String,
+        strokeColorKey: String,
+        strokeWidthDp: Int
+    ): GradientDrawable {
+        return roundRectGradientDrawableWithStroke(
+            getColor(colorKey), themeConfig.getFloat("arbitrary-values", radiusKey, 0.0f),
+            getColor(strokeColorKey), pxFromDp(strokeWidthDp)
+        )
     }
 
     fun apply(textEditKey: String, textEdit: LEditText) {
@@ -198,14 +222,18 @@ object Theme {
             textView.setTextColor(getColor(color))
         }
         themeConfig.getString(section, "background-color", null)?.let { colorString ->
-            val color =  getColor(colorString)
-            val radius = if (editable) themeConfig.getFloat("arbitrary-values", "user_input_corner_radius", 0.0f) else 0.0f
-            textView.background = roundRectGradientDrawable(color,radius)
+            val color = getColor(colorString)
+            val radius = if (editable) themeConfig.getFloat(
+                "arbitrary-values",
+                "user_input_corner_radius",
+                0.0f
+            ) else 0.0f
+            textView.background = roundRectGradientDrawable(color, radius)
         }
         textView.isAllCaps = themeConfig.getBool(section, "allcaps", false)
         themeConfig.getString("textview-style.$textViewKey", "size", null)?.let {
             val growFactor = if (LindoorApplication.instance.tablet()) 1.5f else 1f
-            textView.textSize = growFactor*it.toFloat()
+            textView.textSize = growFactor * it.toFloat()
         }
         themeConfig.getString(section, "align", null)?.let {
             when (it) {
@@ -246,10 +274,13 @@ object Theme {
         }
     }
 
-    private fun roundRectShapeDrawableDualColorState(key:String, radius:Float): GradientDrawable? {
+    private fun roundRectShapeDrawableDualColorState(
+        key: String,
+        radius: Float
+    ): GradientDrawable? {
         getSelectionEffectColors(key)?.also {
             val shape = GradientDrawable()
-            shape.color = buildColorStateList(it.first,it.second, R.attr.state_pressed)
+            shape.color = buildColorStateList(it.first, it.second, R.attr.state_pressed)
             shape.cornerRadius = pxFromDp(radius)
             return shape
         }
@@ -257,8 +288,11 @@ object Theme {
     }
 
 
-    fun roundRectButtonBackgroundStates(key:String): GradientDrawable? {
-        return roundRectShapeDrawableDualColorState(key,themeConfig.getFloat("arbitrary-values", "round_rect_button_corner_radius", 0.0f))
+    fun roundRectButtonBackgroundStates(key: String): GradientDrawable? {
+        return roundRectShapeDrawableDualColorState(
+            key,
+            themeConfig.getFloat("arbitrary-values", "round_rect_button_corner_radius", 0.0f)
+        )
     }
 
 
@@ -293,7 +327,7 @@ object Theme {
         val states =
             StateListDrawable()
 
-        val idleColor:Int = getColor(colorIdle)
+        val idleColor: Int = getColor(colorIdle)
 
         states.addState(
             intArrayOf(R.attr.state_pressed),
@@ -314,30 +348,33 @@ object Theme {
     private fun buildColorStateList(
         colorIdle: String,
         colorSelected: String,
-        forState:Int ) : ColorStateList {
+        forState: Int
+    ): ColorStateList {
         val states = arrayOf(
             intArrayOf(forState),
             intArrayOf(-R.attr.state_enabled),
-            intArrayOf())
-        val idleColor:Int = getColor(colorIdle)
+            intArrayOf()
+        )
+        val idleColor: Int = getColor(colorIdle)
         val colors = intArrayOf(
             getColor(colorSelected),
             ColorUtils.setAlphaComponent(idleColor, 127),
-            idleColor)
+            idleColor
+        )
         return ColorStateList(states, colors)
     }
 
     fun buildSingleColorStateList(colorIdle: String): ColorStateList {
         val states = arrayOf(intArrayOf())
-        val idleColor:Int = getColor(colorIdle)
+        val idleColor: Int = getColor(colorIdle)
         val colors = intArrayOf(idleColor)
         return ColorStateList(states, colors)
     }
 
-    fun getSelectionEffectColors(key:String):Pair<String,String>? {
-        themeConfig.getString("selection-effect.$key","default",null)?.let { default ->
-            themeConfig.getString("selection-effect.$key","selected",null)?.let { selected ->
-                return Pair(default,selected)
+    fun getSelectionEffectColors(key: String): Pair<String, String>? {
+        themeConfig.getString("selection-effect.$key", "default", null)?.let { default ->
+            themeConfig.getString("selection-effect.$key", "selected", null)?.let { selected ->
+                return Pair(default, selected)
             }
         }
         Log.e("[Theme] Failed retrieving selection-effect color:$key")
@@ -345,16 +382,16 @@ object Theme {
         return null
     }
 
-    fun  selectionEffectAsStateListDrawable(key:String): StateListDrawable? {
+    fun selectionEffectAsStateListDrawable(key: String): StateListDrawable? {
         getSelectionEffectColors(key)?.also {
-            return buildStateListDrawable(it.first,it.second)
+            return buildStateListDrawable(it.first, it.second)
         }
         return null
     }
 
-    fun selectionEffectAsColorStateList  (key:String,forState:Int): ColorStateList? {
+    fun selectionEffectAsColorStateList(key: String, forState: Int): ColorStateList? {
         getSelectionEffectColors(key)?.also {
-            return buildColorStateList(it.first,it.second,forState)
+            return buildColorStateList(it.first, it.second, forState)
         }
         return null
     }
@@ -364,7 +401,7 @@ object Theme {
         stackStrace("Theme")
     }
 
-    fun svgAsPictureDrawable(imageName:String):PictureDrawable {
+    fun svgAsPictureDrawable(imageName: String): PictureDrawable {
         val svgFile = File(LindoorApplication.instance.filesDir, "images/$imageName.svg")
         val svg: SVG = SVG.getFromString(svgFile.readText())
         return PictureDrawable(svg.renderToPicture())

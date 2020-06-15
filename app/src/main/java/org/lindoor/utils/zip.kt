@@ -8,7 +8,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
 object zip {
-    fun unzipInputStream(zipInputStream: InputStream, folderName: String):Boolean {
+    fun unzipInputStream(zipInputStream: InputStream, folderName: String): Boolean {
         val folder = File(folderName)
         if (!folder.isDirectory || !folder.exists()) {
             folder.mkdirs()
@@ -25,7 +25,7 @@ object zip {
                     val fout = FileOutputStream(f)
                     val bufout = BufferedOutputStream(fout)
                     val buffer = ByteArray(4096)
-                    var read:Int
+                    var read: Int
                     while (zin.read(buffer).also { read = it } != -1) {
                         bufout.write(buffer, 0, read)
                     }
@@ -36,11 +36,14 @@ object zip {
             }
             zin.close()
             zipInputStream.close()
-            android.util.Log.i("","[ZIP] Successfully unzipped input stream to $folderName")
+            android.util.Log.i("", "[ZIP] Successfully unzipped input stream to $folderName")
             return true
 
         } catch (e: Exception) {
-            android.util.Log.e("","[ZIP] unzipInputStream operation on $zipInputStream failed : $e")
+            android.util.Log.e(
+                "",
+                "[ZIP] unzipInputStream operation on $zipInputStream failed : $e"
+            )
             e.printStackTrace()
             return false
         }

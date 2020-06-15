@@ -7,8 +7,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 
-fun fileObserverWithMainThreadRunnable(file: File, runnable:Runnable):FileObserver {
-    return object : FileObserver(file,ATTRIB) {
+fun fileObserverWithMainThreadRunnable(file: File, runnable: Runnable): FileObserver {
+    return object : FileObserver(file, ATTRIB) {
         override fun onEvent(event: Int, file: String?) {
             GlobalScope.launch(context = Dispatchers.Main) {
                 runnable.run()

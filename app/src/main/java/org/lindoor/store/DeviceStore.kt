@@ -12,7 +12,7 @@ object DeviceStore {
 
     private var devicesConfig: Config
 
-    var devices:ArrayList<Device>
+    var devices: ArrayList<Device>
 
     init {
         if (!devicesXml.exists())
@@ -22,22 +22,26 @@ object DeviceStore {
         devices = readFromXml()
     }
 
-    fun readFromXml():ArrayList<Device> {
-        val result= ArrayList<Device>()
+    fun readFromXml(): ArrayList<Device> {
+        val result = ArrayList<Device>()
         devicesConfig.sectionsNamesList.forEach {
             val actions = ArrayList<Action>()
-            devicesConfig.getString(it,"actions",null)?.also { // Actions are type1,code1|type2,code2 ...
-                it.split("|").forEach {
-                    actions.add(Action(it.split(",").first(),it.split(",").last()))
+            devicesConfig.getString(it, "actions", null)
+                ?.also { // Actions are type1,code1|type2,code2 ...
+                    it.split("|").forEach {
+                        actions.add(Action(it.split(",").first(), it.split(",").last()))
+                    }
                 }
-            }
-            result.add(Device(
-                it,
-                devicesConfig.getString(it,"type",null),
-                devicesConfig.getString(it,"name","missing"),
-                devicesConfig.getString(it,"address","missing"),
-                devicesConfig.getString(it,"actions_method_type",null),
-                actions))
+            result.add(
+                Device(
+                    it,
+                    devicesConfig.getString(it, "type", null),
+                    devicesConfig.getString(it, "name", "missing"),
+                    devicesConfig.getString(it, "address", "missing"),
+                    devicesConfig.getString(it, "actions_method_type", null),
+                    actions
+                )
+            )
         }
         return result
     }
@@ -47,27 +51,27 @@ object DeviceStore {
             devicesConfig.cleanSection(it)
         }
         devices.forEach { device ->
-            devicesConfig.setString(device.id,"type",device.type)
-            devicesConfig.setString(device.id,"name",device.name)
-            devicesConfig.setString(device.id,"address",device.address)
-            devicesConfig.setString(device.id,"actions_method_type",device.actionsMethodType)
+            devicesConfig.setString(device.id, "type", device.type)
+            devicesConfig.setString(device.id, "name", device.name)
+            devicesConfig.setString(device.id, "address", device.address)
+            devicesConfig.setString(device.id, "actions_method_type", device.actionsMethodType)
             var actionString = String()
             device.actions?.forEach {
-                val separator =  if (actionString.isEmpty()) "" else "|"
-                actionString += separator+it.type+","+it.code
+                val separator = if (actionString.isEmpty()) "" else "|"
+                actionString += separator + it.type + "," + it.code
             }
-            devicesConfig.setString(device.id,"actions",actionString)
+            devicesConfig.setString(device.id, "actions", actionString)
         }
         devicesXml.writeText(devicesConfig.dumpAsXml())
 
     }
 
-    fun persistDevice(device:Device) {
+    fun persistDevice(device: Device) {
         devices.add(device)
         sync()
     }
 
-    fun removeDevice(device:Device) {
+    fun removeDevice(device: Device) {
         device.thumbNail.also {
             if (it.exists())
                 it.delete()
@@ -76,7 +80,7 @@ object DeviceStore {
         sync()
     }
 
-    fun findDeviceByAddress(address:Address) : Device? {
+    fun findDeviceByAddress(address: Address): Device? {
         devices.forEach {
             if (it.address.equals(address.asStringUriOnly()))
                 return it
@@ -84,11 +88,12 @@ object DeviceStore {
         return null
     }
 
-    fun findDeviceByAddress(address:String?) : Device? {
-        return address?.let {addressString ->
-            LindoorApplication.coreContext.core.createAddress(addressString)?.let { addressAddress ->
-                return findDeviceByAddress(addressAddress)
-            }
+    fun findDeviceByAddress(address: String?): Device? {
+        return address?.let { addressString ->
+            LindoorApplication.coreContext.core.createAddress(addressString)
+                ?.let { addressAddress ->
+                    return findDeviceByAddress(addressAddress)
+                }
         }
     }
 

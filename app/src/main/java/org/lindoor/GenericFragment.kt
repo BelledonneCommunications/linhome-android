@@ -5,7 +5,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 
-abstract class GenericFragment: Fragment(),
+abstract class GenericFragment : Fragment(),
     ToobarButtonClickedListener {
 
     val mainactivity get() = activity as MainActivity
@@ -26,7 +26,8 @@ abstract class GenericFragment: Fragment(),
 
     fun hideKeyboard() {
         mainactivity.currentFocus?.also {
-            val imm = it.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                it.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
@@ -34,6 +35,7 @@ abstract class GenericFragment: Fragment(),
     fun showProgress() {
         mainactivity.toolbarViewModel.activityInprogress.value = true
     }
+
     fun hideProgress() {
         mainactivity.toolbarViewModel.activityInprogress.value = false
     }

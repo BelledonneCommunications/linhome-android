@@ -18,17 +18,17 @@ import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemSpinnerBinding
 
-class SpinnerItem (val textKey: String, val iconFile: String? = null, val backingKey:String? = null)
-class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Spinner) :
+class SpinnerItem(val textKey: String, val iconFile: String? = null, val backingKey: String? = null)
+class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: Spinner) :
     SpinnerAdapter {
 
-    var height:Int? = null
+    var height: Int? = null
 
     class ViewHolder(itemView: View) {
         val optionIconIV = itemView.icon
-        val optionLabelTV:TextView = itemView.label
-        val optionArrow:ImageView = itemView.arrow
-        val optionSeparator:View = itemView.bottom_separator
+        val optionLabelTV: TextView = itemView.label
+        val optionArrow: ImageView = itemView.arrow
+        val optionSeparator: View = itemView.bottom_separator
 
         init {
             itemView.bottom_separator.setBackgroundColor(Theme.getColor("color_h"))
@@ -41,14 +41,19 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        return getView(position,convertView,parent,true)
+        return getView(position, convertView, parent, true)
     }
 
-    fun getView(position: Int, convertView: View?, parent: ViewGroup?, isDropDown:Boolean): View {
-        var viewHolder:ViewHolder
+    fun getView(position: Int, convertView: View?, parent: ViewGroup?, isDropDown: Boolean): View {
+        var viewHolder: ViewHolder
         var view = convertView
         if (view == null) {
-            view = (DataBindingUtil.inflate(LayoutInflater.from(parent?.context),R.layout.item_spinner,parent,false) as ItemSpinnerBinding).root
+            view = (DataBindingUtil.inflate(
+                LayoutInflater.from(parent?.context),
+                R.layout.item_spinner,
+                parent,
+                false
+            ) as ItemSpinnerBinding).root
             height = view.getLayoutParams().height
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
@@ -69,12 +74,15 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
         }
         view.isPressed = true
         if (isDropDown)
-            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_i","user_input_corner_radius")
+            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(
+                "color_i",
+                "user_input_corner_radius"
+            )
         if (!isDropDown && position == 0) {
             view.getLayoutParams().height = 1
             view.visibility = View.GONE
         } else {
-            view.getLayoutParams().height = this.height!!
+            view.layoutParams.height = this.height!!
             view.visibility = View.VISIBLE
         }
 
@@ -105,7 +113,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        return getView(position,convertView,parent,false)
+        return getView(position, convertView, parent, false)
     }
 
     override fun unregisterDataSetObserver(observer: DataSetObserver?) {
@@ -116,7 +124,7 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>,val spinner:Sp
     }
 }
 
-fun indexByBackingKey(key:String?, items:ArrayList<SpinnerItem>):Int {
+fun indexByBackingKey(key: String?, items: ArrayList<SpinnerItem>): Int {
     items.forEachIndexed { index, spinnerItem ->
         if (spinnerItem.backingKey == key)
             return index

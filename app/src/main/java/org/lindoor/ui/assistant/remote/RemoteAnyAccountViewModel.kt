@@ -11,7 +11,8 @@ import org.linphone.core.CoreListenerStub
 
 class RemoteAnyAccountViewModel : ViewModel() {
 
-    var url: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair(MutableLiveData<String>(),MutableLiveData<Boolean>(false))
+    var url: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var configurationResult = MutableLiveData<ConfiguringState>()
     var qrCodeFound = MutableLiveData<String>()
@@ -23,13 +24,13 @@ class RemoteAnyAccountViewModel : ViewModel() {
             if (status == ConfiguringState.Successful) {
                 if (Account.pushGateway() != null) {
                     Account.linkProxiesWithPushGateway()
-                    pushReady.postValue( true)
-                }
-                else
+                    pushReady.postValue(true)
+                } else
                     Account.createPushGateway(pushReady)
             }
             configurationResult.postValue(status)
         }
+
         override fun onQrcodeFound(core: Core, url: String) {
             qrCodeFound.postValue(url)
         }

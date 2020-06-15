@@ -19,15 +19,20 @@ object Account {
         return coreContext.core.proxyConfigList.isNotEmpty()
     }
 
-    fun lindoorAccountCreate(accountCreator:AccountCreator) {
+    fun lindoorAccountCreate(accountCreator: AccountCreator) {
         accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
     }
 
-    fun lindoorAccountLogin(accountCreator:AccountCreator) {
+    fun lindoorAccountLogin(accountCreator: AccountCreator) {
         accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
     }
 
-    fun sipAccountLogin(accountCreator:AccountCreator, proxy:String?, expiration:String, pushReady:MutableLiveData<Boolean>) {
+    fun sipAccountLogin(
+        accountCreator: AccountCreator,
+        proxy: String?,
+        expiration: String,
+        pushReady: MutableLiveData<Boolean>
+    ) {
         val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
         proxyConfig?.expires = expiration.toInt()
         proxy?.also {
@@ -39,13 +44,14 @@ object Account {
             createPushGateway(pushReady)
     }
 
-    fun pushGateway():ProxyConfig? {
+    fun pushGateway(): ProxyConfig? {
         return coreContext.core.getProxyConfigByIdkey(PUSH_GW_REF_KEY)
     }
 
-    fun createPushGateway(pushReady:MutableLiveData<Boolean>) {
+    fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
         coreContext.core.loadConfigFromXml(LindoorApplication.corePreferences.lindoorAccountDefaultValuesPath)
-        val accountCreator = coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
+        val accountCreator =
+            coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
         accountCreator.language = Locale.getDefault().language
         val user: String = PUSH_GW_USER_PREFIX + xDigitsUUID()
         val pass = UUID.randomUUID().toString()
@@ -54,7 +60,11 @@ object Account {
         accountCreator.email = "$user@${accountCreator.domain}"
         accountCreator.displayName = PUSH_GW_DISPLAY_NAME
         accountCreator.addListener(object : AccountCreatorListenerStub() {
-            override fun onCreateAccount(creator: AccountCreator?, status: AccountCreator.Status?, resp: String?) {
+            override fun onCreateAccount(
+                creator: AccountCreator?,
+                status: AccountCreator.Status?,
+                resp: String?
+            ) {
                 if (status == AccountCreator.Status.AccountCreated) // TODO Adjust when server setup
                     creator?.also {
                         val pushGw = it.createProxyConfig()
@@ -73,7 +83,7 @@ object Account {
         accountCreator.createAccount()
     }
 
-    fun  linkProxiesWithPushGateway() {
+    fun linkProxiesWithPushGateway() {
         pushGateway()?.also { pgw ->
             coreContext.core.proxyConfigList.forEach {
                 if (it.refKey != PUSH_GW_REF_KEY) {

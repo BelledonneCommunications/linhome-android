@@ -15,20 +15,28 @@ import org.lindoor.databinding.WidgetRoundRectButtonWithIconBinding
 class LRoundRectButtonWithIcon : LinearLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context)
     }
 
-    lateinit var buttonText : TextView
+    lateinit var buttonText: TextView
 
     private fun init(
         context: Context
     ) {
-        val binding:WidgetRoundRectButtonWithIconBinding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.widget_round_rect_button_with_icon,this, true)
+        val binding: WidgetRoundRectButtonWithIconBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.widget_round_rect_button_with_icon,
+            this,
+            true
+        )
         setBackgroundColor(Color.TRANSPARENT)
         buttonText = binding.root.text
     }
-
 
 
 }

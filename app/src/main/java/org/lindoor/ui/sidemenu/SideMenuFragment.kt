@@ -23,30 +23,33 @@ class SideMenuFragment : Fragment() {
 
     private lateinit var sideMenuViewModel: SideMenuViewModel
 
-    private fun getMainActivity() : MainActivity {
+    private fun getMainActivity(): MainActivity {
         return activity as MainActivity
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         sideMenuViewModel =
-                ViewModelProvider(this).get(SideMenuViewModel::class.java)
+            ViewModelProvider(this).get(SideMenuViewModel::class.java)
 
         val binding = FragmentSidemenuBinding.inflate(inflater, container, false)
 
 
-        binding.root.list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.root.list.adapter = SideMenuAdapter(sideMenuViewModel.sideMenuOptions,getMainActivity().navController)
+        binding.root.list.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.root.list.adapter =
+            SideMenuAdapter(sideMenuViewModel.sideMenuOptions, getMainActivity().navController)
 
         binding.root.label.text = Texts.get(sideMenuViewModel.sideMenuDisconnectOption.textKey)
-        Theme.setIcon(sideMenuViewModel.sideMenuDisconnectOption.iconFile,binding.root.icon)
+        Theme.setIcon(sideMenuViewModel.sideMenuDisconnectOption.iconFile, binding.root.icon)
         binding.root.top_separator.setBackgroundColor(Theme.getColor("color_h"))
         binding.root.top_separator.visibility = View.VISIBLE
         binding.root.bottom_separator.visibility = View.GONE
-        binding.root.disconnect.background = Theme.selectionEffectAsStateListDrawable("sidemenu_option")
+        binding.root.disconnect.background =
+            Theme.selectionEffectAsStateListDrawable("sidemenu_option")
         binding.root.setBackgroundColor(Theme.getColor("color_b"))
 
         binding.root.disconnect.setOnClickListener {

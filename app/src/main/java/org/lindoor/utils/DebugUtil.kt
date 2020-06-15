@@ -8,6 +8,6 @@ fun stackStrace(point: String) {
     }
 }
 
-fun cdlog(message:String) {
+fun cdlog(message: String) {
     println("cdes>${message}")
 }

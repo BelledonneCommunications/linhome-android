@@ -17,7 +17,7 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class RemoteRootFragment :GenericFragment() {
+class RemoteRootFragment : GenericFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,17 +26,21 @@ class RemoteRootFragment :GenericFragment() {
     ): View? {
         val binding = inflate(inflater, container, false)
 
-        binding.root.url.root.setOnClickListener{
+        binding.root.url.root.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_remote_url)
         }
 
-        binding.root.qr.root.setOnClickListener{
+        binding.root.qr.root.setOnClickListener {
             openQRCodeViewWithPermissionCheck()
         }
         return binding.root
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
     }

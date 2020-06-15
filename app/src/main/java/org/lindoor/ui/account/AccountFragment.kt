@@ -11,9 +11,9 @@ import org.lindoor.databinding.FragmentAccountBinding
 class AccountFragment : Fragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAccountBinding.inflate(inflater, container, false)
         binding.coreContext = LindoorApplication.coreContext

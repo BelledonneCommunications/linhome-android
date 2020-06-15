@@ -6,11 +6,12 @@ import java.util.*
 
 object ActionsMethodTypes {
     var spinnerItems: ArrayList<SpinnerItem> = ArrayList()
+
     init {
         actionsMethodTypesConfig.let { config ->
             config.sectionsNamesList.forEach {
                 spinnerItems.add(
-                    SpinnerItem(config.getString(it,"textkey","missing"),null,it)
+                    SpinnerItem(config.getString(it, "textkey", "missing"), null, it)
                 )
             }
         }

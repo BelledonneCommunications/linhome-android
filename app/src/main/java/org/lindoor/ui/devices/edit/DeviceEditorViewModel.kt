@@ -17,8 +17,10 @@ import org.lindoor.utils.databindings.ViewModelWithTools
 
 class DeviceEditorViewModel : ViewModelWithTools() {
 
-    var name: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair(MutableLiveData<String>(),MutableLiveData<Boolean>(false))
-    var address: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(),MutableLiveData<Boolean>(false))
+    var name: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
+    var address: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var availableDeviceTypes: ArrayList<SpinnerItem> = ArrayList()
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
@@ -31,14 +33,14 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     val actionsViewModels = ArrayList<DeviceEditorActionViewModel>()
 
 
-    var device: Device ? = null
+    var device: Device? = null
         set(value) {
-            field=value
+            field = value
             value?.also {
                 name.first.value = it.name
                 address.first.value = it.address
-                type.value = indexByBackingKey(it.type,availableDeviceTypes)
-                actionsMethod.value = indexByBackingKey(it.actionsMethodType,availableMethodTypes)
+                type.value = indexByBackingKey(it.type, availableDeviceTypes)
+                actionsMethod.value = indexByBackingKey(it.actionsMethodType, availableMethodTypes)
             }
         }
 
@@ -73,10 +75,10 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     }
 
     fun valid(): Boolean {
-        return name.second.value!! &&  address.second.value!!
+        return name.second.value!! && address.second.value!!
     }
 
-    fun saveDevice():Boolean {
+    fun saveDevice(): Boolean {
         if (!valid())
             return false
         actionsViewModels.forEach {
@@ -94,19 +96,31 @@ class DeviceEditorViewModel : ViewModelWithTools() {
             )
             actionsViewModels.forEach {
                 if (it.notEmpty())
-                    device?.actions?.add(Action(availableActionTypes.get(it.type.value!!).backingKey,it.code.first.value!!))
+                    device?.actions?.add(
+                        Action(
+                            availableActionTypes.get(it.type.value!!).backingKey,
+                            it.code.first.value!!
+                        )
+                    )
             }
             DeviceStore.persistDevice(device!!)
         } else {
             device?.also {
-                it.type = if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
+                it.type =
+                    if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
                 it.name = name.first.value!!
                 it.address = address.first.value!!
-                it.actionsMethodType = if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey
+                it.actionsMethodType =
+                    if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey
                 it.actions = ArrayList()
-                actionsViewModels.forEach {action ->
+                actionsViewModels.forEach { action ->
                     if (action.notEmpty())
-                        it.actions?.add(Action(availableActionTypes.get(action.type.value!!).backingKey,action.code.first.value!!))
+                        it.actions?.add(
+                            Action(
+                                availableActionTypes.get(action.type.value!!).backingKey,
+                                action.code.first.value!!
+                            )
+                        )
                 }
             }
             DeviceStore.sync()
@@ -115,13 +129,13 @@ class DeviceEditorViewModel : ViewModelWithTools() {
         return true
     }
 
-    fun addAction(action: Action?, binding:ViewDataBinding) {
-        val actionViewModel =  DeviceEditorActionViewModel(this,binding,actionsViewModels.size+1)
+    fun addAction(action: Action?, binding: ViewDataBinding) {
+        val actionViewModel = DeviceEditorActionViewModel(this, binding, actionsViewModels.size + 1)
         binding.setVariable(BR.actionmodel, actionViewModel)
         binding.setVariable(BR.validators, ValidatorFactory.Companion)
         action?.also {
             actionViewModel.code.first.value = action.code
-            actionViewModel.type.value =indexByBackingKey(action.type,availableActionTypes)
+            actionViewModel.type.value = indexByBackingKey(action.type, availableActionTypes)
         }
         actionsViewModels.add(actionViewModel)
         actionBindings.value?.add(binding)
@@ -129,7 +143,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     }
 
 
-    fun removeActionViewModel(viewModel:DeviceEditorActionViewModel) {
+    fun removeActionViewModel(viewModel: DeviceEditorActionViewModel) {
         actionsViewModels.remove(viewModel)
         actionBindings.value?.remove(viewModel.binding)
         refreshActions.postValue(true)

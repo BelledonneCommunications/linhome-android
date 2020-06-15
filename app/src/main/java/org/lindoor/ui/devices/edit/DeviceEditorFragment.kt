@@ -26,14 +26,14 @@ import org.lindoor.utils.DialogUtil
 class DeviceEditorFragment : GenericFragment() {
 
 
-    lateinit var model:DeviceEditorViewModel
+    lateinit var model: DeviceEditorViewModel
     val args: DeviceEditorFragmentArgs by navArgs()
-    lateinit var binding : FragmentDeviceEditBinding
-    
+    lateinit var binding: FragmentDeviceEditBinding
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
 
@@ -42,7 +42,7 @@ class DeviceEditorFragment : GenericFragment() {
 
         model = ViewModelProvider(this).get(DeviceEditorViewModel::class.java)
         binding.model = model
-        binding.validators  = ValidatorFactory.Companion
+        binding.validators = ValidatorFactory.Companion
 
         binding.root.addaction.root.setOnClickListener {
             addAction(null)
@@ -64,24 +64,29 @@ class DeviceEditorFragment : GenericFragment() {
                 { dialog: DialogInterface, which: Int ->
                     model.device?.let { it1 -> DeviceStore.removeDevice(it1) }
                     mainactivity.navController.navigate(R.id.device_deleted)
-                },model.device?.name
+                }, model.device?.name
             )
         }
 
         return binding.root
     }
 
-    private fun addAction(action:Action?) {
-        val binding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(requireContext()), R.layout.item_action_edit, null, false)
+    private fun addAction(action: Action?) {
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(requireContext()),
+            R.layout.item_action_edit,
+            null,
+            false
+        )
         binding.lifecycleOwner = this
-        model.addAction(action,binding)
+        model.addAction(action, binding)
     }
 
     override fun onToolbarRightButtonClicked() {
         binding.root.name.validate()
         binding.root.address.validate()
         model.actionsViewModels.forEach {
-            if (it.type?.value != 0)
+            if (it.type.value != 0)
                 it.binding.root.code.validate()
         }
         DeviceStore.findDeviceByAddress(model.address.first.value)?.also {

@@ -20,7 +20,7 @@ abstract class CallGenericActivity : GenericActivity() {
         decorView.systemUiVisibility = uiOptions
 
         call = intent.getStringExtra("callId")?.let { callId ->
-            coreContext.core.calls.filter {  it.callLog.callId.equals(callId) }.firstOrNull()
+            coreContext.core.calls.filter { it.callLog.callId.equals(callId) }.firstOrNull()
         }
 
     }

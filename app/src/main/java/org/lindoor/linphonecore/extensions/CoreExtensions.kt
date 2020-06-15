@@ -37,7 +37,9 @@ fun Core.forceSpeakerAudioRoute() {
 fun Core.forceBluetoothAudioRoute() {
     for (audioDevice in coreContext.core.audioDevices) {
         if ((audioDevice.type == AudioDevice.Type.Bluetooth) && audioDevice.hasCapability(
-                AudioDevice.Capabilities.CapabilityPlay)) {
+                AudioDevice.Capabilities.CapabilityPlay
+            )
+        ) {
             Log.i("[Call] Found bluetooth audio device [${audioDevice.deviceName}], routing audio to it")
             coreContext.core.outputAudioDevice = audioDevice
             return
@@ -47,6 +49,6 @@ fun Core.forceBluetoothAudioRoute() {
 }
 
 
-fun Core.callLogsWithNonEmptyCallId():  ArrayList<CallLog> {
+fun Core.callLogsWithNonEmptyCallId(): ArrayList<CallLog> {
     return (coreContext.core.callLogs.toCollection(ArrayList()) as ArrayList<CallLog>).filterNot { it.callId == null } as ArrayList<CallLog>
 }

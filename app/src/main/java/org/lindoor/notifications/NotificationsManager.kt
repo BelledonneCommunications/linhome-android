@@ -116,7 +116,9 @@ class NotificationsManager(private val context: Context) {
             Log.i("[Notifications Manager] Call state changed [$state]")
 
             when (state) {
-                Call.State.IncomingEarlyMedia, Call.State.IncomingReceived -> displayIncomingCallNotification(call)
+                Call.State.IncomingEarlyMedia, Call.State.IncomingReceived -> displayIncomingCallNotification(
+                    call
+                )
                 Call.State.End, Call.State.Error -> dismissCallNotification(call)
                 Call.State.Released -> {
                     if (call.callLog?.status == Call.Status.Missed) {
@@ -129,38 +131,42 @@ class NotificationsManager(private val context: Context) {
     }
 
 
-
     var fileLenght = 0L
-    var incomingCallSnapshotTimer : Timer? = null
-    lateinit private  var notificationBuilder: NotificationCompat.Builder
+    var incomingCallSnapshotTimer: Timer? = null
+    private lateinit var notificationBuilder: NotificationCompat.Builder
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
             if (cstate != Call.State.IncomingEarlyMedia || cstate != Call.State.IncomingReceived)
                 incomingCallSnapshotTimer?.cancel()
         }
+
         override fun onNextVideoFrameDecoded(call: Call?) {
             cdlog("got a frame")
             if (call != null) {
                 call.takeVideoSnapshot(call.callLog.historyEvent().mediaThumbnail.absolutePath)
-                    GlobalScope.launch(context = Dispatchers.Main) {
-                        delay(1000)
-                        call.callLog.historyEvent().mediaThumbnail.also {
-                            if (it.existsAndIsNotEmpty() && it.length() != fileLenght && !LindoorApplication.someActivityRunning) {
-                                fileLenght = it.length()
-                                val notificationLayoutHeadsUp = fillIncomingRemoteViewsForCall(call,true)
-                                val awt = AppWidgetTarget(
-                                    context.applicationContext,
-                                    R.id.caller_picture,
-                                    notificationLayoutHeadsUp,
-                                    0)
-                                Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
-                                notificationBuilder.setCustomHeadsUpContentView(notificationLayoutHeadsUp)
-                                val notification = notificationBuilder.build()
-                                if (!LindoorApplication.someActivityRunning && call.state == Call.State.IncomingEarlyMedia)
-                                    notify(getNotifiableForCall(call).notificationId, notification)
-                            }
+                GlobalScope.launch(context = Dispatchers.Main) {
+                    delay(1000)
+                    call.callLog.historyEvent().mediaThumbnail.also {
+                        if (it.existsAndIsNotEmpty() && it.length() != fileLenght && !LindoorApplication.someActivityRunning) {
+                            fileLenght = it.length()
+                            val notificationLayoutHeadsUp =
+                                fillIncomingRemoteViewsForCall(call, true)
+                            val awt = AppWidgetTarget(
+                                context.applicationContext,
+                                R.id.caller_picture,
+                                notificationLayoutHeadsUp,
+                                0
+                            )
+                            Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
+                            notificationBuilder.setCustomHeadsUpContentView(
+                                notificationLayoutHeadsUp
+                            )
+                            val notification = notificationBuilder.build()
+                            if (!LindoorApplication.someActivityRunning && call.state == Call.State.IncomingEarlyMedia)
+                                notify(getNotifiableForCall(call).notificationId, notification)
                         }
                     }
+                }
             }
         }
     }
@@ -259,7 +265,7 @@ class NotificationsManager(private val context: Context) {
             currentForegroundServiceNotificationId = notificationId
             service?.startForeground(currentForegroundServiceNotificationId, callNotification)
         }
-   }
+    }
 
     private fun stopForegroundNotification() {
         if (service != null) {
@@ -282,7 +288,6 @@ class NotificationsManager(private val context: Context) {
     }
 
 
-
     private fun createServiceNotification(useAutoStartDescription: Boolean = false) {
         val pendingIntent = NavDeepLinkBuilder(context)
             .setComponentName(MainActivity::class.java)
@@ -290,18 +295,23 @@ class NotificationsManager(private val context: Context) {
             .setDestination(R.id.navigation_devices)
             .createPendingIntent()
 
-        serviceNotification = NotificationCompat.Builder(context,Texts.get("notification_channel_service_id"))
-            .setContentTitle(Texts.get("service_name"))
-            .setContentText(if (useAutoStartDescription)Texts.get("service_auto_start_description") else Texts.get("service_description"))
-            .setSmallIcon(R.drawable.ic_lindoor_icon)
-            .setContentIntent(pendingIntent)
-            .setCategory(Notification.CATEGORY_SERVICE)
-            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-            .setWhen(System.currentTimeMillis())
-            .setShowWhen(true)
-            .setOngoing(true)
-            .setColor(ContextCompat.getColor(context, R.color.color_a))
-            .build()
+        serviceNotification =
+            NotificationCompat.Builder(context, Texts.get("notification_channel_service_id"))
+                .setContentTitle(Texts.get("service_name"))
+                .setContentText(
+                    if (useAutoStartDescription) Texts.get("service_auto_start_description") else Texts.get(
+                        "service_description"
+                    )
+                )
+                .setSmallIcon(R.drawable.ic_lindoor_icon)
+                .setContentIntent(pendingIntent)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setWhen(System.currentTimeMillis())
+                .setShowWhen(true)
+                .setOngoing(true)
+                .setColor(ContextCompat.getColor(context, R.color.color_a))
+                .build()
     }
 
     /* Call related */
@@ -318,18 +328,25 @@ class NotificationsManager(private val context: Context) {
     }
 
 
-    private fun fillIncomingRemoteViewsForCall(call:Call, hasSnapShot:Boolean):RemoteViews {
+    private fun fillIncomingRemoteViewsForCall(call: Call, hasSnapShot: Boolean): RemoteViews {
         val address = call.remoteAddress.asStringUriOnly()
-        val displayName = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
+        val displayName =
+            DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
         val notificationLayoutHeadsUp =
             if (hasSnapShot)
-                RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up_snapshot)
+                RemoteViews(
+                    context.packageName,
+                    R.layout.call_incoming_notification_heads_up_snapshot
+                )
             else
                 RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up)
 
         notificationLayoutHeadsUp.setTextViewText(R.id.caller, displayName)
         notificationLayoutHeadsUp.setTextViewText(R.id.sip_uri, address)
-        notificationLayoutHeadsUp.setTextViewText(R.id.incoming_call_info, Texts.get("notif_incoming_call_title"))
+        notificationLayoutHeadsUp.setTextViewText(
+            R.id.incoming_call_info,
+            Texts.get("notif_incoming_call_title")
+        )
         return notificationLayoutHeadsUp
     }
 
@@ -337,31 +354,38 @@ class NotificationsManager(private val context: Context) {
     private fun displayIncomingCallNotification(call: Call, useAsForeground: Boolean = false) {
 
         val notifiable = getNotifiableForCall(call)
-        val displayName = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
+        val displayName =
+            DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
 
         val incomingCallNotificationIntent = Intent(context, CallIncomingActivity::class.java)
-        incomingCallNotificationIntent.putExtra("callId",call.callLog.callId)
+        incomingCallNotificationIntent.putExtra("callId", call.callLog.callId)
         incomingCallNotificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val pendingIntent = PendingIntent.getActivity(context, 0, incomingCallNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            incomingCallNotificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
 
-        notificationBuilder = NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setSmallIcon(R.drawable.notification_phone)
-            .setContentTitle(displayName)
-            .setContentText(Texts.get("notif_incoming_call_title"))
-            .setContentIntent(pendingIntent)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setWhen(System.currentTimeMillis())
-            .setAutoCancel(false)
-            .setShowWhen(true)
-            .setOngoing(true)
-            .setColor(ContextCompat.getColor(context, R.color.color_a))
-            .setFullScreenIntent(pendingIntent, true)
-            .addAction(getCallDeclineAction(notifiable.notificationId))
-            .addAction(getCallAnswerAction(notifiable.notificationId))
-            .setCustomHeadsUpContentView(fillIncomingRemoteViewsForCall(call,false))
+        notificationBuilder =
+            NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setSmallIcon(R.drawable.notification_phone)
+                .setContentTitle(displayName)
+                .setContentText(Texts.get("notif_incoming_call_title"))
+                .setContentIntent(pendingIntent)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(false)
+                .setShowWhen(true)
+                .setOngoing(true)
+                .setColor(ContextCompat.getColor(context, R.color.color_a))
+                .setFullScreenIntent(pendingIntent, true)
+                .addAction(getCallDeclineAction(notifiable.notificationId))
+                .addAction(getCallAnswerAction(notifiable.notificationId))
+                .setCustomHeadsUpContentView(fillIncomingRemoteViewsForCall(call, false))
 
         val notification = notificationBuilder.build()
 
@@ -381,8 +405,8 @@ class NotificationsManager(private val context: Context) {
     }
 
 
-    fun scheduleSnapShots(call:Call) {
-        incomingCallSnapshotTimer = fixedRateTimer("timer",false,1000,1000){
+    fun scheduleSnapShots(call: Call) {
+        incomingCallSnapshotTimer = fixedRateTimer("timer", false, 1000, 1000) {
             GlobalScope.launch(context = Dispatchers.Main) {
                 if (call.state == Call.State.IncomingEarlyMedia) {
                     call.requestNotifyNextVideoFrameDecoded()
@@ -397,11 +421,12 @@ class NotificationsManager(private val context: Context) {
         val missedCallCount: Int = call.core.missedCallsCount
         val body: String
         if (missedCallCount > 1) {
-            body = Texts.get("notif_missed_calls",missedCallCount.toString())
+            body = Texts.get("notif_missed_calls", missedCallCount.toString())
             Log.i("[Notifications Manager] Updating missed calls notification count to $missedCallCount")
         } else {
-            val name = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name?: call.remoteAddress.username
-            body = Texts.get("notif_missed_call",name)
+            val name = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name
+                ?: call.remoteAddress.username
+            body = Texts.get("notif_missed_call", name)
             Log.i("[Notifications Manager] Creating missed call notification")
         }
 
@@ -412,7 +437,8 @@ class NotificationsManager(private val context: Context) {
             .createPendingIntent()
 
         val notification = NotificationCompat.Builder(
-            context,  Texts.get("notification_channel_incoming_call_id"))
+            context, Texts.get("notification_channel_incoming_call_id")
+        )
             .setContentTitle(Texts.get("notif_missed_call_title"))
             .setContentText(body)
             .setSmallIcon(R.drawable.notification_missed)
@@ -453,13 +479,21 @@ class NotificationsManager(private val context: Context) {
 
         val callNotificationIntent = Intent(context, callActivity)
         callNotificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val pendingIntent = PendingIntent.getActivity(context, 0, callNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            callNotificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
 
         val notification = NotificationCompat.Builder(
-            context, Texts.get("notification_channel_service_id"))
-            .setContentTitle(DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username)
+            context, Texts.get("notification_channel_service_id")
+        )
+            .setContentTitle(
+                DeviceStore.findDeviceByAddress(call.remoteAddress)?.name
+                    ?: call.remoteAddress.username
+            )
             .setContentText(stringResourceId)
             .setSmallIcon(iconResourceId)
             .setAutoCancel(false)
@@ -524,7 +558,6 @@ class NotificationsManager(private val context: Context) {
             hangupPendingIntent
         ).build()
     }
-
 
 
 }

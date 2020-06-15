@@ -9,7 +9,7 @@ object HistoryEventStore {
 
     private var historyEventsConfig: Config
 
-    var historyEvents:HashMap<String,HistoryEvent> // CallId / History event
+    var historyEvents: HashMap<String, HistoryEvent> // CallId / History event
 
     init {
         if (!StorageManager.historyEventsXml.exists())
@@ -19,17 +19,19 @@ object HistoryEventStore {
         historyEvents = readFromXml()
     }
 
-    fun readFromXml():HashMap<String,HistoryEvent> {
-        val result= HashMap<String,HistoryEvent>()
+    fun readFromXml(): HashMap<String, HistoryEvent> {
+        val result = HashMap<String, HistoryEvent>()
         historyEventsConfig.sectionsNamesList.forEach {
-            result.put(historyEventsConfig.getString(it,"call_id",null),HistoryEvent(
-                it,
-                historyEventsConfig.getString(it,"call_id",null),
-                historyEventsConfig.getBool(it,"viewed_by_user",false),
-                historyEventsConfig.getString(it,"media_file_name",null),
-                historyEventsConfig.getString(it,"media_thumbnail_file_name",null),
-                historyEventsConfig.getBool(it,"has_video",false)
-            ))
+            result.put(
+                historyEventsConfig.getString(it, "call_id", null), HistoryEvent(
+                    it,
+                    historyEventsConfig.getString(it, "call_id", null),
+                    historyEventsConfig.getBool(it, "viewed_by_user", false),
+                    historyEventsConfig.getString(it, "media_file_name", null),
+                    historyEventsConfig.getString(it, "media_thumbnail_file_name", null),
+                    historyEventsConfig.getBool(it, "has_video", false)
+                )
+            )
         }
         return result
     }
@@ -39,23 +41,31 @@ object HistoryEventStore {
             historyEventsConfig.cleanSection(it)
         }
         historyEvents.forEach { entry ->
-            historyEventsConfig.setBool(entry.value.id,"viewed_by_user",entry.value.viewedByUser)
-            historyEventsConfig.setString(entry.value.id,"media_file_name",entry.value.mediaFileName)
-            historyEventsConfig.setString(entry.value.id,"media_thumbnail_file_name",entry.value.mediaThumbnailFileName)
-            historyEventsConfig.setString(entry.value.id,"call_id",entry.value.callId)
-            historyEventsConfig.setBool(entry.value.id,"has_video",entry.value.hasVideo)
+            historyEventsConfig.setBool(entry.value.id, "viewed_by_user", entry.value.viewedByUser)
+            historyEventsConfig.setString(
+                entry.value.id,
+                "media_file_name",
+                entry.value.mediaFileName
+            )
+            historyEventsConfig.setString(
+                entry.value.id,
+                "media_thumbnail_file_name",
+                entry.value.mediaThumbnailFileName
+            )
+            historyEventsConfig.setString(entry.value.id, "call_id", entry.value.callId)
+            historyEventsConfig.setBool(entry.value.id, "has_video", entry.value.hasVideo)
         }
         historyEventsXml.writeText(historyEventsConfig.dumpAsXml())
     }
 
-    fun persistHistoryEvent(entry:HistoryEvent) {
+    fun persistHistoryEvent(entry: HistoryEvent) {
         entry.callId?.let {
-            historyEvents.put(it,entry)
+            historyEvents.put(it, entry)
             sync()
         }
     }
 
-    fun removeHistoryEvent(entry:HistoryEvent) {
+    fun removeHistoryEvent(entry: HistoryEvent) {
         entry.media.also {
             if (it.exists())
                 it.delete()
@@ -68,18 +78,18 @@ object HistoryEventStore {
         sync()
     }
 
-    fun removeHistoryEventByCallId(callId:String) {
+    fun removeHistoryEventByCallId(callId: String) {
         findHistoryEventByCallId(callId)?.also {
             removeHistoryEvent(it)
         }
     }
 
-    fun findHistoryEventByCallId(callId:String):HistoryEvent? {
+    fun findHistoryEventByCallId(callId: String): HistoryEvent? {
         return historyEvents.get(callId)
     }
 
-    fun markAllAsRead(){
-        historyEvents.forEach{
+    fun markAllAsRead() {
+        historyEvents.forEach {
             it.value.viewedByUser = true
         }
         sync()

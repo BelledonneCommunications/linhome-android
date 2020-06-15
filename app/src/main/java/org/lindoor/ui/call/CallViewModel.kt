@@ -30,18 +30,20 @@ class CallViewModelFactory(private val call: Call) :
     }
 }
 
-class CallViewModel(val call:Call) : ViewModel() {
-    val device: MutableLiveData<Device?> = MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
+class CallViewModel(val call: Call) : ViewModel() {
+    val device: MutableLiveData<Device?> =
+        MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.defaultType)
 
     val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
     val videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
     val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val speakerEnabled: MutableLiveData<Boolean> = MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
+    val speakerEnabled: MutableLiveData<Boolean> =
+        MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
-    private var historyEvent:HistoryEvent
+    private var historyEvent: HistoryEvent
 
     private var callListener = object : CallListenerStub() {
         override fun onStateChanged(call: Call?, cstate: Call.State?, message: String?) {
@@ -77,11 +79,11 @@ class CallViewModel(val call:Call) : ViewModel() {
         historyEvent = call.callLog.historyEvent()
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
-        if (call.state ==  Call.State.IncomingReceived)
+        if (call.state == Call.State.IncomingReceived)
             call.extendedAcceptEarlyMedia()
     }
 
-    private fun fireActionsOnCallStateChanged(cstate:Call.State) {
+    private fun fireActionsOnCallStateChanged(cstate: Call.State) {
         if (cstate == Call.State.IncomingReceived) {
             call.extendedAcceptEarlyMedia()
         }
@@ -91,18 +93,16 @@ class CallViewModel(val call:Call) : ViewModel() {
     }
 
 
-
-
     private fun attemptSetDeviceThumbnail(cstate: Call.State) {
         if (cstate == Call.State.End) { // Copy call media file to device file if there is none or user needs last
-            device.value?.also {d ->
+            device.value?.also { d ->
                 d.thumbNail.also { deviceThumb ->
                     if (corePreferences.showLatestSnapshot || !deviceThumb.existsAndIsNotEmpty()) {
-                        call?.callLog?.historyEvent()?.also { event ->
+                        call.callLog?.historyEvent()?.also { event ->
                             GlobalScope.launch(context = Dispatchers.Main) {
                                 delay(500) // Snapshot availability takes a little time.
                                 if (event.mediaThumbnail.existsAndIsNotEmpty()) {
-                                    event.mediaThumbnail?.copyTo(deviceThumb,true)
+                                    event.mediaThumbnail.copyTo(deviceThumb, true)
                                 }
                             }
                         }
@@ -155,7 +155,7 @@ class CallViewModel(val call:Call) : ViewModel() {
     }
 
     fun performAction(action: Action) {
-        device.value?.also {d ->
+        device.value?.also { d ->
             coreContext.core.useInfoForDtmf = true
             when (d.actionsMethodType) {
                 "method_dtmf_sip_info" -> {

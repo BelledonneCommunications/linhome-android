@@ -10,12 +10,17 @@ import java.io.File
 
 
 @Parcelize
-data class HistoryEvent(var id:String = xDigitsUUID(), // HistoryEvent for outgoing call must be created before the call is created to set recording path so it can't be the callID
-                        var callId:String? = null,
-                        var viewedByUser:Boolean = false,
-                        var mediaFileName:String = File(StorageManager.callsRecordingsDir,"${id}.mkv").absolutePath,
-                        var mediaThumbnailFileName:String  = File(StorageManager.callsRecordingsDir,"${id}.jpg").absolutePath,
-                        var hasVideo:Boolean = false): Parcelable {
+data class HistoryEvent(
+    var id: String = xDigitsUUID(), // HistoryEvent for outgoing call must be created before the call is created to set recording path so it can't be the callID
+    var callId: String? = null,
+    var viewedByUser: Boolean = false,
+    var mediaFileName: String = File(StorageManager.callsRecordingsDir, "${id}.mkv").absolutePath,
+    var mediaThumbnailFileName: String = File(
+        StorageManager.callsRecordingsDir,
+        "${id}.jpg"
+    ).absolutePath,
+    var hasVideo: Boolean = false
+) : Parcelable {
 
     val media: File
         get() {
@@ -27,13 +32,13 @@ data class HistoryEvent(var id:String = xDigitsUUID(), // HistoryEvent for outgo
             return File(mediaThumbnailFileName)
         }
 
-    fun hasMedia() : Boolean {
+    fun hasMedia(): Boolean {
         return media.let {
             it.existsAndIsNotEmpty()
         }
     }
 
-    fun hasMediaThumbnail() : Boolean {
+    fun hasMediaThumbnail(): Boolean {
         return mediaThumbnail.let {
             it.existsAndIsNotEmpty()
         }

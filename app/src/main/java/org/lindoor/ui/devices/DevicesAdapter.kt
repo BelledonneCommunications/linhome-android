@@ -28,12 +28,15 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
     var background: Drawable? = null
     private var deleteViewMargin = 0
     private var initiated = false
-    private lateinit var deleteIcon:PictureDrawable
+    private lateinit var deleteIcon: PictureDrawable
 
     private fun init() {
-        background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_e","device_in_device_list_corner_radius")
+        background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(
+            "color_e",
+            "device_in_device_list_corner_radius"
+        )
         deleteIcon = Theme.svgAsPictureDrawable("icons/delete")
-        Compatibility.setColorFilter(deleteIcon,Theme.getColor("color_c"))
+        Compatibility.setColorFilter(deleteIcon, Theme.getColor("color_c"))
         deleteViewMargin = 20
         initiated = true
     }
@@ -60,10 +63,10 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
         }
         var myDx = dX
         if (-myDx > itemView.width + 20)
-            myDx = - itemView.width.toFloat() +20
+            myDx = -itemView.width.toFloat() + 20
 
         background!!.setBounds(
-            itemView.right + dX.toInt()+deleteViewMargin,
+            itemView.right + dX.toInt() + deleteViewMargin,
             itemView.top,
             itemView.right,
             itemView.bottom
@@ -73,8 +76,10 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
         val itemHeight = itemView.bottom - itemView.top
 
         val redWidth = itemView.right - (itemView.right + myDx)
-        val xMarkLeft = itemView.right + myDx  +redWidth/2- deleteIcon.intrinsicWidth/2 + deleteViewMargin/2
-        val xMarkRight = itemView.right + myDx  + redWidth/2+ deleteIcon.intrinsicWidth/2 + deleteViewMargin/2
+        val xMarkLeft =
+            itemView.right + myDx + redWidth / 2 - deleteIcon.intrinsicWidth / 2 + deleteViewMargin / 2
+        val xMarkRight =
+            itemView.right + myDx + redWidth / 2 + deleteIcon.intrinsicWidth / 2 + deleteViewMargin / 2
         val xMarkTop = itemView.top + (itemHeight - deleteIcon.intrinsicHeight) / 2
         val xMarkBottom = xMarkTop + deleteIcon.intrinsicHeight
         deleteIcon.setBounds(xMarkLeft.toInt(), xMarkTop, xMarkRight.toInt(), xMarkBottom)
@@ -87,14 +92,14 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-       val device = adapter.devices.value!![viewHolder.adapterPosition]
+        val device = adapter.devices.value!![viewHolder.adapterPosition]
         DialogUtil.confirm(
             "delete_device_confirm_message",
             { _: DialogInterface, _: Int ->
-               DeviceStore.removeDevice(device)
+                DeviceStore.removeDevice(device)
                 adapter.devices.value = DeviceStore.devices
                 adapter.notifyDataSetChanged()
-            },device.name,
+            }, device.name,
             { _: DialogInterface, _: Int ->
                 adapter.notifyDataSetChanged()
             }
@@ -102,7 +107,12 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
     }
 }
 
-class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerView: RecyclerView, val selectedDevice:MutableLiveData<Device>, private val lindoorFragment: GenericFragment) :
+class DevicesAdapter(
+    val devices: MutableLiveData<ArrayList<Device>>,
+    recyclerView: RecyclerView,
+    val selectedDevice: MutableLiveData<Device>,
+    private val lindoorFragment: GenericFragment
+) :
     RecyclerView.Adapter<DevicesAdapter.ViewHolder>() {
 
     init {
@@ -134,8 +144,8 @@ class DevicesAdapter(val devices: MutableLiveData<ArrayList<Device>>, recyclerVi
             lindoorFragment: GenericFragment
         ) {
             binding.lifecycleOwner = lindoorFragment
-            binding.setVariable(BR.device,device)
-            binding.setVariable(BR.selectedDevice,selectedDevice)
+            binding.setVariable(BR.device, device)
+            binding.setVariable(BR.selectedDevice, selectedDevice)
             binding.executePendingBindings()
             view.setOnClickListener {
                 selectedDevice.value = device

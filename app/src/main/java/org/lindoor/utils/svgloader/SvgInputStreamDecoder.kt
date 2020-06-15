@@ -15,7 +15,12 @@ import java.io.InputStream
 class SvgInputStreamDecoder : ResourceDecoder<InputStream, SVG> {
     override fun handles(source: InputStream, options: Options): Boolean = true
 
-    override fun decode(source: InputStream, width: Int, height: Int, options: Options): Resource<SVG>? {
+    override fun decode(
+        source: InputStream,
+        width: Int,
+        height: Int,
+        options: Options
+    ): Resource<SVG>? {
         try {
             val svg = SVG.getFromInputStream(source)
 

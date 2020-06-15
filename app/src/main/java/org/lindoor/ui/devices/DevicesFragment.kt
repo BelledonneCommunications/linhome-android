@@ -22,7 +22,6 @@ class DevicesFragment : GenericFragment() {
     private lateinit var devicesViewModel: DevicesViewModel
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,18 +29,25 @@ class DevicesFragment : GenericFragment() {
     ): View? {
         val binding = FragmentDevicesBinding.inflate(inflater, container, false)
         devicesViewModel = ViewModelProvider(this).get(DevicesViewModel::class.java)
-        devicesViewModel.selectedDevice =  MutableLiveData<Device>() // Android bug - onCreateView called on navigateUp()
+        devicesViewModel.selectedDevice =
+            MutableLiveData<Device>() // Android bug - onCreateView called on navigateUp()
         binding.lifecycleOwner = this
         binding.model = devicesViewModel
 
-        binding.root.new_device.setOnClickListener{
+        binding.root.new_device.setOnClickListener {
             val actionDetail = DevicesFragmentDirections.deviceNew()
             mainactivity.navController.navigate(actionDetail)
         }
 
-        binding.root.device_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.root.device_list.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
-        binding.root.device_list.adapter = DevicesAdapter(devicesViewModel.devices,binding.root.device_list,devicesViewModel.selectedDevice,this)
+        binding.root.device_list.adapter = DevicesAdapter(
+            devicesViewModel.devices,
+            binding.root.device_list,
+            devicesViewModel.selectedDevice,
+            this
+        )
 
         if (LindoorApplication.instance.smartPhone()) {
             devicesViewModel.selectedDevice.observe(viewLifecycleOwner, Observer { device ->

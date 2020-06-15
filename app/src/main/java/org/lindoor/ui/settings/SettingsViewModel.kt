@@ -19,7 +19,7 @@ class SettingsViewModel : ViewModelWithTools() {
 
     // Logs
     val enableDebugLogs = MutableLiveData(corePref.debugLogs)
-    var logUploadResult = MutableLiveData<Pair<Core.LogCollectionUploadState,String>>()
+    var logUploadResult = MutableLiveData<Pair<Core.LogCollectionUploadState, String>>()
 
     private val uploadCoreListener = object : CoreListenerStub() {
         override fun onLogCollectionUploadStateChanged(
@@ -27,7 +27,7 @@ class SettingsViewModel : ViewModelWithTools() {
             state: Core.LogCollectionUploadState,
             url: String
         ) {
-            logUploadResult.postValue(Pair(state,url))
+            logUploadResult.postValue(Pair(state, url))
         }
     }
 
@@ -85,7 +85,6 @@ class SettingsViewModel : ViewModelWithTools() {
         encryptionLabels.value = labels
         encryptionIndex.value = encryptionValues.indexOf(core.mediaEncryption.toInt())
     }
-
 
 
 }

@@ -7,17 +7,26 @@ import org.lindoor.ui.assistant.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
 
-class CreateLindoorAccountViewModel : CreatorAssistantViewModel(corePreferences.lindoorAccountDefaultValuesPath) {
+class CreateLindoorAccountViewModel :
+    CreatorAssistantViewModel(corePreferences.lindoorAccountDefaultValuesPath) {
 
-    var username: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair(MutableLiveData<String>(),MutableLiveData<Boolean>(false))
-    var email: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(),MutableLiveData<Boolean>(false))
-    var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(),MutableLiveData<Boolean>(false))
-    var pass2: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair( MutableLiveData<String>(),MutableLiveData<Boolean>(false))
+    var username: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
+    var email: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
+    var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
+    var pass2: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var creationResult = MutableLiveData<AccountCreator.Status>()
 
     private val creatorListener = object : AccountCreatorListenerStub() {
-        override fun onCreateAccount(creator: AccountCreator?, status: AccountCreator.Status?, resp: String?) {
+        override fun onCreateAccount(
+            creator: AccountCreator?,
+            status: AccountCreator.Status?,
+            resp: String?
+        ) {
             if (status == AccountCreator.Status.AccountCreated)
                 creator?.also {
                     Account.lindoorAccountCreate(creator)

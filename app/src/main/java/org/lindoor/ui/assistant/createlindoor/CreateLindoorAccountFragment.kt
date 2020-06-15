@@ -22,9 +22,9 @@ class CreateLindoorAccountFragment :
     CreatorAssistantFragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         val binding = FragmentAssistantCreateLindoorBinding.inflate(inflater, container, false)
@@ -32,16 +32,16 @@ class CreateLindoorAccountFragment :
 
         val model = ViewModelProvider(this).get(CreateLindoorAccountViewModel::class.java)
         binding.model = model
-        binding.validators  = ValidatorFactory.Companion
+        binding.validators = ValidatorFactory.Companion
 
-        binding.root.create.root.setOnClickListener{
+        binding.root.create.root.setOnClickListener {
             binding.root.username.validate()
             binding.root.email.validate()
             binding.root.password.validate()
             binding.root.password_confirmation.validate()
-            updateField(model.setUsername(model.username),binding.root.username)
-            updateField(model.setPassword(model.pass1),binding.root.password)
-            updateField(model.setEmail(model.email),binding.root.email)
+            updateField(model.setUsername(model.username), binding.root.username)
+            updateField(model.setPassword(model.pass1), binding.root.password)
+            updateField(model.setEmail(model.email), binding.root.email)
 
             if (model.valid()) {
                 hideKeyboard()
@@ -51,16 +51,26 @@ class CreateLindoorAccountFragment :
                     hideProgress()
                     create.root.isEnabled = true
                     when (status) {
-                        AccountCreator.Status.AccountExist -> binding.root.username.setError(Texts.get("lindoor_account_username_already_exists"))
+                        AccountCreator.Status.AccountExist -> binding.root.username.setError(
+                            Texts.get(
+                                "lindoor_account_username_already_exists"
+                            )
+                        )
                         AccountCreator.Status.AccountCreated -> {
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                            DialogUtil.info("lindoor_account_created",model.username.first.value!!)
-                        } else -> {
-                            binding.root.username.setError(Texts.get("lindoor_account_creation_failed","$status"))
+                            DialogUtil.info("lindoor_account_created", model.username.first.value!!)
+                        }
+                        else -> {
+                            binding.root.username.setError(
+                                Texts.get(
+                                    "lindoor_account_creation_failed",
+                                    "$status"
+                                )
+                            )
                         }
                     }
                 })
-                if ( model.accountCreator.createAccount() != AccountCreator.Status.RequestOk) {
+                if (model.accountCreator.createAccount() != AccountCreator.Status.RequestOk) {
                     hideProgress()
                     create.root.isEnabled = true
                     DialogUtil.error("lindoor_account_creation_request_failed")

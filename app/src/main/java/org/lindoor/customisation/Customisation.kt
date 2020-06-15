@@ -53,19 +53,23 @@ object Customisation {
             if (zipmd5 == context.getSharedPreferences(
                     context.getString(R.string.app_name),
                     Context.MODE_PRIVATE
-                ).getString(context.getString(R.string.zip_md5),null)
+                ).getString(context.getString(R.string.zip_md5), null)
             ) {
-                android.util.Log.i("","[Customisation] md5 identical - custo has not changed.")
+                android.util.Log.i("", "[Customisation] md5 identical - custo has not changed.")
                 zipInputStream.close()
                 return
             }
-            if (zip.unzipInputStream(zipInputStream,LindoorApplication.instance.filesDir.absolutePath))
+            if (zip.unzipInputStream(
+                    zipInputStream,
+                    LindoorApplication.instance.filesDir.absolutePath
+                )
+            )
                 context.getSharedPreferences(
                     context.getString(R.string.app_name),
                     Context.MODE_PRIVATE
                 ).edit().putString(context.getString(R.string.zip_md5), zipmd5).apply()
         } catch (e: Exception) {
-            android.util.Log.e("","[Customisation] Failed unzipping zip from assets : $e")
+            android.util.Log.e("", "[Customisation] Failed unzipping zip from assets : $e")
             e.printStackTrace()
             return
         }

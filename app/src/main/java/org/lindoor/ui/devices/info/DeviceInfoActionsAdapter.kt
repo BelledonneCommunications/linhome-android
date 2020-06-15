@@ -15,10 +15,16 @@ import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemActionInfoBinding
 import org.lindoor.entities.Action
 
-class DeviceInfoActionsAdapter(private val actions: ArrayList<Action>) : RecyclerView.Adapter<DeviceInfoActionsAdapter.ViewHolder>() {
+class DeviceInfoActionsAdapter(private val actions: ArrayList<Action>) :
+    RecyclerView.Adapter<DeviceInfoActionsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.item_action_info,parent,false) as ItemActionInfoBinding
+        val binding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_action_info,
+            parent,
+            false
+        ) as ItemActionInfoBinding
         return ViewHolder(binding.root)
     }
 
@@ -28,8 +34,8 @@ class DeviceInfoActionsAdapter(private val actions: ArrayList<Action>) : Recycle
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val icon = itemView.icon
-        private val type:TextView = itemView.label
-        private val code:TextView = itemView.code
+        private val type: TextView = itemView.label
+        private val code: TextView = itemView.code
 
         fun bindItems(action: Action) {
             type.text = action.typeName()

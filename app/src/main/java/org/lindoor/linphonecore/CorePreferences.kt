@@ -235,10 +235,18 @@ class CorePreferences constructor(private val context: Context) {
         get() = config.getString("app", "rls_uri", "sip:rls@sip.linphone.org")
 
     val conferenceServerUri: String
-        get() = config.getString("app", "default_conference_factory_uri", "sip:conference-factory@sip.linphone.org")
+        get() = config.getString(
+            "app",
+            "default_conference_factory_uri",
+            "sip:conference-factory@sip.linphone.org"
+        )
 
     val limeX3dhServerUrl: String
-        get() = config.getString("app", "default_lime_x3dh_server_url", "https://lime.linphone.org/lime-server/lime-server.php")
+        get() = config.getString(
+            "app",
+            "default_lime_x3dh_server_url",
+            "https://lime.linphone.org/lime-server/lime-server.php"
+        )
 
     val allowMultipleFilesAndTextInSameMessage: Boolean
         get() = config.getBool("app", "allow_multiple_files_and_text_in_same_message", true)
@@ -309,8 +317,11 @@ class CorePreferences constructor(private val context: Context) {
         outStream.close()
     }
 
-    fun encryptedPass(user:String,clearPass:String) : String {
+    fun encryptedPass(user: String, clearPass: String): String {
         val md = MessageDigest.getInstance(passwordAlgo?.toUpperCase())
-        return BigInteger(1, md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())).toString(16).padStart(32, '0')
+        return BigInteger(
+            1,
+            md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())
+        ).toString(16).padStart(32, '0')
     }
 }

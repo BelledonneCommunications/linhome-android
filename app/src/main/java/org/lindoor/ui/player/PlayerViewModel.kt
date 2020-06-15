@@ -11,19 +11,20 @@ import org.linphone.core.tools.Log
 import java.util.*
 
 
-class PlayerViewModelFactory(private val callId: String,private val player:Player) :
+class PlayerViewModelFactory(private val callId: String, private val player: Player) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return PlayerViewModel(callId,player) as T
+        return PlayerViewModel(callId, player) as T
     }
 }
 
-class PlayerViewModel(val callId:String, val player:Player) : ViewModel() {
+class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
 
-    val historyEvent = LindoorApplication.coreContext.core.findCallLogFromCallId(callId).historyEvent()
+    val historyEvent =
+        LindoorApplication.coreContext.core.findCallLogFromCallId(callId).historyEvent()
     val playing = MutableLiveData(false)
-    val position:MutableLiveData<Int> = MutableLiveData(0)
+    val position: MutableLiveData<Int> = MutableLiveData(0)
     val reset = MutableLiveData(false)
 
 
@@ -82,7 +83,7 @@ class PlayerViewModel(val callId:String, val player:Player) : ViewModel() {
 
 
     fun seek(p: Int) {
-        if (!isClosed())  {
+        if (!isClosed()) {
             if (playing.value!!)
                 player.pause()
             player.seek(p)
@@ -92,9 +93,9 @@ class PlayerViewModel(val callId:String, val player:Player) : ViewModel() {
         }
     }
 
-    fun updatePosition(){
-        if (!isClosed())  {
-            position.value =  player.currentPosition
+    fun updatePosition() {
+        if (!isClosed()) {
+            position.value = player.currentPosition
         }
     }
 

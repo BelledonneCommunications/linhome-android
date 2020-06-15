@@ -6,7 +6,7 @@ import org.linphone.core.Call
 import org.linphone.core.CallLog
 
 
-fun CallLog.historyEvent() : HistoryEvent {
+fun CallLog.historyEvent(): HistoryEvent {
     if (userData != null) {
         val historyEvent = userData as HistoryEvent
         if (historyEvent.callId == null && callId != null) {
@@ -30,9 +30,12 @@ fun CallLog.historyEvent() : HistoryEvent {
 }
 
 
-
-fun CallLog.isNew() : Boolean {
-    return historyEvent()?.let {
-        dir == Call.Dir.Incoming && setOf(Call.Status.Missed,Call.Status.Declined,Call.Status.DeclinedElsewhere).contains(status) && !it.viewedByUser
-    } ?: false
+fun CallLog.isNew(): Boolean {
+    return historyEvent().let {
+        dir == Call.Dir.Incoming && setOf(
+            Call.Status.Missed,
+            Call.Status.Declined,
+            Call.Status.DeclinedElsewhere
+        ).contains(status) && !it.viewedByUser
+    }
 }

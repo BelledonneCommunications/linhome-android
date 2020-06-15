@@ -13,23 +13,29 @@ import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.databinding.ItemSidemenuBinding
 
-class MenuOption (val textKey: String, val iconFile: String, val targetFragmentId: Int)
-class SideMenuAdapter(private val options: ArrayList<MenuOption>, navController:NavController) : RecyclerView.Adapter<SideMenuAdapter.ViewHolder>() {
+class MenuOption(val textKey: String, val iconFile: String, val targetFragmentId: Int)
+class SideMenuAdapter(private val options: ArrayList<MenuOption>, navController: NavController) :
+    RecyclerView.Adapter<SideMenuAdapter.ViewHolder>() {
 
     val navigationController = navController
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.item_sidemenu,parent,false) as ItemSidemenuBinding
-        return ViewHolder(binding.root,this)
+        val binding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.item_sidemenu,
+            parent,
+            false
+        ) as ItemSidemenuBinding
+        return ViewHolder(binding.root, this)
     }
 
     override fun getItemCount(): Int {
         return options.size
     }
 
-    class ViewHolder(itemView: View,adapter:SideMenuAdapter) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, adapter: SideMenuAdapter) : RecyclerView.ViewHolder(itemView) {
         private val optionIconIV = itemView.icon
-        private val optionLabelTV:TextView = itemView.label
+        private val optionLabelTV: TextView = itemView.label
         private val optionsAdapter = adapter
 
         init {
@@ -39,7 +45,7 @@ class SideMenuAdapter(private val options: ArrayList<MenuOption>, navController:
 
         fun bindItems(option: MenuOption) {
             optionLabelTV.text = Texts.get(option.textKey)
-            Theme.setIcon(option.iconFile,optionIconIV)
+            Theme.setIcon(option.iconFile, optionIconIV)
             itemView.setOnClickListener {
                 optionsAdapter.navigationController.navigate(option.targetFragmentId)
             }

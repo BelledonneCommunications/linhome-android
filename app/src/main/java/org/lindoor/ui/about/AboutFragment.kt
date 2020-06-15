@@ -11,9 +11,9 @@ import org.lindoor.databinding.FragmentAboutBinding
 class AboutFragment : Fragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
         binding.coreContext = LindoorApplication.coreContext

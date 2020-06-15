@@ -13,9 +13,9 @@ class SvgBitmapTranscoder : ResourceTranscoder<SVG, Bitmap> {
     override fun transcode(toTranscode: Resource<SVG>, options: Options): Resource<Bitmap> {
         val svg = toTranscode.get()
         val width = svg.documentWidth.toInt().takeIf { it > 0 }
-                ?: (svg.documentViewBox.right - svg.documentViewBox.left).toInt()
+            ?: (svg.documentViewBox.right - svg.documentViewBox.left).toInt()
         val height = svg.documentHeight.toInt().takeIf { it > 0 }
-                ?: (svg.documentViewBox.bottom - svg.documentViewBox.top).toInt()
+            ?: (svg.documentViewBox.bottom - svg.documentViewBox.top).toInt()
 
         val picture = svg.renderToPicture(width, height)
         val drawable = PictureDrawable(picture)

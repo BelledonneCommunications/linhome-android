@@ -9,8 +9,8 @@ import org.linphone.core.CallLog
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 
-class TabbarViewModel   : ViewModel() {
-    var unreadCount =  MutableLiveData(0)
+class TabbarViewModel : ViewModel() {
+    var unreadCount = MutableLiveData(0)
 
     private val coreListener = object : CoreListenerStub() {
         override fun onCallLogUpdated(lc: Core?, newcl: CallLog?) {
@@ -20,7 +20,7 @@ class TabbarViewModel   : ViewModel() {
 
     fun updateUnreadCount() {
         var count = 0
-        LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId().forEach{
+        LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId().forEach {
             if (it.isNew())
                 count++
         }

@@ -10,7 +10,7 @@ import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRootBinding
 
-class AssistantRootFragment :GenericFragment() {
+class AssistantRootFragment : GenericFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,16 +19,16 @@ class AssistantRootFragment :GenericFragment() {
     ): View? {
         val binding = FragmentAssistantRootBinding.inflate(inflater, container, false)
 
-        binding.root.create.root.setOnClickListener{
+        binding.root.create.root.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_create_lindoor)
         }
-        binding.root.use.root.setOnClickListener{
+        binding.root.use.root.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_login_lindoor)
         }
-        binding.root.sip.root.setOnClickListener{
+        binding.root.sip.root.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_login_sip)
         }
-        binding.root.remote.root.setOnClickListener{
+        binding.root.remote.root.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_remote_root)
         }
         return binding.root

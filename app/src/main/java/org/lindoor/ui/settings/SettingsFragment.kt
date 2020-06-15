@@ -22,20 +22,27 @@ import org.linphone.core.PayloadType
 import org.linphone.core.tools.Log
 
 
-class SettingsFragment :GenericFragment() {
+class SettingsFragment : GenericFragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         settingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
-        initCodecsList(LindoorApplication.coreContext.core.audioPayloadTypes,settingsViewModel.audioCodecs,true)
-        initCodecsList(LindoorApplication.coreContext.core.videoPayloadTypes,settingsViewModel.videCodecs)
+        initCodecsList(
+            LindoorApplication.coreContext.core.audioPayloadTypes,
+            settingsViewModel.audioCodecs,
+            true
+        )
+        initCodecsList(
+            LindoorApplication.coreContext.core.videoPayloadTypes,
+            settingsViewModel.videCodecs
+        )
         binding.model = settingsViewModel
         binding.view = this
         binding.lifecycleOwner = this
@@ -43,9 +50,18 @@ class SettingsFragment :GenericFragment() {
     }
 
 
-    private fun initCodecsList(payloads: Array<PayloadType>, target:  ArrayList<ViewDataBinding>, showRate:Boolean = false) {
+    private fun initCodecsList(
+        payloads: Array<PayloadType>,
+        target: ArrayList<ViewDataBinding>,
+        showRate: Boolean = false
+    ) {
         for (payload in payloads) {
-            val binding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(requireContext()), R.layout.settings_widget_switch, null, false)
+            val binding = DataBindingUtil.inflate<ViewDataBinding>(
+                LayoutInflater.from(requireContext()),
+                R.layout.settings_widget_switch,
+                null,
+                false
+            )
             binding.setVariable(BR.title, payload.mimeType)
             if (showRate)
                 binding.setVariable(BR.subtitle, "${payload.clockRate} Hz")
@@ -67,7 +83,8 @@ class SettingsFragment :GenericFragment() {
             binding.root.send_logs.isEnabled = false
             settingsViewModel.logUploadResult.observe(viewLifecycleOwner, Observer { result ->
                 when (result.first) {
-                    Core.LogCollectionUploadState.InProgress -> {}
+                    Core.LogCollectionUploadState.InProgress -> {
+                    }
                     Core.LogCollectionUploadState.NotDelivered -> {
                         hideProgress()
                         binding.root.send_logs.isEnabled = true

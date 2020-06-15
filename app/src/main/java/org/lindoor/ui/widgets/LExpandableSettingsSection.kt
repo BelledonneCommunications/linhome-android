@@ -17,37 +17,41 @@ import org.lindoor.databinding.SettingsWidgetExpandableBinding
 class LExpandableSettingsSection : LinearLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context)
     }
 
     private lateinit var binding: SettingsWidgetExpandableBinding
 
-    var entries: ArrayList<ViewDataBinding> ? = null
+    var entries: ArrayList<ViewDataBinding>? = null
         set(value) {
             items.removeAllViews()
             value?.also { them ->
                 for (i in them) {
                     binding.root.items.addView(i.root)
-                    i.setVariable(BR.subsection,true)
+                    i.setVariable(BR.subsection, true)
                 }
-                them.last().setVariable(BR.hideseparator,true)
+                them.last().setVariable(BR.hideseparator, true)
             }
         }
 
-    var title: String ? = null
+    var title: String? = null
         set(value) {
             value?.also {
                 binding.title = Texts.get(it)
             }
         }
-    var subtitle: String ? = null
+    var subtitle: String? = null
         set(value) {
             value?.also {
                 binding.subtitle = Texts.get(it)
             }
         }
-    var enabled: Boolean ? = null
+    var enabled: Boolean? = null
         set(value) {
             binding.enabled = value
         }
@@ -55,9 +59,10 @@ class LExpandableSettingsSection : LinearLayout {
     private fun init(
         context: Context
     ) {
-         binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.settings_widget_expandable,this, true)
+            R.layout.settings_widget_expandable, this, true
+        )
         binding.root.setOnClickListener {
             if (binding.root.items.visibility == View.GONE) {
                 binding.root.items.visibility = View.VISIBLE

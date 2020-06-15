@@ -9,17 +9,18 @@ import org.linphone.core.AccountCreator
 import org.linphone.core.TransportType
 import java.util.*
 
-open class CreatorAssistantViewModel (defaultValuePath:String): ViewModel() {
+open class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel() {
 
-    var accountCreator:AccountCreator
+    var accountCreator: AccountCreator
 
     init {
         coreContext.core.loadConfigFromXml(defaultValuePath)
-        accountCreator = coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
+        accountCreator =
+            coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
         accountCreator.language = Locale.getDefault().language
     }
 
-    fun setUsername(field:Pair<MutableLiveData<String>, MutableLiveData<Boolean>>):AccountCreator.UsernameStatus?  {
+    fun setUsername(field: Pair<MutableLiveData<String>, MutableLiveData<Boolean>>): AccountCreator.UsernameStatus? {
         if (TextUtils.isEmpty(field.first.value))
             return null
         val result = accountCreator.setUsername(field.first.value)
@@ -27,7 +28,7 @@ open class CreatorAssistantViewModel (defaultValuePath:String): ViewModel() {
         return result
     }
 
-    fun setPassword(field:Pair<MutableLiveData<String>, MutableLiveData<Boolean>>):AccountCreator.PasswordStatus?  {
+    fun setPassword(field: Pair<MutableLiveData<String>, MutableLiveData<Boolean>>): AccountCreator.PasswordStatus? {
         if (TextUtils.isEmpty(field.first.value))
             return null
         val result = accountCreator.setPassword(field.first.value)
@@ -35,7 +36,7 @@ open class CreatorAssistantViewModel (defaultValuePath:String): ViewModel() {
         return result
     }
 
-    fun setEmail(field:Pair<MutableLiveData<String>, MutableLiveData<Boolean>>):AccountCreator.EmailStatus?  {
+    fun setEmail(field: Pair<MutableLiveData<String>, MutableLiveData<Boolean>>): AccountCreator.EmailStatus? {
         if (TextUtils.isEmpty(field.first.value))
             return null
         val result = accountCreator.setEmail(field.first.value)
@@ -43,7 +44,7 @@ open class CreatorAssistantViewModel (defaultValuePath:String): ViewModel() {
         return result
     }
 
-    fun setDomain(field:Pair<MutableLiveData<String>, MutableLiveData<Boolean>>):AccountCreator.DomainStatus?  {
+    fun setDomain(field: Pair<MutableLiveData<String>, MutableLiveData<Boolean>>): AccountCreator.DomainStatus? {
         if (TextUtils.isEmpty(field.first.value))
             return null
         val result = accountCreator.setDomain(field.first.value)
@@ -51,7 +52,7 @@ open class CreatorAssistantViewModel (defaultValuePath:String): ViewModel() {
         return result
     }
 
-    fun setTransport(transport:TransportType) {
+    fun setTransport(transport: TransportType) {
         accountCreator.transport = transport
     }
 

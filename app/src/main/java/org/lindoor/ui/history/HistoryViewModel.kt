@@ -10,10 +10,10 @@ import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 
 class HistoryViewModel : ViewModel() {
-    lateinit var history : MutableLiveData<ArrayList<CallLog>>
+    lateinit var history: MutableLiveData<ArrayList<CallLog>>
 
     val editing = MutableLiveData(false)
-    val selectedForDeletion:MutableLiveData<ArrayList<String>> = MutableLiveData(arrayListOf())
+    val selectedForDeletion: MutableLiveData<ArrayList<String>> = MutableLiveData(arrayListOf())
 
     private val coreListener = object : CoreListenerStub() {
         override fun onCallLogUpdated(lc: Core?, newcl: CallLog?) {

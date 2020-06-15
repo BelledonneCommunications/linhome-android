@@ -16,14 +16,14 @@ import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 import org.linphone.core.tools.Log
 
-class RemoteQrAccountFragment :GenericFragment() {
+class RemoteQrAccountFragment : GenericFragment() {
 
-    lateinit var binding:FragmentAssistantRemoteQrBinding
+    lateinit var binding: FragmentAssistantRemoteQrBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentAssistantRemoteQrBinding.inflate(inflater, container, false)
@@ -90,7 +90,6 @@ class RemoteQrAccountFragment :GenericFragment() {
         coreContext.core.enableVideoPreview(false)
         super.onPause()
     }
-
 
 
 }

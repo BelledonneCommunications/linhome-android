@@ -20,6 +20,7 @@ class SvgAppGlideModule : AppGlideModule() {
             .prepend(String::class.java, InputStream::class.java, SvgStringModelLoaderFactory())
             .append(InputStream::class.java, SVG::class.java, SvgInputStreamDecoder())
     }
+
     override fun isManifestParsingEnabled() = false
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {

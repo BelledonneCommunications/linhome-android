@@ -55,6 +55,7 @@ fun bounce(view: View, bounceTrigger: Boolean) {
                 bounce.reset()
                 bounce.start()
             }
+
             override fun onAnimationRepeat(animation: Animation) {}
         })
         view.startAnimation(bounce)
@@ -68,24 +69,51 @@ fun bounce(view: View, bounceTrigger: Boolean) {
 @BindingAdapter("roundRectInput")
 fun roundrectbackground(view: ViewGroup, enabled: Boolean) {
     if (enabled)
-        view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius("color_c","user_input_corner_radius")
+        view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(
+            "color_c",
+            "user_input_corner_radius"
+        )
 }
 
 @BindingAdapter("roundRectInputWithColor")
 fun roundRectInputWithColor(view: ViewGroup, color: String) {
-    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(color,"user_input_corner_radius")
+    view.background =
+        Theme.roundRectInputBackgroundWithColorKeyAndRadius(color, "user_input_corner_radius")
 }
 
-@BindingAdapter("roundRectWithColor","andRadius")
-fun roundRectWithColor(view: View, colorKey: String, radiusKey:String) {
-    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(colorKey,radiusKey)
+@BindingAdapter("roundRectWithColor", "andRadius")
+fun roundRectWithColor(view: View, colorKey: String, radiusKey: String) {
+    view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(colorKey, radiusKey)
 }
 
-@BindingAdapter("roundRectWithColor","andRadius","andStrokeWidth","andStrokeColor","selected_stroke_color")
-fun roundRectWithColor(view: View, colorKey: String, radiusKey:String, strokeWidth:Int, strokeColorKey:String, selectedStrokeColor:String) {
-    val drawableIdle = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey,radiusKey,strokeColorKey,strokeWidth)
-    val drawablePressed = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(colorKey,radiusKey,selectedStrokeColor,strokeWidth)
-    view.background = Theme.buildStateListDrawable(drawableIdle,drawablePressed)
+@BindingAdapter(
+    "roundRectWithColor",
+    "andRadius",
+    "andStrokeWidth",
+    "andStrokeColor",
+    "selected_stroke_color"
+)
+fun roundRectWithColor(
+    view: View,
+    colorKey: String,
+    radiusKey: String,
+    strokeWidth: Int,
+    strokeColorKey: String,
+    selectedStrokeColor: String
+) {
+    val drawableIdle = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(
+        colorKey,
+        radiusKey,
+        strokeColorKey,
+        strokeWidth
+    )
+    val drawablePressed = Theme.roundRectInputBackgroundWithColorKeyAndRadiusAndStroke(
+        colorKey,
+        radiusKey,
+        selectedStrokeColor,
+        strokeWidth
+    )
+    view.background = Theme.buildStateListDrawable(drawableIdle, drawablePressed)
 }
 
 @BindingAdapter("cornerRadius")
@@ -98,8 +126,13 @@ fun cornerRadius(view: CardView, radius: String) {
 ///////////////////////
 
 @BindingAdapter("popupBackgoundColor", "popupBackgoundRadius")
-fun background(view: Spinner, colorKey: String, radius:Float) {
-    view.setPopupBackgroundDrawable(Theme.roundRectGradientDrawable(Theme.getColor(colorKey),radius))
+fun background(view: Spinner, colorKey: String, radius: Float) {
+    view.setPopupBackgroundDrawable(
+        Theme.roundRectGradientDrawable(
+            Theme.getColor(colorKey),
+            radius
+        )
+    )
 }
 
 
@@ -108,16 +141,18 @@ fun background(view: Spinner, colorKey: String, radius:Float) {
 ////////////////////////
 
 @BindingAdapter("passConfirmValidatorOf")// Todo move into class
-fun passConfirmValidatorWith(textInput: LTextInput,otherTextInput: LTextInput) {
-    textInput.validator = NonEmptyStringMatcherValidator(otherTextInput,"input_password_do_not_match")
+fun passConfirmValidatorWith(textInput: LTextInput, otherTextInput: LTextInput) {
+    textInput.validator =
+        NonEmptyStringMatcherValidator(otherTextInput, "input_password_do_not_match")
 }
 
 @BindingAdapter("title") // Todo move into class
-fun title(textInput: LTextInput,titleKey: String) {
+fun title(textInput: LTextInput, titleKey: String) {
     textInput.title.text = Texts.get(titleKey)
 }
+
 @BindingAdapter("hint") // Todo move into class
-fun hint(textInput: LTextInput,hintKey: String) {
+fun hint(textInput: LTextInput, hintKey: String) {
     textInput.text.hint = Texts.get(hintKey)
 }
 
@@ -127,7 +162,7 @@ fun hint(textInput: LTextInput,hintKey: String) {
 
 @BindingAdapter("style")
 fun style(textView: TextView, name: String) {
-    Theme.apply(name,textView)
+    Theme.apply(name, textView)
 }
 
 @BindingAdapter("marquee")
@@ -146,7 +181,7 @@ fun marquee(textView: TextView, enabled: Boolean) {
 )
 fun text(textView: TextView, textKey: String?, textArgs: String?) {
     if (textArgs != null) {
-        textView.text = textKey?.let { Texts.get(it,textArgs.split(",").toTypedArray()) }
+        textView.text = textKey?.let { Texts.get(it, textArgs.split(",").toTypedArray()) }
     } else
         textView.text = textKey?.let { Texts.get(it) }
 }
@@ -158,7 +193,7 @@ fun text(textView: TextView, textKey: String?, textArgs: String?) {
 
 @BindingAdapter("style")
 fun style(textView: LEditText, name: String) {
-    Theme.apply(name,textView)
+    Theme.apply(name, textView)
 }
 
 @BindingAdapter("hint")
@@ -172,19 +207,25 @@ fun hint(textView: LEditText, textKey: String) {
 
 @BindingAdapter("textstyle")
 fun ldstyle(button: Button, name: String) {
-    Theme.apply(name,button)
+    Theme.apply(name, button)
 }
 
 
 @BindingAdapter("selection_effect_text")
 fun effect(control: AppCompatButton, effectKey: String) {
-    control.setTextColor(Theme.selectionEffectAsColorStateList(effectKey,android.R.attr.state_activated))
+    control.setTextColor(
+        Theme.selectionEffectAsColorStateList(
+            effectKey,
+            android.R.attr.state_activated
+        )
+    )
 
 }
 
 @BindingAdapter("selection_effect_background")
 fun effectbg(control: AppCompatButton, effectKey: String) {
-    control.backgroundTintList = Theme.selectionEffectAsColorStateList(effectKey,android.R.attr.state_activated)
+    control.backgroundTintList =
+        Theme.selectionEffectAsColorStateList(effectKey, android.R.attr.state_activated)
 }
 
 
@@ -195,13 +236,14 @@ fun effectbg(control: AppCompatButton, effectKey: String) {
 
 @BindingAdapter("icon")
 fun icon(button: FloatingActionButton, name: String) {
-    Theme.setIcon(name,button)
+    Theme.setIcon(name, button)
 }
 
 @BindingAdapter("backgroundeffect")
 fun background(button: ViewGroup, name: String?) {
     name?.let {
-        button.backgroundTintList = Theme.selectionEffectAsColorStateList(it,android.R.attr.state_activated)
+        button.backgroundTintList =
+            Theme.selectionEffectAsColorStateList(it, android.R.attr.state_activated)
     }
 }
 
@@ -229,7 +271,8 @@ fun title(control: LSegmentedControl, name: String) {
 
 @BindingAdapter("background")
 fun background(spinner: LSpinner, name: String) {
-    spinner.backgroundTintList = Theme.selectionEffectAsColorStateList(name,android.R.attr.state_activated)
+    spinner.backgroundTintList =
+        Theme.selectionEffectAsColorStateList(name, android.R.attr.state_activated)
 }
 
 
@@ -237,9 +280,10 @@ fun background(spinner: LSpinner, name: String) {
 /// ImageButton
 ///////////////////////
 
-@BindingAdapter("tint","bg")
-fun backgroundColorWithPressEffect(button: ImageView, tint: String, background:String) {
-    button.backgroundTintList = Theme.selectionEffectAsColorStateList(background,android.R.attr.state_activated)
+@BindingAdapter("tint", "bg")
+fun backgroundColorWithPressEffect(button: ImageView, tint: String, background: String) {
+    button.backgroundTintList =
+        Theme.selectionEffectAsColorStateList(background, android.R.attr.state_activated)
     //button.imageTintList =  Theme.selectionEffectAsColorStateList(tint,android.R.attr.state_activated)
 }
 
@@ -251,27 +295,29 @@ fun backgroundColorWithPressEffect(button: ImageView, tint: String, background:S
 @BindingAdapter("deviceTypeIconCircle")
 fun deviceTypeIconCircle(image: ImageView, type: String?) {
     type?.also {
-        DeviceTypes.iconNameForDeviceType(it,circle = true)?.let { it1 -> Theme.setIcon(it1, image) }
+        DeviceTypes.iconNameForDeviceType(it, circle = true)
+            ?.let { it1 -> Theme.setIcon(it1, image) }
     }
 }
 
 @BindingAdapter("icon")
 fun icon(button: ImageView, name: String?) {
     if (name != null) {
-        Theme.setIcon(name,button)
+        Theme.setIcon(name, button)
     }
 }
 
 @BindingAdapter(value = ["glidewith", "cornerradius"], requireAll = false)
-fun glidewith(image: ImageView, file: File?,cornerradius:String?) {
-   file?.also{
-       if (cornerradius != null) {
-           val floatRadius = pxFromDp(Customisation.themeConfig.getFloat("arbitrary-values", cornerradius, 0.0f))
-           Theme.glidegeneric.load(it).transform(CenterCrop(), RoundedCorners(floatRadius.toInt())).into(image)
-       }
-       else
-           Theme.glidegeneric.load(it).into(image)
-   }
+fun glidewith(image: ImageView, file: File?, cornerradius: String?) {
+    file?.also {
+        if (cornerradius != null) {
+            val floatRadius =
+                pxFromDp(Customisation.themeConfig.getFloat("arbitrary-values", cornerradius, 0.0f))
+            Theme.glidegeneric.load(it).transform(CenterCrop(), RoundedCorners(floatRadius.toInt()))
+                .into(image)
+        } else
+            Theme.glidegeneric.load(it).into(image)
+    }
 }
 
 @BindingAdapter("tint")
@@ -281,12 +327,13 @@ fun tint(button: ImageView, name: String) {
 
 @BindingAdapter("backgroundeffect")
 fun background(button: ImageView, name: String?) {
-    button.backgroundTintList = name?.let { Theme.selectionEffectAsColorStateList(it,android.R.attr.state_pressed) }
+    button.backgroundTintList =
+        name?.let { Theme.selectionEffectAsColorStateList(it, android.R.attr.state_pressed) }
 }
 
 @BindingAdapter("src")
 fun src(image: ImageView, name: String) {
-    Theme.setIcon(name,image)
+    Theme.setIcon(name, image)
 }
 
 @BindingAdapter("deviceTypeIcon")
@@ -308,7 +355,7 @@ fun selection_effect(image: View, key: String) {
 
 @BindingAdapter("foreground_selection_effect")
 fun foreground_selection_effect(image: ImageView, key: String) {
-    image.imageTintList =  Theme.selectionEffectAsColorStateList(key,android.R.attr.state_activated)
+    image.imageTintList = Theme.selectionEffectAsColorStateList(key, android.R.attr.state_activated)
 }
 
 ///////////////////////
@@ -326,14 +373,15 @@ fun text(b: LRoundRectButton, name: String) {
 }
 
 @BindingAdapter("primary") // Todo move into class
-fun primary(b: LRoundRectButton, important:Boolean) {
-    Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")?.also {
-        b.root.background = it
-    }
+fun primary(b: LRoundRectButton, important: Boolean) {
+    Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")
+        ?.also {
+            b.root.background = it
+        }
 }
 
 @BindingAdapter("android:enabled") // Todo move into class
-fun enabled(b: LRoundRectButton, enabled:Boolean) {
+fun enabled(b: LRoundRectButton, enabled: Boolean) {
     b.root.isEnabled = enabled
 }
 
@@ -345,14 +393,15 @@ fun text(b: LRoundRectButtonWithIcon, name: String) {
 
 
 @BindingAdapter("primary") // Todo move into class
-fun primary(b: LRoundRectButtonWithIcon, important:Boolean) {
-    Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")?.also {
-        b.root.background = it
-    }
+fun primary(b: LRoundRectButtonWithIcon, important: Boolean) {
+    Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")
+        ?.also {
+            b.root.background = it
+        }
 }
 
 @BindingAdapter("android:enabled") // Todo move into class
-fun enabled(b: LRoundRectButtonWithIcon, enabled:Boolean) {
+fun enabled(b: LRoundRectButtonWithIcon, enabled: Boolean) {
     b.root.isEnabled = enabled
 }
 
@@ -368,7 +417,8 @@ fun gradientBackground(view: ViewGroup, themeGradientName: String) {
 
 
 @BindingAdapter("shouldSetPaddingStartOnly", "paddingStartOnlyDp")
-fun paddingStartOnly(view: ViewGroup, shouldAdd: Boolean, padding: Int
+fun paddingStartOnly(
+    view: ViewGroup, shouldAdd: Boolean, padding: Int
 ) {
     if (shouldAdd) {
         view.setPadding(pxFromDp(padding), 0, 0, 0)
@@ -377,7 +427,7 @@ fun paddingStartOnly(view: ViewGroup, shouldAdd: Boolean, padding: Int
 
 
 @BindingAdapter("items")
-fun items(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>) {
+fun items(viewgroup: ViewGroup, items: ArrayList<ViewDataBinding>) {
     viewgroup.removeAllViews()
     items.forEach {
         viewgroup.addView(it.root)
@@ -385,7 +435,7 @@ fun items(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>) {
 }
 
 @BindingAdapter("items", "refreshOn")
-fun refresh(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>, refresh:Boolean) {
+fun refresh(viewgroup: ViewGroup, items: ArrayList<ViewDataBinding>, refresh: Boolean) {
     if (refresh) {
         viewgroup.removeAllViews()
         items.forEach {
@@ -397,7 +447,11 @@ fun refresh(viewgroup: ViewGroup, items:ArrayList<ViewDataBinding>, refresh:Bool
 @BindingAdapter("device")
 fun refresh(view: RecyclerView, device: Device?) {
     device?.actions?.also { them ->
-        view.layoutManager = LinearLayoutManager(LindoorApplication.instance.applicationContext, RecyclerView.VERTICAL, false)
+        view.layoutManager = LinearLayoutManager(
+            LindoorApplication.instance.applicationContext,
+            RecyclerView.VERTICAL,
+            false
+        )
         view.adapter = DeviceInfoActionsAdapter(them)
     }
 }

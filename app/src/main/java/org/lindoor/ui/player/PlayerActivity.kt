@@ -18,7 +18,7 @@ import org.lindoor.linphonecore.extensions.historyEvent
 class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
 
 
-    lateinit var binding : ActivityPlayerBinding
+    lateinit var binding: ActivityPlayerBinding
     lateinit var playerViewModel: PlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,19 +30,28 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
         decorView.systemUiVisibility = uiOptions
 
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_player) as ActivityPlayerBinding
+        binding =
+            DataBindingUtil.setContentView(this, R.layout.activity_player) as ActivityPlayerBinding
         binding.lifecycleOwner = this
         intent.getStringExtra("callId")?.also { callId ->
-            LindoorApplication.Companion.coreContext.core.findCallLogFromCallId(callId)?.historyEvent()?.also { event ->
-                LindoorApplication.Companion.coreContext.core.createLocalPlayer(null,null,if (event.hasVideo) binding.root.video else null)?.also { player ->
+            LindoorApplication.Companion.coreContext.core.findCallLogFromCallId(callId)
+                ?.historyEvent()?.also { event ->
+                LindoorApplication.Companion.coreContext.core.createLocalPlayer(
+                    null,
+                    null,
+                    if (event.hasVideo) binding.root.video else null
+                )?.also { player ->
                     playerViewModel =
-                        ViewModelProvider(this, PlayerViewModelFactory(callId,player))[PlayerViewModel::class.java]
+                        ViewModelProvider(
+                            this,
+                            PlayerViewModelFactory(callId, player)
+                        )[PlayerViewModel::class.java]
                     binding.model = playerViewModel
                     binding.root.cancel.setOnClickListener {
                         binding.root.cancel.alpha = 0.3f
                         finish()
                     }
-                    setupPlayerControl(binding.root,playerViewModel)
+                    setupPlayerControl(binding.root, playerViewModel)
                 }
             }
         } ?: run {
@@ -50,7 +59,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
         }
     }
 
-    private fun setupPlayerControl(view:View, model:PlayerViewModel) {
+    private fun setupPlayerControl(view: View, model: PlayerViewModel) {
         model.playing.observe(this, Observer { playing ->
             if (playing) {
                 view.timer.start()

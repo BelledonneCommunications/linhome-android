@@ -14,49 +14,64 @@ import java.util.*
 
 
 @Parcelize
-data class Device(var id:String, var type:String?, var name:String, var address:String, var actionsMethodType:String?, var actions:ArrayList<Action>? ) :
+data class Device(
+    var id: String,
+    var type: String?,
+    var name: String,
+    var address: String,
+    var actionsMethodType: String?,
+    var actions: ArrayList<Action>?
+) :
     Parcelable {
 
-    constructor( type:String?, name:String, address:String, actionsMethodType:String?, actions:ArrayList<Action>? ) : this(
-        xDigitsUUID(),type,name,address,actionsMethodType,actions)
+    constructor(
+        type: String?,
+        name: String,
+        address: String,
+        actionsMethodType: String?,
+        actions: ArrayList<Action>?
+    ) : this(
+        xDigitsUUID(), type, name, address, actionsMethodType, actions
+    )
 
 
     val thumbNail: File
         get() {
-            return File(StorageManager.devicesThumnailPath,"${id}.jpg")
+            return File(StorageManager.devicesThumnailPath, "${id}.jpg")
         }
 
 
-    fun supportsVideo ():Boolean {
+    fun supportsVideo(): Boolean {
         return type?.let {
             DeviceTypes.supportsVideo(it)
-        }?:false
+        } ?: false
     }
 
-    fun supportsAudio ():Boolean {
+    fun supportsAudio(): Boolean {
         return type?.let {
             DeviceTypes.supportsAudio(it)
-        }?:true
+        } ?: true
     }
 
     fun call() {
-        val params : CallParams = LindoorApplication.coreContext.core.createCallParams(null)
+        val params: CallParams = LindoorApplication.coreContext.core.createCallParams(null)
         type?.also {
             params.enableVideo(DeviceTypes.supportsVideo(it))
             params.enableAudio(DeviceTypes.supportsAudio(it))
         }
-        val historyEvent  = HistoryEvent()
+        val historyEvent = HistoryEvent()
         params.recordFile = historyEvent.mediaFileName
         LindoorApplication.coreContext.core.createAddress(address)?.let {
-            val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it,params)
+            val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it, params)
             if (call != null)
-                call.callLog.userData = historyEvent // Retrieved in CallViewModel and bound with call ID when available
+                call.callLog.userData =
+                    historyEvent // Retrieved in CallViewModel and bound with call ID when available
             else
                 DialogUtil.toast("unable_to_call_device")
         }
     }
 
-    fun typeName():String? {
+    fun typeName(): String? {
         return type?.let {
             DeviceTypes.typeNameForDeviceType(it)
         }
@@ -68,8 +83,8 @@ data class Device(var id:String, var type:String?, var name:String, var address:
         }
     }
 
-    fun hasThumbNail():Boolean {
-        return thumbNail?.existsAndIsNotEmpty()
+    fun hasThumbNail(): Boolean {
+        return thumbNail.existsAndIsNotEmpty()
     }
 
 

@@ -42,13 +42,14 @@ class MainActivity : GenericActivity() {
         super.onCreate(savedInstanceState)
 
         val decorView: View = window.decorView
-        val uiOptions: Int =  View.SYSTEM_UI_FLAG_VISIBLE
-        decorView.setSystemUiVisibility(uiOptions)
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        val uiOptions: Int = View.SYSTEM_UI_FLAG_VISIBLE
+        decorView.systemUiVisibility = uiOptions
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         applyCommonTheme()
 
 
-        val binding:ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
         toolbarViewModel = ViewModelProvider(this).get(ToolbarViewModel::class.java)
@@ -65,40 +66,41 @@ class MainActivity : GenericActivity() {
         applyTheme()
 
         tabbar_devices.setOnClickListener {
-            if (tabBarLayoutClicked(tabbar_devices,tabbar_history))
+            if (tabBarLayoutClicked(tabbar_devices, tabbar_history))
                 navController.navigate(R.id.navigation_devices, null)
         }
         tabbar_history.setOnClickListener {
-            if (tabBarLayoutClicked(tabbar_history,tabbar_devices))
+            if (tabBarLayoutClicked(tabbar_history, tabbar_devices))
                 navController.navigate(R.id.navigation_history, null)
         }
-        tabBarLayoutClicked(tabbar_devices,tabbar_history)
+        tabBarLayoutClicked(tabbar_devices, tabbar_history)
 
-        navController.addOnDestinationChangedListener {
-                _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             if (sideMenuOpened()) {
                 navControllerSideMenu.navigateUp()
             }
             when (destination.id) {
-                R.id.navigation_devices,R.id.navigation_history -> {
+                R.id.navigation_devices, R.id.navigation_history -> {
                     enterRootFragment()
-                } else -> {
-                enterNonRootFragment()
-            }
+                }
+                else -> {
+                    enterNonRootFragment()
+                }
             }
             toolbar_title.text = titleForNavigationFragment(destination.id)
         }
 
-        navControllerSideMenu.addOnDestinationChangedListener {
-                _, destination, _ ->
+        navControllerSideMenu.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.fragment_sidemenu -> {
                     enterNonRootFragment()
                     toolbar_title.text = null
-                } else -> {
-                enterRootFragment()
-                toolbar_title.text = titleForNavigationFragment(navController.currentDestination?.id)
-            }
+                }
+                else -> {
+                    enterRootFragment()
+                    toolbar_title.text =
+                        titleForNavigationFragment(navController.currentDestination?.id)
+                }
             }
         }
 
@@ -155,13 +157,13 @@ class MainActivity : GenericActivity() {
         toolbar.progress.setBackgroundColor(Theme.getColor("color_j"))
     }
 
-    private fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup):Boolean {
+    private fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup): Boolean {
         if (clicked.isSelected)
             return false
         clicked.isSelected = true
         unclicked.isSelected = false
-        Theme.alphAnimate(clicked,1f)
-        Theme.alphAnimate(unclicked,0.3f)
+        Theme.alphAnimate(clicked, 1f)
+        Theme.alphAnimate(unclicked, 0.3f)
         return true
     }
 
@@ -187,12 +189,11 @@ class MainActivity : GenericActivity() {
     }
 
 
-
     fun sideMenuOpened(): Boolean {
         return navControllerSideMenu.currentDestination?.id != R.id.fragment_empty
     }
 
-    private fun titleForNavigationFragment(fragmentId:Int?): String? {
+    private fun titleForNavigationFragment(fragmentId: Int?): String? {
         return when (fragmentId) {
             R.id.navigation_assistant_root,
             R.id.navigation_assistant_create_lindoor,
@@ -201,7 +202,9 @@ class MainActivity : GenericActivity() {
             R.id.navigation_assistant_remote_root,
             R.id.navigation_assistant_remote_qr,
             R.id.navigation_assistant_remote_url -> Texts.get("assistant")
-            R.id.navigation_devices, R.id.navigation_device_edit, R.id.navigation_device_info -> Texts.get("devices")
+            R.id.navigation_devices, R.id.navigation_device_edit, R.id.navigation_device_info -> Texts.get(
+                "devices"
+            )
             R.id.navigation_history -> Texts.get("history")
             R.id.navigation_about -> Texts.get("about")
             R.id.navigation_settings -> Texts.get("settings")
@@ -210,16 +213,20 @@ class MainActivity : GenericActivity() {
     }
 
 
-
     @SuppressLint("NeedOnRequestPermissionsResult")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (permissions.size > 0)
             onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun start() {}
+    fun start() {
+    }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun onStorageDenied() {
@@ -233,9 +240,9 @@ class MainActivity : GenericActivity() {
 
 
     fun applyCommonTheme() {
-        getWindow().also { window ->
-            window.setStatusBarColor(Theme.getColor("color_a"))
-            window.setNavigationBarColor(Theme.getColor("color_j"))
+        window.also { window ->
+            window.statusBarColor = Theme.getColor("color_a")
+            window.navigationBarColor = Theme.getColor("color_j")
         }
     }
 
@@ -244,11 +251,11 @@ class MainActivity : GenericActivity() {
         if (sideMenuOpened()) {
             if (event != null) {
                 val overFlowPct =
-                    if (LindoorApplication.instance.smartPhone())  0.75
-                    else if (LindoorApplication.instance.landcape())  0.3
+                    if (LindoorApplication.instance.smartPhone()) 0.75
+                    else if (LindoorApplication.instance.landcape()) 0.3
                     else 0.5
 
-                if (event.x.toInt() > overFlowPct * getWindow().getDecorView().getWidth()) {
+                if (event.x.toInt() > overFlowPct * window.decorView.width) {
                     navControllerSideMenu.navigateUp()
                     return false
                 }

@@ -19,12 +19,12 @@ import org.lindoor.utils.extensions.invisible
 import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 
-class RemoteUrlAccountFragment :GenericFragment() {
+class RemoteUrlAccountFragment : GenericFragment() {
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         val binding = FragmentAssistantRemoteUrlBinding.inflate(inflater, container, false)
@@ -32,9 +32,9 @@ class RemoteUrlAccountFragment :GenericFragment() {
 
         val model = ViewModelProvider(this).get(RemoteAnyAccountViewModel::class.java)
         binding.model = model
-        binding.validators  = ValidatorFactory.Companion
+        binding.validators = ValidatorFactory.Companion
 
-        binding.root.apply.root.setOnClickListener{
+        binding.root.apply.root.setOnClickListener {
             binding.root.url.validate()
             if (model.valid()) {
                 apply.root.isEnabled = false

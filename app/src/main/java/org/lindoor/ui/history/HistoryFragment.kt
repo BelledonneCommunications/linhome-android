@@ -38,8 +38,10 @@ class HistoryFragment : GenericFragment() {
         binding.lifecycleOwner = this
         binding.model = historyViewModel
 
-        binding.root.loglist.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.root.loglist.adapter = HistoryEventsAdapter(historyViewModel.history.value!!,historyViewModel,this)
+        binding.root.loglist.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.root.loglist.adapter =
+            HistoryEventsAdapter(historyViewModel.history.value!!, historyViewModel, this)
         binding.root.loglist.setHasFixedSize(true)
         showProgress()
         binding.root.loglist.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -80,14 +82,14 @@ class HistoryFragment : GenericFragment() {
                 "delete_history_confirm_message",
                 { _: DialogInterface, _: Int ->
                     historyViewModel.deleteSelection()
-                    (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs =  historyViewModel.history.value!!
+                    (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs =
+                        historyViewModel.history.value!!
                     binding.root.loglist.adapter?.notifyDataSetChanged()
                     mainactivity.tabbarViewModel.updateUnreadCount()
                     exitEdition()
-                },(historyViewModel.selectedForDeletion.value!!.size).toString()
+                }, (historyViewModel.selectedForDeletion.value!!.size).toString()
             )
-        }
-        else
+        } else
             enterEdition()
     }
 
@@ -101,7 +103,8 @@ class HistoryFragment : GenericFragment() {
         Theme.setIcon("icons/cancel", mainactivity.toolbar_left_button_image)
         mainactivity.toolbar_left_button_title.text = Texts.get("cancel")
         mainactivity.toolbar_right_button_title.text = Texts.get("delete")
-        mainactivity.toolbarViewModel.rightButtonVisible.value = !historyViewModel.history.value!!.isEmpty()
+        mainactivity.toolbarViewModel.rightButtonVisible.value =
+            !historyViewModel.history.value!!.isEmpty()
         coreContext.notificationsManager.dismissMissedCallNotification()
 
     }

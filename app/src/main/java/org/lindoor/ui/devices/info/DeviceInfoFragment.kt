@@ -16,9 +16,9 @@ class DeviceInfoFragment : GenericFragment() {
     val args: DeviceEditorFragmentArgs by navArgs()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
 

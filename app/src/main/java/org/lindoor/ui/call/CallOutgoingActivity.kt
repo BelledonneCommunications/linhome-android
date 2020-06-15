@@ -9,28 +9,32 @@ import org.lindoor.databinding.ActivityCallOutgoingBinding
 import org.linphone.core.Call
 
 
-class CallOutgoingActivity : CallGenericActivity () {
+class CallOutgoingActivity : CallGenericActivity() {
 
-    lateinit var binding : ActivityCallOutgoingBinding
+    lateinit var binding: ActivityCallOutgoingBinding
     private lateinit var callViewModel: CallViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_call_outgoing) as ActivityCallOutgoingBinding
+        binding = DataBindingUtil.setContentView(
+            this,
+            R.layout.activity_call_outgoing
+        ) as ActivityCallOutgoingBinding
         binding.lifecycleOwner = this
 
         call?.also {
-            callViewModel = ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
+            callViewModel =
+                ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
             binding.callmodel = callViewModel
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
-                    Call.State.OutgoingInit,Call.State.OutgoingProgress,Call.State.OutgoingRinging -> return@Observer
+                    Call.State.OutgoingInit, Call.State.OutgoingProgress, Call.State.OutgoingRinging -> return@Observer
                     else -> finish()
                 }
             })
 
-        }  ?: finish()
+        } ?: finish()
     }
 
 }

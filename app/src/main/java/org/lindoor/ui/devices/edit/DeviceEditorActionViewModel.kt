@@ -5,13 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.ui.widgets.LSpinnerListener
 
-class DeviceEditorActionViewModel (val owningViewModel: DeviceEditorViewModel, val binding: ViewDataBinding, val displayIndex:Int): ViewModel() {
+class DeviceEditorActionViewModel(
+    val owningViewModel: DeviceEditorViewModel,
+    val binding: ViewDataBinding,
+    val displayIndex: Int
+) : ViewModel() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
-    var code: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =  Pair(MutableLiveData<String>(),MutableLiveData<Boolean>(false))
+    var code: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
+        Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
-    fun valid():Boolean {
-        return (type.value==0 && code.first.value.isNullOrEmpty()) || (type.value!=0 && code.second.value!!)
+    fun valid(): Boolean {
+        return (type.value == 0 && code.first.value.isNullOrEmpty()) || (type.value != 0 && code.second.value!!)
     }
+
     fun removeAction() {
         owningViewModel.removeActionViewModel(this)
     }
@@ -23,8 +29,8 @@ class DeviceEditorActionViewModel (val owningViewModel: DeviceEditorViewModel, v
         }
     }
 
-    fun notEmpty() : Boolean {
-        return type.value!=0 && !code.first.value.isNullOrEmpty()
+    fun notEmpty(): Boolean {
+        return type.value != 0 && !code.first.value.isNullOrEmpty()
     }
 
 }

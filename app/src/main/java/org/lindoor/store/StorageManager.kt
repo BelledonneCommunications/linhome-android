@@ -16,9 +16,9 @@ object StorageManager {
 
     val devicesXml = File(LindoorApplication.instance.filesDir, "devices.xml")
     val historyEventsXml = File(LindoorApplication.instance.filesDir, "history_events.xml")
-    val devicesThumnailPath = File(getUserDataPath(),"devices/thumbnails")
-    val callsRecordingsDir = File(getUserDataPath(),"calls/recordings")
-    val storePrivately = Theme.arbitraryValue("store_user_data_in_private_storage",false)
+    val devicesThumnailPath = File(getUserDataPath(), "devices/thumbnails")
+    val callsRecordingsDir = File(getUserDataPath(), "calls/recordings")
+    val storePrivately = Theme.arbitraryValue("store_user_data_in_private_storage", false)
 
     init {
         if (!devicesThumnailPath.exists())
@@ -34,9 +34,9 @@ object StorageManager {
                 if (!it.exists())
                     it.mkdirs()
                 return it
-            } ?:  LindoorApplication.instance.filesDir
+            } ?: LindoorApplication.instance.filesDir
         else
-            return  LindoorApplication.instance.filesDir
+            return LindoorApplication.instance.filesDir
     }
 
     fun canUseExternalStorage(): Boolean { // LindoorApplication.instance.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&

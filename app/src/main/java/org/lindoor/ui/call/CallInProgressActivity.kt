@@ -23,25 +23,29 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class CallInProgressActivity : CallGenericActivity () {
+class CallInProgressActivity : CallGenericActivity() {
 
-    lateinit var binding : ActivityCallInProgressBinding
+    lateinit var binding: ActivityCallInProgressBinding
     lateinit var callViewModel: CallViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_call_in_progress) as ActivityCallInProgressBinding
+        binding = DataBindingUtil.setContentView(
+            this,
+            R.layout.activity_call_in_progress
+        ) as ActivityCallInProgressBinding
         binding.lifecycleOwner = this
 
         call?.also {
-            callViewModel = ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
+            callViewModel =
+                ViewModelProvider(this, CallViewModelFactory(it))[CallViewModel::class.java]
             binding.callmodel = callViewModel
             binding.callTimer.base = SystemClock.elapsedRealtime() - (1000 * it.duration)
             binding.callTimer.start()
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
-                    Call.State.End,Call.State.Released -> finish()
+                    Call.State.End, Call.State.Released -> finish()
                 }
             })
             binding.root.videotogglecollapsed.setOnClickListener {
@@ -61,12 +65,13 @@ class CallInProgressActivity : CallGenericActivity () {
                 true
             }
             startWithPermissionCheck()
-        }  ?: finish()
+        } ?: finish()
     }
 
     override fun onResume() {
         super.onResume()
-        coreContext.core.nativeVideoWindowId = if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
+        coreContext.core.nativeVideoWindowId =
+            if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
 
         if (coreContext.core.callsNb == 0) {
             Log.w("[Call Activity] Resuming but no call found...")
@@ -86,14 +91,19 @@ class CallInProgressActivity : CallGenericActivity () {
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (permissions.size > 0)
             onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @NeedsPermission(Manifest.permission.RECORD_AUDIO)
-    fun start() {}
+    fun start() {
+    }
 
     @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
     fun onCameraDenied() {

@@ -33,7 +33,10 @@ class LindoorApplication : Application() {
             corePreferences = CorePreferences(context)
             corePreferences.copyAssetsFromPackage() // TODO Move in the zip - attention not to overwrite .linphone_rc
 
-            val config = Factory.instance().createConfigWithFactory(corePreferences.configPath, corePreferences.factoryConfigPath)
+            val config = Factory.instance().createConfigWithFactory(
+                corePreferences.configPath,
+                corePreferences.factoryConfigPath
+            )
             corePreferences.config = config
 
             Factory.instance().setDebugMode(corePreferences.debugLogs, Texts.appName)
@@ -44,6 +47,7 @@ class LindoorApplication : Application() {
 
 
     }
+
     override fun onCreate() {
         super.onCreate()
         instance = this

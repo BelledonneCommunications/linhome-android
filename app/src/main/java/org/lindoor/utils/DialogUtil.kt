@@ -8,16 +8,17 @@ import org.lindoor.R
 import org.lindoor.customisation.Texts
 
 
-class DialogUtil() {
+class DialogUtil {
     companion object {
 
-        var context: Context? = null // Multi context as activity can change during calls/idle transition
+        var context: Context? =
+            null // Multi context as activity can change during calls/idle transition
 
         fun info(textKey: String, args: Array<String>? = null) {
             context?.also {
                 MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
                     .setMessage(Texts.get(textKey, args))
-                    .setPositiveButton(Texts.get("ok"),null)
+                    .setPositiveButton(Texts.get("ok"), null)
                     .show()
             }
         }
@@ -26,12 +27,16 @@ class DialogUtil() {
             info(textKey, arrayOf(oneArg))
         }
 
-        fun error(textKey: String,args: Array<String>? = null, titleKey:String = "generic_dialog_error_title") {
+        fun error(
+            textKey: String,
+            args: Array<String>? = null,
+            titleKey: String = "generic_dialog_error_title"
+        ) {
             context?.also {
                 MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
                     .setTitle(Texts.get(titleKey, args))
                     .setMessage(Texts.get(textKey, args))
-                    .setPositiveButton(Texts.get("ok"),null)
+                    .setPositiveButton(Texts.get("ok"), null)
                     .show()
             }
         }
@@ -40,34 +45,76 @@ class DialogUtil() {
             error(textKey, arrayOf(oneArg))
         }
 
-        fun confirm(titleKey: String? = null, messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel", oneArg:String? = null) {
+        fun confirm(
+            titleKey: String? = null,
+            messageKey: String,
+            confirmFonction: (DialogInterface, Int) -> Unit,
+            cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },
+            confirmTextKey: String? = "confirm",
+            cancelTextKey: String? = "cancel",
+            oneArg: String? = null
+        ) {
             context?.also {
                 val dialog = MaterialAlertDialogBuilder(it, R.style.LindoorDialogTheme)
-                    .setMessage(if (oneArg != null) Texts.get(messageKey,oneArg) else  Texts.get(messageKey))
-                    .setPositiveButton(Texts.get(confirmTextKey!!),DialogInterface.OnClickListener(function = confirmFonction))
-                    .setNegativeButton(Texts.get(cancelTextKey!!),DialogInterface.OnClickListener(function = cancelFunction!!))
+                    .setMessage(
+                        if (oneArg != null) Texts.get(messageKey, oneArg) else Texts.get(
+                            messageKey
+                        )
+                    )
+                    .setPositiveButton(
+                        Texts.get(confirmTextKey!!),
+                        DialogInterface.OnClickListener(function = confirmFonction)
+                    )
+                    .setNegativeButton(
+                        Texts.get(cancelTextKey!!),
+                        DialogInterface.OnClickListener(function = cancelFunction!!)
+                    )
                 titleKey?.also {
                     dialog.setTitle(Texts.get(it))
                 }
                 dialog.setOnDismissListener { dialog ->
-                    cancelFunction.invoke(dialog,0)
+                    cancelFunction.invoke(dialog, 0)
                 }
                 dialog.setCancelable(false)
                 dialog.show()
             }
         }
 
-        fun confirm(messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },  confirmTextKey:String ? = "confirm", cancelTextKey: String? = "cancel", oneArg:String? = null) {
-            confirm(null,messageKey,confirmFonction,cancelFunction,confirmTextKey,cancelTextKey,oneArg)
+        fun confirm(
+            messageKey: String,
+            confirmFonction: (DialogInterface, Int) -> Unit,
+            cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> },
+            confirmTextKey: String? = "confirm",
+            cancelTextKey: String? = "cancel",
+            oneArg: String? = null
+        ) {
+            confirm(
+                null,
+                messageKey,
+                confirmFonction,
+                cancelFunction,
+                confirmTextKey,
+                cancelTextKey,
+                oneArg
+            )
         }
 
-        fun confirm(messageKey: String, confirmFonction: (DialogInterface, Int) -> Unit, oneArg:String? = null,cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> }) {
-            confirm(null,messageKey,confirmFonction, cancelFunction,"confirm","cancel",oneArg)
+        fun confirm(
+            messageKey: String,
+            confirmFonction: (DialogInterface, Int) -> Unit,
+            oneArg: String? = null,
+            cancelFunction: ((DialogInterface, Int) -> Unit)? = { _: DialogInterface, _: Int -> }
+        ) {
+            confirm(null, messageKey, confirmFonction, cancelFunction, "confirm", "cancel", oneArg)
         }
 
-        fun toast(textKey: String, long:Boolean = false) {
+        fun toast(textKey: String, long: Boolean = false) {
             context?.also {
-                Toast.makeText(context,Texts.get(textKey),if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    Texts.get(textKey),
+                    if (long) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

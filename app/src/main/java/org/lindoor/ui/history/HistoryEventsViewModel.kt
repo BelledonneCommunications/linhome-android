@@ -14,11 +14,16 @@ import org.linphone.core.CallLog
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val historyViewModel: HistoryViewModel, val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)) : ViewModelWithTools() {
+class HistoryEventsViewModel(
+    val callLog: CallLog,
+    val showDate: Boolean,
+    val historyViewModel: HistoryViewModel,
+    val device: Device? = DeviceStore.findDeviceByAddress(callLog.remoteAddress)
+) : ViewModelWithTools() {
 
     val viewMedia = MutableLiveData(false)
 
-    var historyEvent:HistoryEvent? = callLog.callId?.let {
+    var historyEvent: HistoryEvent? = callLog.callId?.let {
         HistoryEventStore.findHistoryEventByCallId(it)
     }
 
@@ -35,12 +40,12 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
     }
 
 
-    fun callTypeIcon():String {
+    fun callTypeIcon(): String {
         return when (callLog.status) {
             Call.Status.Missed -> "icons/missed"
             Call.Status.Declined, Call.Status.DeclinedElsewhere -> "icons/declined"
-            Call.Status.Aborted,Call.Status.EarlyAborted -> "icons/declined"
-            Call.Status.Success,Call.Status.AcceptedElsewhere -> {
+            Call.Status.Aborted, Call.Status.EarlyAborted -> "icons/declined"
+            Call.Status.Success, Call.Status.AcceptedElsewhere -> {
                 if (callLog.dir == Call.Dir.Incoming)
                     "icons/accepted"
                 else
@@ -49,14 +54,14 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
         }
     }
 
-    fun callTypeAndDate():String {
-        val simpleDateFormat = SimpleDateFormat(historyTimePattern,Locale.getDefault())
+    fun callTypeAndDate(): String {
+        val simpleDateFormat = SimpleDateFormat(historyTimePattern, Locale.getDefault())
         val callTime = simpleDateFormat.format(Date(callLog.startDate * 1000))
         val typeText = when (callLog.status) {
             Call.Status.Missed -> "history_list_call_type_missed"
             Call.Status.Declined, Call.Status.DeclinedElsewhere -> "history_list_call_type_declined"
-            Call.Status.Aborted,Call.Status.EarlyAborted -> "history_list_call_type_aborted"
-            Call.Status.Success,Call.Status.AcceptedElsewhere -> {
+            Call.Status.Aborted, Call.Status.EarlyAborted -> "history_list_call_type_aborted"
+            Call.Status.Success, Call.Status.AcceptedElsewhere -> {
                 if (callLog.dir == Call.Dir.Incoming)
                     "history_list_call_type_accepted"
                 else
@@ -70,8 +75,8 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
         )
     }
 
-    fun dayText():String {
-        return DateUtil.todayYesterdayRealDay(callLog.startDate/86400)
+    fun dayText(): String {
+        return DateUtil.todayYesterdayRealDay(callLog.startDate / 86400)
     }
 
     fun toggleSelect() {
@@ -86,7 +91,7 @@ class HistoryEventsViewModel(val callLog: CallLog, val showDate:Boolean, val his
         viewMedia.value = true
     }
 
-    fun isNew():Boolean {
+    fun isNew(): Boolean {
         return callLog.isNew()
     }
 

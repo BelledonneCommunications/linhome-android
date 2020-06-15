@@ -99,7 +99,7 @@ class Api26Compatibility {
             vibrator.vibrate(effect, audioAttrs)
         }
 
-        fun vibrateOneShot(v:Vibrator) {
+        fun vibrateOneShot(v: Vibrator) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }

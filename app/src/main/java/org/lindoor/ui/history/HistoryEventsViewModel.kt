@@ -8,7 +8,6 @@ import org.lindoor.linphonecore.extensions.isNew
 import org.lindoor.store.DeviceStore
 import org.lindoor.store.HistoryEventStore
 import org.lindoor.utils.DateUtil
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.databindings.ViewModelWithTools
 import org.linphone.core.Call
 import org.linphone.core.CallLog

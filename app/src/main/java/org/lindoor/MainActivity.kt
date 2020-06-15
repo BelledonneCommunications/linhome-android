@@ -2,10 +2,8 @@ package org.lindoor
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -22,7 +20,6 @@ import org.lindoor.ui.tabbar.TabbarViewModel
 import org.lindoor.ui.toolbar.ToobarButtonClickedListener
 import org.lindoor.ui.toolbar.ToolbarViewModel
 import org.lindoor.utils.DialogUtil
-import org.lindoor.utils.cdlog
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied

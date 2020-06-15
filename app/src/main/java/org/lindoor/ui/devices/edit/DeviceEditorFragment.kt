@@ -10,7 +10,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_assistant_create_lindoor.view.*
 import kotlinx.android.synthetic.main.fragment_device_edit.view.*
 import kotlinx.android.synthetic.main.item_action_edit.view.*
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
@@ -86,8 +85,15 @@ class DeviceEditorFragment : GenericFragment() {
                 it.binding.root.code.validate()
         }
         DeviceStore.findDeviceByAddress(model.address.first.value)?.also {
-            binding.root.address.setError(Texts.get("device_address_already_exists","${it.name}"))
-            return
+            if (args.device?.id != it.id) {
+                binding.root.address.setError(
+                    Texts.get(
+                        "device_address_already_exists",
+                        "${it.name}"
+                    )
+                )
+                return
+            }
         }
         if (model.saveDevice()) {
             mainactivity.navController.navigateUp()

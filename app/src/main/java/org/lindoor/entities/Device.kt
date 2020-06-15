@@ -1,13 +1,9 @@
 package org.lindoor.entities
 
-import android.R
-import android.graphics.Bitmap
 import android.os.Parcelable
-import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
-import org.lindoor.customisation.Theme
 import org.lindoor.store.StorageManager
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.existsAndIsNotEmpty

@@ -3,9 +3,8 @@ package org.lindoor.ui.call
 import android.os.Bundle
 import android.view.View
 import org.lindoor.GenericActivity
-import org.lindoor.utils.DialogUtil
-import org.linphone.core.Call
 import org.lindoor.LindoorApplication.Companion.coreContext
+import org.linphone.core.Call
 
 
 abstract class CallGenericActivity : GenericActivity() {

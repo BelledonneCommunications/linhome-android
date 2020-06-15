@@ -1,11 +1,9 @@
 package org.lindoor.linphonecore.extensions
 
 import org.lindoor.LindoorApplication.Companion.coreContext
-import org.lindoor.entities.HistoryEvent
-import org.lindoor.store.HistoryEventStore
-import org.linphone.core.*
-import org.linphone.core.tools.Log
-
+import org.linphone.core.Call
+import org.linphone.core.CallParams
+import org.linphone.core.MediaDirection
 
 
 fun Call.extendedAcceptEarlyMedia() {

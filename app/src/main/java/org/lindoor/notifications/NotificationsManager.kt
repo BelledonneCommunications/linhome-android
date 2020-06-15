@@ -24,7 +24,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.TextureView
 import android.widget.RemoteViews
@@ -34,8 +33,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.AppWidgetTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -56,7 +53,6 @@ import org.lindoor.ui.call.CallIncomingActivity
 import org.lindoor.ui.call.CallOutgoingActivity
 import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
-import org.lindoor.utils.pxFromDp
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub

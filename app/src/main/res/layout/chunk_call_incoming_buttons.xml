@@ -18,11 +18,9 @@
 
         <include
             layout="@layout/widget_call_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"
+            android:layout_marginEnd="50dp"
             bind:backgroundeffect='@{"decline_call_button"}'
             bind:icon='@{"icons/decline"}'
             bind:onClick="@{()->callmodel.decline()}"
@@ -32,11 +30,9 @@
 
         <include
             layout="@layout/widget_call_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_weight="1"
+            android:layout_marginStart="50dp"
             bind:backgroundeffect='@{"accept_call_button"}'
             bind:icon='@{"icons/phone"}'
             bind:onClick="@{()->callmodel.extendedAccept()}"

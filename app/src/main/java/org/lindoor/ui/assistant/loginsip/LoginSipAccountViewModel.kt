@@ -27,7 +27,7 @@ class LoginSipAccountViewModel :
     )
 
     val moreOptionsOpened = MutableLiveData(false)
-    var pushReady = MutableLiveData(false)
+    val pushReady = MutableLiveData<Boolean>()
 
 
     fun valid(): Boolean {

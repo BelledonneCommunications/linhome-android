@@ -8,7 +8,7 @@ import com.bumptech.glide.signature.ObjectKey
 import org.lindoor.customisation.Theme
 import org.lindoor.entities.Device
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
-import org.lindoor.utils.fileObserverWithMainThreadRunnable
+import org.linphone.compatibility.Compatibility.Companion.fileObserverWithMainThreadRunnable
 import java.io.File
 
 

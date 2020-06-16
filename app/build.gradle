@@ -4,13 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
-    /*
     maven {
         url file(LinphoneSdkBuildDir + '/maven_repository/')
-    }*/
-
+    }
     maven {
         url "https://linphone.org/maven_repository"
     }
@@ -44,7 +43,16 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
         }
+        debug {
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
+        }
+
     }
 
     compileOptions {
@@ -83,9 +91,11 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
-    implementation 'com.google.firebase:firebase-analytics:17.4.2'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation "androidx.media:media:1.1.0"
+    implementation 'com.google.firebase:firebase-crashlytics-ndk:17.0.1'
 
 
 }

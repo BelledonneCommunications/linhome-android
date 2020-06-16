@@ -27,14 +27,19 @@ import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.FileObserver
 import android.os.Vibrator
 import android.view.WindowManager
 import androidx.core.app.NotificationManagerCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.lindoor.LindoorApplication
 import org.lindoor.compatibility.Api23Compatibility
 import org.lindoor.compatibility.Api25Compatibility
 import org.lindoor.compatibility.Api26Compatibility
 import org.linphone.mediastream.Version
+import java.io.File
 
 
 @Suppress("DEPRECATION")
@@ -120,5 +125,27 @@ class Compatibility {
             }
         }
 
+
+        // Lindoor
+
+        fun fileObserverWithMainThreadRunnable(file: File, runnable: Runnable): FileObserver {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return object : FileObserver(file, ATTRIB) {
+                    override fun onEvent(event: Int, file: String?) {
+                        GlobalScope.launch(context = Dispatchers.Main) {
+                            runnable.run()
+                        }
+                    }
+                }
+            } else {
+                return object : FileObserver(file.absolutePath, ATTRIB) {
+                    override fun onEvent(event: Int, file: String?) {
+                        GlobalScope.launch(context = Dispatchers.Main) {
+                            runnable.run()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

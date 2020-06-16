@@ -3,6 +3,7 @@ package org.lindoor.entities
 import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
+import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
@@ -17,6 +18,10 @@ object Account {
 
     fun configured(): Boolean {
         return coreContext.core.proxyConfigList.isNotEmpty()
+    }
+
+    fun get(): ProxyConfig? {
+        return coreContext.core.defaultProxyConfig
     }
 
     fun lindoorAccountCreate(accountCreator: AccountCreator) {

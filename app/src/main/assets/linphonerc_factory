@@ -36,5 +36,6 @@ xmlrpc_url=https://subscribe.linphone.org:444/wizard.php
 ; MD5 / SHA-256
 password_algo=SHA-256
 domain=sip.linphone.org
+freesip_url=https://www.linphone.org/freesip/home
 
 ## End of factory rc

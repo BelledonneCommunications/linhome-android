@@ -208,6 +208,7 @@ class MainActivity : GenericActivity() {
             R.id.navigation_history -> Texts.get("history")
             R.id.navigation_about -> Texts.get("about")
             R.id.navigation_settings -> Texts.get("settings")
+            R.id.navigation_account -> Texts.get("menu_account")
             else -> null
         }
     }

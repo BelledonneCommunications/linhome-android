@@ -7,9 +7,9 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
-    //maven {
-    //    url file(LinphoneSdkBuildDir + '/maven_repository/')
-    // }
+    maven {
+        url file(LinphoneSdkBuildDir + '/maven_repository/')
+    }
     maven {
         url "https://linphone.org/maven_repository"
     }
@@ -20,10 +20,6 @@ repositories {
 
 android {
     compileSdkVersion 29
-
-    dataBinding {
-        enabled = true
-    }
 
     defaultConfig {
         applicationId "org.linphone"
@@ -39,17 +35,26 @@ android {
         variant.getMergedFlavor().manifestPlaceholders = [lindoor_file_provider: applicationId + ".fileprovider"]
     }
 
+    buildFeatures{
+        dataBinding = true
+    }
+
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             firebaseCrashlytics {
-                //nativeSymbolUploadEnabled true
+                nativeSymbolUploadEnabled true
+                strippedNativeLibsDir "build/intermediates/stripped_native_libs/debug/out/lib"
+                unstrippedNativeLibsDir "build/intermediates/merged_native_libs/debug/out/lib"
             }
         }
         debug {
             firebaseCrashlytics {
-                //nativeSymbolUploadEnabled true
+                nativeSymbolUploadEnabled true
+                strippedNativeLibsDir "build/intermediates/stripped_native_libs/debug/out/lib"
+                unstrippedNativeLibsDir "build/intermediates/merged_native_libs/debug/out/lib"
             }
         }
 

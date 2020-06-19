@@ -62,8 +62,7 @@ object Theme {
                     }
             }
         }
-        Log.e("[Theme] Failed retrieving gradient color:$key")
-        themeError()
+        themeError("[Theme] Failed retrieving gradient color:$key")
         return null
     }
 
@@ -75,16 +74,14 @@ object Theme {
         themeConfig.getString("colors", key, null)?.let { color ->
             return Color.parseColor(color)
         }
-        Log.e("[Theme] Failed retrieving color:$key")
-        themeError()
+        themeError("[Theme] Failed retrieving color:$key")
         return 0
     }
 
     fun arbitraryValue(key: String, default: String): String {
         var result: String? = themeConfig.getString("arbitrary-values", key, null)
         if (result == null) {
-            Log.e("[Theme] Failed retrieving arbitrary value:$key")
-            themeError()
+            themeError("[Theme] Failed retrieving arbitrary value:$key")
             result = default
         }
         return result
@@ -93,8 +90,7 @@ object Theme {
     fun arbitraryValue(key: String, default: Boolean): Boolean {
         var result: Boolean? = themeConfig.getBool("arbitrary-values", key, default)
         if (result == null) {
-            Log.e("[Theme] Failed retrieving arbitrary value:$key")
-            themeError()
+            themeError("[Theme] Failed retrieving arbitrary value:$key")
             result = default
         }
         return result
@@ -377,8 +373,7 @@ object Theme {
                 return Pair(default, selected)
             }
         }
-        Log.e("[Theme] Failed retrieving selection-effect color:$key")
-        themeError()
+        themeError("[Theme] Failed retrieving selection-effect color:$key")
         return null
     }
 
@@ -396,7 +391,8 @@ object Theme {
         return null
     }
 
-    private fun themeError() {
+    private fun themeError(message:String? = "[Theme] there is an error in the theme. Check the stack trace below") {
+        Log.e(message)
         themeError = true
         stackStrace("Theme")
     }

@@ -43,6 +43,7 @@ object DeviceStore {
                 )
             )
         }
+        result.sortWith(compareBy({ it.name }, { it.address }))
         return result
     }
 
@@ -50,6 +51,7 @@ object DeviceStore {
         devicesConfig.sectionsNamesList.forEach {
             devicesConfig.cleanSection(it)
         }
+        devices.sortWith(compareBy({ it.name }, { it.address }))
         devices.forEach { device ->
             devicesConfig.setString(device.id, "type", device.type)
             devicesConfig.setString(device.id, "name", device.name)

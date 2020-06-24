@@ -21,7 +21,7 @@ class DevicesFragment : GenericFragment() {
 
     private lateinit var devicesViewModel: DevicesViewModel
     private lateinit var binding: FragmentDevicesBinding
-    
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

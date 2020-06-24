@@ -56,7 +56,7 @@ class AccountViewModel : ViewModel() {
                     it
                 )
             }
-        }
+        } ?: Texts.get("no_account_configured")
     }
 
 

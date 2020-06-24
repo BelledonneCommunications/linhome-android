@@ -20,14 +20,14 @@ import org.lindoor.entities.Device
 class DevicesFragment : GenericFragment() {
 
     private lateinit var devicesViewModel: DevicesViewModel
-
-
+    private lateinit var binding: FragmentDevicesBinding
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentDevicesBinding.inflate(inflater, container, false)
+        binding = FragmentDevicesBinding.inflate(inflater, container, false)
         devicesViewModel = ViewModelProvider(this).get(DevicesViewModel::class.java)
         devicesViewModel.selectedDevice =
             MutableLiveData<Device>() // Android bug - onCreateView called on navigateUp()
@@ -35,6 +35,7 @@ class DevicesFragment : GenericFragment() {
         binding.model = devicesViewModel
 
         binding.root.new_device.setOnClickListener {
+            binding.root.new_device.visibility = View.INVISIBLE
             val actionDetail = DevicesFragmentDirections.deviceNew()
             mainactivity.navController.navigate(actionDetail)
         }
@@ -65,6 +66,11 @@ class DevicesFragment : GenericFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.root.new_device.visibility = View.VISIBLE
     }
 
 }

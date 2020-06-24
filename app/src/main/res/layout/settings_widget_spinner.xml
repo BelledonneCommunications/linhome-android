@@ -31,6 +31,17 @@
         android:orientation="vertical"
         android:gravity="center_vertical|left">
 
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            src='@{"icons/chevron_down"}'
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            >
+        </ImageView>
+
         <TextView
             android:id="@+id/settings_title"
             android:layout_width="match_parent"
@@ -75,7 +86,9 @@
             android:layout_below="@id/settings_subtitle"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
+            android:background="@null"
             />
+
 
 
 

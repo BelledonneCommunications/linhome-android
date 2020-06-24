@@ -1,5 +1,5 @@
 .gradle/
 .idea/
 app/app.iml
-./build
-./app/src/main/assets/lindoor.zip
+build
+app/src/main/assets/lindoor.zip

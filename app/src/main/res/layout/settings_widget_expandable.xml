@@ -41,13 +41,11 @@
             android:text="@{title}"
             android:enabled="@{enabled ?? true}"
             android:visibility="@{title.length() > 0 ? View.VISIBLE : View.GONE}"
-            android:singleLine="true"
             android:layout_marginTop="15dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@+id/arrow"
             style='@{"settings_title"}'
-            marquee='@{true}'
             />
 
         <TextView

@@ -1,6 +1,5 @@
 .gradle/
 .idea/
-#app/src/main/assets/work/
 app/app.iml
 ./build
 ./app/src/main/assets/lindoor.zip

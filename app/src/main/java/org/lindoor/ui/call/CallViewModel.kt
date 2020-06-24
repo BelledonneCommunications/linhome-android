@@ -15,6 +15,7 @@ import org.lindoor.entities.Device
 import org.lindoor.entities.HistoryEvent
 import org.lindoor.linphonecore.extensions.*
 import org.lindoor.store.DeviceStore
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
@@ -56,7 +57,7 @@ class CallViewModel(val call: Call) : ViewModel() {
                 call?.remoteParams?.videoEnabled()?.also {
                     call.requestNotifyNextVideoFrameDecoded()
                 }
-                callState.postValue(state)
+                callState.value = state
             }
 
         }

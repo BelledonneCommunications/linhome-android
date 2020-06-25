@@ -40,8 +40,8 @@ class CallViewModel(val call: Call) : ViewModel() {
     val videoContent: MutableLiveData<Boolean> = MutableLiveData(false)
     val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val speakerEnabled: MutableLiveData<Boolean> =
-        MutableLiveData(coreContext.core.outputAudioDevice?.type == AudioDevice.Type.Speaker)
+    val speakerDisabled: MutableLiveData<Boolean> =
+        MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
     private var historyEvent: HistoryEvent
@@ -143,10 +143,10 @@ class CallViewModel(val call: Call) : ViewModel() {
         val audioDevice = coreContext.core.outputAudioDevice
         if (audioDevice?.type == AudioDevice.Type.Speaker) {
             coreContext.core.forceEarpieceAudioRoute()
-            speakerEnabled.value = false
+            speakerDisabled.value = true
         } else {
             coreContext.core.forceSpeakerAudioRoute()
-            speakerEnabled.value = true
+            speakerDisabled.value = false
         }
     }
 

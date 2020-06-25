@@ -90,7 +90,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
             device = Device(
                 if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey,
                 name.first.value!!,
-                address.first.value!!,
+                if (address.first.value!!.startsWith("sip:") || address.first.value!!.startsWith("sips:")) address.first.value!! else "sip:${address.first.value}",
                 if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
                 ArrayList()
             )
@@ -109,7 +109,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                 it.type =
                     if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
                 it.name = name.first.value!!
-                it.address = address.first.value!!
+                it.address =  if (address.first.value!!.startsWith("sip:") || address.first.value!!.startsWith("sips:")) address.first.value!! else "sip:${address.first.value}"
                 it.actionsMethodType =
                     if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey
                 it.actions = ArrayList()

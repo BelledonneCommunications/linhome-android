@@ -79,7 +79,7 @@
             android:layout_marginTop="6dp"
             android:gravity="center"
             android:visibility='@{off ? View.GONE : View.VISIBLE, default = "visible"}'
-            android:singleLine="true"
+            android:lines="2"
             marquee='@{true}'
             text='@{text}'
             android:text="xxxxxx" />
@@ -92,7 +92,7 @@
             android:layout_marginTop="6dp"
             android:gravity="center"
             android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
-            android:singleLine="true"
+            android:lines="2"
             marquee='@{true}'
             text='@{textOff}'
             android:text="xxxxxx" />

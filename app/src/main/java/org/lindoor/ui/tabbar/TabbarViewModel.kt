@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
 import org.lindoor.linphonecore.extensions.callLogsWithNonEmptyCallId
 import org.lindoor.linphonecore.extensions.isNew
+import org.lindoor.linphonecore.extensions.missedCount
 import org.linphone.core.CallLog
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
@@ -19,12 +20,7 @@ class TabbarViewModel : ViewModel() {
     }
 
     fun updateUnreadCount() {
-        var count = 0
-        LindoorApplication.coreContext.core.callLogsWithNonEmptyCallId().forEach {
-            if (it.isNew())
-                count++
-        }
-        unreadCount.value = count
+        unreadCount.value =  LindoorApplication.coreContext.core.missedCount()
     }
 
     init {

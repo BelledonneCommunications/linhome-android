@@ -47,6 +47,7 @@ import org.lindoor.customisation.Theme
 import org.lindoor.linphonecore.CoreService
 import org.lindoor.linphonecore.extensions.extendedAcceptEarlyMedia
 import org.lindoor.linphonecore.extensions.historyEvent
+import org.lindoor.linphonecore.extensions.missedCount
 import org.lindoor.store.DeviceStore
 import org.lindoor.ui.call.CallInProgressActivity
 import org.lindoor.ui.call.CallIncomingActivity
@@ -446,7 +447,7 @@ class NotificationsManager(private val context: Context) {
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setWhen(System.currentTimeMillis())
             .setShowWhen(true)
-            .setNumber(missedCallCount)
+            .setNumber(coreContext.core.missedCount())
             .setColor(Theme.getColor("color_s"))
             .build()
         notify(MISSED_CALLS_NOTIF_ID, notification)

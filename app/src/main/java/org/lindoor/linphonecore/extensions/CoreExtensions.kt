@@ -1,5 +1,6 @@
 package org.lindoor.linphonecore.extensions
 
+import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.linphone.core.AudioDevice
 import org.linphone.core.CallLog
@@ -52,3 +53,14 @@ fun Core.forceBluetoothAudioRoute() {
 fun Core.callLogsWithNonEmptyCallId(): ArrayList<CallLog> {
     return (coreContext.core.callLogs.toCollection(ArrayList()) as ArrayList<CallLog>).filterNot { it.callId == null } as ArrayList<CallLog>
 }
+
+
+fun Core.missedCount(): Int {
+    var count = 0
+    coreContext.core.callLogsWithNonEmptyCallId().forEach {
+        if (it.isNew())
+            count++
+    }
+    return count
+}
+

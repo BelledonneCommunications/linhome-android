@@ -144,6 +144,7 @@
                 android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="27dp"
+                android:enabled="@{model.refreshActions &amp;&amp; model.actionBindings.size() &lt; 3}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actions"

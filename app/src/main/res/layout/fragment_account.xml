@@ -61,6 +61,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 primary='@{false}'
                 text='@{"refresh_registers"}'
+                android:visibility="@{model.account != null ? View.VISIBLE : View.GONE}"
                 />
 
 
@@ -75,6 +76,7 @@
                 app:layout_constraintBottom_toTopOf="@id/delete_lindoor_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{model.account != null ? View.VISIBLE : View.GONE}"
                 primary='@{false}'
                 text='@{"change_password"}'
                 />
@@ -91,6 +93,7 @@
                 app:layout_constraintBottom_toTopOf="@id/disconnect"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{model.account != null ? View.VISIBLE : View.GONE}"
                 primary='@{false}'
                 text='@{"delete_account"}'
                 />
@@ -106,6 +109,7 @@
                 app:layout_constraintTop_toBottomOf="@id/delete_lindoor_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{model.account != null ? View.VISIBLE : View.GONE}"
                 primary='@{false}'
                 text='@{"menu_disconnect"}'
                 />

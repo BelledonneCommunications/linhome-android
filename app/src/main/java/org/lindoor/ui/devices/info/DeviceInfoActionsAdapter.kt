@@ -36,15 +36,17 @@ class DeviceInfoActionsAdapter(private val actions: ArrayList<Action>) :
         private val icon = itemView.icon
         private val type: TextView = itemView.label
         private val code: TextView = itemView.code
+        private val topSeparator = itemView.top_separator
 
-        fun bindItems(action: Action) {
+        fun bindItems(action: Action, showTopSeparator:Boolean) {
             type.text = action.typeName()
             code.text = action.code
+            topSeparator.visibility = if (showTopSeparator) View.VISIBLE else View.INVISIBLE
             Theme.setIcon(ActionTypes.iconNameForActionType(action.type!!), icon)
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(actions[position])
+        holder.bindItems(actions[position], position == 0)
     }
 }

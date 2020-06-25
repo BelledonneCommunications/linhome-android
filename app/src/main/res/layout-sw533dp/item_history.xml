@@ -138,12 +138,12 @@
                     <ImageView
                         android:id="@+id/logtypeicon"
                         icon='@{model.callTypeIcon()}'
-                        android:layout_width="20dp"
+                        android:layout_width="40dp"
                         android:layout_height="20dp"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="3dp"
                         android:layout_below="@+id/separator"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerInside"/>
 
                     <TextView
                         android:id="@+id/logtypeanddate"

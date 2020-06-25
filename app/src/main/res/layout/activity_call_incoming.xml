@@ -58,7 +58,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/chunk_call_top"
+            android:layout_centerVertical="true"
             android:layout_marginTop="20dp"
             android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/chunk_call_name_address"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="27dp"
                 android:gravity="center">
 
                 <include

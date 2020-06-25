@@ -5,7 +5,6 @@ job-android:
   image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:29
 
   script:
-    - git submodule update --init --recursive
     - ./gradlew app:dependencies | grep org.linphone
     - ./gradlew assembleDebug
     - cp ./app/build/outputs/apk/debug/app-debug.apk lindoor-debug-unsigned.apk

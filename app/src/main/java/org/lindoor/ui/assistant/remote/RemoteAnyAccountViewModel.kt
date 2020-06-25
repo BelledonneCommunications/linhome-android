@@ -23,8 +23,7 @@ class RemoteAnyAccountViewModel : ViewModel() {
         override fun onConfiguringStatus(core: Core, status: ConfiguringState, message: String?) {
             if (status == ConfiguringState.Successful) {
                 if (Account.pushGateway() != null) {
-                    Account.linkProxiesWithPushGateway()
-                    pushReady.postValue(true)
+                    Account.linkProxiesWithPushGateway(pushReady)
                 } else
                     Account.createPushGateway(pushReady)
             }

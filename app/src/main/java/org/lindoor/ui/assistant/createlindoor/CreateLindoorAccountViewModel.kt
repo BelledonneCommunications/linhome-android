@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.entities.Account
 import org.lindoor.ui.assistant.CreatorAssistantViewModel
+import org.lindoor.utils.cdlog
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
 

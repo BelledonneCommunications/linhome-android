@@ -47,6 +47,7 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             model.setTransport(TransportType.values()[model.transport.value!!])
             if (model.valid()) {
                 hideKeyboard()
+                showProgress()
                 Account.sipAccountLogin(
                     model.accountCreator,
                     model.proxy.first.value,
@@ -55,10 +56,11 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
                 )
             }
         }
-        model.pushReady.observe(viewLifecycleOwner, Observer { status ->
-            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-            if (status) {
+        model.pushReady.observe(viewLifecycleOwner, Observer { pushready ->
+            hideProgress()
+            if (pushready) {
                 DialogUtil.info("sip_account_created")
+                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
             } else
                 DialogUtil.error("failed_creating_pushgateway")
         })

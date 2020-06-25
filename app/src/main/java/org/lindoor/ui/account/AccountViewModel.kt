@@ -10,6 +10,7 @@ import org.lindoor.linphonecore.extensions.callLogsWithNonEmptyCallId
 import org.lindoor.linphonecore.extensions.isNew
 import org.lindoor.linphonecore.extensions.toHumanReadable
 import org.lindoor.store.DeviceStore
+import org.lindoor.utils.cdlog
 import org.linphone.core.*
 
 class AccountViewModel : ViewModel() {
@@ -35,6 +36,9 @@ class AccountViewModel : ViewModel() {
     }
 
     init {
+        LindoorApplication.coreContext.core.proxyConfigList.forEach {
+            cdlog("${it.identityAddress.asString()} ${it.idkey}")
+        }
         LindoorApplication.coreContext.core.addListener(coreListener)
     }
 

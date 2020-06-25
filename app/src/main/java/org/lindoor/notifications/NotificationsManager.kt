@@ -141,7 +141,6 @@ class NotificationsManager(private val context: Context) {
         }
 
         override fun onNextVideoFrameDecoded(call: Call?) {
-            cdlog("got a frame")
             if (call != null) {
                 call.takeVideoSnapshot(call.callLog.historyEvent().mediaThumbnail.absolutePath)
                 GlobalScope.launch(context = Dispatchers.Main) {
@@ -410,7 +409,6 @@ class NotificationsManager(private val context: Context) {
             GlobalScope.launch(context = Dispatchers.Main) {
                 if (call.state == Call.State.IncomingEarlyMedia) {
                     call.requestNotifyNextVideoFrameDecoded()
-                    cdlog("requesting video frame")
                 }
             }
         }

@@ -1,9 +1,11 @@
 package org.lindoor.entities
 
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
+import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
@@ -12,7 +14,7 @@ import java.util.*
 
 object Account {
 
-    private const val PUSH_GW_REF_KEY = "lindoor_pushgateway"
+    private const val PUSH_GW_ID_KEY = "lindoor_pushgateway"
     private const val PUSH_GW_USER_PREFIX = "lindoor_generated"
     private const val PUSH_GW_DISPLAY_NAME = "Lindoor"
 
@@ -21,15 +23,19 @@ object Account {
     }
 
     fun get(): ProxyConfig? {
-        return coreContext.core.defaultProxyConfig
+        coreContext.core.proxyConfigList.forEach {
+            if (PUSH_GW_ID_KEY != it.idkey)
+                return it
+        }
+        return null
     }
 
     fun lindoorAccountCreate(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
+        accountCreator.createProxyConfig().idkey = PUSH_GW_ID_KEY
     }
 
     fun lindoorAccountLogin(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig().refKey = PUSH_GW_REF_KEY
+        accountCreator.createProxyConfig().idkey = PUSH_GW_ID_KEY
     }
 
     fun sipAccountLogin(
@@ -40,30 +46,30 @@ object Account {
     ) {
         val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
         proxyConfig?.expires = expiration.toInt()
-        proxy?.also {
-            proxyConfig?.serverAddr = it
-        }
+        proxyConfig?.serverAddr = if (!TextUtils.isEmpty(proxy)) proxy else accountCreator.domain
         if (pushGateway() != null)
-            linkProxiesWithPushGateway()
+            linkProxiesWithPushGateway(pushReady)
         else
             createPushGateway(pushReady)
     }
 
     fun pushGateway(): ProxyConfig? {
-        return coreContext.core.getProxyConfigByIdkey(PUSH_GW_REF_KEY)
+        return coreContext.core.getProxyConfigByIdkey(PUSH_GW_ID_KEY)
     }
 
     fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
-        coreContext.core.loadConfigFromXml(LindoorApplication.corePreferences.lindoorAccountDefaultValuesPath)
+        coreContext.core.loadConfigFromXml(corePreferences.lindoorAccountDefaultValuesPath)
         val accountCreator =
-            coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
+            coreContext.core.createAccountCreator(corePreferences.xmlRpcServerUrl)
         accountCreator.language = Locale.getDefault().language
         val user: String = PUSH_GW_USER_PREFIX + xDigitsUUID()
         val pass = UUID.randomUUID().toString()
+        accountCreator.domain = corePreferences.loginDomain
         accountCreator.username = user
         accountCreator.password = pass
         accountCreator.email = "$user@${accountCreator.domain}"
         accountCreator.displayName = PUSH_GW_DISPLAY_NAME
+
         accountCreator.addListener(object : AccountCreatorListenerStub() {
             override fun onCreateAccount(
                 creator: AccountCreator?,
@@ -73,29 +79,30 @@ object Account {
                 if (status == AccountCreator.Status.AccountCreated) // TODO Adjust when server setup
                     creator?.also {
                         val pushGw = it.createProxyConfig()
-                        pushGw.refKey = PUSH_GW_REF_KEY
+                        pushGw.idkey = PUSH_GW_ID_KEY
                         pushGw.enableRegister(true)
                         pushGw.enablePublish(false)
                         pushGw.expires = 31536000
                         pushGw.serverAddr = "sips:${it.domain}:5061;transport=tls"
                         pushGw.route = pushGw.serverAddr
                         pushGw.isPushNotificationAllowed = true
-                        linkProxiesWithPushGateway()
-                        pushReady.value = true
+                        linkProxiesWithPushGateway(pushReady)
                     }
             }
         })
-        accountCreator.createAccount()
+        if ( accountCreator.createAccount()!= AccountCreator.Status.RequestOk)
+            pushReady.value = false
     }
 
-    fun linkProxiesWithPushGateway() {
+    fun linkProxiesWithPushGateway(pushReady: MutableLiveData<Boolean>) {
         pushGateway()?.also { pgw ->
             coreContext.core.proxyConfigList.forEach {
-                if (it.refKey != PUSH_GW_REF_KEY) {
+                if (it.idkey != PUSH_GW_ID_KEY) {
                     it.dependency = pgw
                 }
             }
         }
+        pushReady.value = true
     }
 
 

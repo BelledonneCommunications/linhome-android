@@ -43,9 +43,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 style='@{"account_info"}'
-                android:lines="2"
+                android:lines="3"
                 android:visibility="@{model.pushGw != null &amp;&amp; model.account != model.pushGw ? View.VISIBLE : View.GONE}"
-                android:text='@{model.accountDesc}' />
+                android:text='@{model.pushGWDesc}' />
 
 
             <org.lindoor.ui.widgets.LRoundRectButton

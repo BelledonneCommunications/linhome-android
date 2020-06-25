@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
+import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.linphone.core.AccountCreator
 import org.linphone.core.TransportType
 import java.util.*
@@ -18,6 +19,7 @@ open class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel() {
         accountCreator =
             coreContext.core.createAccountCreator(LindoorApplication.corePreferences.xmlRpcServerUrl)
         accountCreator.language = Locale.getDefault().language
+        accountCreator.domain = corePreferences.loginDomain
     }
 
     fun setUsername(field: Pair<MutableLiveData<String>, MutableLiveData<Boolean>>): AccountCreator.UsernameStatus? {

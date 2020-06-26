@@ -14,7 +14,6 @@
     <entry name="reg_sendregister" overwrite="true">1</entry>
     <entry name="nat_policy_ref" overwrite="true"></entry>
     <entry name="realm" overwrite="true"></entry>
-    <entry name="conference_factory_uri" overwrite="true"></entry>
   </section>
   <section name="nat_policy_default_values">
     <entry name="stun_server" overwrite="true"></entry>

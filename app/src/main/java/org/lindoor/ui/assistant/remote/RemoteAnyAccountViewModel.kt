@@ -15,7 +15,6 @@ class RemoteAnyAccountViewModel : ViewModel() {
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var configurationResult = MutableLiveData<ConfiguringState>()
-    var qrCodeFound = MutableLiveData<String>()
     val pushReady = MutableLiveData<Boolean>()
 
 

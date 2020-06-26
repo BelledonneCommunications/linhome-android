@@ -30,8 +30,9 @@ class RemoteAnyAccountViewModel : ViewModel() {
             configurationResult.postValue(status)
         }
 
-        override fun onQrcodeFound(core: Core, url: String) {
-            qrCodeFound.postValue(url)
+        override fun onQrcodeFound(core: Core, qr: String) {
+            url.first.value = qr
+            startRemoteProvisionning()
         }
     }
 
@@ -41,6 +42,12 @@ class RemoteAnyAccountViewModel : ViewModel() {
 
     init {
         coreContext.core.addListener(coreListener)
+    }
+
+    fun startRemoteProvisionning() {
+        coreContext.core.provisioningUri = url.first.value
+        coreContext.core.stop()
+        coreContext.core.start()
     }
 
     override fun onCleared() {

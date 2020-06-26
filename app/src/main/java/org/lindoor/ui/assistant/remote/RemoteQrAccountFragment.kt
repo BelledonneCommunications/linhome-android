@@ -47,12 +47,7 @@ class RemoteQrAccountFragment : GenericFragment() {
             } else
                 DialogUtil.error("failed_creating_pushgateway")
         })
-        model.qrCodeFound.observe(viewLifecycleOwner, Observer { url ->
-            showProgress()
-            coreContext.core.provisioningUri = url
-            coreContext.core.stop()
-            coreContext.core.start()
-        })
+
 
         binding.root.infobutton.setOnClickListener {
             binding.root.infotext.toogleVisible()

@@ -52,9 +52,7 @@ class RemoteUrlAccountFragment : GenericFragment() {
                 })
                 hideKeyboard()
                 showProgress()
-                coreContext.core.provisioningUri = model.url.first.value
-                coreContext.core.stop()
-                coreContext.core.start()
+                model.startRemoteProvisionning()
             }
         }
 

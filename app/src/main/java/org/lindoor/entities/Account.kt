@@ -2,10 +2,8 @@ package org.lindoor.entities
 
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
-import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub

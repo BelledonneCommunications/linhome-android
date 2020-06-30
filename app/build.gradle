@@ -31,7 +31,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "org.linphone"
+        applicationId "org.lindoor"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 4

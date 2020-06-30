@@ -62,7 +62,7 @@ class AccountFragment : Fragment() {
             "account_manage_on_freesip_message",
             { _: DialogInterface, _: Int ->
                 val browserIntent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse(LindoorApplication.corePreferences.config.getString("assistant","freesip_url","www.linphone.org")))
+                    Intent(Intent.ACTION_VIEW, Uri.parse(LindoorApplication.corePreferences.config.getString("assistant","freesip_url","www.lindoor.org")))
                 startActivity(browserIntent)
             },confirmTextKey="continue")
     }

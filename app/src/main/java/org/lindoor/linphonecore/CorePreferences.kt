@@ -223,7 +223,7 @@ class CorePreferences constructor(private val context: Context) {
     /* App settings previously in non_localizable_custom */
 
     val defaultDomain: String
-        get() = config.getString("app", "default_domain", "sip.linphone.org")
+        get() = config.getString("app", "default_domain", "sip.lindoor.org")
 
     val fetchContactsFromDefaultDirectory: Boolean
         get() = config.getBool("app", "fetch_contacts_from_default_directory", true)
@@ -232,20 +232,20 @@ class CorePreferences constructor(private val context: Context) {
         get() = config.getBool("app", "hide_contacts_without_presence", false)
 
     val rlsUri: String
-        get() = config.getString("app", "rls_uri", "sip:rls@sip.linphone.org")
+        get() = config.getString("app", "rls_uri", "sip:rls@sip.lindoor.org")
 
     val conferenceServerUri: String
         get() = config.getString(
             "app",
             "default_conference_factory_uri",
-            "sip:conference-factory@sip.linphone.org"
+            "sip:conference-factory@sip.lindoor.org"
         )
 
     val limeX3dhServerUrl: String
         get() = config.getString(
             "app",
             "default_lime_x3dh_server_url",
-            "https://lime.linphone.org/lime-server/lime-server.php"
+            "https://lime.lindoor.org/lime-server/lime-server.php"
         )
 
     val allowMultipleFilesAndTextInSameMessage: Boolean

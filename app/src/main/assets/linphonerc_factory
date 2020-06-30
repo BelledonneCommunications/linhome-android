@@ -32,10 +32,10 @@ enabled=1
 
 
 [assistant]
-xmlrpc_url=https://subscribe.lindoor.org:444/wizard.php
+xmlrpc_url=https://subscribe.linphone.org:444/wizard.php
 ; MD5 / SHA-256
 password_algo=SHA-256
-domain=sip.lindoor.org
+domain=lindoor.org
 freesip_url=https://www.lindoor.org/freesip/home
 
 ## End of factory rc

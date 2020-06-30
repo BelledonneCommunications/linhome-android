@@ -30,8 +30,8 @@ host=
 port=443
 
 [misc]
-version_check_url_root=https://www.lindoor.org/releases
-log_collection_upload_server_url=https://www.lindoor.org:444/lft.php
+version_check_url_root=https://www.linphone.org/releases
+log_collection_upload_server_url=https://www.linphone.org:444/lft.php
 max_calls=10
 history_max_size=100
 

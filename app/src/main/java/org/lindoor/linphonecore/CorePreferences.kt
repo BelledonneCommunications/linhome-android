@@ -125,12 +125,6 @@ class CorePreferences constructor(private val context: Context) {
         }
 
 
-    /* App settings previously in non_localizable_custom */
-
-    val defaultDomain: String
-        get() = config.getString("app", "default_domain", "sip.lindoor.org")
-
-
     /* Assets stuff */
 
     val configPath: String

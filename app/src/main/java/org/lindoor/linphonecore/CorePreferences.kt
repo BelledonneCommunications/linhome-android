@@ -69,88 +69,14 @@ class CorePreferences constructor(private val context: Context) {
             config.setBool("app", "keep_service_alive", value)
         }
 
-    /* UI */
-
-    var forcePortrait: Boolean
-        get() = config.getBool("app", "force_portrait_orientation", false)
-        set(value) {
-            config.setBool("app", "force_portrait_orientation", value)
-        }
-
-    /** -1 means auto, 0 no, 1 yes */
-    var darkMode: Int
-        get() {
-            if (!darkModeAllowed) return 0
-            return config.getInt("app", "dark_mode", -1)
-        }
-        set(value) {
-            config.setInt("app", "dark_mode", value)
-        }
-
-    /* Audio */
-
-    val echoCancellerCalibration: Int
-        get() = config.getInt("sound", "ec_delay", -1)
 
     /* Video */
-
-    var videoPreview: Boolean
-        get() = config.getBool("app", "video_preview", false)
-        set(value) = config.setBool("app", "video_preview", value)
-
-    val hideStaticImageCamera: Boolean
-        get() = config.getBool("app", "hide_static_image_camera", true)
-
-    /* Chat */
-
-    var makePublicDownloadedImages: Boolean
-        get() = config.getBool("app", "make_downloaded_images_public_in_gallery", true)
-        set(value) {
-            config.setBool("app", "make_downloaded_images_public_in_gallery", value)
-        }
-
-    var hideEmptyRooms: Boolean
-        get() = config.getBool("app", "hide_empty_chat_rooms", true)
-        set(value) {
-            config.setBool("app", "hide_empty_chat_rooms", value)
-        }
-
-    var hideRoomsFromRemovedProxies: Boolean
-        get() = config.getBool("app", "hide_chat_rooms_from_removed_proxies", true)
-        set(value) {
-            config.setBool("app", "hide_chat_rooms_from_removed_proxies", value)
-        }
 
     var deviceName: String
         get() = config.getString("app", "device_name", Compatibility.getDeviceName(context))
         set(value) = config.setString("app", "device_name", value)
 
-    var chatRoomShortcuts: Boolean
-        get() = config.getBool("app", "chat_room_shortcuts", true)
-        set(value) {
-            config.setBool("app", "chat_room_shortcuts", value)
-        }
 
-    /* Contacts */
-
-    // TODO: use it
-    var storePresenceInNativeContact: Boolean
-        get() = config.getBool("app", "store_presence_in_native_contact", false)
-        set(value) {
-            config.setBool("app", "store_presence_in_native_contact", value)
-        }
-
-    var displayOrganization: Boolean
-        get() = config.getBool("app", "display_contact_organization", contactOrganizationVisible)
-        set(value) {
-            config.setBool("app", "display_contact_organization", value)
-        }
-
-    var contactsShortcuts: Boolean
-        get() = config.getBool("app", "contact_shortcuts", false)
-        set(value) {
-            config.setBool("app", "contact_shortcuts", value)
-        }
 
     /* Call */
 
@@ -178,13 +104,7 @@ class CorePreferences constructor(private val context: Context) {
             config.setBool("app", "call_overlay", value)
         }
 
-    /* Assistant */
 
-    var firstStart: Boolean
-        get() = config.getBool("app", "first_start", true)
-        set(value) {
-            config.setBool("app", "first_start", value)
-        }
 
     var xmlRpcServerUrl: String?
         get() = config.getString("assistant", "xmlrpc_url", null)
@@ -204,63 +124,12 @@ class CorePreferences constructor(private val context: Context) {
             config.setString("assistant", "domain", value)
         }
 
-    /* Dialog related */
-
-    var limeSecurityPopupEnabled: Boolean
-        get() = config.getBool("app", "lime_security_popup_enabled", true)
-        set(value) {
-            config.setBool("app", "lime_security_popup_enabled", value)
-        }
-
-    /* Other */
-
-    var voiceMailUri: String?
-        get() = config.getString("app", "voice_mail", null)
-        set(value) {
-            config.setString("app", "voice_mail", value)
-        }
 
     /* App settings previously in non_localizable_custom */
 
     val defaultDomain: String
         get() = config.getString("app", "default_domain", "sip.lindoor.org")
 
-    val fetchContactsFromDefaultDirectory: Boolean
-        get() = config.getBool("app", "fetch_contacts_from_default_directory", true)
-
-    val hideContactsWithoutPresence: Boolean
-        get() = config.getBool("app", "hide_contacts_without_presence", false)
-
-    val rlsUri: String
-        get() = config.getString("app", "rls_uri", "sip:rls@sip.lindoor.org")
-
-    val conferenceServerUri: String
-        get() = config.getString(
-            "app",
-            "default_conference_factory_uri",
-            "sip:conference-factory@sip.lindoor.org"
-        )
-
-    val limeX3dhServerUrl: String
-        get() = config.getString(
-            "app",
-            "default_lime_x3dh_server_url",
-            "https://lime.lindoor.org/lime-server/lime-server.php"
-        )
-
-    val allowMultipleFilesAndTextInSameMessage: Boolean
-        get() = config.getBool("app", "allow_multiple_files_and_text_in_same_message", true)
-
-    val contactOrganizationVisible: Boolean
-        get() = config.getBool("app", "display_contact_organization", true)
-
-    // If enabled, SIP addresses will be stored in a different raw id than the contact and with a custom MIME type
-    // If disabled, account won't be created
-    val useLinphoneSyncAccount: Boolean
-        get() = config.getBool("app", "use_linphone_tag", true)
-
-    private val darkModeAllowed: Boolean
-        get() = config.getBool("app", "dark_mode_allowed", true)
 
     /* Assets stuff */
 

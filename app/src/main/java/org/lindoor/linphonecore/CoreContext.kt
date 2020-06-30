@@ -234,29 +234,6 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
         computeUserAgent()
 
-        for (lpc in core.proxyConfigList) {
-            if (lpc.identityAddress.domain == corePreferences.defaultDomain) {
-                // Ensure conference URI is set on sip.linphone.org proxy configs
-                if (lpc.conferenceFactoryUri == null) {
-                    lpc.edit()
-                    val uri = corePreferences.conferenceServerUri
-                    Log.i("[Context] Setting conference factory on proxy config ${lpc.identityAddress.asString()} to default value: $uri")
-                    lpc.conferenceFactoryUri = uri
-                    lpc.done()
-                }
-
-                // Ensure LIME server URL is set if at least one sip.linphone.org proxy
-                if (core.limeX3DhAvailable()) {
-                    var url: String? = core.limeX3DhServerUrl
-                    if (url == null || url.isEmpty()) {
-                        url = corePreferences.limeX3dhServerUrl
-                        Log.i("[Context] Setting LIME X3Dh server url to default value: $url")
-                        core.limeX3DhServerUrl = url
-                    }
-                }
-            }
-        }
-
         Log.i("[Context] Core configured")
     }
 

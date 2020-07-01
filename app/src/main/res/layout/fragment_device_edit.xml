@@ -91,7 +91,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 listener="@{model.deviceTypeListener}"
-                initialIndex="@{model.type}"
+                initialIndex="@{model.deviceType}"
                 items="@{model.availableDeviceTypes}"
              />
 

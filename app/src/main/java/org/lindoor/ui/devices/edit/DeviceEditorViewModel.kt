@@ -23,7 +23,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var availableDeviceTypes: ArrayList<SpinnerItem> = ArrayList()
-    var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    var deviceType: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
     var availableMethodTypes: ArrayList<SpinnerItem> = ArrayList()
     var actionsMethod: MutableLiveData<Int> = MutableLiveData<Int>(0)
@@ -39,7 +39,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
             value?.also {
                 name.first.value = it.name
                 address.first.value = it.address
-                type.value = indexByBackingKey(it.type, availableDeviceTypes)
+                deviceType.value = indexByBackingKey(it.type, availableDeviceTypes)
                 actionsMethod.value = indexByBackingKey(it.actionsMethodType, availableMethodTypes)
             }
         }
@@ -49,7 +49,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
 
     val deviceTypeListener = object : LSpinnerListener {
         override fun onItemSelected(position: Int) {
-            type.value = position
+            deviceType.value = position
         }
     }
 
@@ -88,7 +88,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
 
         if (device == null) {
             device = Device(
-                if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey,
+                if (deviceType.value == 0) null else availableDeviceTypes.get(deviceType.value!!).backingKey,
                 name.first.value!!,
                 if (address.first.value!!.startsWith("sip:") || address.first.value!!.startsWith("sips:")) address.first.value!! else "sip:${address.first.value}",
                 if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
@@ -107,7 +107,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
         } else {
             device?.also {
                 it.type =
-                    if (type.value == 0) null else availableDeviceTypes.get(type.value!!).backingKey
+                    if (deviceType.value == 0) null else availableDeviceTypes.get(deviceType.value!!).backingKey
                 it.name = name.first.value!!
                 it.address =  if (address.first.value!!.startsWith("sip:") || address.first.value!!.startsWith("sips:")) address.first.value!! else "sip:${address.first.value}"
                 it.actionsMethodType =

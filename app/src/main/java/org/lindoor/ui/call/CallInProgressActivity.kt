@@ -106,12 +106,12 @@ class CallInProgressActivity : CallGenericActivity() {
     }
 
     @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
-    fun onCameraDenied() {
+    fun onRecordAudioDenied() {
         DialogUtil.error("record_audio_permission_denied")
     }
 
     @OnNeverAskAgain(Manifest.permission.RECORD_AUDIO)
-    fun onCameraNeverAskAgain() {
+    fun onRecordAudioDeniedNeverAskAgain() {
         DialogUtil.error("record_audio_permission_denied_dont_ask_again")
     }
 

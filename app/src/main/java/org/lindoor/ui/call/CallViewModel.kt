@@ -157,7 +157,6 @@ class CallViewModel(val call: Call) : ViewModel() {
 
     fun performAction(action: Action) {
         device.value?.also { d ->
-            coreContext.core.useInfoForDtmf = true
             when (d.actionsMethodType) {
                 "method_dtmf_sip_info" -> {
                     coreContext.core.useInfoForDtmf = true

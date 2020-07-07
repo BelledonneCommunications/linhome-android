@@ -9,18 +9,18 @@
     <entry name="quality_reporting_interval" overwrite="true">180</entry>
     <entry name="reg_expires" overwrite="true">31536000</entry>
     <entry name="reg_identity" overwrite="true">sip:?@lindoor.org</entry>
-    <entry name="reg_proxy" overwrite="true">&lt;sip:lindoor.org;transport=tls&gt;</entry>
-    <entry name="reg_route" overwrite="true">&lt;sip:lindoor.org;transport=tls&gt;</entry>
+    <entry name="reg_proxy" overwrite="true">&lt;sip:sip.lindoor.org;transport=tls&gt;</entry>
+    <entry name="reg_route" overwrite="true">&lt;sip:sip.lindoor.org;transport=tls&gt;</entry>
     <entry name="reg_sendregister" overwrite="true">1</entry>
     <entry name="nat_policy_ref" overwrite="true">nat_policy_default_values</entry>
-    <entry name="realm" overwrite="true">lindoor.org</entry>
+    <entry name="realm" overwrite="true">sip.lindoor.org</entry>
   </section>
   <section name="nat_policy_default_values">
     <entry name="stun_server" overwrite="true">stun.lindoor.org</entry>
     <entry name="protocols" overwrite="true">stun,ice</entry>
   </section>
   <section name="assistant">
-    <entry name="domain" overwrite="true">lindoor.org</entry>
+    <entry name="domain" overwrite="true">sip.lindoor.org</entry>
     <entry name="algorithm" overwrite="true">SHA-256</entry>
     <entry name="password_max_length" overwrite="true">-1</entry>
     <entry name="password_min_length" overwrite="true">1</entry>

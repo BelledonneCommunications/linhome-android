@@ -59,10 +59,6 @@ class HistoryEventsAdapter(
         }
 
         fun playMedia(callLog: CallLog, lindoorFragment: GenericFragment) {
-            if (callLog.historyEvent().hasVideo) { //TODO Remove me
-                DialogUtil.toast("Unable to play back videos (pending crash fix) - audio calls work ok")
-                return
-            }
             val intent = Intent(lindoorFragment.activity, PlayerActivity::class.java)
             intent.putExtra("callId", callLog.callId)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

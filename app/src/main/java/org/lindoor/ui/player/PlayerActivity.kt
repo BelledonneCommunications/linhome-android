@@ -39,7 +39,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                 LindoorApplication.Companion.coreContext.core.createLocalPlayer(
                     null,
                     null,
-                    if (event.hasVideo) binding.root.video else null
+                    if (event.hasVideo) binding.root.video.surfaceTexture else null
                 )?.also { player ->
                     playerViewModel =
                         ViewModelProvider(

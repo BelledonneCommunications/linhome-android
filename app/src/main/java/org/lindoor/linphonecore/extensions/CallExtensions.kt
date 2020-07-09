@@ -7,12 +7,14 @@ import org.linphone.core.MediaDirection
 
 
 fun Call.extendedAcceptEarlyMedia() {
-    val earlyMediaCallParams: CallParams = coreContext.core.createCallParams(this)
-    earlyMediaCallParams.videoDirection = MediaDirection.RecvOnly
-    earlyMediaCallParams.audioDirection = MediaDirection.Inactive
-    earlyMediaCallParams.recordFile = callLog.historyEvent().mediaFileName
-    acceptEarlyMediaWithParams(earlyMediaCallParams)
-    startRecording()
+    if (state == Call.State.IncomingReceived) {
+        val earlyMediaCallParams: CallParams = coreContext.core.createCallParams(this)
+        earlyMediaCallParams.videoDirection = MediaDirection.RecvOnly
+        earlyMediaCallParams.audioDirection = MediaDirection.Inactive
+        earlyMediaCallParams.recordFile = callLog.historyEvent().mediaFileName
+        acceptEarlyMediaWithParams(earlyMediaCallParams)
+        startRecording()
+    }
 }
 
 fun Call.extendedAccept() {

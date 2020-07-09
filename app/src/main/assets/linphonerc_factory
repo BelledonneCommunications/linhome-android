@@ -6,8 +6,8 @@
 
 [net]
 mtu=1300
-force_ice_disablement=0
-firewall_policy=ice
+force_ice_disablement=1
+firewall_policy=0
 stun_server=stun.linphone.org
 
 [sip]

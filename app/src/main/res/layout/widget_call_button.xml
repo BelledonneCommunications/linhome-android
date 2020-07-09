@@ -85,7 +85,7 @@
             android:text="xxxxxx" />
 
         <TextView
-            android:id="@+id/textOff"
+            android:id="@+id/textOffLabel"
             style='@{"call_action_button"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"

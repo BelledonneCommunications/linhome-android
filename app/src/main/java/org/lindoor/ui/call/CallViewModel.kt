@@ -80,8 +80,6 @@ class CallViewModel(val call: Call) : ViewModel() {
         historyEvent = call.callLog.historyEvent()
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
-        if (call.state == Call.State.IncomingReceived)
-            call.extendedAcceptEarlyMedia()
     }
 
     private fun fireActionsOnCallStateChanged(cstate: Call.State) {

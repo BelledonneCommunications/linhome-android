@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -64,6 +65,13 @@ class CallInProgressActivity : CallGenericActivity() {
                 }
                 true
             }
+            callViewModel.videoFullScreen.observe(this, Observer { full ->
+                if (!full) {
+                    binding.root.actions.visibility = View.VISIBLE
+                    binding.root.controls.visibility = View.VISIBLE
+                    binding.root.timer.visibility = View.VISIBLE
+                }
+            })
             startWithPermissionCheck()
         } ?: finish()
     }

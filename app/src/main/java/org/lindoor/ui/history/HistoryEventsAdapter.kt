@@ -10,9 +10,7 @@ import org.lindoor.BR
 import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.ItemHistoryBinding
-import org.lindoor.linphonecore.extensions.historyEvent
 import org.lindoor.ui.player.PlayerActivity
-import org.lindoor.utils.DialogUtil
 import org.linphone.core.CallLog
 
 class HistoryEventsAdapter(
@@ -47,7 +45,7 @@ class HistoryEventsAdapter(
             historyViewModel: HistoryViewModel,
             lindoorFragment: GenericFragment
         ) {
-            val entryViewModel = HistoryEventsViewModel(callLog, showDate, historyViewModel)
+            val entryViewModel = HistoryEventViewModel(callLog, showDate, historyViewModel)
             binding.lifecycleOwner = lindoorFragment
             binding.setVariable(BR.model, entryViewModel)
             binding.setVariable(BR.historymodel, historyViewModel)

@@ -1,6 +1,7 @@
 package org.lindoor.customisation
 
 import org.lindoor.customisation.Customisation.actionTypesConfig
+import org.lindoor.linphonecore.extensions.getString
 import org.lindoor.ui.widgets.SpinnerItem
 import java.util.*
 
@@ -12,7 +13,7 @@ object ActionTypes {
             config.sectionsNamesList.forEach {
                 spinnerItems.add(
                     SpinnerItem(
-                        config.getString(it, "textkey", "missing"),
+                        config.getString(it, "textkey", nonNullDefault = "missing"),
                         config.getString(it, "icon", null),
                         it
                     )
@@ -23,13 +24,13 @@ object ActionTypes {
 
     fun typeNameForActionType(typeKey: String): String {
         return actionTypesConfig.let { config ->
-            Texts.get(config.getString(typeKey, "textkey", null))
+            Texts.get(config.getString(typeKey, "textkey", nonNullDefault = typeKey))
         }
     }
 
     fun iconNameForActionType(typeKey: String): String {
         return actionTypesConfig.let { config ->
-            config.getString(typeKey, "icon", null)
+            config.getString(typeKey, "icon", nonNullDefault = typeKey )
         }
     }
 

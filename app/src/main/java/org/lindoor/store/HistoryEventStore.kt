@@ -4,6 +4,8 @@ import org.lindoor.entities.HistoryEvent
 import org.lindoor.store.StorageManager.historyEventsXml
 import org.linphone.core.Config
 import org.linphone.core.Factory
+import org.lindoor.linphonecore.extensions.getString
+
 
 object HistoryEventStore {
 
@@ -23,12 +25,12 @@ object HistoryEventStore {
         val result = HashMap<String, HistoryEvent>()
         historyEventsConfig.sectionsNamesList.forEach {
             result.put(
-                historyEventsConfig.getString(it, "call_id", null), HistoryEvent(
+                historyEventsConfig.getString(it, "call_id", null)!!, HistoryEvent(
                     it,
                     historyEventsConfig.getString(it, "call_id", null),
                     historyEventsConfig.getBool(it, "viewed_by_user", false),
-                    historyEventsConfig.getString(it, "media_file_name", null),
-                    historyEventsConfig.getString(it, "media_thumbnail_file_name", null),
+                    historyEventsConfig.getString(it, "media_file_name", null)!!,
+                    historyEventsConfig.getString(it, "media_thumbnail_file_name", null)!!,
                     historyEventsConfig.getBool(it, "has_video", false)
                 )
             )

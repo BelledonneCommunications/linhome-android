@@ -425,7 +425,7 @@ class NotificationsManager(private val context: Context) {
         } else {
             val name = DeviceStore.findDeviceByAddress(call.remoteAddress)?.name
                 ?: call.remoteAddress.username
-            body = Texts.get("notif_missed_call", name)
+            body = Texts.get("notif_missed_call", name?:"device")
             Log.i("[Notifications Manager] Creating missed call notification")
         }
 

@@ -7,6 +7,7 @@ import org.lindoor.store.StorageManager.devicesXml
 import org.linphone.core.Address
 import org.linphone.core.Config
 import org.linphone.core.Factory
+import org.lindoor.linphonecore.extensions.getString
 
 object DeviceStore {
 
@@ -36,8 +37,8 @@ object DeviceStore {
                 Device(
                     it,
                     devicesConfig.getString(it, "type", null),
-                    devicesConfig.getString(it, "name", "missing"),
-                    devicesConfig.getString(it, "address", "missing"),
+                    devicesConfig.getString(it, "name", nonNullDefault = "missing"),
+                    devicesConfig.getString(it, "address", nonNullDefault = "missing"),
                     devicesConfig.getString(it, "actions_method_type", null),
                     actions
                 )

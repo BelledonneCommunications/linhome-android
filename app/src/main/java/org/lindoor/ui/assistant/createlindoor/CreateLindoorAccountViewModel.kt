@@ -30,7 +30,7 @@ class CreateLindoorAccountViewModel :
         ) {
             if (status == AccountCreator.Status.AccountCreated)
                 creator?.also {
-                    Account.lindoorAccountCreate(creator)
+                    Account.lindoorAccountCreateProxyConfig(creator)
                 }
             creationResult.postValue(status)
         }

@@ -3,6 +3,8 @@ package org.lindoor.customisation
 import org.lindoor.customisation.Customisation.deviceTypesConfig
 import org.lindoor.ui.widgets.SpinnerItem
 import java.util.*
+import org.lindoor.linphonecore.extensions.getString
+
 
 object DeviceTypes {
     var deviceTypes: ArrayList<SpinnerItem> = ArrayList()
@@ -15,7 +17,7 @@ object DeviceTypes {
                     defaultType = it
                 deviceTypes.add(
                     SpinnerItem(
-                        config.getString(it, "textkey", "missing"),
+                        config.getString(it, "textkey", nonNullDefault = "missing"),
                         config.getString(it, "icon", null),
                         it
                     )
@@ -32,7 +34,9 @@ object DeviceTypes {
 
     fun typeNameForDeviceType(typeKey: String): String? {
         return deviceTypesConfig.let { config ->
-            Texts.get(config.getString(typeKey, "textkey", deviceTypes.get(0).backingKey))
+            config.getString(typeKey, "textkey", deviceTypes.get(0).backingKey)?.let {
+                Texts.get(it)
+            }
         }
     }
 

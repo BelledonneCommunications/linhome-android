@@ -158,18 +158,18 @@ class CallViewModel(val call: Call) : ViewModel() {
             when (d.actionsMethodType) {
                 "method_dtmf_sip_info" -> {
                     coreContext.core.useInfoForDtmf = true
-                    call.sendDtmfs(action.code)
+                    action.code?.let { call.sendDtmfs(it) }
                 }
                 "method_dtmf_rfc_4733" -> {
                     coreContext.core.useRfc2833ForDtmf = true
-                    call.sendDtmfs(action.code)
+                    action.code?.let { call.sendDtmfs(it) }
                 }
                 "method_sip_message" -> {
                     val message = coreContext.core.createInfoMessage()
                     val content = coreContext.core.createContent()
                     content.type = "text/plain"
                     action.code?.length?.let { content.setBuffer(action.code.toByteArray(), it) }
-                    message.content = content
+                    message.setContent(content)
                     call.sendInfoMessage(message)
                 }
             }

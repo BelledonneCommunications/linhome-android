@@ -42,16 +42,18 @@ class LoginLindoorAccountFragment : CreatorAssistantFragment() {
             if (model.fieldsValid()) {
                 hideKeyboard()
                 showProgress()
-                val xmlRpcSession = LindoorApplication.coreContext.core.createXmlRpcSession(
-                    corePreferences.xmlRpcServerUrl
-                )
+                val xmlRpcSession = corePreferences.xmlRpcServerUrl?.let { it1 ->
+                    LindoorApplication.coreContext.core.createXmlRpcSession(
+                        it1
+                    )
+                }
                 val xmlRpcRequest =
-                    xmlRpcSession.createRequest(XmlRpcArgType.String, "check_authentication")
-                xmlRpcRequest.setListener { request ->
+                    xmlRpcSession?.createRequest(XmlRpcArgType.String, "check_authentication")
+                xmlRpcRequest?.setListener { request ->
                     hideProgress()
                     if (request != null) {
                         if (request.stringResponse == "OK") {
-                            Account.lindoorAccountLogin(model.accountCreator)
+                            Account.lindoorAccountCreateProxyConfig(model.accountCreator)
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                             DialogUtil.info("lindoor_account_loggedin")
                         } else {
@@ -59,15 +61,17 @@ class LoginLindoorAccountFragment : CreatorAssistantFragment() {
                         }
                     }
                 }
-                xmlRpcRequest.addStringArg(model.username.first.value)
-                xmlRpcRequest.addStringArg(
+                xmlRpcRequest?.addStringArg(model.username.first.value!!)
+                xmlRpcRequest?.addStringArg(
                     corePreferences.encryptedPass(
                         model.username.first.value!!,
                         model.pass1.first.value!!
                     )
                 )
-                xmlRpcRequest.addStringArg(corePreferences.loginDomain)
-                xmlRpcSession.sendRequest(xmlRpcRequest)
+                corePreferences.loginDomain?.let { it1 -> xmlRpcRequest?.addStringArg(it1) }
+                if (xmlRpcRequest != null) {
+                    xmlRpcSession?.sendRequest(xmlRpcRequest)
+                }
             }
         }
 

@@ -39,7 +39,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 coreContext.notificationsManager.getSipUriForCallNotificationId(notificationId)
             val core: Core = coreContext.core
 
-            val call = core.findCallFromUri(remoteAddress)
+            val call = remoteAddress?.let { core.findCallFromUri(it) }
             if (call == null) {
                 Log.e("[Notification Broadcast Receiver] Couldn't find call from remote address $remoteAddress")
                 return

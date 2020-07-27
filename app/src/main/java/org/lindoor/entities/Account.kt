@@ -2,19 +2,15 @@ package org.lindoor.entities
 
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
+import org.lindoor.LindoorApplication
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
-import org.lindoor.utils.extensions.xDigitsUUID
-import org.linphone.core.AccountCreator
-import org.linphone.core.AccountCreatorListenerStub
-import org.linphone.core.ProxyConfig
-import java.util.*
+import org.lindoor.utils.cdlog
+import org.linphone.core.*
 
 object Account {
 
     private const val PUSH_GW_ID_KEY = "lindoor_pushgateway"
-    private const val PUSH_GW_USER_PREFIX = "lindoor_generated"
-    private const val PUSH_GW_DISPLAY_NAME = "Lindoor"
 
     fun configured(): Boolean {
         return coreContext.core.proxyConfigList.isNotEmpty()
@@ -28,12 +24,8 @@ object Account {
         return null
     }
 
-    fun lindoorAccountCreate(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig().idkey = PUSH_GW_ID_KEY
-    }
-
-    fun lindoorAccountLogin(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig().idkey = PUSH_GW_ID_KEY
+    fun lindoorAccountCreateProxyConfig(accountCreator: AccountCreator) {
+        accountCreator.createProxyConfig()
     }
 
     fun sipAccountLogin(
@@ -44,7 +36,9 @@ object Account {
     ) {
         val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
         proxyConfig?.expires = expiration.toInt()
-        proxyConfig?.serverAddr = if (!TextUtils.isEmpty(proxy)) proxy else accountCreator.domain
+        if (!TextUtils.isEmpty(proxy)) {
+            proxyConfig?.serverAddr = proxy
+        }
         if (pushGateway() != null)
             linkProxiesWithPushGateway(pushReady)
         else
@@ -57,39 +51,46 @@ object Account {
 
     fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
         coreContext.core.loadConfigFromXml(corePreferences.lindoorAccountDefaultValuesPath)
-        val accountCreator =
-            coreContext.core.createAccountCreator(corePreferences.xmlRpcServerUrl)
-        accountCreator.language = Locale.getDefault().language
-        val user: String = PUSH_GW_USER_PREFIX + xDigitsUUID()
-        val pass = UUID.randomUUID().toString()
-        accountCreator.domain = corePreferences.loginDomain
-        accountCreator.username = user
-        accountCreator.password = pass
-        accountCreator.email = "$user@${accountCreator.domain}"
-        accountCreator.displayName = PUSH_GW_DISPLAY_NAME
 
-        accountCreator.addListener(object : AccountCreatorListenerStub() {
-            override fun onCreateAccount(
-                creator: AccountCreator?,
-                status: AccountCreator.Status?,
-                resp: String?
-            ) {
-                if (status == AccountCreator.Status.AccountCreated) // TODO Adjust when server setup
-                    creator?.also {
-                        val pushGw = it.createProxyConfig()
-                        pushGw.idkey = PUSH_GW_ID_KEY
-                        pushGw.enableRegister(true)
-                        pushGw.enablePublish(false)
-                        pushGw.expires = 31536000
-                        pushGw.serverAddr = "sips:${it.domain}:5061;transport=tls"
-                        pushGw.route = pushGw.serverAddr
-                        pushGw.isPushNotificationAllowed = true
-                        linkProxiesWithPushGateway(pushReady)
+
+        val xmlRpcSession = corePreferences.xmlRpcServerUrl?.let {
+            LindoorApplication.coreContext.core.createXmlRpcSession(
+                it
+            )
+        }
+        val xmlRpcRequest =
+            xmlRpcSession?.createRequest(XmlRpcArgType.StringStruct, "create_push_account")
+        xmlRpcRequest?.addStringArg(coreContext.core.userAgent)
+
+        xmlRpcRequest?.setListener { request ->
+            val status = request.status
+            val responseValues = request.listResponse
+            cdlog("Status : ${request.status} listResponse size : ${request.listResponse.size} ")
+            if (request.status == XmlRpcStatus.Ok) {
+                    val pushGw = coreContext.core.createProxyConfig()
+                    pushGw.idkey = PUSH_GW_ID_KEY
+                    pushGw.enableRegister(true)
+                    pushGw.enablePublish(false)
+                    pushGw.expires = 31536000
+                    pushGw.serverAddr = "sips:${responseValues.get(1)};transport=tls"
+                    pushGw.setRoutes(arrayOf(pushGw.serverAddr))
+                    pushGw.isPushNotificationAllowed = true
+                    coreContext.core.createAddress("sip:${responseValues.get(0)}@${responseValues.get(1)}")?.let {
+                        pushGw.setIdentityAddress(it)
                     }
-            }
-        })
-        if ( accountCreator.createAccount()!= AccountCreator.Status.RequestOk)
-            pushReady.value = false
+                    val authInfo = Factory.instance().createAuthInfo(responseValues.get(0),responseValues.get(0),null,responseValues.get(2),responseValues.get(1),responseValues.get(1))
+                    coreContext.core.addAuthInfo(authInfo)
+                    coreContext.core.addProxyConfig(pushGw)
+                    linkProxiesWithPushGateway(pushReady)
+                } else {
+                    pushReady.value = false
+                }
+        }
+        if (xmlRpcRequest != null) {
+            xmlRpcSession?.sendRequest(xmlRpcRequest)
+        }
+
+
     }
 
     fun linkProxiesWithPushGateway(pushReady: MutableLiveData<Boolean>) {

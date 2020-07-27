@@ -37,7 +37,7 @@ class AccountViewModel : ViewModel() {
 
     init {
         LindoorApplication.coreContext.core.proxyConfigList.forEach {
-            cdlog("${it.identityAddress.asString()} ${it.idkey}")
+            cdlog("${it.identityAddress?.asString()} ${it.idkey}")
         }
         LindoorApplication.coreContext.core.addListener(coreListener)
     }
@@ -54,7 +54,7 @@ class AccountViewModel : ViewModel() {
 
 
     fun getDescription(key:String, proxyConfig: ProxyConfig?): String? {
-        return account?.state?.toHumanReadable()?.let {
+        return proxyConfig?.state?.toHumanReadable()?.let {
             proxyConfig?.identityAddress?.asStringUriOnly()?.let { it1 ->
                 Texts.get(key, it1,
                     it

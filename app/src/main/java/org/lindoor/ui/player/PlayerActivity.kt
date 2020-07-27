@@ -13,6 +13,7 @@ import org.lindoor.LindoorApplication
 import org.lindoor.R
 import org.lindoor.databinding.ActivityPlayerBinding
 import org.lindoor.linphonecore.extensions.historyEvent
+import org.linphone.core.AudioDevice
 
 
 class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
@@ -34,11 +35,23 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
             DataBindingUtil.setContentView(this, R.layout.activity_player) as ActivityPlayerBinding
         binding.lifecycleOwner = this
         intent.getStringExtra("callId")?.also { callId ->
-            LindoorApplication.Companion.coreContext.core.findCallLogFromCallId(callId)
+            LindoorApplication.coreContext.core.findCallLogFromCallId(callId)
                 ?.historyEvent()?.also { event ->
-                LindoorApplication.Companion.coreContext.core.createLocalPlayer(
-                    null,
-                    null,
+                    var speakerCard: String? = null
+                    var earpieceCard: String? = null
+                    for (device in LindoorApplication.coreContext.core.audioDevices) {
+                        if (device.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
+                            if (device.type == AudioDevice.Type.Speaker) {
+                                speakerCard = device.id
+                            } else if (device.type == AudioDevice.Type.Earpiece) {
+                                earpieceCard = device.id
+                            }
+                        }
+                    }
+
+                LindoorApplication.coreContext.core.createLocalPlayer(
+                    speakerCard ?: earpieceCard,
+                    "MSAndroidTextureDisplay",
                     if (event.hasVideo) binding.root.video.surfaceTexture else null
                 )?.also { player ->
                     playerViewModel =

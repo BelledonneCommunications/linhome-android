@@ -22,7 +22,7 @@ class PlayerViewModelFactory(private val callId: String, private val player: Pla
 class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
 
     val historyEvent =
-        LindoorApplication.coreContext.core.findCallLogFromCallId(callId).historyEvent()
+        LindoorApplication.coreContext.core.findCallLogFromCallId(callId)?.historyEvent()
     val playing = MutableLiveData(false)
     val position: MutableLiveData<Int> = MutableLiveData(0)
     val reset = MutableLiveData(false)

@@ -54,15 +54,19 @@ data class Device(
     }
 
     fun call() {
-        val params: CallParams = LindoorApplication.coreContext.core.createCallParams(null)
+        val params: CallParams? = LindoorApplication.coreContext.core.createCallParams(null)
         type?.also {
-            params.enableVideo(DeviceTypes.supportsVideo(it))
-            params.enableAudio(DeviceTypes.supportsAudio(it))
+            params?.enableVideo(DeviceTypes.supportsVideo(it))
+            params?.enableAudio(DeviceTypes.supportsAudio(it))
         }
         val historyEvent = HistoryEvent()
-        params.recordFile = historyEvent.mediaFileName
+        params?.recordFile = historyEvent.mediaFileName
         LindoorApplication.coreContext.core.createAddress(address)?.let {
-            val call = LindoorApplication.coreContext.core.inviteAddressWithParams(it, params)
+            val call = params?.let { parameters ->
+                LindoorApplication.coreContext.core.inviteAddressWithParams(it,
+                    parameters
+                )
+            }
             if (call != null)
                 call.callLog.userData =
                     historyEvent // Retrieved in CallViewModel and bound with call ID when available

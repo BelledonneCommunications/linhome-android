@@ -28,6 +28,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
+import org.lindoor.linphonecore.extensions.getString
 
 class CorePreferences constructor(private val context: Context) {
     private var _config: Config? = null
@@ -73,7 +74,7 @@ class CorePreferences constructor(private val context: Context) {
     /* Video */
 
     var deviceName: String
-        get() = config.getString("app", "device_name", Compatibility.getDeviceName(context))
+        get() = config.getString("app", "device_name", nonNullDefault = Compatibility.getDeviceName(context))
         set(value) = config.setString("app", "device_name", value)
 
 

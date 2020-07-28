@@ -1,7 +1,9 @@
 package org.lindoor.ui.player
 
+import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.TextureView
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,6 +16,8 @@ import org.lindoor.R
 import org.lindoor.databinding.ActivityPlayerBinding
 import org.lindoor.linphonecore.extensions.historyEvent
 import org.linphone.core.AudioDevice
+import org.linphone.core.Player
+import org.linphone.core.tools.Log
 
 
 class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
@@ -49,28 +53,32 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                         }
                     }
 
-                LindoorApplication.coreContext.core.createLocalPlayer(
-                    speakerCard ?: earpieceCard,
-                    "MSAndroidTextureDisplay",
-                    if (event.hasVideo) binding.root.video.surfaceTexture else null
-                )?.also { player ->
-                    playerViewModel =
-                        ViewModelProvider(
-                            this,
-                            PlayerViewModelFactory(callId, player)
-                        )[PlayerViewModel::class.java]
-                    binding.model = playerViewModel
-                    binding.root.cancel.setOnClickListener {
-                        binding.root.cancel.alpha = 0.3f
-                        finish()
+                    LindoorApplication.coreContext.core.createLocalPlayer(
+                        speakerCard ?: earpieceCard,
+                        null,
+                        null
+                    )?.also { player ->
+                        playerViewModel =
+                            ViewModelProvider(
+                                this@PlayerActivity,
+                                PlayerViewModelFactory(callId, player)
+                            )[PlayerViewModel::class.java]
+                        binding.model = playerViewModel
+                        binding.root.cancel.setOnClickListener {
+                            binding.root.cancel.alpha = 0.3f
+                            finish()
+                        }
+                        setupPlayerControl(binding.root, playerViewModel)
+                        if (event.hasVideo) {
+                            setTextureView(binding.root.video,player)
+                        }
                     }
-                    setupPlayerControl(binding.root, playerViewModel)
-                }
             }
         } ?: run {
             this.finish()
         }
     }
+
 
     private fun setupPlayerControl(view: View, model: PlayerViewModel) {
         model.playing.observe(this, Observer { playing ->
@@ -90,6 +98,36 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
             model.updatePosition()
         }
 
+    }
+
+    fun setTextureView(textureView: TextureView, player: Player) {
+        Log.i("[Player] Is TextureView available? ${textureView.isAvailable}")
+        if (textureView.isAvailable) {
+            player.setWindowId(textureView.surfaceTexture)
+        } else {
+            textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+                override fun onSurfaceTextureSizeChanged(
+                    surface: SurfaceTexture?,
+                    width: Int,
+                    height: Int
+                ) { }
+
+                override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) { }
+
+                override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                    return true
+                }
+
+                override fun onSurfaceTextureAvailable(
+                    surface: SurfaceTexture?,
+                    width: Int,
+                    height: Int
+                ) {
+                    Log.i("[Player] Surface texture should be available now")
+                    player.setWindowId(textureView.surfaceTexture)
+                }
+            }
+        }
     }
 
 }

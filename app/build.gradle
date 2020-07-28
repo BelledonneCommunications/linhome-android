@@ -21,8 +21,18 @@ repositories {
     }
 }
 
-task zipTheme(type:Exec) {
-    commandLine "./zip-theme.sh"
+task zipTheme(type: Zip){
+    println "Zipping theme"
+    from '../lindoor-shared-themes/'
+    include 'action_types.xml'
+    include 'method_types.xml'
+    include 'device_types.xml'
+    include 'texts.xml'
+    include 'theme.xml'
+    include 'images/**/*'
+    include 'fonts/**/*'
+    archiveFileName = "lindoor.zip"
+    destinationDirectory = file('src/main/assets/')
 }
 
 afterEvaluate {

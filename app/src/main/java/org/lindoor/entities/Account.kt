@@ -65,26 +65,25 @@ object Account {
         xmlRpcRequest?.setListener { request ->
             val status = request.status
             val responseValues = request.listResponse
-            cdlog("Status : ${request.status} listResponse size : ${request.listResponse.size} ")
             if (request.status == XmlRpcStatus.Ok) {
-                    val pushGw = coreContext.core.createProxyConfig()
-                    pushGw.idkey = PUSH_GW_ID_KEY
-                    pushGw.enableRegister(true)
-                    pushGw.enablePublish(false)
-                    pushGw.expires = 31536000
-                    pushGw.serverAddr = "sips:${responseValues.get(1)};transport=tls"
-                    pushGw.setRoutes(arrayOf(pushGw.serverAddr))
-                    pushGw.isPushNotificationAllowed = true
-                    coreContext.core.createAddress("sip:${responseValues.get(0)}@${responseValues.get(1)}")?.let {
-                        pushGw.setIdentityAddress(it)
-                    }
-                    val authInfo = Factory.instance().createAuthInfo(responseValues.get(0),responseValues.get(0),null,responseValues.get(2),responseValues.get(1),responseValues.get(1))
-                    coreContext.core.addAuthInfo(authInfo)
-                    coreContext.core.addProxyConfig(pushGw)
-                    linkProxiesWithPushGateway(pushReady)
-                } else {
-                    pushReady.value = false
+                val pushGw = coreContext.core.createProxyConfig()
+                pushGw.idkey = PUSH_GW_ID_KEY
+                pushGw.enableRegister(true)
+                pushGw.enablePublish(false)
+                pushGw.expires = 31536000
+                pushGw.serverAddr = "sips:${responseValues.get(1)};transport=tls"
+                pushGw.setRoutes(arrayOf(pushGw.serverAddr))
+                pushGw.isPushNotificationAllowed = true
+                coreContext.core.createAddress("sip:${responseValues.get(0)}@${responseValues.get(1)}")?.let {
+                    pushGw.setIdentityAddress(it)
                 }
+                val authInfo = Factory.instance().createAuthInfo(responseValues.get(0),responseValues.get(0),null,responseValues.get(2),responseValues.get(1),responseValues.get(1))
+                coreContext.core.addAuthInfo(authInfo)
+                coreContext.core.addProxyConfig(pushGw)
+                linkProxiesWithPushGateway(pushReady)
+            } else {
+                pushReady.value = false
+            }
         }
         if (xmlRpcRequest != null) {
             xmlRpcSession?.sendRequest(xmlRpcRequest)

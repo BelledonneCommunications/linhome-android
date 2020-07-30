@@ -35,7 +35,7 @@ enabled=1
 xmlrpc_url=https://subscribe.linphone.org/flexisip-account-manager/lindoor/xmlrpc.php
 ; MD5 / SHA-256
 password_algo=SHA-256
-domain=sip.linphone.org
+domain=sip.lindoor.org
 freesip_url=https://www.linphone.org/freesip/home
 
 ## End of factory rc

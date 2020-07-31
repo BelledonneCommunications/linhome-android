@@ -52,7 +52,6 @@ import org.lindoor.store.DeviceStore
 import org.lindoor.ui.call.CallInProgressActivity
 import org.lindoor.ui.call.CallIncomingActivity
 import org.lindoor.ui.call.CallOutgoingActivity
-import org.lindoor.utils.cdlog
 import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
@@ -158,7 +157,7 @@ class NotificationsManager(private val context: Context) {
                                 0
                             )
                             Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
-                            notificationBuilder.setCustomHeadsUpContentView(
+                            notificationBuilder.setCustomBigContentView(
                                 notificationLayoutHeadsUp
                             )
                             val notification = notificationBuilder.build()
@@ -336,10 +335,10 @@ class NotificationsManager(private val context: Context) {
             if (hasSnapShot)
                 RemoteViews(
                     context.packageName,
-                    R.layout.call_incoming_notification_heads_up_snapshot
+                    R.layout.call_incoming_notification_content_with_snapshot
                 )
             else
-                RemoteViews(context.packageName, R.layout.call_incoming_notification_heads_up)
+                RemoteViews(context.packageName, R.layout.call_incoming_notification_content)
 
         notificationLayoutHeadsUp.setTextViewText(R.id.caller, displayName)
         notificationLayoutHeadsUp.setTextViewText(R.id.sip_uri, address)
@@ -376,6 +375,7 @@ class NotificationsManager(private val context: Context) {
                 .setContentText(Texts.get("notif_incoming_call_title"))
                 .setContentIntent(pendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(false)
@@ -385,7 +385,8 @@ class NotificationsManager(private val context: Context) {
                 .setFullScreenIntent(pendingIntent, true)
                 .addAction(getCallDeclineAction(notifiable.notificationId))
                 .addAction(getCallAnswerAction(notifiable.notificationId))
-                .setCustomHeadsUpContentView(fillIncomingRemoteViewsForCall(call, false))
+                .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
+                .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, true))
 
         val notification = notificationBuilder.build()
 

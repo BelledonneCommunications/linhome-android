@@ -16,6 +16,8 @@ import org.lindoor.R
 import org.lindoor.databinding.ActivityCallInProgressBinding
 import org.lindoor.utils.DialogUtil
 import org.lindoor.utils.extensions.toogleVisible
+import org.lindoor.utils.stackStrace
+import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
 import org.linphone.core.tools.Log
 import permissions.dispatcher.NeedsPermission
@@ -31,6 +33,9 @@ class CallInProgressActivity : CallGenericActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Compatibility.setShowWhenLocked(this, true)
+        Compatibility.setTurnScreenOn(this, true)
 
         binding = DataBindingUtil.setContentView(
             this,
@@ -91,7 +96,6 @@ class CallInProgressActivity : CallGenericActivity() {
     }
 
     override fun onPause() {
-        coreContext.core.nativeVideoWindowId = null
         if (coreContext.core.callsNb > 0) {
             coreContext.createCallOverlay()
         }

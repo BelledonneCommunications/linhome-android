@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.ActivityCallIncomingBinding
+import org.lindoor.utils.stackStrace
+import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
 
 
@@ -19,6 +21,10 @@ class CallIncomingActivity : CallGenericActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Compatibility.setShowWhenLocked(this, true)
+        Compatibility.setTurnScreenOn(this, true)
+        Compatibility.requestDismissKeyguard(this)
 
         binding = DataBindingUtil.setContentView(
             this,
@@ -51,11 +57,6 @@ class CallIncomingActivity : CallGenericActivity() {
         super.onResume()
         coreContext.core.nativeVideoWindowId =
             if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
-    }
-
-    override fun onPause() {
-        coreContext.core.nativeVideoWindowId = null
-        super.onPause()
     }
 
 }

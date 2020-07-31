@@ -38,6 +38,7 @@ import org.lindoor.LindoorApplication
 import org.lindoor.compatibility.Api23Compatibility
 import org.lindoor.compatibility.Api25Compatibility
 import org.lindoor.compatibility.Api26Compatibility
+import org.lindoor.compatibility.Api28Compatibility
 import org.linphone.mediastream.Version
 import java.io.File
 
@@ -124,6 +125,33 @@ class Compatibility {
                 drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
             }
         }
+
+        /* UI */
+
+        fun setShowWhenLocked(activity: Activity, enable: Boolean) {
+            if (Version.sdkStrictlyBelow(Version.API27_OREO_81)) {
+                Api23Compatibility.setShowWhenLocked(activity, enable)
+            } else {
+                Api28Compatibility.setShowWhenLocked(activity, enable)
+            }
+        }
+
+        fun setTurnScreenOn(activity: Activity, enable: Boolean) {
+            if (Version.sdkStrictlyBelow(Version.API27_OREO_81)) {
+                Api23Compatibility.setTurnScreenOn(activity, enable)
+            } else {
+                Api28Compatibility.setTurnScreenOn(activity, enable)
+            }
+        }
+
+        fun requestDismissKeyguard(activity: Activity) {
+            if (Version.sdkStrictlyBelow(Version.API27_OREO_81)) {
+                Api23Compatibility.requestDismissKeyguard(activity)
+            } else {
+                Api28Compatibility.requestDismissKeyguard(activity)
+            }
+        }
+
 
 
         // Lindoor

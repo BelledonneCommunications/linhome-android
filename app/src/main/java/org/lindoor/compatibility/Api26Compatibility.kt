@@ -20,10 +20,7 @@
 package org.lindoor.compatibility
 
 import android.annotation.TargetApi
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PictureInPictureParams
+import android.app.*
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
@@ -79,6 +76,7 @@ class Api26Compatibility {
             channel.enableVibration(true)
             channel.enableLights(true)
             channel.setShowBadge(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(channel)
         }
 

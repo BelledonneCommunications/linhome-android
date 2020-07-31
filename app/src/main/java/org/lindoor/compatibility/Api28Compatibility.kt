@@ -20,7 +20,9 @@
 package org.lindoor.compatibility
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.app.ActivityManager
+import android.app.KeyguardManager
 import android.app.usage.UsageStatsManager
 import android.content.Context
 
@@ -37,6 +39,18 @@ class Api28Compatibility {
             val usageStatsManager =
                 context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             return usageStatsManager.appStandbyBucket
+        }
+        fun setShowWhenLocked(activity: Activity, enable: Boolean) {
+            activity.setShowWhenLocked(enable)
+        }
+
+        fun setTurnScreenOn(activity: Activity, enable: Boolean) {
+            activity.setTurnScreenOn(enable)
+        }
+
+        fun requestDismissKeyguard(activity: Activity) {
+            val keyguardManager = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            keyguardManager.requestDismissKeyguard(activity, null)
         }
     }
 }

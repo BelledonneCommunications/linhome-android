@@ -36,7 +36,7 @@
         android:contentDescription="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
+        android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_lindoor_icon"

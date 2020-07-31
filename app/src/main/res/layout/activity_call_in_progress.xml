@@ -60,9 +60,8 @@
             android:id="@+id/centerbundle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/chunk_call_top"
             android:layout_above="@+id/actions"
-            android:layout_marginTop="12dp">
+            android:layout_centerVertical="true">
 
             <LinearLayout
                 android:id="@+id/chunk_call_name_address"

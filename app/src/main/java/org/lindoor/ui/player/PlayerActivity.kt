@@ -89,9 +89,13 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
             }
         })
 
-        model.reset.observe(this, Observer { reached ->
-            if (reached)
+        model.resetEvent.observe(this, Observer { reset ->
+            if (reset)
                 view.timer.base = SystemClock.elapsedRealtime()
+        })
+
+        model.seekPosition.observe(this, Observer { p ->
+            view.timer.base = SystemClock.elapsedRealtime() - p
         })
 
         view.timer.setOnChronometerTickListener {

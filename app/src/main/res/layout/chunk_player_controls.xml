@@ -60,7 +60,8 @@
             android:layout_toEndOf="@+id/play"
             android:layout_marginEnd="7dp"
             android:progress="@{playermodel.position}"
-            android:onProgressChanged="@{(seekBar, progress, fromUser) -> fromUser ? playermodel.seek(progress) : null}"
+            android:onProgressChanged="@{(seekBar, progress, fromUser) -> fromUser ? playermodel.setTargetSeek(progress) : null}"
+            android:onStopTrackingTouch="@{(seekBar) -> playermodel.seek()}"
             android:thumbTint="@color/color_a" />
 
 

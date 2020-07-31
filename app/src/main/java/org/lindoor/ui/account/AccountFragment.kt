@@ -64,6 +64,6 @@ class AccountFragment : Fragment() {
                 val browserIntent =
                     Intent(Intent.ACTION_VIEW, Uri.parse(LindoorApplication.corePreferences.config.getString("assistant","freesip_url","www.lindoor.org")))
                 startActivity(browserIntent)
-            },confirmTextKey="continue")
+            })
     }
 }

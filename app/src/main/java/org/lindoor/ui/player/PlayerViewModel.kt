@@ -7,8 +7,6 @@ import org.lindoor.LindoorApplication
 import org.lindoor.linphonecore.extensions.historyEvent
 import org.linphone.core.Player
 import org.linphone.core.PlayerListener
-import org.linphone.core.tools.Log
-import java.util.*
 
 
 class PlayerViewModelFactory(private val callId: String, private val player: Player) :
@@ -25,44 +23,38 @@ class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
         LindoorApplication.coreContext.core.findCallLogFromCallId(callId)?.historyEvent()
     val playing = MutableLiveData(false)
     val position: MutableLiveData<Int> = MutableLiveData(0)
-    val reset = MutableLiveData(false)
+    val resetEvent = MutableLiveData(false)
+    val seekPosition = MutableLiveData(0)
 
-
-    lateinit var date: Date
+    var targetSeek: Int = 0
 
     val duration: Int
         get() {
-            if (isClosed())
-                if (historyEvent != null) {
-                    player.open(historyEvent.mediaFileName)
-                }
             return player.duration
         }
 
 
     private val listener = PlayerListener {
-        Log.i("[Recording] End of file reached")
         playing.value = false
-        reset.value = true
-        seek(0)
+        resetEvent.value = true
+        targetSeek = 0
+        seek()
     }
 
     init {
         player.addListener(listener)
+        if (historyEvent != null) {
+            player.open(historyEvent.mediaFileName)
+        }
     }
 
     override fun onCleared() {
-        if (!isClosed()) player.close()
+        player.close()
         player.removeListener(listener)
-
         super.onCleared()
     }
 
     fun togglePlay() {
-        if (isClosed())
-            if (historyEvent != null) {
-                player.open(historyEvent.mediaFileName)
-            }
         if (playing.value!!)
             player.pause()
         else
@@ -71,35 +63,28 @@ class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
     }
 
     fun playFromStart() {
-        if (isClosed())
-            if (historyEvent != null) {
-                player.open(historyEvent.mediaFileName)
-            }
-        seek(0)
+        targetSeek = 0
+        seek()
         player.start()
         playing.value = true
-        reset.value = true
+        resetEvent.value = true
     }
 
 
-    fun seek(p: Int) {
-        if (!isClosed()) {
-            if (playing.value!!)
-                player.pause()
-            player.seek(p)
-            if (playing.value!!)
-                player.start()
-            updatePosition()
+    fun seek() {
+        player.close()
+        if (historyEvent != null) {
+            player.open(historyEvent.mediaFileName)
         }
+        player.seek(targetSeek)
+        if (playing.value!!)
+            player.start()
+        updatePosition()
+        seekPosition.value = targetSeek
     }
 
     fun updatePosition() {
-        if (!isClosed()) {
             position.value = player.currentPosition
-        }
     }
 
-    private fun isClosed(): Boolean {
-        return player.state == Player.State.Closed
-    }
 }

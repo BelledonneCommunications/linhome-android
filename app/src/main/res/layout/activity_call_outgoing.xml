@@ -32,8 +32,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/chunk_call_top"
-            android:layout_marginTop="40dp">
+            android:layout_centerVertical="true"
+            android:layout_marginTop="20dp">
             <LinearLayout
                 android:id="@+id/chunk_call_name_address"
                 android:layout_width="match_parent"

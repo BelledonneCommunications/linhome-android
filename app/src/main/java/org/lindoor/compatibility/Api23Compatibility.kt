@@ -20,12 +20,14 @@
 package org.lindoor.compatibility
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Vibrator
 import android.provider.Settings
+import android.view.WindowManager
 
 @TargetApi(23)
 class Api23Compatibility {
@@ -61,6 +63,26 @@ class Api23Compatibility {
         fun vibrateOneShot(v: Vibrator) {
             v.vibrate(500)
         }
+        fun setShowWhenLocked(activity: Activity, enable: Boolean) {
+            if (enable) {
+                activity.window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+            } else {
+                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+            }
+        }
+
+        fun setTurnScreenOn(activity: Activity, enable: Boolean) {
+            if (enable) {
+                activity.window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+            } else {
+                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+            }
+        }
+
+        fun requestDismissKeyguard(activity: Activity) {
+            activity.window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+        }
+
     }
 
 

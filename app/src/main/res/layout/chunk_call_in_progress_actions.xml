@@ -25,7 +25,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:visibility='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? View.VISIBLE : View.GONE}'
+            android:visibility='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? View.VISIBLE : View.INVISIBLE}'
             bind:backgroundeffect='@{"incall_call_button"}'
             bind:icon='@{callmodel.device != null &amp;&amp; callmodel.device.actions.size()>0 ? callmodel.device.actions.get(0).iconName() : null}'
             bind:onClick="@{()->callmodel.performAction(callmodel.device.actions.get(0))}"

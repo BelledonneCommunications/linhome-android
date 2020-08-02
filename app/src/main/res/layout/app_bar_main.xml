@@ -80,7 +80,7 @@
                         >
                         <ImageView
                             android:id="@+id/toolbar_left_button_image"
-                            android:layout_width="20dp"
+                            android:layout_width="25dp"
                             android:layout_height="20dp"
                             android:layout_centerHorizontal="true"
                             android:scaleType="centerInside"
@@ -126,7 +126,7 @@
                         >
                         <ImageView
                             android:id="@+id/toolbar_right_button_image"
-                            android:layout_width="20dp"
+                            android:layout_width="25dp"
                             android:layout_height="20dp"
                             android:scaleType="centerInside"
                             android:src="@drawable/ic_lindoor_icon"

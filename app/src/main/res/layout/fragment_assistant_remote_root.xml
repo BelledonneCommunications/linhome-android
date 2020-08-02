@@ -73,7 +73,7 @@
         android:id="@+id/infotext"
         android:padding="10dp"
         style='@{"info_bubble"}'
-        text='@{"assistant_remote_prov_from_url_infobubble"}'
+        text='@{"assistant_remote_prov_infobubble"}'
         backgoundcolor='@{"color_n"}'
         android:layout_width="210dp"
         android:layout_height="wrap_content"

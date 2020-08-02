@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toTopOf="@id/url"
@@ -17,8 +17,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
+        android:text="toto titi"
         style='@{"view_main_title"}'
         text='@{"assistant_remote_prov"}' />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/infobutton"
+        icon='@{"icons/informations"}'
+        backgroundeffect='@{"info_bubble"}'
+        tint='@{"color_c"}'
+        android:scaleType="centerInside"
+        app:elevation="10dp"
+        app:fabCustomSize="20dp"
+        app:maxImageSize="9dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:translationY="20dp"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/title" />
+
+
 
     <org.lindoor.ui.widgets.LRoundRectButton
         android:id="@+id/url"
@@ -47,6 +67,19 @@
         app:layout_constraintTop_toBottomOf="@id/url"
         primary='@{false}'
         text='@{"assistant_remote_qr"}'
+        />
+
+    <TextView
+        android:id="@+id/infotext"
+        android:padding="10dp"
+        style='@{"info_bubble"}'
+        text='@{"assistant_remote_prov_from_url_infobubble"}'
+        backgoundcolor='@{"color_n"}'
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/infobutton"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        android:visibility="invisible"
         />
 
 

@@ -64,14 +64,6 @@ class RemoteUrlAccountFragment : GenericFragment() {
                 DialogUtil.error("failed_creating_pushgateway")
         })
 
-        binding.root.infobutton.setOnClickListener {
-            binding.root.infotext.toogleVisible()
-        }
-
-        binding.root.setOnClickListener {
-            binding.root.infotext.invisible()
-        }
-
         return binding.root
     }
 

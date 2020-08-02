@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_assistant_remote_qr.view.*
 import kotlinx.android.synthetic.main.fragment_assistant_remote_root.view.*
+import kotlinx.android.synthetic.main.fragment_assistant_remote_root.view.infobutton
+import kotlinx.android.synthetic.main.fragment_assistant_remote_root.view.infotext
 import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteRootBinding.inflate
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.extensions.toogleVisible
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
@@ -33,6 +37,11 @@ class RemoteRootFragment : GenericFragment() {
         binding.root.qr.root.setOnClickListener {
             openQRCodeViewWithPermissionCheck()
         }
+
+        binding.root.infobutton.setOnClickListener {
+            binding.root.infotext.toogleVisible()
+        }
+
         return binding.root
     }
 

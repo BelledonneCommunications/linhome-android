@@ -49,10 +49,6 @@ class RemoteQrAccountFragment : GenericFragment() {
         })
 
 
-        binding.root.infobutton.setOnClickListener {
-            binding.root.infotext.toogleVisible()
-        }
-
         return binding.root
     }
 

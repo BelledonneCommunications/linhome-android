@@ -23,7 +23,8 @@ fun Call.extendedAccept() {
     inCallParams?.audioDirection = MediaDirection.SendRecv
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
     acceptWithParams(inCallParams)
-    startRecording()
+    if (!isRecording)
+        startRecording()
 }
 
 

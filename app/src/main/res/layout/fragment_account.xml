@@ -44,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 style='@{"account_info"}'
                 android:lines="3"
-                android:visibility="@{model.pushGw != null &amp;&amp; model.account != model.pushGw ? View.VISIBLE : View.GONE}"
+                android:visibility="@{model.pushGw != null &amp;&amp; model.account != model.pushGw ? View.GONE : View.GONE}"
                 android:text='@{model.pushGWDesc}' />
 
 

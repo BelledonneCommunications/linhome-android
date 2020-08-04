@@ -129,6 +129,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                 ) {
                     Log.i("[Player] Surface texture should be available now")
                     player.setWindowId(textureView.surfaceTexture)
+                    playerViewModel.playFromStart()
                 }
             }
         }

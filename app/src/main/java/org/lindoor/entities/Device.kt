@@ -1,7 +1,13 @@
 package org.lindoor.entities
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.FileUtils
 import android.os.Parcelable
+import com.caverock.androidsvg.SVG
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.lindoor.LindoorApplication
 import org.lindoor.customisation.DeviceTypes
 import org.lindoor.store.StorageManager
@@ -10,6 +16,7 @@ import org.lindoor.utils.extensions.existsAndIsNotEmpty
 import org.lindoor.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import java.io.File
+import java.io.FileInputStream
 import java.util.*
 
 
@@ -24,6 +31,8 @@ data class Device(
 ) :
     Parcelable {
 
+    var typeIconAsBitmap: Bitmap? = null
+
     constructor(
         type: String?,
         name: String,
@@ -33,6 +42,12 @@ data class Device(
     ) : this(
         xDigitsUUID(), type, name, address, actionsMethodType, actions
     )
+
+    init {
+        GlobalScope.launch() {
+            typeIconAsBitmap = typeIconAsBitmap(type)
+        }
+    }
 
 
     val thumbNail: File
@@ -45,12 +60,6 @@ data class Device(
         return type?.let {
             DeviceTypes.supportsVideo(it)
         } ?: false
-    }
-
-    fun supportsAudio(): Boolean {
-        return type?.let {
-            DeviceTypes.supportsAudio(it)
-        } ?: true
     }
 
     fun call() {
@@ -87,9 +96,33 @@ data class Device(
         }
     }
 
+    companion object {
+        fun typeIconAsBitmap(type: String?): Bitmap? {
+            return type?.let {
+                val svgFile = File(
+                    LindoorApplication.instance.filesDir,
+                    "images/${DeviceTypes.iconNameForDeviceType(it)}.svg"
+                )
+                val targetStream = FileInputStream(svgFile)
+                val svg = SVG.getFromInputStream(targetStream)
+                if (svg.documentWidth != -1f) {
+                    val newBM = Bitmap.createBitmap(
+                        Math.ceil(svg.documentWidth.toDouble()).toInt(),
+                        Math.ceil(svg.documentHeight.toDouble()).toInt(),
+                        Bitmap.Config.ARGB_8888
+                    )
+                    val bmcanvas = Canvas(newBM)
+                    bmcanvas.drawRGB(255, 255, 255)
+                    svg.renderToCanvas(bmcanvas)
+                    newBM
+                } else
+                    null
+            }
+        }
+    }
+
     fun hasThumbNail(): Boolean {
         return thumbNail.existsAndIsNotEmpty()
     }
-
 
 }

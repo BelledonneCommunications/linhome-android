@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:id="@+id/header"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:orientation="vertical">
@@ -17,13 +17,6 @@
             style="@android:style/TextAppearance.Material.Notification.Title"/>
 
         <TextView
-            android:id="@+id/sip_uri"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/color_a"
-            style="@android:style/TextAppearance.Material.Notification.Line2"/>
-
-        <TextView
             android:id="@+id/incoming_call_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,6 +24,12 @@
 
     </LinearLayout>
 
-
+    <ImageView
+        android:id="@+id/device_type"
+        android:src="@drawable/ic_lindoor_icon"
+        android:layout_alignParentRight="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp">
+    </ImageView>
 
 </RelativeLayout>

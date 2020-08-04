@@ -44,7 +44,7 @@ class LindoorApplication : Application() {
             coreContext = CoreContext(context, config)
             coreContext.start()
 
-            // Things to do once
+            // work around https://bugs.linphone.org/view.php?id=7714 - for demo purpose
             if (corePreferences.config.getBool("app","first_launch", true)) {
                 corePreferences.config.setBool("app","first_launch", false)
                 coreContext.core.videoPayloadTypes.forEach {

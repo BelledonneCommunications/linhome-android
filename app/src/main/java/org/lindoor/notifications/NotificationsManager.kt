@@ -42,6 +42,7 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.LindoorApplication.Companion.corePreferences
 import org.lindoor.MainActivity
 import org.lindoor.R
+import org.lindoor.customisation.DeviceTypes
 import org.lindoor.customisation.Texts
 import org.lindoor.customisation.Theme
 import org.lindoor.linphonecore.CoreService
@@ -59,6 +60,7 @@ import org.linphone.core.CallListenerStub
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 import org.linphone.core.tools.Log
+import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.concurrent.fixedRateTimer
@@ -87,7 +89,6 @@ class NotificationsManager(private val context: Context) {
         const val INTENT_NOTIF_ID = "NOTIFICATION_ID"
         const val INTENT_HANGUP_CALL_NOTIF_ACTION = "org.lindoor.HANGUP_CALL_ACTION"
         const val INTENT_ANSWER_CALL_NOTIF_ACTION = "org.lindoor.ANSWER_CALL_ACTION"
-        const val INTENT_LOCAL_IDENTITY = "LOCAL_IDENTITY"
 
         private const val SERVICE_NOTIF_ID = 1
         private const val MISSED_CALLS_NOTIF_ID = 2
@@ -97,7 +98,6 @@ class NotificationsManager(private val context: Context) {
     private val notificationManager: NotificationManagerCompat by lazy {
         NotificationManagerCompat.from(context)
     }
-    private val chatNotificationsMap: HashMap<String, Notifiable> = HashMap()
     private val callNotificationsMap: HashMap<String, Notifiable> = HashMap()
 
     private var lastNotificationId: Int = 5
@@ -148,18 +148,16 @@ class NotificationsManager(private val context: Context) {
                     call.callLog.historyEvent().mediaThumbnail.also {
                         if (it.existsAndIsNotEmpty() && it.length() != fileLenght && !LindoorApplication.someActivityRunning) {
                             fileLenght = it.length()
-                            val notificationLayoutHeadsUp =
+                            val remoteView =
                                 fillIncomingRemoteViewsForCall(call, true)
                             val awt = AppWidgetTarget(
                                 context.applicationContext,
                                 R.id.caller_picture,
-                                notificationLayoutHeadsUp,
+                                remoteView,
                                 0
                             )
                             Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
-                            notificationBuilder.setCustomBigContentView(
-                                notificationLayoutHeadsUp
-                            )
+                            notificationBuilder.setCustomBigContentView(remoteView)
                             val notification = notificationBuilder.build()
                             if (!LindoorApplication.someActivityRunning && call.state == Call.State.IncomingEarlyMedia)
                                 notify(getNotifiableForCall(call).notificationId, notification)
@@ -328,10 +326,9 @@ class NotificationsManager(private val context: Context) {
 
 
     private fun fillIncomingRemoteViewsForCall(call: Call, hasSnapShot: Boolean): RemoteViews {
-        val address = call.remoteAddress.asStringUriOnly()
-        val displayName =
-            DeviceStore.findDeviceByAddress(call.remoteAddress)?.name ?: call.remoteAddress.username
-        val notificationLayoutHeadsUp =
+        val device =  DeviceStore.findDeviceByAddress(call.remoteAddress)
+        val displayName = device?.name ?: call.remoteAddress.username
+        val remoteView =
             if (hasSnapShot)
                 RemoteViews(
                     context.packageName,
@@ -340,13 +337,26 @@ class NotificationsManager(private val context: Context) {
             else
                 RemoteViews(context.packageName, R.layout.call_incoming_notification_content)
 
-        notificationLayoutHeadsUp.setTextViewText(R.id.caller, displayName)
-        notificationLayoutHeadsUp.setTextViewText(R.id.sip_uri, address)
-        notificationLayoutHeadsUp.setTextViewText(
+        remoteView.setTextViewText(R.id.caller, displayName)
+        remoteView.setTextViewText(
             R.id.incoming_call_info,
             Texts.get("notif_incoming_call_title")
         )
-        return notificationLayoutHeadsUp
+
+        device?.also { device ->
+            device.typeIconAsBitmap?.also {
+                val awt = AppWidgetTarget(
+                    context.applicationContext,
+                    R.id.device_type,
+                    remoteView,
+                    if (hasSnapShot) 1 else 2
+                )
+                Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
+            }
+        }
+
+
+        return remoteView
     }
 
 

@@ -43,6 +43,17 @@ class LindoorApplication : Application() {
             Log.i("[Application] Core context created")
             coreContext = CoreContext(context, config)
             coreContext.start()
+
+            // Things to do once
+            if (corePreferences.config.getBool("app","first_launch", true)) {
+                corePreferences.config.setBool("app","first_launch", false)
+                coreContext.core.videoPayloadTypes.forEach {
+                    if (it.description.toLowerCase().contains("vp8")) {
+                        it.enable(false)
+                    }
+                }
+            }
+
         }
 
 

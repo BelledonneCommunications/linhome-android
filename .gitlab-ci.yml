@@ -24,13 +24,27 @@ job-android:
   image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:29
 
   script:
+    - sdkmanager
+    - scp -oStrictHostKeyChecking=no $DEPLOY_SERVER:$ANDROID_KEYSTORE_PATH app/
+    - echo storePassword=$ANDROID_KEYSTORE_PASSWORD > keystore.properties
+    - echo keyPassword=$ANDROID_KEYSTORE_KEY_PASSWORD >> keystore.properties
+    - echo keyAlias=$ANDROID_KEYSTORE_KEY_ALIAS >> keystore.properties
+    - echo storeFile=$ANDROID_KEYSTORE_FILE >> keystore.properties
+    - ./gradlew app:dependencies | grep org.linphone
+    - ./gradlew assembleDebug
+    - ./gradlew assembleRelease
+
+
+
     - ./gradlew app:dependencies | grep org.linphone
     - ./gradlew assembleDebug
     - cp ./app/build/outputs/apk/debug/app-debug.apk lindoor-debug-unsigned.apk
+    - cp ./app/build/outputs/apk/release/app-debug.apk lindoor-release-signed.apk
 
   artifacts:
     paths:
       - lindoor-debug-unsigned.apk 
+      - lindoor-release-signed.apk 
     when: always
     expire_in: 1 week
 

@@ -20,3 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep public class * extends androidx.fragment.app.Fragment { *; }
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable

@@ -35,8 +35,7 @@ job-android:
     - ./gradlew assembleDebug
     - ./gradlew assembleRelease
     - cp ./app/build/outputs/apk/debug/app-debug.apk lindoor-debug-unsigned.apk
-    - cp ./app/build/outputs/apk/release/app-release-signed.apk lindoor-release-signed.apk
-
+    - cp ./app/build/outputs/apk/release/app-release.apk lindoor-release-signed.apk
 
   artifacts:
     paths:

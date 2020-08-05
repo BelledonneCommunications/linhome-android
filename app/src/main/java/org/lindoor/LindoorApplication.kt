@@ -52,6 +52,7 @@ class LindoorApplication : Application() {
                         it.enable(false)
                     }
                 }
+                coreContext.core.enableIpv6(false)
             }
 
         }

@@ -1,6 +1,8 @@
 package org.lindoor.customisation
 
+import android.graphics.Bitmap
 import org.lindoor.customisation.Customisation.deviceTypesConfig
+import org.lindoor.entities.Device
 import org.lindoor.ui.widgets.SpinnerItem
 import java.util.*
 import org.lindoor.linphonecore.extensions.getString
@@ -9,6 +11,7 @@ import org.lindoor.linphonecore.extensions.getString
 object DeviceTypes {
     var deviceTypes: ArrayList<SpinnerItem> = ArrayList()
     lateinit var defaultType: String
+    var defaultTypeIconAsBitmap: Bitmap? = null
 
     init {
         deviceTypesConfig.let { config ->
@@ -22,6 +25,7 @@ object DeviceTypes {
                         it
                     )
                 )
+                defaultTypeIconAsBitmap = Device.typeIconAsBitmap(defaultType)
             }
         }
     }

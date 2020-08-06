@@ -158,6 +158,7 @@ class NotificationsManager(private val context: Context) {
                             )
                             Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
                             notificationBuilder.setCustomBigContentView(remoteView)
+                            notificationBuilder.setCustomContentView(remoteView)
                             val notification = notificationBuilder.build()
                             if (!LindoorApplication.someActivityRunning && call.state == Call.State.IncomingEarlyMedia)
                                 notify(getNotifiableForCall(call).notificationId, notification)
@@ -343,17 +344,18 @@ class NotificationsManager(private val context: Context) {
             Texts.get("notif_incoming_call_title")
         )
 
-        device?.also { device ->
-            device.typeIconAsBitmap?.also {
-                val awt = AppWidgetTarget(
-                    context.applicationContext,
-                    R.id.device_type,
-                    remoteView,
-                    if (hasSnapShot) 1 else 2
-                )
-                Glide.with(context.applicationContext).asBitmap().load(it).into(awt)
+        val awt = AppWidgetTarget(
+            context.applicationContext,
+            R.id.device_type,
+            remoteView,
+            if (hasSnapShot) 1 else 2
+        )
+
+        Glide.with(context.applicationContext).asBitmap().load(device?.let { device ->
+            device.typeIconAsBitmap?.let {
+                it
             }
-        }
+        } ?: DeviceTypes.defaultTypeIconAsBitmap).into(awt)
 
 
         return remoteView
@@ -396,7 +398,7 @@ class NotificationsManager(private val context: Context) {
                 .addAction(getCallDeclineAction(notifiable.notificationId))
                 .addAction(getCallAnswerAction(notifiable.notificationId))
                 .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
-                .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, true))
+                .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
 
         val notification = notificationBuilder.build()
 

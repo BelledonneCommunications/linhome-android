@@ -14,6 +14,7 @@ import org.lindoor.GenericFragment
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteRootBinding.inflate
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.extensions.invisible
 import org.lindoor.utils.extensions.toogleVisible
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
@@ -41,6 +42,10 @@ class RemoteRootFragment : GenericFragment() {
         binding.root.infobutton.setOnClickListener {
             binding.root.infotext.toogleVisible()
         }
+        binding.root.setOnClickListener {
+            binding.root.infotext.invisible()
+        }
+
 
         return binding.root
     }

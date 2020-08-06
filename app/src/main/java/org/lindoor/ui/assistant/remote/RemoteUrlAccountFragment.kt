@@ -64,6 +64,7 @@ class RemoteUrlAccountFragment : GenericFragment() {
                 DialogUtil.error("failed_creating_pushgateway")
         })
 
+
         return binding.root
     }
 

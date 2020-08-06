@@ -12,6 +12,7 @@ import org.lindoor.LindoorApplication.Companion.coreContext
 import org.lindoor.R
 import org.lindoor.databinding.FragmentAssistantRemoteQrBinding
 import org.lindoor.utils.DialogUtil
+import org.lindoor.utils.extensions.invisible
 import org.lindoor.utils.extensions.toogleVisible
 import org.linphone.core.ConfiguringState
 import org.linphone.core.tools.Log
@@ -47,6 +48,15 @@ class RemoteQrAccountFragment : GenericFragment() {
             } else
                 DialogUtil.error("failed_creating_pushgateway")
         })
+
+
+        binding.root.infobutton.setOnClickListener {
+            binding.root.infotext.toogleVisible()
+        }
+
+        binding.root.setOnClickListener {
+            binding.root.infotext.invisible()
+        }
 
 
         return binding.root

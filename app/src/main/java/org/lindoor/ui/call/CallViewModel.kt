@@ -55,7 +55,8 @@ class CallViewModel(val call: Call) : ViewModel() {
                 fireActionsOnCallStateChanged(state)
                 attemptSetDeviceThumbnail(state)
                 call?.remoteParams?.videoEnabled()?.also {
-                    call.requestNotifyNextVideoFrameDecoded()
+                    if (!videoContent.value!!)
+                        call.requestNotifyNextVideoFrameDecoded()
                 }
                 callState.value = state
             }
@@ -80,6 +81,10 @@ class CallViewModel(val call: Call) : ViewModel() {
         historyEvent = call.callLog.historyEvent()
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
+        call?.remoteParams?.videoEnabled()?.also {
+            call.requestNotifyNextVideoFrameDecoded()
+        }
+
     }
 
     private fun fireActionsOnCallStateChanged(cstate: Call.State) {

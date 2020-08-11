@@ -41,6 +41,40 @@ afterEvaluate {
             task.dependsOn tasks.zipTheme
 }
 
+task getGitVersion() {
+    def gitVersion = "5.0.0"
+    def gitVersionStream = new ByteArrayOutputStream()
+    def gitCommitsCount = new ByteArrayOutputStream()
+    def gitCommitHash = new ByteArrayOutputStream()
+
+    try {
+        exec {
+            executable "git" args "describe", "--abbrev=0", "--tags"
+            standardOutput = gitVersionStream
+        }
+        exec {
+            executable "git" args "rev-list", gitVersionStream.toString().trim() + "..HEAD", "--count"
+            standardOutput = gitCommitsCount
+        }
+        exec {
+            executable "git" args "rev-parse", "--short", "HEAD"
+            standardOutput = gitCommitHash
+        }
+
+        if (gitCommitsCount.toString().toInteger() == 0) {
+            gitVersion = gitVersionStream.toString().trim()
+        } else {
+            gitVersion = gitVersionStream.toString().trim() + "." + gitCommitsCount.toString().trim() + "+" + gitCommitHash.toString().trim()
+        }
+        println("Git version: " + gitVersion)
+    } catch (ignored) {
+        println("Git not found")
+    }
+    project.version = gitVersion
+}
+project.tasks['preBuild'].dependsOn 'getGitVersion'
+
+
 android {
     compileSdkVersion 29
 
@@ -56,6 +90,9 @@ android {
 
     applicationVariants.all { variant ->
         variant.getMergedFlavor().manifestPlaceholders = [lindoor_file_provider: applicationId + ".fileprovider"]
+        variant.outputs.all {
+            outputFileName = "lindoor-android-${variant.buildType.name}-${project.version}.apk"
+        }
     }
 
     signingConfigs {

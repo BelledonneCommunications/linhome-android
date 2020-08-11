@@ -34,13 +34,11 @@ job-android:
     - ./gradlew app:dependencies | grep org.linphone
     - ./gradlew assembleDebug
     - ./gradlew assembleRelease
-    - cp ./app/build/outputs/apk/debug/app-debug.apk lindoor-debug-unsigned.apk
-    - cp ./app/build/outputs/apk/release/app-release.apk lindoor-release-signed.apk
 
   artifacts:
     paths:
-      - lindoor-debug-unsigned.apk 
-      - lindoor-release-signed.apk 
+     - ./app/build/outputs/apk/debug/lindoor-android-debug-*.apk
+     - ./app/build/outputs/apk/release/lindoor-android-release-*.apk
     when: always
     expire_in: 1 week
 

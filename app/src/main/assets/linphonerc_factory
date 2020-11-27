@@ -1,0 +1,50 @@
+
+## Start of factory rc
+
+#This file shall not contain path referencing package name, in order to be portable when app is renamed.
+#Paths to resources must be set from LinphoneManager, after creating LinphoneCore.
+
+[net]
+mtu=1300
+force_ice_disablement=1
+firewall_policy=0
+stun_server=stun.linphone.org
+
+[sip]
+guess_hostname=1
+register_only_when_network_is_up=1
+auto_net_state_mon=1
+auto_answer_replacing_calls=1
+ping_with_options=0
+use_cpim=1
+
+[sound]
+#remove this property for any application that is not Linphone public version itself
+ec_calibrator_cool_tones=1
+
+[video]
+displaytype=MSAndroidTextureDisplay
+auto_resize_preview_to_keep_ratio=1
+automatically_accept=1
+capture=1
+display=1
+enabled=1
+
+
+[assistant]
+xmlrpc_url=https://subscribe.linphone.org/flexisip-account-manager/linhome/xmlrpc.php
+; MD5 / SHA-256
+password_algo=MD5
+domain=sip.linhome.org
+freesip_url=https://subscribe.linhome.org
+
+[rtp]
+audio_rtp_port=-1
+video_rtp_port=-1
+
+[misc]
+max_calls=1
+history_max_size=100
+
+
+## End of factory rc

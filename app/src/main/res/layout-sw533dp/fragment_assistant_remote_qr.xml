@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        backgoundcolor='@{"color_c"}'
+        android:layout_height="match_parent">
+
+
+        <TextureView
+            android:id="@+id/qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+
+        <RelativeLayout
+            android:id="@+id/header_opaque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_c"
+            android:paddingBottom="60dp"
+            tools:context=".ui.assistant.remote.RemoteQrAccountFragment">
+
+            <TextView
+                android:id="@+id/title"
+                style='@{"view_main_title"}'
+                text='@{"assistant_remote_from_qr"}'
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"/>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/infobutton"
+                icon='@{"icons/informations"}'
+                backgroundeffect='@{"info_bubble"}'
+                tint='@{"color_c"}'
+                android:scaleType="centerInside"
+                app:elevation="10dp"
+                app:fabCustomSize="20dp"
+                app:maxImageSize="9dp"
+                android:layout_marginTop="-21dp"
+                android:layout_width="20dp"
+                android:layout_marginStart="-10dp"
+                android:layout_height="20dp"
+                android:layout_toEndOf="@+id/title"
+                android:layout_alignTop="@+id/title" />
+
+
+            <TextView
+                android:id="@+id/subtitle"
+                style='@{"view_sub_title"}'
+                text='@{"assistant_remote_from_qr_desc"}'
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="33dp" />
+
+            <TextView
+                android:id="@+id/infotext"
+                android:padding="10dp"
+                style='@{"info_bubble"}'
+                text='@{"assistant_remote_prov_from_qr_infobubble"}'
+                backgoundcolor='@{"color_n"}'
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infobutton"
+                android:layout_alignEnd="@+id/title"
+                android:visibility="invisible"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/mask_container"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@+id/header_opaque"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:gravity="center">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_c"
+                android:layout_toLeftOf="@id/mask">
+            </View>
+
+            <ImageView
+                android:id="@+id/mask"
+                src='@{"icons/qrcode_mask"}'
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                >
+            </ImageView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_c"
+                android:layout_toRightOf="@id/mask">
+            </View>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_c"
+            android:layout_below="@id/mask_container">
+        </View>
+
+
+
+    </RelativeLayout>
+
+</layout>

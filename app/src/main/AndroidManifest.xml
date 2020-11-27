@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.linhome">
+
+    <!-- Helps filling notification_phone number and country code in assistant -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Needed for auto start at boot and to ensure the service won't be killed by OS while in call -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Needed for full screen intent in incoming call notifications -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <!-- To vibrate while incoming call -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Needed to shared downloaded files if setting is on -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Both permissions below are for contacts sync account -->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!-- Needed for overlay -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+
+
+    <application
+        android:extractNativeLibs="true"
+        android:hardwareAccelerated="true"
+        android:name="org.linhome.LinhomeApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/LinhomeTheme">
+        <activity
+            android:name="org.linhome.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/LinhomeTheme">
+            <nav-graph android:value="@navigation/fragments_graph" />
+        </activity>
+        <activity
+            android:name="org.linhome.SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="sensor"
+            android:theme="@style/LinhomeTheme"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.linhome.ui.call.CallIncomingActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LinhomeTheme"
+            >
+        </activity>
+
+        <activity
+            android:name="org.linhome.ui.call.CallOutgoingActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LinhomeTheme"
+            >
+        </activity>
+
+        <activity
+            android:name="org.linhome.ui.call.CallInProgressActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LinhomeTheme"
+            >
+        </activity>
+
+        <activity
+            android:name="org.linhome.ui.player.PlayerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LinhomeTheme"
+            android:screenOrientation="sensor"
+            >
+        </activity>
+        <!-- Receivers -->
+
+        <receiver android:name="org.linhome.linphonecore.CorePushReceiver">
+            <intent-filter>
+                <action android:name="org.linhome.core.action.PUSH_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="org.linhome.notifications.NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name="org.linhome.linphonecore.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- Services -->
+
+        <service
+            android:name="org.linhome.linphonecore.CoreService"
+            android:foregroundServiceType="phoneCall"
+            android:stopWithTask="false"
+            android:label="@string/app_name" />
+
+        <service android:name="org.linphone.core.tools.firebase.FirebaseMessaging" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${linhome_file_provider}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+    </application>
+
+
+</manifest>

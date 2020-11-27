@@ -1,0 +1,195 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="model" type="org.linhome.ui.history.HistoryEventViewModel" />
+        <variable name="historymodel" type="org.linhome.ui.history.HistoryViewModel" />
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
+        android:alpha="@{historymodel.editing &amp;&amp; !historymodel.selectedForDeletion.contains(model.callLog.callId) ? 0.3f : 1.0f}"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            style='@{"history_list_day_name"}'
+            android:visibility='@{model.showDate ? View.VISIBLE : View.GONE, default="gone"}'
+            android:text='@{model.dayText()}' />
+
+
+        <androidx.cardview.widget.CardView
+            android:clickable='@{model.historyEvent.hasMedia()||historymodel.editing ? true : false}'
+            android:onClick="@{() -> historymodel.editing ? model.toggleSelect() : model.viewMedia()}"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="142dp"
+            app:contentPadding="2dp"
+            android:elevation="6dp"
+            app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="true"
+            roundRectWithColor='@{"color_c"}'
+            andRadius='@{"call_in_history_list_corner_radius"}'
+            andStrokeWidth='@{2}'
+            andStrokeColor='@{!model.isNew() ? "color_c" : "color_t"}'
+            selected_stroke_color='@{"color_a"}'>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardPreventCornerOverlap="true"
+                roundRectWithColor='@{"color_c"}'
+                andRadius='@{"call_in_history_list_corner_radius"}'>
+
+                <RelativeLayout
+                    android:id="@+id/media"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    >
+
+                    <ImageView
+                        android:id="@+id/mediathumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        glidewith ='@{model.historyEvent.mediaThumbnail}'
+                        android:visibility='@{model.historyEvent.hasMedia() &amp;&amp; model.historyEvent.hasMediaThumbnail() ? View.VISIBLE : View.GONE, default="gone"}'
+                        android:scaleType="centerCrop"/>
+
+                    <TextView
+                        android:id="@+id/nomedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style='@{"history_no_media_found"}'
+                        text='@{"history_no_media_found"}'
+                        backgoundcolor='@{"color_u"}'
+                        android:layout_centerInParent="true"
+                        android:visibility='@{model.historyEvent.hasMedia() ? View.GONE : View.VISIBLE, default="visible"}'
+                        android:text="No media" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/play"
+                        android:clickable='@{model.historyEvent.hasMedia() &amp;&amp; !historymodel.editing ? true : false}'
+                        android:onClick="@{() -> model.viewMedia()}"
+                        backgroundeffect='@{historymodel.editing ? null : "primary_color"}'
+                        backgroundcolor='@{historymodel.editing ? "color_b" : null}'
+                        tint='@{"color_c"}'
+                        icon='@{"icons/play"}'
+                        app:fabCustomSize="33dp"
+                        app:maxImageSize="12dp"
+                        android:layout_width="33dp"
+                        android:layout_height="33dp"
+                        android:layout_gravity="center"
+                        app:elevation="0dp"
+                        android:layout_centerInParent="true"
+                        android:visibility='@{model.historyEvent.hasMedia() ? View.VISIBLE : View.GONE, default="visible"}'
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_marginStart="150dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="19dp"
+                        style='@{"history_list_device_name"}'
+                        text='@{model.device != null ?  model.device.name : model.getText("history_unregistered_device")}'
+                        android:text="Name" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/name"
+                        android:layout_marginTop="1dp"
+                        android:text='@{model.callLog.remoteAddress.asStringUriOnly(), default="address"}'
+                        style='@{"history_list_device_address"}'
+                        />
+
+                    <RelativeLayout
+                        android:id="@+id/separator"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="40dp"
+                        android:layout_height="1dp"
+                        android:visibility="visible"
+                        backgoundcolor='@{"color_h"}'
+                        android:layout_below="@+id/address"
+                       />
+
+                    <ImageView
+                        android:id="@+id/logtypeicon"
+                        icon='@{model.callTypeIcon()}'
+                        android:layout_width="40dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_below="@+id/separator"
+                        android:scaleType="centerInside"/>
+
+                    <TextView
+                        android:id="@+id/logtypeanddate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_below="@+id/address"
+                        android:layout_toEndOf="@+id/logtypeicon"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginStart="12dp"
+                        style='@{"history_list_call_date"}'
+                        android:text='@{model.callTypeAndDate(), default="call"}' />
+
+                    <TextView
+                        android:id="@+id/newtag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginBottom="17dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="5dp"
+                        style='@{"history_list_new_tag"}'
+                        text='@{"history_call_new"}'
+                        android:visibility='@{model.isNew() &amp;&amp; !historymodel.editing? View.VISIBLE : View.INVISIBLE, default="gone"}'
+                        android:text="new" />
+
+                    <CheckBox
+                        android:id="@+id/delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="-4dp"
+                        android:layout_marginEnd="-15dp"
+                        android:onClick="@{() -> model.toggleSelect()}"
+                        android:checked='@{historymodel.editing &amp;&amp; historymodel.selectedForDeletion.contains(model.callLog.callId)  ? true : false, default=false}'
+                        android:visibility='@{historymodel.editing ? View.VISIBLE : View.INVISIBLE, default="visible"}'
+                         />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+</layout>

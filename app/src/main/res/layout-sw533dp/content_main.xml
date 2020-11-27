@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable name="tabbarviewmodel2" type="org.linhome.ui.tabbar.TabbarViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/app_bar_main">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/tabbar"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/navigation_host_fragment"
+
+            android:baselineAligned="false">
+            <LinearLayout
+                android:id="@+id/tabbar_devices"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:id="@+id/icon_devices"
+                    android:layout_width="37dp"
+                    android:layout_height="31dp"
+                    src='@{"icons/footer_devices"}'
+                    >
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/text_devices"
+                    android:layout_marginStart="9dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style='@{"tabbar_option"}'
+                    text='@{"devices"}'
+                    >
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tabbar_history"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:gravity="center"
+                android:focusable="true">
+
+                <RelativeLayout
+                    android:layout_width="45dp"
+                    android:layout_height="55dp">
+
+
+                    <ImageView
+                        android:id="@+id/icon_history"
+                        android:layout_width="37dp"
+                        android:layout_height="31dp"
+                        android:layout_centerInParent="true"
+                        src='@{"icons/footer_history"}'
+                        >
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/unread_count"
+                        android:background="@drawable/round_shape"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:backgroundTint="@color/color_a"
+                        bounceTrigger='@{tabbarviewmodel2.unreadCount > 0}'
+                        style='@{"tabbar_unread_count"}'
+                        android:visibility='@{tabbarviewmodel2.unreadCount > 0 ? View.VISIBLE : View.INVISIBLE}'
+                        android:text='@{tabbarviewmodel2.unreadCount &lt; 100 ? String.valueOf(tabbarviewmodel2.unreadCount) : "99+"}'
+                        >
+                    </TextView>
+                </RelativeLayout>
+
+
+
+                <TextView
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/text_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style='@{"tabbar_option"}'
+                    text='@{"history"}'>
+                </TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/navigation_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/fragments_graph"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tabbar"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <fragment
+            android:id="@+id/host_fragment_sidemenu"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent=".5"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/sidemenu_graph" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

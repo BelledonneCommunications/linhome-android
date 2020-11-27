@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="org.linhome.customisation.Texts"/>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="org.linhome.ui.settings.SettingsViewModel"/>
+        <variable
+            name="view"
+            type="org.linhome.ui.settings.SettingsFragment"/>
+        <variable
+            name="subsection"
+            type="Boolean" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        backgoundcolor='@{"color_c"}'
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <org.linhome.ui.widgets.LExpandableSettingsSection
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            title='@{"audio_codecs"}'
+            entries="@{model.audioCodecs}"/>
+
+        <org.linhome.ui.widgets.LExpandableSettingsSection
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            title='@{"video_codecs"}'
+            entries="@{model.videCodecs}"/>
+
+        <include
+            layout="@layout/settings_widget_switch"
+            title='@{model.getText("enable_ipv6")}'
+            listener="@{model.enableIpv6Listener}"
+            checked="@={model.enableIpv6}"/>
+
+        <include
+            layout="@layout/settings_widget_spinner"
+            title='@{model.getText("media_encryption")}'
+            listener="@{model.encryptionListener}"
+            selectedIndex="@{model.encryptionIndex}"
+            labels="@{model.encryptionLabels}"/>
+
+        <include
+            layout="@layout/settings_widget_switch"
+            title='@{model.getText("enable_debuglogs")}'
+            listener="@{model.enableDebugLogsListener}"
+            checked="@={model.enableDebugLogs}"/>
+
+        <LinearLayout
+            android:id="@+id/debug_log_options"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{model.enableDebugLogs ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/settings_widget_basic"
+                title='@{model.getText("clear_logs")}'
+                listener="@{view.clearLogsListener}"
+                subsection="@{true}"
+                />
+
+            <include
+                android:id="@+id/send_logs"
+                layout="@layout/settings_widget_basic"
+                title='@{model.getText("send_logs")}'
+                listener="@{view.sendLogsListener}"
+                subsection="@{true}"
+                />
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/settings_widget_switch"
+            title='@{model.getText("settings_device_show_latest_snapshot")}'
+            listener="@{model.showLatestSnapshot}"
+            checked="@={model.latestSnapshotShown}"/>
+
+
+    </LinearLayout>
+    </ScrollView>
+</layout>

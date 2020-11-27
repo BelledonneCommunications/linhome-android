@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="selectedIndex"
+            type="Integer" />
+        <variable
+            name="enabled"
+            type="Boolean" />
+        <variable
+            name="labels"
+            type="java.util.ArrayList&lt;String&gt;" />
+        <variable
+            name="listener"
+            type="org.linhome.ui.settings.SettingListener" />
+    </data>
+
+    <RelativeLayout
+        android:onClick="@{() -> listener.onClicked()}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical|left">
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            src='@{"icons/chevron_down"}'
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            android:enabled="@{enabled ?? true}"
+            android:visibility="@{title.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_title"}'
+
+            />
+
+        <TextView
+            android:id="@+id/settings_subtitle"
+            android:text="@{subtitle}"
+            android:enabled="@{enabled ?? true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{subtitle.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:singleLine="true"
+            android:layout_below="@id/settings_title"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:marquee='@{true}'
+            style='@{"settings_subtitle"}'
+            />
+
+        <Spinner
+            android:id="@+id/settings_spinner"
+            android:entries="@{labels}"
+            popupBackgoundColor='@{"color_d"}'
+            popupBackgoundRadius='@{7.0f}'
+            selectedIndex="@{selectedIndex}"
+            settingListener="@{listener}"
+            android:enabled="@{enabled ?? true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/settings_subtitle"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@null"
+            />
+
+
+
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/settings_spinner"
+            backgoundcolor='@{"color_h"}'
+            />
+
+    </RelativeLayout>
+
+</layout>

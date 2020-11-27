@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="off"
+            type="androidx.lifecycle.MutableLiveData&lt;Boolean>" />
+        <variable
+            name="icon"
+            type="String" />
+        <variable
+            name="text"
+            type="String" />
+        <variable
+            name="textOff"
+            type="String" />
+        <variable
+            name="backgroundeffect"
+            type="String" />
+        <variable
+            name="tint"
+            type="String" />
+        <variable
+            name="outline"
+            type="Boolean" />
+        <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/border"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@{outline ? @drawable/round_shape_outline_color_c : @drawable/round_shape}"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/button_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="@drawable/round_shape"
+                icon='@{icon}'
+                backgroundeffect='@{backgroundeffect}'
+                tint='@{tint}'
+                android:onClick="@{onClick}"
+                />
+
+            <LinearLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="4dp"
+                android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
+                android:orientation="horizontal" >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/strike_trhough"
+                    />
+            </LinearLayout>
+
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/button_text"
+            style='@{"call_action_button"}'
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:visibility='@{off ? View.GONE : View.VISIBLE, default = "visible"}'
+            android:lines="2"
+            marquee='@{true}'
+            text='@{text}'
+            android:text="xxxxxx" />
+
+        <TextView
+            android:id="@+id/textOffLabel"
+            style='@{"call_action_button"}'
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
+            android:lines="2"
+            marquee='@{true}'
+            text='@{textOff}'
+            android:text="xxxxxx" />
+
+    </LinearLayout>
+</layout>

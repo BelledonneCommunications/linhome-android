@@ -1,0 +1,31 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="callmodel" type="org.linhome.ui.call.CallViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style='@{"view_call_device_name"}'
+        android:text='@{callmodel.device != null ? callmodel.device.name : callmodel.call.remoteAddress.username}'
+        />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        style='@{"view_call_device_address"}'
+        android:text='@{callmodel.call.remoteAddress.asString()}'
+        />
+    </LinearLayout>
+</layout>

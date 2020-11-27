@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
+    backgoundcolor='@{"color_c"}'
+    tools:context=".ui.assistant.remote.RemoteRootFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
+        style='@{"view_main_title"}'
+        android:layout_centerHorizontal="true"
+        text='@{"assistant_remote_prov"}' />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/infobutton"
+        icon='@{"icons/informations"}'
+        backgroundeffect='@{"info_bubble"}'
+        tint='@{"color_c"}'
+        android:scaleType="centerInside"
+        app:elevation="10dp"
+        app:fabCustomSize="20dp"
+        app:maxImageSize="9dp"
+        android:layout_marginTop="-21dp"
+        android:layout_width="20dp"
+        android:layout_marginStart="-10dp"
+        android:layout_height="20dp"
+        android:layout_toEndOf="@+id/title"
+        android:layout_alignTop="@+id/title" />
+
+
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/url"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/title"
+        primary='@{false}'
+        android:layout_centerHorizontal="true"
+
+        text='@{"assistant_remote_url"}'
+        />
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/qr"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/url"
+        primary='@{false}'
+        android:layout_centerHorizontal="true"
+
+        text='@{"assistant_remote_qr"}'
+        />
+
+    <TextView
+        android:id="@+id/infotext"
+        android:padding="10dp"
+        style='@{"info_bubble"}'
+        text='@{"assistant_remote_prov_infobubble"}'
+        backgoundcolor='@{"color_n"}'
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/infobutton"
+        android:layout_alignEnd="@+id/title"
+        android:visibility="invisible"
+        />
+
+
+
+
+</RelativeLayout>
+</layout>

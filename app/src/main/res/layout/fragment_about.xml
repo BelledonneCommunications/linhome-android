@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="org.linhome.customisation.Texts"/>
+
+        <variable
+            name="coreContext"
+            type="org.linhome.linphonecore.CoreContext" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    gradientBackground='@{"dark_light_vertical_gradient"}'
+    >
+
+    <ImageView
+        android:id="@+id/linhome_icon"
+        src='@{"others/linhome_icon"}'
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/linhome_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ImageView
+        android:id="@+id/linhome_text"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/linhome_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linhome_icon"
+        src='@{"others/linhome_text"}'
+        />
+
+    <TextView
+        android:id="@+id/linhome_title"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/texts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linhome_text"
+        style='@{"splash_title"}'
+        text='@{"splash_title"}'
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/texts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/appversion"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            text='@{"app_version"}'
+            text_args='@{"Android,"+coreContext.appVersion}'
+            style='@{"about_text"}'
+            />
+
+        <TextView
+            android:id="@+id/sdkversion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appversion"
+            text='@{"sdk_version"}'
+            text_args='@{coreContext.sdkVersion}'
+            style='@{"about_text"}'
+            />
+
+        <TextView
+            android:id="@+id/linhome_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:layout_marginTop="38dp"
+            android:layout_below="@+id/sdkversion"
+            style='@{"about_link"}'
+            text='@{"about_link"}'
+            />
+
+        <TextView
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/licence"
+            android:layout_width="match_parent"
+            android:layout_marginTop="9dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linhome_link"
+            android:autoLink="web"
+            style='@{"about_text"}'
+            text='@{"license_text"}'
+            />
+
+        <TextView
+            android:id="@+id/copyright"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="23dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/licence"
+            style='@{"about_text"}'
+            text='@{"copyright_text"}'
+            />
+
+
+    </RelativeLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,70 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.widget.RelativeLayout.LayoutParams" />
+
+        <variable
+            name="callmodel"
+            type="org.linhome.ui.call.CallViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chunk_call_video_or_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+
+        <ImageView
+            deviceTypeIconCircle="@{callmodel.device != null &amp;&amp; callmodel.device.type != null ? callmodel.device.type : callmodel.defaultDeviceType}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintWidth_percent="0.2"
+            android:scaleType="fitXY"
+            android:visibility='@{callmodel.videoContent ? View.GONE : View.VISIBLE, default = "visible"}'></ImageView>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="H,4:3"
+            app:layout_constraintWidth_percent="0.5"
+            android:visibility='@{!callmodel.videoContent ? View.GONE : View.VISIBLE, default = "gone"}'>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/videotogglecollapsed"
+                backgroundeffect='@{"primary_color"}'
+                icon='@{"icons/fullscreen_start"}'
+                tint='@{"color_c"}'
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="13dp"
+                app:fabCustomSize="50dp" />
+
+            <TextureView
+                android:id="@+id/videocollapsed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
+

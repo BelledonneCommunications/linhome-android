@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="enabled"
+            type="Boolean" />
+        <variable
+            name="listener"
+            type="org.linhome.ui.settings.SettingListener" />
+        <variable
+            name="subsection"
+            type="Boolean" />
+    </data>
+
+    <RelativeLayout
+        android:onClick="@{() -> listener.onClicked()}"
+        android:enabled="@{enabled ?? true}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        shouldSetPaddingStartOnly="@{subsection}"
+        paddingStartOnlyDp='@{30}'
+        selection_effect='@{"settings_item"}'
+        android:gravity="center_vertical|left">
+
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            android:enabled="@{enabled ?? true}"
+            android:visibility="@{title.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_title"}'
+            />
+
+        <TextView
+            android:id="@+id/settings_subtitle"
+            android:text="@{subtitle}"
+            android:enabled="@{enabled ?? true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{subtitle.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:singleLine="true"
+            android:layout_below="@id/settings_title"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_subtitle"}'
+            marquee='@{true}'
+            />
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/settings_subtitle"
+            backgoundcolor='@{"color_h"}'
+            />
+
+    </RelativeLayout>
+
+</layout>

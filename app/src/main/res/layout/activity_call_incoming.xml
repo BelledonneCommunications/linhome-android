@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+        <import type="org.linphone.core.Call.State" />
+        <variable
+            name="callmodel"
+            type="org.linhome.ui.call.CallViewModel" />
+    </data>
+
+    <RelativeLayout
+        gradientBackground='@{"dark_light_vertical_gradient"}'
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+
+        <TextureView
+            android:id="@+id/videofullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility='@{callmodel.videoFullScreen ? View.VISIBLE : View.GONE, default = "gone"}' />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/videotogglefullscreen"
+            backgroundeffect='@{"primary_color"}'
+            icon='@{"icons/fullscreen_stop"}'
+            tint='@{"color_c"}'
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="13dp"
+            android:visibility='@{callmodel.videoFullScreen ? View.VISIBLE : View.GONE, default = "gone"}'
+            app:fabCustomSize="50dp" />
+
+        <LinearLayout
+            android:id="@+id/chunk_call_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp"
+            android:layout_alignParentTop="true"
+            android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+
+            <include
+                layout="@layout/chunk_call_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/middle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="20dp"
+            android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+
+            <LinearLayout
+                android:id="@+id/chunk_call_name_address"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+                <include
+                    layout="@layout/chunk_call_name_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chunk_call_video_or_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_name_address"
+                android:layout_marginTop="27dp"
+                android:gravity="center">
+
+                <include
+                    layout="@layout/chunk_call_device_icon_or_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/chunk_some_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chunk_call_video_or_icon"
+                android:layout_marginTop="27dp"
+                android:gravity="center">
+
+                <TextView
+                    style='@{"view_call_device_address"}'
+                    text='@{"incoming_someone_at_your_door"}'
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/middle"
+            android:gravity="center_horizontal|bottom">
+
+            <include
+                layout="@layout/chunk_call_incoming_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

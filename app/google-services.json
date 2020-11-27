@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1041242817246",
+    "firebase_url": "https://linhome-9495d.firebaseio.com",
+    "project_id": "linhome-9495d",
+    "storage_bucket": "linhome-9495d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041242817246:android:07473278f9da59cecff84f",
+        "android_client_info": {
+          "package_name": "org.linhome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041242817246-g794hhtgv48btoi0qtv5gmq6k76ds40c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhAgohVJwuGSu-4F0lUUV_eib3qQh2ASM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041242817246-g794hhtgv48btoi0qtv5gmq6k76ds40c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1041242817246-de0fa5ngdf78ql0agpdgvgbukd9o0fui.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.linhome"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

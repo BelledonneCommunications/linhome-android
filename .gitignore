@@ -1,0 +1,7 @@
+.gradle/
+.idea/
+app/app.iml
+build
+builds
+app/src/main/assets/linhome.zip
+app/build

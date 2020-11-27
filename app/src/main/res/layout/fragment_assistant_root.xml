@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    backgoundcolor='@{"color_c"}'
+    tools:context=".ui.assistant.AssistantRootFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@id/subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        style='@{"view_main_title"}'
+        text='@{"assistant_welcome_title"}' />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        app:layout_constraintBottom_toTopOf="@id/create"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        style='@{"view_sub_title"}'
+        text='@{"assistant_welcome_subtitle"}' />
+
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/create"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="43dp"
+        app:layout_constraintBottom_toBottomOf="@id/use"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"
+        primary='@{false}'
+        text='@{"assistant_create_linhome_account"}'
+        />
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/use"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintBottom_toTopOf="@id/sip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create"
+        primary='@{false}'
+        text='@{"assistant_use_linhome_account"}'
+        />
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/sip"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintBottom_toTopOf="@id/remote"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/use"
+        primary='@{false}'
+        text='@{"assistant_use_sip_account"}'
+        />
+
+    <org.linhome.ui.widgets.LRoundRectButton
+        android:id="@+id/remote"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sip"
+        primary='@{false}'
+        text='@{"assistant_remote_prov"}'
+         />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

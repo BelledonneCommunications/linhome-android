@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sidemenu_navigation"
+    app:startDestination="@+id/fragment_empty">
+
+    <fragment
+        android:id="@+id/fragment_empty"
+        android:name="org.linhome.ui.EmptyFragment"
+        tools:layout="@layout/fragment_empty" >
+        <action
+            android:id="@+id/open_side_menu"
+            app:destination="@id/fragment_sidemenu"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_sidemenu"
+        android:name="org.linhome.ui.sidemenu.SideMenuFragment"
+        tools:layout="@layout/fragment_sidemenu"
+        >
+    </fragment>
+
+</navigation>

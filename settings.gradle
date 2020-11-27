@@ -1,0 +1,2 @@
+rootProject.name='Linhome'
+include ':app'

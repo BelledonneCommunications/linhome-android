@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<resources>
+
+    <!-- IMPORTANT - those are the minimum set that need to be imported from the theme.xml no more or less needed -->
+
+    <color name="color_a">#ffff5e00</color>
+    <color name="color_b">#444444</color>
+    <color name="color_c">#ffffff</color>
+
+    <!-- END -->
+
+    <color name="transparent">#00FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>

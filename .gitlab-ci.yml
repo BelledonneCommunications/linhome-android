@@ -1,0 +1,45 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+.linux-prepare:
+
+ before_script:
+   ##
+   ## If a LINDOOR_USER_KEY is defined then start ssh-agent and add the key
+   ##
+   - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then eval $(ssh-agent -s); fi
+   - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then echo "$LINDOOR_USER_KEY" | tr -d '\r' | ssh-add - > /dev/null; fi
+   - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then mkdir -p ~/.ssh && chmod 700 ~/.ssh; fi
+   - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then echo -e "Host gitlab.linphone.org\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config; fi
+   - if ! [ -z ${SCP_PRIVATE_KEY+x} ]; then eval $(ssh-agent -s); fi
+   - if ! [ -z ${SCP_PRIVATE_KEY+x} ]; then echo "$SCP_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null; fi
+
+ after_script:
+   - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then rm -rf ~/.ssh || true; fi
+
+job-android:
+
+  extends: .linux-prepare
+
+  stage: build
+  tags: [ "docker-android" ]
+  image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:29
+
+
+  script:
+    - scp -oStrictHostKeyChecking=no $DEPLOY_SERVER:$ANDROID_KEYSTORE_PATH app/
+    - echo storePassword=$ANDROID_KEYSTORE_PASSWORD > keystore.properties
+    - echo keyPassword=$ANDROID_KEYSTORE_KEY_PASSWORD >> keystore.properties
+    - echo keyAlias=$ANDROID_KEYSTORE_KEY_ALIAS >> keystore.properties
+    - echo storeFile=$ANDROID_KEYSTORE_FILE >> keystore.properties
+    - ./gradlew app:dependencies | grep org.linphone
+    - ./gradlew assembleDebug
+    - ./gradlew assembleRelease
+
+  artifacts:
+    paths:
+     - ./app/build/outputs/apk/debug/linhome-android-debug-*.apk
+     - ./app/build/outputs/apk/release/linhome-android-release-*.apk
+    when: always
+    expire_in: 1 week
+

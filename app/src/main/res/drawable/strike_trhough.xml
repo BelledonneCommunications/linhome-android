@@ -1,0 +1,14 @@
+<rotate android:fromDegrees="-50"
+    android:toDegrees="45"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <shape
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="line">
+        <stroke
+            android:width="2dp"
+            android:color="@color/color_c" />
+        <size android:height="3dp" />
+    </shape>
+</rotate>

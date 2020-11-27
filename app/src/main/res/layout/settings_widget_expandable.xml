@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="enabled"
+            type="Boolean" />
+    </data>
+
+    <RelativeLayout
+        android:clickable="true"
+        android:focusable="true"
+        android:enabled="@{enabled ?? true}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical|start">
+        
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            src='@{"icons/chevron_down"}'
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            android:enabled="@{enabled ?? true}"
+            android:visibility="@{title.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_toStartOf="@+id/arrow"
+            style='@{"settings_title"}'
+            />
+
+        <TextView
+            android:id="@+id/settings_subtitle"
+            android:text="@{subtitle}"
+            android:enabled="@{enabled ?? true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{subtitle.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:singleLine="true"
+            android:layout_below="@id/settings_title"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            style='@{"settings_subtitle"}'
+            marquee='@{true}'
+            />
+
+        <LinearLayout
+            android:id="@+id/items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/settings_subtitle"
+            android:visibility="gone"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/items"
+            backgoundcolor='@{"color_h"}'
+             />
+
+    </RelativeLayout>
+
+</layout>

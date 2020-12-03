@@ -25,18 +25,17 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.TextureView
 import android.view.View
+import android.view.View.OnTouchListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_player.view.*
 import kotlinx.android.synthetic.main.chunk_player_controls.view.*
-import kotlinx.android.synthetic.main.item_history.*
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication
 import org.linhome.R
 import org.linhome.databinding.ActivityPlayerBinding
 import org.linhome.linphonecore.extensions.historyEvent
-import org.linphone.core.AudioDevice
 import org.linphone.core.Player
 import org.linphone.core.tools.Log
 
@@ -82,7 +81,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                         }
                         setupPlayerControl(binding.root, playerViewModel)
                         if (event.hasVideo) {
-                            setTextureView(binding.root.video, player,seekTo,playing)
+                            setTextureView(binding.root.video, player, seekTo, playing)
                         }
                     }
             }
@@ -95,8 +94,8 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.clear()
-        outState.putInt("position",  playerViewModel.position.value!!)
-        outState.putBoolean("playing",  playerViewModel.playing.value!!)
+        outState.putInt("position", playerViewModel.position.value!!)
+        outState.putBoolean("playing", playerViewModel.playing.value!!)
     }
 
     private fun setupPlayerControl(view: View, model: PlayerViewModel) {
@@ -120,10 +119,11 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
         view.timer.setOnChronometerTickListener {
             model.updatePosition()
         }
+        view.seek.setOnTouchListener({ view, motionEvent -> false })
 
     }
 
-    fun setTextureView(textureView: TextureView, player: Player, seekTo:Int, playing:Boolean) {
+    fun setTextureView(textureView: TextureView, player: Player, seekTo: Int, playing: Boolean) {
         Log.i("[Player] Is TextureView available? ${textureView.isAvailable}")
         if (textureView.isAvailable) {
             player.setWindowId(textureView.surfaceTexture)

@@ -36,7 +36,7 @@ xmlrpc_url=https://subscribe.linphone.org/flexisip-account-manager/linhome/xmlrp
 ; MD5 / SHA-256
 password_algo=MD5
 domain=sip.linhome.org
-freesip_url=https://subscribe.linhome.org
+freesip_url=https://subscribe.linhome.org/login
 
 [rtp]
 audio_rtp_port=-1

@@ -82,7 +82,7 @@ class AccountFragment : Fragment() {
             "account_manage_on_freesip_message",
             { _: DialogInterface, _: Int ->
                 val browserIntent =
-                    Intent(Intent.ACTION_VIEW, Uri.parse(LinhomeApplication.corePreferences.config.getString("assistant","freesip_url","https://subscribe.linhome.org")))
+                    Intent(Intent.ACTION_VIEW, Uri.parse(LinhomeApplication.corePreferences.config.getString("assistant","freesip_url","https://subscribe.linhome.org/login")))
                 startActivity(browserIntent)
             })
     }

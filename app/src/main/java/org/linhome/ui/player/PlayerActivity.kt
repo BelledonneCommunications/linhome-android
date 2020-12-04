@@ -36,6 +36,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.R
 import org.linhome.databinding.ActivityPlayerBinding
 import org.linhome.linphonecore.extensions.historyEvent
+import org.linhome.utils.cdlog
 import org.linphone.core.Player
 import org.linphone.core.tools.Log
 
@@ -45,6 +46,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
 
     lateinit var binding: ActivityPlayerBinding
     lateinit var playerViewModel: PlayerViewModel
+    var playingOnPause = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,10 +94,10 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         outState.clear()
         outState.putInt("position", playerViewModel.position.value!!)
-        outState.putBoolean("playing", playerViewModel.playing.value!!)
+        outState.putBoolean("playing", playingOnPause)
+        super.onSaveInstanceState(outState)
     }
 
     private fun setupPlayerControl(view: View, model: PlayerViewModel) {
@@ -150,6 +152,11 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                 ) {
                     Log.i("[Player] Surface texture should be available now seekTo = ${seekTo}")
                     player.setWindowId(textureView.surfaceTexture)
+                    playerViewModel.playFromStart()
+                    if (!playing)
+                        playerViewModel?.pausePlay()
+
+                    /* Temporarily disable until seek is fixed in lib for H264
                     if (seekTo == 0)
                         playerViewModel.playFromStart()
                     else {
@@ -160,6 +167,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                         if (!playing)
                             playerViewModel.togglePlay()
                     }
+                     */
                 }
             }
         }
@@ -167,6 +175,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
 
 
     override fun onPause() {
+        playingOnPause = playerViewModel.playing.value!!
         playerViewModel?.pausePlay()
         super.onPause()
     }

@@ -34,7 +34,7 @@
             android:id="@+id/border"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/round_shape_outline_color_b"
+            android:background="@null"
             android:padding="2dp">
 
             <ImageView

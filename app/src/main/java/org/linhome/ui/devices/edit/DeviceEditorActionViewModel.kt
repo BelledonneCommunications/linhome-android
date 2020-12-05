@@ -28,7 +28,7 @@ import org.linhome.ui.widgets.LSpinnerListener
 class DeviceEditorActionViewModel(
     val owningViewModel: DeviceEditorViewModel,
     val binding: ViewDataBinding,
-    val displayIndex: Int
+    val displayIndex: MutableLiveData<Int> = MutableLiveData(0)
 ) : ViewModel() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)
     var code: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =

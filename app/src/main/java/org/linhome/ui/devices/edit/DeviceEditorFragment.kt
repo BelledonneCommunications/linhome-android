@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -87,6 +88,12 @@ class DeviceEditorFragment : GenericFragment() {
                 }, model.device?.name
             )
         }
+
+        model.refreshActions.observe(viewLifecycleOwner, Observer { refresh ->
+            for ((index, actionViewModel) in model.actionsViewModels.withIndex()) {
+                actionViewModel.displayIndex.value = index+1
+            }
+        })
 
         return binding.root
     }

@@ -154,7 +154,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
     }
 
     fun addAction(action: Action?, binding: ViewDataBinding) {
-        val actionViewModel = DeviceEditorActionViewModel(this, binding, actionsViewModels.size + 1)
+        val actionViewModel = DeviceEditorActionViewModel(this, binding, MutableLiveData(actionsViewModels.size + 1))
         binding.setVariable(BR.actionmodel, actionViewModel)
         binding.setVariable(BR.validators, ValidatorFactory.Companion)
         action?.also {

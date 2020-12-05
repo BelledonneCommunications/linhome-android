@@ -91,6 +91,7 @@ class RemoteQrAccountFragment : GenericFragment() {
 
 
     fun startScanner() {
+        coreContext.core.reloadVideoDevices()
         setBackCamera()
         coreContext.core.nativePreviewWindowId = binding.qrcode
         coreContext.core.enableQrcodeVideoPreview(true)

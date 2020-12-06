@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -47,10 +47,12 @@
                 android:layout_marginEnd="30dp"
                 backgoundcolor='@{"color_c"}'
                 android:layout_gravity="top"
-                tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment">
+                tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/your_device"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +69,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintTop_toTopOf="@id/your_device"
                     app:layout_constraintBottom_toTopOf="@id/address"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -122,24 +124,24 @@
                     />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            </LinearLayout>
+            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="60dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
-                android:paddingTop="18dp"
                 backgoundcolor='@{"color_c"}'
                 android:layout_gravity="top"
-                tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment">
+                tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/select_method_section_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/method"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -167,7 +169,7 @@
                 android:id="@+id/actions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -187,13 +189,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actions"
                 app:layout_constraintBottom_toTopOf="parent"
+                android:enabled="@{model.refreshActions &amp;&amp; model.actionBindings.size() &lt; 3}"
                 primary='@{false}'
                 text='@{"device_action_add"}'
                 icon='@{"icons/more"}'
                 />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

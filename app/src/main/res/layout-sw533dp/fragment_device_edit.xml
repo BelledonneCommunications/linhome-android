@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.InputType"/>
+        <variable name="model" type="org.linhome.ui.devices.edit.DeviceEditorViewModel" />
+        <variable name="validators" type="org.linhome.ui.validators.ValidatorFactory.Companion" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            backgoundcolor='@{"color_c"}'
+            tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toTopOf="@id/name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style='@{"view_main_title"}'
+                app:layout_constraintVertical_chainStyle="spread"
+                android:text='@{model.device != null ? model.device.name : model.getText("new_device")}'
+                 />
+
+            <org.linhome.ui.widgets.LTextInput
+                android:id="@+id/name"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintBottom_toTopOf="@id/address"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"device_name"}'
+                liveString="@{model.name.first}"
+                liveValidity="@{model.name.second}"
+                validator="@{validators.nonEmptyStringValidator}"
+                android:inputType="@{InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_NORMAL}"/>
+
+            <org.linhome.ui.widgets.LTextInput
+                android:id="@+id/address"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                app:layout_constraintBottom_toTopOf="@id/select_type_section_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                title='@{"device_address"}'
+                hint='@{"device_address_hint"}'
+                liveString="@{model.address.first}"
+                liveValidity="@{model.address.second}"
+                validator="@{validators.sipUri}"
+                android:inputType="@{InputType.TYPE_TEXT_VARIATION_URI}"/>
+
+            <TextView
+                android:id="@+id/select_type_section_title"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/address"
+                app:layout_constraintBottom_toTopOf="@id/devicetype"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style='@{"section_title"}'
+                app:layout_constraintVertical_chainStyle="spread"
+                text='@{"device_type_select"}'
+                />
+
+            <org.linhome.ui.widgets.LSpinner
+                android:id="@+id/devicetype"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/select_type_section_title"
+                app:layout_constraintBottom_toTopOf="@id/select_method_section_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                listener="@{model.deviceTypeListener}"
+                initialIndex="@{model.deviceType}"
+                items="@{model.availableDeviceTypes}"
+             />
+
+            <TextView
+                android:id="@+id/select_method_section_title"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                app:layout_constraintTop_toBottomOf="@id/devicetype"
+                app:layout_constraintBottom_toTopOf="@id/method"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style='@{"section_title"}'
+                app:layout_constraintVertical_chainStyle="spread"
+                text='@{"method_type_select"}'
+                />
+
+            <org.linhome.ui.widgets.LSpinner
+                android:id="@+id/method"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/select_method_section_title"
+                app:layout_constraintBottom_toTopOf="@id/actions"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                items="@{model.availableMethodTypes}"
+                initialIndex="@{model.actionsMethod}"
+                listener="@{model.actionsMethodListener}"
+                titlekey='@{"action_method"}' />
+
+           <LinearLayout
+               android:id="@+id/actions"
+               android:layout_width="600dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="10dp"
+               android:orientation="vertical"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/method"
+               app:layout_constraintBottom_toTopOf="@id/addaction"
+               items="@{model.actionBindings}"
+               refreshOn="@{model.refreshActions}"
+               />
+
+            <org.linhome.ui.widgets.LRoundRectButtonWithIcon
+                android:id="@+id/addaction"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="27dp"
+                android:enabled="@{model.refreshActions &amp;&amp; model.actionBindings.size() &lt; 3}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/actions"
+                app:layout_constraintBottom_toTopOf="@id/delete"
+                primary='@{false}'
+                text='@{"device_action_add"}'
+                icon='@{"icons/more"}'
+              />
+
+            <org.linhome.ui.widgets.LRoundRectButton
+                android:id="@+id/delete"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="600dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="37dp"
+                android:layout_marginBottom="23dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addaction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                primary='@{true}'
+                text='@{"delete_device"}'
+                android:visibility='@{model.device != null ? View.VISIBLE : View.GONE}'
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</layout>

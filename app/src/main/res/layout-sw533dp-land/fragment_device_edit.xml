@@ -43,17 +43,32 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="30dp"
                 backgoundcolor='@{"color_c"}'
+                android:layout_gravity="top"
                 tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment">
+
+                <TextView
+                    android:id="@+id/your_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    style='@{"section_title"}'
+                    app:layout_constraintVertical_chainStyle="spread"
+                    text='@{"your_device"}'
+                    />
 
 
                 <org.linhome.ui.widgets.LTextInput
                     android:id="@+id/name"
-                    android:layout_width="320dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
-                    app:layout_constraintVertical_chainStyle="spread"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/your_device"
                     app:layout_constraintBottom_toTopOf="@id/address"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -65,9 +80,8 @@
 
                 <org.linhome.ui.widgets.LTextInput
                     android:id="@+id/address"
-                    android:layout_width="320dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     app:layout_constraintTop_toBottomOf="@id/name"
                     app:layout_constraintBottom_toTopOf="@id/select_type_section_title"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +95,7 @@
 
                 <TextView
                     android:id="@+id/select_type_section_title"
-                    android:layout_width="320dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     app:layout_constraintTop_toBottomOf="@id/address"
@@ -95,7 +109,7 @@
 
                 <org.linhome.ui.widgets.LSpinner
                     android:id="@+id/devicetype"
-                    android:layout_width="320dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     app:layout_constraintTop_toBottomOf="@id/select_type_section_title"
@@ -110,16 +124,20 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="60dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
+                android:paddingTop="18dp"
                 backgoundcolor='@{"color_c"}'
+                android:layout_gravity="top"
                 tools:context=".ui.assistant.loginlinhome.LoginLinhomeAccountFragment">
 
             <TextView
                 android:id="@+id/select_method_section_title"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -133,9 +151,9 @@
 
             <org.linhome.ui.widgets.LSpinner
                 android:id="@+id/method"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/select_method_section_title"
                 app:layout_constraintBottom_toTopOf="@id/actions"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +165,7 @@
 
             <LinearLayout
                 android:id="@+id/actions"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
@@ -163,40 +181,39 @@
                 android:id="@+id/addaction"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="180dp"
+                android:layout_width="220dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="27dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actions"
-                app:layout_constraintBottom_toTopOf="@id/delete"
+                app:layout_constraintBottom_toTopOf="parent"
                 primary='@{false}'
                 text='@{"device_action_add"}'
                 icon='@{"icons/more"}'
                 />
 
-            <org.linhome.ui.widgets.LRoundRectButton
-                android:id="@+id/delete"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_width="320dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="37dp"
-                android:layout_marginBottom="23dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addaction"
-                app:layout_constraintBottom_toBottomOf="parent"
-                primary='@{true}'
-                text='@{"delete_device"}'
-                android:visibility='@{model.device != null ? View.VISIBLE : View.GONE}'
-                />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
 
+
     </ScrollView>
+        <org.linhome.ui.widgets.LRoundRectButton
+            android:id="@+id/delete"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginBottom="23dp"
+            primary='@{true}'
+            text='@{"delete_device"}'
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:visibility='@{model.device != null ? View.VISIBLE : View.GONE}'
+            />
     </RelativeLayout>
 
 

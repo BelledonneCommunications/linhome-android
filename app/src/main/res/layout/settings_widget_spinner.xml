@@ -25,7 +25,7 @@
     </data>
 
     <RelativeLayout
-        android:onClick="@{() -> listener.onClicked()}"
+        android:onClick="@{() -> settingsSpinner.performClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -39,6 +39,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
+            android:onClick="@{() -> settingsSpinner.performClick()}"
             >
         </ImageView>
 

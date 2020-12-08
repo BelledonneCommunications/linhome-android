@@ -10,7 +10,7 @@ General description is available from [Linhome web site](https://www.linhome.org
 
 Copyright © Belledonne Communications
 
-Linphone is dual licensed, and is available either :
+Linhome is dual licensed, and is available either :
 
  - under a [GNU/GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html), for free (open source). Please make sure that you
 

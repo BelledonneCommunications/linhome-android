@@ -24,7 +24,7 @@ details).
 
 ### Documentation
 
-- Supported features and RFCs : https://www.linphone.org/technical-corner/liblinphone
+- Supported features and RFCs from the underlying Liblinphone library : https://www.linphone.org/technical-corner/liblinphone
 
 
 # Building the app

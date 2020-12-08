@@ -43,6 +43,7 @@ import org.linhome.entities.Action
 import org.linhome.store.DeviceStore
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
+import org.linhome.utils.cdlog
 
 class DeviceEditorFragment : GenericFragment() {
 
@@ -71,11 +72,13 @@ class DeviceEditorFragment : GenericFragment() {
 
         model.device = args.device
 
-        if (model.device == null) {
-            addAction(null)
-        } else {
-            model.device!!.actions?.forEach {
-                addAction(it)
+        if (model.actionsViewModels.isEmpty()) {
+            if (model.device == null) {
+                addAction(null)
+            } else {
+                model.device!!.actions?.forEach {
+                    addAction(it)
+                }
             }
         }
 

@@ -41,7 +41,7 @@ import org.linhome.databinding.ItemSpinnerBinding
 import org.linhome.utils.cdlog
 
 class SpinnerItem(val textKey: String, val iconFile: String? = null, val backingKey: String? = null)
-class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: Spinner, val lSpinner:LSpinner) :
+class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: Spinner, val lSpinner:LSpinner, var selectedIndex: Int?) :
     SpinnerAdapter {
 
     var height: Int? = null
@@ -112,6 +112,13 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: 
         } else {
             view.layoutParams.height = this.height!!
             view.visibility = View.VISIBLE
+        }
+
+        if (lSpinner.opened && position == selectedIndex) {
+            view.background = Theme.roundRectInputBackgroundWithColorKeyAndRadius(
+                "color_i",
+                "user_input_corner_radius"
+            )
         }
 
         return view

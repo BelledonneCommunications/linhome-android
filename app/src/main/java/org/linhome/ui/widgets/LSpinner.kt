@@ -72,7 +72,7 @@ class LSpinner : LinearLayout {
 
     var items: ArrayList<SpinnerItem>? = null
         set(value) {
-            binding.root.spinner.adapter = value?.let { LSpinnerAdapter(it, binding.root.spinner, this) }
+            binding.root.spinner.adapter = value?.let { LSpinnerAdapter(it, binding.root.spinner, this, null) }
         }
 
 
@@ -93,6 +93,7 @@ class LSpinner : LinearLayout {
         set(value) {
             if (value != null) {
                 binding.root.spinner.setSelection(value)
+                (binding.root.spinner.adapter as LSpinnerAdapter).selectedIndex = value
             }
         }
 

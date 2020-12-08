@@ -51,10 +51,6 @@ class CallOutgoingActivity : CallGenericActivity() {
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
                     Call.State.OutgoingInit, Call.State.OutgoingProgress, Call.State.OutgoingRinging, Call.State.OutgoingEarlyMedia -> return@Observer
-                    Call.State.Error -> {
-                        DialogUtil.error("unable_to_call_device")
-                        finish()
-                    }
                     else -> finish()
                 }
             })

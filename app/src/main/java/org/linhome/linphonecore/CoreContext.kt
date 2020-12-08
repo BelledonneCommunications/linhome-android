@@ -31,6 +31,10 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.TypedValue
 import android.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
@@ -181,7 +185,10 @@ class CoreContext(val context: Context, coreConfig: Config) {
                 }
             }
             if (state == Call.State.Error && call.callLog?.dir == Call.Dir.Outgoing) {
-                DialogUtil.error("unable_to_call_device")
+                GlobalScope.launch(context = Dispatchers.Main) {
+                    delay(250)
+                    DialogUtil.error("unable_to_call_device")
+                }
             }
         }
     }

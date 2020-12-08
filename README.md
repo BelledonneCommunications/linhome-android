@@ -4,7 +4,7 @@
 Linhome is an open source software designed to communicate via voice and video with door entry devices.
 The Linhome application has been developed to meet the emerging needs of intercom and video monitoring system developers to leverage a robust, secure and interoperable open source VoIP solution to build their own mobile application.
 
-General description is available from Linhome web site (-> mettre le lien https://www.linhome.org)
+General description is available from Linhome web site ([linhome web site](https://www.linhome.org))
 
 ### License
 

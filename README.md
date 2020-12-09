@@ -25,6 +25,13 @@ Linhome is dual licensed, and is available either :
 
 # Building the app
 
+The app depends on a single git submodule that holds the shared information with iOS App that is the Theme (images, colors, fonts, etc) and the texts and translations of the app. 
+So after cloning the repository make sure you run : 
+```
+git submodule update --init --recursive
+```
+The application will automatically collect the appropriate information from the shared submodule as part of the gradle build script.
+
 If you have Android Studio, simply open the project, wait for the gradle synchronization and then build/install the app.
 It will download the linphone library from our Maven repository as an AAR file so you don't have to build anything yourself.
 

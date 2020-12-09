@@ -45,8 +45,10 @@ object Account {
     }
 
     fun linhomeAccountCreateProxyConfig(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig()?.findAuthInfo()?.algorithm = corePreferences.passwordAlgo
-
+        accountCreator.createProxyConfig()?.let { proxyConfig ->
+            proxyConfig.findAuthInfo()?.algorithm = corePreferences.passwordAlgo
+            proxyConfig.isPushNotificationAllowed = true
+        }
     }
 
     fun sipAccountLogin(

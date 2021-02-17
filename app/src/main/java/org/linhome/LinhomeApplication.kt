@@ -69,7 +69,8 @@ class LinhomeApplication : Application() {
                 corePreferences.config.setBool("app","first_launch", false)
             }
             coreContext.core.setStaticPicture(context.filesDir.absolutePath+"/nowebcamCIF.jpg")
-            coreContext.core.ring = context.filesDir.absolutePath+"/bell.caf"
+            coreContext.core.ring = context.filesDir.absolutePath+"/bell.wav"
+            coreContext.core.ringDuringIncomingEarlyMedia = true
 
             setDefaultCodecs()
 

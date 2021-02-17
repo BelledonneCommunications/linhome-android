@@ -151,7 +151,7 @@ class CorePreferences constructor(private val context: Context) {
         copy("assistant_linhome_account_default_values", linhomeAccountDefaultValuesPath, true)
         copy("assistant_sip_account_default_values", sipAccountDefaultValuesPath, true)
         copy("nowebcamCIF.jpg", context.filesDir.absolutePath+"/nowebcamCIF.jpg", true)
-        copy("bell.caf", context.filesDir.absolutePath+"/bell.caf", true)
+        copy("bell.wav", context.filesDir.absolutePath+"/bell.wav", true)
 
 
     }

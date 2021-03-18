@@ -109,11 +109,11 @@ object HistoryEventStore {
         return historyEvents.get(callId)
     }
 
-    fun markAllAsRead() {
-        historyEvents.forEach {
-            it.value.viewedByUser = true
+    fun markAsRead(historyEventId: String) {
+        historyEvents.filter { it.value.id ==  historyEventId }.forEach { event ->
+            event.value.viewedByUser = true
+            persistHistoryEvent(event.value)
         }
-        sync()
     }
 
 }

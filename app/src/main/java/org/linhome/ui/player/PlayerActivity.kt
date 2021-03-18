@@ -36,6 +36,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.R
 import org.linhome.databinding.ActivityPlayerBinding
 import org.linhome.linphonecore.extensions.historyEvent
+import org.linhome.store.HistoryEventStore
 import org.linhome.utils.cdlog
 import org.linphone.core.Player
 import org.linphone.core.tools.Log
@@ -85,6 +86,7 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                         if (event.hasVideo) {
                             setTextureView(binding.root.video, player, seekTo, playing)
                         }
+                        HistoryEventStore.markAsRead(event.id)
                     }
             }
 

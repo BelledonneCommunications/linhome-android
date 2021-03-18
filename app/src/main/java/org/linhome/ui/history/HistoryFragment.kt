@@ -126,6 +126,7 @@ class HistoryFragment : GenericFragment() {
         mainactivity.toolbarViewModel.rightButtonVisible.value =
             !historyViewModel.history.value!!.isEmpty()
         coreContext.notificationsManager.dismissMissedCallNotification()
+        binding.root.loglist.adapter?.notifyDataSetChanged()
 
     }
 
@@ -144,7 +145,6 @@ class HistoryFragment : GenericFragment() {
 
 
     override fun onPause() {
-        HistoryEventStore.markAllAsRead()
         mainactivity.tabbarViewModel.updateUnreadCount()
         super.onPause()
     }

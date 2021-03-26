@@ -21,6 +21,7 @@ package org.linhome.linphonecore
 
 import android.content.Context
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.entities.Action
 import org.linphone.compatibility.Compatibility
 import org.linphone.core.Config
 import org.linphone.mediastream.Log
@@ -47,6 +48,38 @@ class CorePreferences constructor(private val context: Context) {
         set(value) {
             config.setBool("devices", "latest_snapshot", value)
         }
+
+
+    // Default actions to be displayed when no device is associated with the call. Taken from configuration.
+    //[default_actions]
+    //default_actions_method_type=[method_dtmf_sip_info|method_dtmf_rfc_4733|method_sip_message]
+    //action_1_type=[action_open_door|action_open_gate|action_lightup|action_unlock] (match name in shared theme action_types.xml)
+    //action_1_code=yyyy (dtmf code)
+    //action_2... up to 3 actions
+
+    val defaultActionsMethodType: String?
+        get() = config.getString("default_actions", "method_type", null)
+
+    val defaultAction1: Action?
+        get() = config.getString("default_actions", "action_1_type", null)?.let { type ->
+            config.getString("default_actions", "action_1_code", null)?.let { code ->
+                Action(type,code)
+            } ?: null
+        } ?:null
+
+    val defaultAction2: Action?
+        get() = config.getString("default_actions", "action_2_type", null)?.let { type ->
+            config.getString("default_actions", "action_2_code", null)?.let { code ->
+                Action(type,code)
+            } ?: null
+        } ?:null
+
+    val defaultAction3: Action?
+        get() = config.getString("default_actions", "action_3_type", null)?.let { type ->
+            config.getString("default_actions", "action_3_code", null)?.let { code ->
+                Action(type,code)
+            } ?: null
+        } ?:null
 
 
     // Todo - review necessary portion (copied from Linphone)

@@ -40,10 +40,11 @@ import org.linphone.core.AudioDevice
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub
 import org.linphone.core.Reason
+import java.util.ArrayList
 
 
 class CallViewModelFactory(private val call: Call) :
-    ViewModelProvider.NewInstanceFactory() {
+        ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return CallViewModel(call) as T
@@ -52,15 +53,18 @@ class CallViewModelFactory(private val call: Call) :
 
 class CallViewModel(val call: Call) : ViewModel() {
     val device: MutableLiveData<Device?> =
-        MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
+            MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.defaultType)
+    val actions: ArrayList<Action> = device.value?.let {
+        it.actions
+    } ?: defaultActionsIfAny()
 
     val callState: MutableLiveData<Call.State> = MutableLiveData(call.state)
     val videoContent: MutableLiveData<Boolean> = MutableLiveData()
     val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val speakerDisabled: MutableLiveData<Boolean> =
-        MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
+            MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
 
     private var historyEvent: HistoryEvent
@@ -210,6 +214,22 @@ class CallViewModel(val call: Call) : ViewModel() {
 
     fun extendedAccept() {
         call.extendedAccept()
+    }
+
+
+    // Default actions to be displayed when no device is associated with the call. Taken from configuration.
+    //[default_actions]
+    //default_actions_method_type=[method_dtmf_sip_info|method_dtmf_rfc_4733|method_sip_message]
+    //action_1_type=[action_open_door|action_open_gate|action_lightup|action_unlock] (match name in shared theme action_types.xml)
+    //action_1_code=yyyy (dtmf code)
+    //action_2... up to 3 actions
+
+    fun defaultActionsIfAny() : ArrayList<Action> {
+        var actions = ArrayList<Action>()
+        corePreferences.defaultAction1?.also {actions.add(it)}
+        corePreferences.defaultAction2?.also {actions.add(it)}
+        corePreferences.defaultAction3?.also {actions.add(it)}
+        return actions
     }
 
 }

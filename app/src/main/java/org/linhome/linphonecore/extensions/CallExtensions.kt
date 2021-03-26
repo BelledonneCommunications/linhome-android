@@ -22,6 +22,7 @@ package org.linhome.linphonecore.extensions
 
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.store.DeviceStore
 import org.linphone.core.Call
 import org.linphone.core.CallParams
@@ -42,9 +43,13 @@ fun Call.extendedAccept() {
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
     enableCamera(false)
 
-    DeviceStore.findDeviceByAddress(remoteAddress)?.also {
-        LinhomeApplication.coreContext.core.useRfc2833ForDtmf = it.actionsMethodType == "method_dtmf_rfc_4733"
-        LinhomeApplication.coreContext.core.useInfoForDtmf = it.actionsMethodType == "method_dtmf_sip_info"
+    val device = DeviceStore.findDeviceByAddress(remoteAddress)
+    if (device != null) {
+        coreContext.core.useRfc2833ForDtmf = device.actionsMethodType == "method_dtmf_rfc_4733"
+        coreContext.core.useInfoForDtmf = device.actionsMethodType == "method_dtmf_sip_info"
+    } else {
+        coreContext.core.useRfc2833ForDtmf = corePreferences.defaultActionsMethodType == "method_dtmf_rfc_4733"
+        coreContext.core.useInfoForDtmf = corePreferences.defaultActionsMethodType == "method_dtmf_sip_info"
     }
 
     acceptWithParams(inCallParams)

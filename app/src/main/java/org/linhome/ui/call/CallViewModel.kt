@@ -187,27 +187,28 @@ class CallViewModel(val call: Call) : ViewModel() {
     }
 
     fun performAction(action: Action) {
-        device.value?.also { d ->
-            when (d.actionsMethodType) {
-                "method_dtmf_sip_info" -> {
-                    coreContext.core.useInfoForDtmf = true
-                    action.code?.let { call.sendDtmfs(it) }
+        val actionMethodType = device.value?.let { d->
+            d.actionsMethodType
+        } ?: corePreferences.defaultActionsMethodType
+        when (actionMethodType) {
+            "method_dtmf_sip_info" -> {
+                coreContext.core.useInfoForDtmf = true
+                action.code?.let { call.sendDtmfs(it) }
+            }
+            "method_dtmf_rfc_4733" -> {
+                coreContext.core.useRfc2833ForDtmf = true
+                action.code?.let { call.sendDtmfs(it) }
+            }
+            "method_sip_message" -> {
+                var params = coreContext.core.createDefaultChatRoomParams()
+                params.enableGroup(false)
+                params.enableEncryption(false)
+                var chatRoom = coreContext.core.searchChatRoom(params,call.remoteAddress, call.remoteAddress, arrayOf(call.remoteAddress!!))
+                if (chatRoom == null) {
+                    chatRoom = coreContext.core.createChatRoom(params, call.remoteAddress,  arrayOf(call.remoteAddress!!))
                 }
-                "method_dtmf_rfc_4733" -> {
-                    coreContext.core.useRfc2833ForDtmf = true
-                    action.code?.let { call.sendDtmfs(it) }
-                }
-                "method_sip_message" -> {
-                    var params = coreContext.core.createDefaultChatRoomParams()
-                    params.enableGroup(false)
-                    params.enableEncryption(false)
-                    var chatRoom = coreContext.core.searchChatRoom(params,call.remoteAddress, call.remoteAddress, arrayOf(call.remoteAddress!!))
-                    if (chatRoom == null) {
-                        chatRoom = coreContext.core.createChatRoom(params, call.remoteAddress,  arrayOf(call.remoteAddress!!))
-                    }
-                    val message = chatRoom?.createMessageFromUtf8(action.code)
-                    message?.send()
-                }
+                val message = chatRoom?.createMessageFromUtf8(action.code)
+                message?.send()
             }
         }
     }

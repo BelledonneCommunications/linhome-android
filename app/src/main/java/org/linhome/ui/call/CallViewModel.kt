@@ -27,12 +27,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.customisation.DeviceTypes
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.entities.HistoryEvent
+import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.extensions.*
 import org.linhome.store.DeviceStore
 import org.linhome.utils.extensions.existsAndIsNotEmpty
@@ -112,6 +114,9 @@ class CallViewModel(val call: Call) : ViewModel() {
                 if (it)
                     call.requestNotifyNextVideoFrameDecoded()
             }
+        }
+        if (LinhomeApplication.instance.tablet()) {
+            coreContext.core.forceSpeakerAudioRoute()
         }
     }
 

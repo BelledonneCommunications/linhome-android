@@ -27,6 +27,7 @@ import org.linhome.customisation.Customisation
 import org.linhome.customisation.Texts
 import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.CorePreferences
+import org.linhome.linphonecore.extensions.forceSpeakerAudioRoute
 import org.linhome.store.DeviceStore
 import org.linphone.core.Factory
 import org.linphone.core.LogCollectionState
@@ -71,7 +72,7 @@ class LinhomeApplication : Application() {
             coreContext.core.setStaticPicture(context.filesDir.absolutePath+"/nowebcamCIF.jpg")
             coreContext.core.ring = context.filesDir.absolutePath+"/bell.wav"
             coreContext.core.ringDuringIncomingEarlyMedia = true
-
+            coreContext.core.isNativeRingingEnabled = true
             setDefaultCodecs()
 
         }

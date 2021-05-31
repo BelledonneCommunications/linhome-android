@@ -76,6 +76,7 @@ class RemoteUrlAccountFragment : GenericFragment() {
         })
 
         model.pushReady.observe(viewLifecycleOwner, Observer { status ->
+            hideProgress()
             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
             if (status) {
                 DialogUtil.info("remote_configuration_success")

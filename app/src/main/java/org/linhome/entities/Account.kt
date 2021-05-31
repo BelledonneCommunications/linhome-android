@@ -87,7 +87,7 @@ object Account {
         corePreferences.loginDomain?.let { xmlRpcRequest?.addStringArg(it) }
         corePreferences.passwordAlgo?.let { xmlRpcRequest?.addStringArg(it) }
 
-        xmlRpcRequest?.setListener { request ->
+        xmlRpcRequest?.addListener { request ->
             val status = request.status
             val responseValues = request.listResponse
             if (request.status == XmlRpcStatus.Ok) {

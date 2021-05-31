@@ -69,7 +69,7 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                 }
                 val xmlRpcRequest =
                     xmlRpcSession?.createRequest(XmlRpcArgType.String, "check_authentication")
-                xmlRpcRequest?.setListener { request ->
+                xmlRpcRequest?.addListener { request ->
                     hideProgress()
                     if (request != null) {
                         if (request.stringResponse == "OK") {

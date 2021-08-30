@@ -12,14 +12,14 @@ Group changes to describe their impact on the project, as follows:
 
 ## [1.1.0]
 
-    SDK 5.0+ update (for ring stream to speaker during early media)
-    Added german translations
-    Force audio route to speaker on tablets
-    Use random ports
-    Fix method type on default actions
-    history events - marked as read only if played
-    Decline incoming call if already on a call
-    Fix Ringing (flag to allow ringing during early media + caf -> wav format)    
-    
+- Update to Linphone SDK 5.0.0
+- German translation
+- Fix Force audio route to speaker on tablets
+- Use random ports
+- Fix method type on default actions
+- Fix history events - marked as read only if played
+- Fix Decline incoming call if already on a call
+- Fix Ringing (flag to allow ringing during early media + caf -> wav format) 
+
 ## [1.0.0] - Release candidate
     

@@ -78,4 +78,9 @@ class CallIncomingActivity : CallGenericActivity() {
             if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
     }
 
+    override fun onPause() {
+        coreContext.core.nativeVideoWindowId = null
+        super.onPause()
+    }
+
 }

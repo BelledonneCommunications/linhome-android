@@ -119,6 +119,7 @@ class CallInProgressActivity : CallGenericActivity() {
         if (coreContext.core.callsNb > 0) {
             coreContext.createCallOverlay()
         }
+	coreContext.core.nativeVideoWindowId = null
         super.onPause()
     }
 

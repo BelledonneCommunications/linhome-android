@@ -26,6 +26,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.linphonecore.CorePreferences
+import org.linhome.linphonecore.extensions.cleanHistory
 import org.linphone.core.*
 
 object Account {
@@ -138,6 +139,11 @@ object Account {
             it.done()
             coreContext.core.removeProxyConfig(it)
         }
+        coreContext.core.cleanHistory()
+        coreContext.core.provisioningUri = null
+        coreContext.core.config.setString("misc","config-uri",null)
+        coreContext.core.stop()
+        LinhomeApplication.ensureCoreExists(coreContext.context, true)
     }
 
 }

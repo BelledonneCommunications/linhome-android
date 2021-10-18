@@ -21,6 +21,7 @@
 package org.linhome.linphonecore.extensions
 
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.store.HistoryEventStore
 import org.linphone.core.AudioDevice
 import org.linphone.core.CallLog
 import org.linphone.core.Core
@@ -81,5 +82,14 @@ fun Core.missedCount(): Int {
             count++
     }
     return count
+}
+
+
+fun Core.cleanHistory() {
+    coreContext.core.callLogs.forEach {
+        if (it.callId != null)
+            HistoryEventStore.removeHistoryEventByCallId(it.callId)
+        coreContext.core.removeCallLog(it)
+    }
 }
 

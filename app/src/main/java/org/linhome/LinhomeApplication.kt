@@ -43,8 +43,8 @@ class LinhomeApplication : Application() {
 
         var someActivityRunning: Boolean = false
 
-        fun ensureCoreExists(context: Context) {
-            if (::coreContext.isInitialized && !coreContext.stopped) {
+        fun ensureCoreExists(context: Context, force:Boolean = false) {
+            if (!force && ::coreContext.isInitialized && !coreContext.stopped) {
                 return
             }
 

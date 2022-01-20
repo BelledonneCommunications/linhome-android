@@ -33,6 +33,10 @@ object DeviceStore {
 
     private var devicesConfig: Config
 
+    val vcard_device_type_header = "X-LINPHONE-ACCOUNT-TYPE"
+    val vcard_actions_list_header = "X-LINPHONE-ACCOUNT-ACTION"
+    val vcard_action_method_type_header = "X-LINPHONE-ACCOUNT-DTMF-PROTOCOL"
+
     var devices: ArrayList<Device>
 
     init {

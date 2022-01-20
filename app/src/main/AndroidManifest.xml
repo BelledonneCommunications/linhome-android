@@ -43,7 +43,8 @@
             android:label="@string/app_name"
             android:screenOrientation="sensor"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/LinhomeTheme">
+            android:theme="@style/LinhomeTheme"
+            android:exported="false">
             <nav-graph android:value="@navigation/fragments_graph" />
         </activity>
         <activity
@@ -51,7 +52,7 @@
             android:label="@string/app_name"
             android:screenOrientation="sensor"
             android:theme="@style/LinhomeTheme"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -88,7 +89,8 @@
         </activity>
         <!-- Receivers -->
 
-        <receiver android:name="org.linhome.linphonecore.CorePushReceiver">
+        <receiver android:name="org.linhome.linphonecore.CorePushReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="org.linhome.core.action.PUSH_RECEIVED"/>
             </intent-filter>
@@ -99,7 +101,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name="org.linhome.linphonecore.BootReceiver">
+        <receiver android:name="org.linhome.linphonecore.BootReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />

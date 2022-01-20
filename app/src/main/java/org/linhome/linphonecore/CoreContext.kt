@@ -245,7 +245,6 @@ class CoreContext(val context: Context, coreConfig: Config) {
         Log.i("[Context] Configuring Core")
 
         core.zrtpSecretsFile = context.filesDir.absolutePath + "/zrtp_secrets"
-        core.callLogsDatabasePath = context.filesDir.absolutePath + "/linphone-log-history.db"
 
         initUserCertificates()
 

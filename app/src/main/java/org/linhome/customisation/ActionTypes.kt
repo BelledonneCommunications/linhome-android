@@ -54,4 +54,8 @@ object ActionTypes {
         }
     }
 
+    fun isValid(typeKey: String):  Boolean {
+        return !actionTypesConfig.getString(typeKey, "textkey", "-").equals("-")
+    }
+
 }

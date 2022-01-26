@@ -39,4 +39,10 @@ object ActionsMethodTypes {
         }
     }
 
+    fun methodTypeIsSupported(typeKey: String): Boolean {
+        return !actionsMethodTypesConfig.getString( typeKey, "textkey", "-").equals("-")
+    }
+
+
+
 }

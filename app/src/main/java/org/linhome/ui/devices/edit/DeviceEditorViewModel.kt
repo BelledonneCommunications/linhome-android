@@ -116,7 +116,8 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                 name.first.value!!,
                 if (address.first.value!!.startsWith("sip:") || address.first.value!!.startsWith("sips:")) address.first.value!! else "sip:${address.first.value}",
                 if (actionsMethod.value == 0) null else availableMethodTypes.get(actionsMethod.value!!).backingKey,
-                ArrayList()
+                ArrayList(),
+                false
             )
             actionsViewModels.forEach {
                 if (it.notEmpty())
@@ -147,7 +148,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
                         )
                 }
             }
-            DeviceStore.sync()
+            DeviceStore.saveLocalDevices()
         }
 
         return true

@@ -46,6 +46,7 @@ video_rtp_port=-1
 [misc]
 max_calls=1
 history_max_size=100
+store_friends=1
 
 
 ## End of factory rc

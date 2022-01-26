@@ -78,6 +78,11 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
         if (viewHolder.adapterPosition == -1) {
             return
         }
+
+        val device = adapter.devices.value!![viewHolder.adapterPosition]
+        if (device.isRemotelyProvisionned)
+            return
+
         if (!initiated) {
             init()
         }
@@ -113,6 +118,8 @@ class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val device = adapter.devices.value!![viewHolder.adapterPosition]
+        if (device.isRemotelyProvisionned)
+            return
         DialogUtil.confirm(
             "delete_device_confirm_message",
             { _: DialogInterface, _: Int ->

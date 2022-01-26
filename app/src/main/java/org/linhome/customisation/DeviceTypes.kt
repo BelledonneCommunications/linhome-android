@@ -76,4 +76,8 @@ object DeviceTypes {
         }
     }
 
+    fun deviceTypeSupported(typeKey: String): Boolean {
+        return !deviceTypesConfig?.getString(typeKey, "textkey", "-").equals("-")
+    }
+
 }

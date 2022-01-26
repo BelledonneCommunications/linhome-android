@@ -20,31 +20,71 @@
 
 package org.linhome.store
 
+import androidx.lifecycle.MutableLiveData
 import org.linhome.LinhomeApplication
 import org.linhome.entities.Action
 import org.linhome.entities.Device
-import org.linhome.store.StorageManager.devicesXml
-import org.linphone.core.Address
-import org.linphone.core.Config
-import org.linphone.core.Factory
 import org.linhome.linphonecore.extensions.getString
+import org.linhome.store.StorageManager.devicesXml
+import org.linphone.core.*
+import org.linphone.mediastream.Log
 
 object DeviceStore {
 
     private var devicesConfig: Config
 
-    val vcard_device_type_header = "X-LINPHONE-ACCOUNT-TYPE"
-    val vcard_actions_list_header = "X-LINPHONE-ACCOUNT-ACTION"
-    val vcard_action_method_type_header = "X-LINPHONE-ACCOUNT-DTMF-PROTOCOL"
-
     var devices: ArrayList<Device>
 
+    val local_devices_fl_name = "local_devices"
+
+    private val coreListener: CoreListenerStub = object : CoreListenerStub() {
+        override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
+            Log.i("[Context] Global state changed [$state]")
+            if (state == GlobalState.On) {
+                devices = readFromFriends()
+            }
+        }
+        override fun onFriendListCreated(core: Core, friendList: FriendList) {
+            Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
+            devices = readFromFriends()
+        }
+    }
+
     init {
-        if (!devicesXml.exists())
-            devicesXml.createNewFile()
         devicesConfig = Factory.instance().createConfig(null)
-        devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
-        devices = readFromXml()
+        if (devicesXml.exists()) {
+            devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
+            devices = readFromXml()
+            saveLocalDevices()
+            devicesXml.delete()
+        }
+        devices = readFromFriends()
+        LinhomeApplication.coreContext.core.addListener(coreListener)
+    }
+
+    fun readFromFriends(): ArrayList<Device> {
+        val result = ArrayList<Device>()
+        LinhomeApplication.coreContext.core.getFriendListByName(local_devices_fl_name)?.friends?.forEach { friend ->
+            val card = friend.vcard
+            if (card != null) {
+                result.add(Device(card, false))
+            }
+        }
+        LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
+            LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
+                serverFriendList.friends.forEach { friend ->
+                    val card = friend.vcard
+                    if (Device.remoteVcardValid(card)) {
+                        result.add(Device(card!!, true))
+                    } else {
+                        Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")
+                    }
+                }
+            }
+        }
+
+        result.sortWith(compareBy({ it.name }, { it.address }))
+        return result
     }
 
     fun readFromXml(): ArrayList<Device> {
@@ -64,7 +104,8 @@ object DeviceStore {
                     devicesConfig.getString(it, "name", nonNullDefault = "missing"),
                     devicesConfig.getString(it, "address", nonNullDefault = "missing"),
                     devicesConfig.getString(it, "actions_method_type", null),
-                    actions
+                    actions,
+                    false
                 )
             )
         }
@@ -72,30 +113,28 @@ object DeviceStore {
         return result
     }
 
-    fun sync() {
-        devicesConfig.sectionsNamesList.forEach {
-            devicesConfig.cleanSection(it)
+    fun saveLocalDevices() {
+        val core = LinhomeApplication.coreContext.core
+        val localDevicesFriendList:FriendList?
+        core.getFriendListByName(local_devices_fl_name)?.also {
+            core.removeFriendList(it)
         }
+        localDevicesFriendList = core.createFriendList()
+        localDevicesFriendList.displayName = local_devices_fl_name
+
         devices.sortWith(compareBy({ it.name }, { it.address }))
         devices.forEach { device ->
-            devicesConfig.setString(device.id, "type", device.type)
-            devicesConfig.setString(device.id, "name", device.name)
-            devicesConfig.setString(device.id, "address", device.address)
-            devicesConfig.setString(device.id, "actions_method_type", device.actionsMethodType)
-            var actionString = String()
-            device.actions?.forEach {
-                val separator = if (actionString.isEmpty()) "" else "|"
-                actionString += separator + it.type + "," + it.code
+            val friend = device.friend
+            if (!device.isRemotelyProvisionned) {
+                localDevicesFriendList.addFriend (friend)
             }
-            devicesConfig.setString(device.id, "actions", actionString)
         }
-        devicesXml.writeText(devicesConfig.dumpAsXml())
-
+        core.addFriendList(localDevicesFriendList)
     }
 
     fun persistDevice(device: Device) {
         devices.add(device)
-        sync()
+        saveLocalDevices()
     }
 
     fun removeDevice(device: Device) {
@@ -104,7 +143,7 @@ object DeviceStore {
                 it.delete()
         }
         devices.remove(device)
-        sync()
+        saveLocalDevices()
     }
 
     fun findDeviceByAddress(address: Address): Device? {

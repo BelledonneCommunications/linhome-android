@@ -20,6 +20,7 @@
 
 package org.linhome.ui.devices
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,9 @@ import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
 import org.linhome.databinding.FragmentDevicesBinding
 import org.linhome.entities.Device
+import org.linhome.store.DeviceStore
+import org.linhome.utils.DialogUtil
+import org.linphone.core.Core
 
 
 class DevicesFragment : GenericFragment() {
@@ -88,6 +92,29 @@ class DevicesFragment : GenericFragment() {
                 val actionDetail = DevicesFragmentDirections.deviceEditTablet()
                 actionDetail.device = devicesViewModel.selectedDevice.value
                 mainactivity.navController.navigate(actionDetail)
+            }
+        }
+
+        binding.root.swiperefresh.isEnabled = false
+        devicesViewModel.friendListUpdatedOk.observe(viewLifecycleOwner, { updateOk ->
+            (binding.root.device_list.adapter as RecyclerView.Adapter).notifyDataSetChanged()
+            binding.root.swiperefresh.isRefreshing = false
+            if (updateOk != true) {
+                DialogUtil.error("vcard_sync_failed")
+            }
+        })
+
+        binding.root.swiperefresh.setOnRefreshListener {
+            if (LinhomeApplication.coreContext.core.isNetworkReachable != true) {
+                binding.root.swiperefresh.isRefreshing = false
+                DialogUtil.error("no_network")
+            } else if (LinhomeApplication.coreContext.core.callsNb == 0) {
+                LinhomeApplication.coreContext.core.config?.getString("misc", "contacts-vcard-list", null)?.also  { remoteFlName ->
+                    LinhomeApplication.coreContext.core.getFriendListByName(remoteFlName)?.also { serverFriendList ->
+                        serverFriendList.addListener(devicesViewModel.friendListListener)
+                        serverFriendList.synchronizeFriendsFromServer()
+                    }
+                }
             }
         }
 

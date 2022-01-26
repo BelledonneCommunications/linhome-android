@@ -45,7 +45,7 @@ class DeviceInfoFragment : GenericFragment() {
         val binding = FragmentDeviceInfoBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.device = args.device
-
+        mainactivity.toolbarViewModel.rightButtonVisible.value = args.device?.isRemotelyProvisionned != true
         return binding.root
     }
 
@@ -59,7 +59,6 @@ class DeviceInfoFragment : GenericFragment() {
         super.onResume()
         Theme.setIcon("icons/edit", mainactivity.toolbar_right_button_image)
         mainactivity.toolbar_right_button_title.text = Texts.get("edit")
-        mainactivity.toolbarViewModel.rightButtonVisible.value = true
         mainactivity.resumeNavigation()
     }
 

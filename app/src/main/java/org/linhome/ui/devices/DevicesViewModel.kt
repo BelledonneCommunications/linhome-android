@@ -22,13 +22,54 @@ package org.linhome.ui.devices
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.linhome.LinhomeApplication
 import org.linhome.entities.Device
 import org.linhome.store.DeviceStore
+import org.linphone.core.*
+import org.linphone.mediastream.Log
 
 class DevicesViewModel : ViewModel() {
-    val devices = MutableLiveData<ArrayList<Device>>().apply {
+    var devices = MutableLiveData<ArrayList<Device>>().apply {
         value = DeviceStore.devices
     }
     var selectedDevice = MutableLiveData<Device?>()
+    var friendListUpdatedOk = MutableLiveData<Boolean>()
+
+    val friendListListener: FriendListListenerStub = object : FriendListListenerStub() {
+        override fun onSyncStatusChanged(
+            friendList: FriendList,
+            status: FriendList.SyncStatus?,
+            message: String
+        ) {
+            if (status == FriendList.SyncStatus.Successful || status == FriendList.SyncStatus.Failure) {
+                devices.value = DeviceStore.devices
+                friendListUpdatedOk.value = status == FriendList.SyncStatus.Successful
+            }
+        }
+    }
+
+    private val coreListener: CoreListenerStub = object : CoreListenerStub() {
+        override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
+            Log.i("[Context] Global state changed [$state]")
+            if (state == GlobalState.On) {
+                DeviceStore.devices = DeviceStore.readFromFriends()
+                devices.value = DeviceStore.devices
+            }
+        }
+        override fun onFriendListCreated(core: Core, friendList: FriendList) {
+            Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
+            DeviceStore.devices = DeviceStore.readFromFriends()
+            devices.value = DeviceStore.devices
+            friendListUpdatedOk.value = true
+        }
+    }
+
+    init {
+        LinhomeApplication.coreContext.core.addListener(coreListener)
+    }
+
+    override fun onCleared() {
+        LinhomeApplication.coreContext.core.removeListener(coreListener)
+    }
 
 }

@@ -38,15 +38,11 @@ object DeviceStore {
     val local_devices_fl_name = "local_devices"
 
     private val coreListener: CoreListenerStub = object : CoreListenerStub() {
-        override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
-            Log.i("[Context] Global state changed [$state]")
-            if (state == GlobalState.On) {
+        override fun onFriendListCreated(core: Core, friendList: FriendList) {
+            if (core.globalState == GlobalState.On) {
+                Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
                 devices = readFromFriends()
             }
-        }
-        override fun onFriendListCreated(core: Core, friendList: FriendList) {
-            Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
-            devices = readFromFriends()
         }
     }
 

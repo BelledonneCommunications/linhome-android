@@ -73,7 +73,7 @@ class LinhomeApplication : Application() {
             coreContext.core.ring = context.filesDir.absolutePath+"/bell.wav"
             coreContext.core.ringDuringIncomingEarlyMedia = true
             coreContext.core.isNativeRingingEnabled = true
-            coreContext.core.friendsDatabasePath = context.filesDir.absolutePath+"/devices.db"
+           //coreContext.core.friendsDatabasePath = context.filesDir.absolutePath+"/devices.db"
             setDefaultCodecs()
 
         }

@@ -30,10 +30,6 @@ import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import kotlinx.android.synthetic.main.item_sidemenu.view.bottom_separator
-import kotlinx.android.synthetic.main.item_sidemenu.view.icon
-import kotlinx.android.synthetic.main.item_sidemenu.view.label
-import kotlinx.android.synthetic.main.item_spinner.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
@@ -46,15 +42,15 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: 
 
     var height: Int? = null
 
-    class ViewHolder(itemView: View) {
+    class ViewHolder(itemView: ItemSpinnerBinding) {
         val optionIconIV = itemView.icon
         val optionLabelTV: TextView = itemView.label
         val optionArrow: ImageView = itemView.arrow
-        val optionSeparator: View = itemView.bottom_separator
+        val optionSeparator: View = itemView.bottomSeparator
 
         init {
-            itemView.bottom_separator.setBackgroundColor(Theme.getColor("color_h"))
-            itemView.background = Theme.selectionEffectAsStateListDrawable("dropdown_list")
+            itemView.bottomSeparator.setBackgroundColor(Theme.getColor("color_h"))
+            itemView.root.background = Theme.selectionEffectAsStateListDrawable("dropdown_list")
         }
     }
 
@@ -71,14 +67,15 @@ class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: 
         var viewHolder: ViewHolder
         var view = convertView
         if (view == null) {
-            view = (DataBindingUtil.inflate(
+            val binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent?.context),
                 R.layout.item_spinner,
                 parent,
                 false
-            ) as ItemSpinnerBinding).root
+            ) as ItemSpinnerBinding
+            view = binding.root
             height = view.getLayoutParams().height
-            viewHolder = ViewHolder(view)
+            viewHolder = ViewHolder(binding)
             view.tag = viewHolder
         } else
             viewHolder = view.tag as ViewHolder

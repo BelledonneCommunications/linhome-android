@@ -26,8 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_assistant_login_sip.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantLoginSipBinding
 import org.linhome.entities.Account
@@ -51,19 +49,19 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
         binding.model = model
         binding.validators = ValidatorFactory.Companion
 
-        binding.root.more.root.setOnClickListener {
+        binding.more.setOnClickListener {
             model.moreOptionsOpened.value = true
         }
 
-        binding.root.loginsip.root.setOnClickListener {
-            binding.root.username.validate()
-            binding.root.password.validate()
-            binding.root.domain.validate()
-            binding.root.proxy.validate()
-            binding.root.expiration.validate()
-            updateField(model.setUsername(model.username), binding.root.username)
-            updateField(model.setPassword(model.pass1), binding.root.password)
-            updateField(model.setDomain(model.domain), binding.root.domain)
+        binding.loginsip.setOnClickListener {
+            binding.username.validate()
+            binding.password.validate()
+            binding.domain.validate()
+            binding.proxy.validate()
+            binding.expiration.validate()
+            updateField(model.setUsername(model.username), binding.username)
+            updateField(model.setPassword(model.pass1), binding.password)
+            updateField(model.setDomain(model.domain), binding.domain)
             model.setTransport(TransportType.values()[model.transport.value!!])
             if (model.valid()) {
                 hideKeyboard()

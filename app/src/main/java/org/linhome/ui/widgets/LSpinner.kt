@@ -28,7 +28,6 @@ import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
-import kotlinx.android.synthetic.main.widget_spinner.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.WidgetSpinnerBinding
@@ -57,33 +56,33 @@ class LSpinner : LinearLayout {
     var titlekey: String? = null
         set(value) {
             value?.also {
-                binding.root.title.text = Texts.get(it)
-                binding.root.title.visibility = View.VISIBLE
+                binding.title.text = Texts.get(it)
+                binding.title.visibility = View.VISIBLE
             }
         }
 
     var titletext: String? = null
         set(value) {
             value?.also {
-                binding.root.title.text = it
-                binding.root.title.visibility = View.VISIBLE
+                binding.title.text = it
+                binding.title.visibility = View.VISIBLE
             }
         }
 
     var items: ArrayList<SpinnerItem>? = null
         set(value) {
-            binding.root.spinner.adapter = value?.let { LSpinnerAdapter(it, binding.root.spinner, this, null) }
+            binding.spinner.adapter = value?.let { LSpinnerAdapter(it, binding.spinner, this, null) }
         }
 
 
     var missingText: String? = null
         set(value) {
-            binding.root.error.text = value?.let { Texts.get(it) }
+            binding.error.text = value?.let { Texts.get(it) }
         }
 
     var showMissingText: Boolean? = null
         set(value) {
-            binding.root.error.visibility = if (value!!) View.VISIBLE else View.GONE
+            binding.error.visibility = if (value!!) View.VISIBLE else View.GONE
         }
 
     var listener: LSpinnerListener? = null
@@ -92,8 +91,8 @@ class LSpinner : LinearLayout {
     var initialIndex: Int? = null
         set(value) {
             if (value != null) {
-                binding.root.spinner.setSelection(value)
-                (binding.root.spinner.adapter as LSpinnerAdapter).selectedIndex = value
+                binding.spinner.setSelection(value)
+                (binding.spinner.adapter as LSpinnerAdapter).selectedIndex = value
             }
         }
 
@@ -105,9 +104,9 @@ class LSpinner : LinearLayout {
     ) {
         binding = DataBindingUtil.inflate(from(context), R.layout.widget_spinner, this, true)
         binding.owner = this
-        binding.root.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                hideSpinnerDropDown(binding.root.spinner)
+                hideSpinnerDropDown(binding.spinner)
             }
 
             override fun onItemSelected(
@@ -122,7 +121,7 @@ class LSpinner : LinearLayout {
 
     fun onItemSelected(position:Int) {
         listener?.onItemSelected(position)
-        hideSpinnerDropDown(binding.root.spinner)
+        hideSpinnerDropDown(binding.spinner)
     }
 
     fun hideSpinnerDropDown(spinner: Spinner?) { // Work around protected method : onDetachedFromWindow

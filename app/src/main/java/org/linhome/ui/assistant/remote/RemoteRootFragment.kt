@@ -25,8 +25,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_assistant_remote_root.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.linhome.GenericFragment
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantRemoteRootBinding.inflate
@@ -48,19 +46,19 @@ class RemoteRootFragment : GenericFragment() {
     ): View? {
         val binding = inflate(inflater, container, false)
 
-        binding.root.url.root.setOnClickListener {
+        binding.url.setOnClickListener {
             mainactivity.navController.navigate(R.id.navigation_assistant_remote_url)
         }
 
-        binding.root.qr.root.setOnClickListener {
+        binding.qr.setOnClickListener {
             openQRCodeViewWithPermissionCheck()
         }
 
-        binding.root.infobutton.setOnClickListener {
-            binding.root.infotext.toogleVisible()
+        binding.infobutton.setOnClickListener {
+            binding.infotext.toogleVisible()
         }
         binding.root.setOnClickListener {
-            binding.root.infotext.invisible()
+            binding.infotext.invisible()
         }
 
 

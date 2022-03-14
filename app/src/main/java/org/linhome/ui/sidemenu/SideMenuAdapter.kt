@@ -27,7 +27,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_sidemenu.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
@@ -46,21 +45,21 @@ class SideMenuAdapter(private val options: ArrayList<MenuOption>, navController:
             parent,
             false
         ) as ItemSidemenuBinding
-        return ViewHolder(binding.root, this)
+        return ViewHolder(binding, this)
     }
 
     override fun getItemCount(): Int {
         return options.size
     }
 
-    class ViewHolder(itemView: View, adapter: SideMenuAdapter) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: ItemSidemenuBinding, adapter: SideMenuAdapter) : RecyclerView.ViewHolder(itemView.root) {
         private val optionIconIV = itemView.icon
         private val optionLabelTV: TextView = itemView.label
         private val optionsAdapter = adapter
 
         init {
-            itemView.bottom_separator.setBackgroundColor(Theme.getColor("color_h"))
-            itemView.background = Theme.selectionEffectAsStateListDrawable("sidemenu_option")
+            itemView.bottomSeparator.setBackgroundColor(Theme.getColor("color_h"))
+            itemView.root.background = Theme.selectionEffectAsStateListDrawable("sidemenu_option")
         }
 
         fun bindItems(option: MenuOption) {

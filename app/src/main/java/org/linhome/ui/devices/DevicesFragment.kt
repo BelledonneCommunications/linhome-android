@@ -30,8 +30,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_device_info.view.*
-import kotlinx.android.synthetic.main.fragment_devices.view.*
 import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
 import org.linhome.databinding.FragmentDevicesBinding
@@ -39,7 +37,6 @@ import org.linhome.entities.Device
 import org.linhome.store.DeviceStore
 import org.linhome.utils.DialogUtil
 import org.linphone.core.Core
-
 
 class DevicesFragment : GenericFragment() {
 
@@ -58,24 +55,24 @@ class DevicesFragment : GenericFragment() {
         binding.lifecycleOwner = this
         binding.model = devicesViewModel
 
-        binding.root.new_device.setOnClickListener {
-            binding.root.new_device.visibility = View.INVISIBLE
+        binding.newDevice.setOnClickListener {
+            binding.newDevice.visibility = View.INVISIBLE
             val actionDetail = DevicesFragmentDirections.deviceNew()
             mainactivity.navController.navigate(actionDetail)
         }
 
-        binding.root.new_device_none_configured?.setOnClickListener {
-            binding.root.new_device_none_configured.visibility = View.INVISIBLE
+        binding.newDeviceNoneConfigured?.setOnClickListener {
+            binding.newDeviceNoneConfigured?.visibility = View.INVISIBLE
             val actionDetail = DevicesFragmentDirections.deviceNew()
             mainactivity.navController.navigate(actionDetail)
         }
 
-        binding.root.device_list.layoutManager =
+        binding.deviceList.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
-        binding.root.device_list.adapter = DevicesAdapter(
+        binding.deviceList.adapter = DevicesAdapter(
             devicesViewModel.devices,
-            binding.root.device_list,
+            binding.deviceList,
             devicesViewModel.selectedDevice,
             this
         )
@@ -88,25 +85,25 @@ class DevicesFragment : GenericFragment() {
         }
 
         if (LinhomeApplication.instance.tablet()) {
-            binding.root.edit_device?.setOnClickListener {
+            binding.fragmentDeviceInfo?.editDevice?.setOnClickListener {
                 val actionDetail = DevicesFragmentDirections.deviceEditTablet()
                 actionDetail.device = devicesViewModel.selectedDevice.value
                 mainactivity.navController.navigate(actionDetail)
             }
         }
 
-        binding.root.swiperefresh.isEnabled = false
+        binding.swiperefresh?.isEnabled = false
         devicesViewModel.friendListUpdatedOk.observe(viewLifecycleOwner, { updateOk ->
-            (binding.root.device_list.adapter as RecyclerView.Adapter).notifyDataSetChanged()
-            binding.root.swiperefresh.isRefreshing = false
+            (binding.deviceList.adapter as RecyclerView.Adapter).notifyDataSetChanged()
+            binding.swiperefresh?.isRefreshing = false
             if (updateOk != true) {
                 DialogUtil.error("vcard_sync_failed")
             }
         })
 
-        binding.root.swiperefresh.setOnRefreshListener {
+        binding.swiperefresh?.setOnRefreshListener {
             if (LinhomeApplication.coreContext.core.isNetworkReachable != true) {
-                binding.root.swiperefresh.isRefreshing = false
+                binding.swiperefresh?.isRefreshing = false
                 DialogUtil.error("no_network")
             } else if (LinhomeApplication.coreContext.core.callsNb == 0) {
                 LinhomeApplication.coreContext.core.config?.getString("misc", "contacts-vcard-list", null)?.also  { remoteFlName ->
@@ -125,15 +122,15 @@ class DevicesFragment : GenericFragment() {
         super.onResume()
         if (LinhomeApplication.instance.tablet()) {
             if (devicesViewModel.devices.value!!.size == 0) {
-                binding.root.new_device.visibility = View.GONE
-                binding.root.new_device_none_configured.visibility = View.VISIBLE
+                binding.newDevice.visibility = View.GONE
+                binding.newDeviceNoneConfigured?.visibility = View.VISIBLE
             } else {
-                binding.root.new_device.visibility = View.VISIBLE
-                binding.root.new_device_none_configured.visibility = View.GONE
+                binding.newDevice.visibility = View.VISIBLE
+                binding.newDeviceNoneConfigured?.visibility = View.GONE
             }
 
         } else {
-            binding.root.new_device.visibility = View.VISIBLE
+            binding.newDevice.visibility = View.VISIBLE
         }
 
     }

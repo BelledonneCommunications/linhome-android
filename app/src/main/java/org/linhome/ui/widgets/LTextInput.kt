@@ -28,7 +28,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import kotlinx.android.synthetic.main.widget_text_input.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.WidgetTextInputBinding
@@ -46,7 +45,7 @@ class LTextInput : LinearLayout {
         init(context)
     }
 
-    private lateinit var title: TextView
+    lateinit var title: TextView
     lateinit var text: LEditText
     private lateinit var error: TextView
 
@@ -70,7 +69,7 @@ class LTextInput : LinearLayout {
 
     var hint: String? = null
         set(value) {
-            binding.root.text.hint = value?.let { Texts.get(it) }
+            binding.text.hint = value?.let { Texts.get(it) }
         }
 
     private fun init(
@@ -79,9 +78,9 @@ class LTextInput : LinearLayout {
         binding = DataBindingUtil.inflate(from(context), R.layout.widget_text_input, this, true)
         binding.owner = this
 
-        title = binding.root.title
-        text = binding.root.text
-        error = binding.root.error
+        title = binding.title
+        text = binding.text
+        error = binding.error
     }
 
 

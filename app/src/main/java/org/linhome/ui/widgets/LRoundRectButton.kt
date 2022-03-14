@@ -29,7 +29,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import org.linhome.R
 import org.linhome.databinding.WidgetRoundRectButtonBinding
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 
 
 
@@ -56,7 +55,7 @@ class LRoundRectButton : LinearLayout {
             true
         )
         setBackgroundColor(Color.TRANSPARENT)
-        buttonText = binding.root.text
+        buttonText = binding.text
     }
 
 

@@ -26,9 +26,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_action_info.view.*
-import kotlinx.android.synthetic.main.item_sidemenu.view.icon
-import kotlinx.android.synthetic.main.item_sidemenu.view.label
 import org.linhome.R
 import org.linhome.customisation.ActionTypes
 import org.linhome.customisation.Theme
@@ -45,18 +42,18 @@ class DeviceInfoActionsAdapter(private val actions: ArrayList<Action>) :
             parent,
             false
         ) as ItemActionInfoBinding
-        return ViewHolder(binding.root)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return actions.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: ItemActionInfoBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val icon = itemView.icon
         private val type: TextView = itemView.label
         private val code: TextView = itemView.code
-        private val topSeparator = itemView.top_separator
+        private val topSeparator = itemView.topSeparator
 
         fun bindItems(action: Action, showTopSeparator:Boolean) {
             type.text = action.typeName()

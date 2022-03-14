@@ -51,6 +51,7 @@
             android:layout_marginBottom="20dp"
             >
             <include
+                android:id="@+id/chunk_player_controls"
                 layout="@layout/chunk_player_controls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

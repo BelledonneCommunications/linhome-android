@@ -28,9 +28,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.app_bar_main.view.*
-import kotlinx.android.synthetic.main.content_main.*
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ActivityMainBinding
@@ -54,8 +51,9 @@ class MainActivity : GenericActivity() {
     lateinit var toolbarViewModel: ToolbarViewModel
     lateinit var tabbarViewModel: TabbarViewModel
 
-
     var toobarButtonClickedListener: ToobarButtonClickedListener? = null
+    lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -68,8 +66,7 @@ class MainActivity : GenericActivity() {
         applyCommonTheme()
 
 
-        val binding: ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
         toolbarViewModel = ViewModelProvider(this).get(ToolbarViewModel::class.java)
@@ -78,26 +75,26 @@ class MainActivity : GenericActivity() {
         tabbarViewModel = ViewModelProvider(this).get(TabbarViewModel::class.java)
         binding.tabbarviewmodel = tabbarViewModel
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.appbar.toolbar)
 
         navController = findNavController(R.id.navigation_host_fragment)
         navControllerSideMenu = findNavController(R.id.host_fragment_sidemenu)
 
         applyTheme()
 
-        tabbar_devices.setOnClickListener {
-            if (tabBarLayoutClicked(tabbar_devices, tabbar_history)) {
+        binding.appbar.contentmain.tabbarDevices.setOnClickListener {
+            if (tabBarLayoutClicked(binding.appbar.contentmain.tabbarDevices, binding.appbar.contentmain.tabbarHistory)) {
                 navController.popBackStack()
                 navController.navigate(R.id.navigation_devices, null)
             }
         }
-        tabbar_history.setOnClickListener {
-            if (tabBarLayoutClicked(tabbar_history, tabbar_devices)) {
+        binding.appbar.contentmain.tabbarHistory.setOnClickListener {
+            if (tabBarLayoutClicked(binding.appbar.contentmain.tabbarHistory, binding.appbar.contentmain.tabbarDevices)) {
                 navController.popBackStack()
                 navController.navigate(R.id.navigation_history, null)
             }
         }
-        tabBarLayoutClicked(tabbar_devices, tabbar_history)
+        tabBarLayoutClicked(binding.appbar.contentmain.tabbarDevices, binding.appbar.contentmain.tabbarHistory)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (sideMenuOpened()) {
@@ -111,33 +108,33 @@ class MainActivity : GenericActivity() {
                     enterNonRootFragment()
                 }
             }
-            toolbar_title.text = titleForNavigationFragment(destination.id)
+            binding.appbar.toolbarTitle.text = titleForNavigationFragment(destination.id)
         }
 
         navControllerSideMenu.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.fragment_sidemenu -> {
                     enterNonRootFragment()
-                    toolbar_title.text = null
+                    binding.appbar.toolbarTitle.text = null
                 }
                 else -> {
                     enterRootFragment()
-                    toolbar_title.text =
+                    binding.appbar.toolbarTitle.text =
                         titleForNavigationFragment(navController.currentDestination?.id)
                 }
             }
         }
 
-        toolbar_right_button.setOnClickListener {
+        binding.appbar.toolbarRightButton.setOnClickListener {
             toobarButtonClickedListener?.onToolbarRightButtonClicked()
         }
-        toolbar_left_button.setOnClickListener {
+        binding.appbar.toolbarLeftButton.setOnClickListener {
             toobarButtonClickedListener?.onToolbarLeftButtonClicked()
         }
-        toolbar_burger_button.setOnClickListener {
+        binding.appbar.toolbarBurgerButton.setOnClickListener {
             onToolbarBurgerButtonClicked()
         }
-        toolbar_back_button.setOnClickListener {
+        binding.appbar.toolbarBackButton.setOnClickListener {
             onToolbarBackButtonClicked()
         }
 
@@ -146,7 +143,7 @@ class MainActivity : GenericActivity() {
         }
 
         if (savedInstanceState != null && savedInstanceState?.getBoolean("history_opened")) {
-            tabbar_history.performClick()
+            binding.appbar.contentmain.tabbarHistory.performClick()
         }
 
 
@@ -164,11 +161,11 @@ class MainActivity : GenericActivity() {
     private fun enterNonRootFragment() {
         toolbarViewModel.backButtonVisible.value = true
         toolbarViewModel.burgerButtonVisible.value = false
-        tabbar.visibility = View.GONE
+        binding.appbar.contentmain.tabbar.visibility = View.GONE
     }
 
     private fun enterRootFragment() {
-        tabbar.visibility = View.VISIBLE
+        binding.appbar.contentmain.tabbar.visibility = View.VISIBLE
         toolbarViewModel.backButtonVisible.value = false
         toolbarViewModel.burgerButtonVisible.value = true
         toolbarViewModel.leftButtonVisible.value = false
@@ -186,10 +183,10 @@ class MainActivity : GenericActivity() {
 
 
     private fun applyTheme() { //Todo move into bindings when validated
-        toolbar.setBackgroundColor(Theme.getColor("color_a"))
-        tabbar.setBackgroundColor(Theme.getColor("color_j"))
-        toolbar.progress.indeterminateTintList = Theme.buildSingleColorStateList("color_a")
-        toolbar.progress.setBackgroundColor(Theme.getColor("color_j"))
+        binding.appbar.toolbar.setBackgroundColor(Theme.getColor("color_a"))
+        binding.appbar.contentmain.tabbar.setBackgroundColor(Theme.getColor("color_j"))
+        binding.appbar.progress.indeterminateTintList = Theme.buildSingleColorStateList("color_a")
+        binding.appbar.progress.setBackgroundColor(Theme.getColor("color_j"))
     }
 
     private fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup): Boolean {

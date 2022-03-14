@@ -33,7 +33,7 @@ class SettingsViewModel : ViewModelWithTools() {
     val audioCodecs = ArrayList<ViewDataBinding>()
     val videCodecs = ArrayList<ViewDataBinding>()
 
-    val enableIpv6 = MutableLiveData(core.ipv6Enabled())
+    val enableIpv6 = MutableLiveData(core.isIpv6Enabled())
     val latestSnapshotShown = MutableLiveData(corePref.showLatestSnapshot)
 
 
@@ -75,7 +75,7 @@ class SettingsViewModel : ViewModelWithTools() {
 
     val enableIpv6Listener = object : SettingListenerStub() {
         override fun onBoolValueChanged(newValue: Boolean) {
-            core.enableIpv6(newValue)
+            core.isIpv6Enabled = newValue
         }
     }
 

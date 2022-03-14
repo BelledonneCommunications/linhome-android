@@ -27,12 +27,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_assistant_remote_qr.view.*
 import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantRemoteQrBinding
-import org.linhome.entities.Account
 import org.linhome.utils.DialogUtil
 import org.linhome.utils.extensions.invisible
 import org.linhome.utils.extensions.toogleVisible
@@ -77,12 +75,12 @@ class RemoteQrAccountFragment : GenericFragment() {
         })
 
 
-        binding.root.infobutton.setOnClickListener {
-            binding.root.infotext.toogleVisible()
+        binding.infobutton.setOnClickListener {
+            binding.infotext.toogleVisible()
         }
 
         binding.root.setOnClickListener {
-            binding.root.infotext.invisible()
+            binding.infotext.invisible()
         }
 
 
@@ -94,8 +92,8 @@ class RemoteQrAccountFragment : GenericFragment() {
         coreContext.core.reloadVideoDevices()
         setBackCamera()
         coreContext.core.nativePreviewWindowId = binding.qrcode
-        coreContext.core.enableQrcodeVideoPreview(true)
-        coreContext.core.enableVideoPreview(true)
+        coreContext.core.isQrcodeVideoPreviewEnabled = true
+        coreContext.core.isVideoPreviewEnabled = true
     }
 
     override fun onResume() {
@@ -119,8 +117,8 @@ class RemoteQrAccountFragment : GenericFragment() {
 
     override fun onPause() {
         coreContext.core.nativePreviewWindowId = null
-        coreContext.core.enableQrcodeVideoPreview(false)
-        coreContext.core.enableVideoPreview(false)
+        coreContext.core.isQrcodeVideoPreviewEnabled = false
+        coreContext.core.isVideoPreviewEnabled = false
         super.onPause()
     }
 

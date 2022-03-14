@@ -23,11 +23,12 @@ package org.linhome.ui.devices.edit
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.linhome.databinding.ItemActionEditBinding
 import org.linhome.ui.widgets.LSpinnerListener
 
 class DeviceEditorActionViewModel(
     val owningViewModel: DeviceEditorViewModel,
-    val binding: ViewDataBinding,
+    val binding: ItemActionEditBinding,
     val displayIndex: MutableLiveData<Int> = MutableLiveData(0)
 ) : ViewModel() {
     var type: MutableLiveData<Int> = MutableLiveData<Int>(0)

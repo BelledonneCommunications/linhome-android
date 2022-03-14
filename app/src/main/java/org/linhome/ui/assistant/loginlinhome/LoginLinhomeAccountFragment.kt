@@ -25,8 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_assistant_login_linhome.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
@@ -54,11 +52,11 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
         binding.model = model
         binding.validators = ValidatorFactory.Companion
 
-        binding.root.login.root.setOnClickListener {
-            binding.root.username.validate()
-            binding.root.password.validate()
-            updateField(model.setUsername(model.username), binding.root.username)
-            updateField(model.setPassword(model.pass1), binding.root.password)
+        binding.login.setOnClickListener {
+            binding.username.validate()
+            binding.password.validate()
+            updateField(model.setUsername(model.username), binding.username)
+            updateField(model.setPassword(model.pass1), binding.password)
             if (model.fieldsValid()) {
                 hideKeyboard()
                 showProgress()
@@ -77,7 +75,7 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                             DialogUtil.info("linhome_account_loggedin")
                         } else {
-                            binding.root.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
+                            binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
                         }
                     }
                 }

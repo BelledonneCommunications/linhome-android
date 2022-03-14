@@ -128,8 +128,8 @@ data class Device(
         }
         val params: CallParams? = LinhomeApplication.coreContext.core.createCallParams(null)
         type?.also {
-            params?.enableVideo(DeviceTypes.supportsVideo(it))
-            params?.enableAudio(DeviceTypes.supportsAudio(it))
+            params?.isVideoEnabled = DeviceTypes.supportsVideo(it)
+            params?.isAudioEnabled = DeviceTypes.supportsAudio(it)
         }
         val historyEvent = HistoryEvent()
         params?.recordFile = historyEvent.mediaFileName
@@ -142,7 +142,7 @@ data class Device(
                 )
             }
             if (call != null) {
-                call.enableCamera(false)
+                call.isCameraEnabled = false
                 call.callLog.userData =
                     historyEvent // Retrieved in CallViewModel and bound with call ID when available
             } else

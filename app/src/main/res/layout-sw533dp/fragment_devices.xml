@@ -81,6 +81,7 @@
             android:visibility="@{model.selectedDevice != null ? View.VISIBLE : View.GONE}"
             >
             <include
+                android:id="@+id/fragment_device_info"
                 layout="@layout/fragment_device_info"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -29,7 +29,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import org.linhome.R
 import org.linhome.databinding.WidgetRoundRectButtonWithIconBinding
-import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
 
 
 
@@ -45,18 +44,19 @@ class LRoundRectButtonWithIcon : LinearLayout {
     }
 
     lateinit var buttonText: TextView
+    lateinit var binding: WidgetRoundRectButtonWithIconBinding
 
     private fun init(
         context: Context
     ) {
-        val binding: WidgetRoundRectButtonWithIconBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.widget_round_rect_button_with_icon,
             this,
             true
         )
         setBackgroundColor(Color.TRANSPARENT)
-        buttonText = binding.root.text
+        buttonText = binding.text
     }
 
 

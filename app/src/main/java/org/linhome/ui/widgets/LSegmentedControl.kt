@@ -28,7 +28,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
-import kotlinx.android.synthetic.main.widget_segmented_control.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.WidgetSegmentedControlBinding
@@ -66,9 +65,9 @@ class LSegmentedControl : LinearLayout {
     var defaultSelected: Int? = null
         set(value) {
             when (value) {
-                0 -> binding.root.option1.performClick()
-                1 -> binding.root.option2.performClick()
-                2 -> binding.root.option3.performClick()
+                0 -> binding.option1.performClick()
+                1 -> binding.option2.performClick()
+                2 -> binding.option3.performClick()
             }
             field = value
         }
@@ -86,25 +85,25 @@ class LSegmentedControl : LinearLayout {
             true
         )
         binding.owner = this
-        titleTextView = binding.root.title
+        titleTextView = binding.title
 
-        binding.root.option1.setOnClickListener {
+        binding.option1.setOnClickListener {
             liveIndex?.value = 0
-            on(binding.root.option1)
-            off(binding.root.option2)
-            off(binding.root.option3)
+            on(binding.option1)
+            off(binding.option2)
+            off(binding.option3)
         }
-        binding.root.option2.setOnClickListener {
+        binding.option2.setOnClickListener {
             liveIndex?.value = 1
-            off(binding.root.option1)
-            on(binding.root.option2)
-            off(binding.root.option3)
+            off(binding.option1)
+            on(binding.option2)
+            off(binding.option3)
         }
-        binding.root.option3.setOnClickListener {
+        binding.option3.setOnClickListener {
             liveIndex?.value = 2
-            off(binding.root.option1)
-            off(binding.root.option2)
-            on(binding.root.option3)
+            off(binding.option1)
+            off(binding.option2)
+            on(binding.option3)
         }
     }
 

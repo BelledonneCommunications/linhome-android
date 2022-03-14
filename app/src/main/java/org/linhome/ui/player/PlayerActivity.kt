@@ -29,8 +29,6 @@ import android.view.View.OnTouchListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_player.view.*
-import kotlinx.android.synthetic.main.chunk_player_controls.view.*
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication
 import org.linhome.R
@@ -78,13 +76,13 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                                 PlayerViewModelFactory(callId, player)
                             )[PlayerViewModel::class.java]
                         binding.model = playerViewModel
-                        binding.root.cancel.setOnClickListener {
-                            binding.root.cancel.alpha = 0.3f
+                        binding.cancel.setOnClickListener {
+                            binding.cancel.alpha = 0.3f
                             finish()
                         }
-                        setupPlayerControl(binding.root, playerViewModel)
+                        setupPlayerControl(binding, playerViewModel)
                         if (event.hasVideo) {
-                            setTextureView(binding.root.video, player, seekTo, playing)
+                            setTextureView(binding.video, player, seekTo, playing)
                         }
                         HistoryEventStore.markAsRead(event.id)
                     }
@@ -102,28 +100,28 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
         super.onSaveInstanceState(outState)
     }
 
-    private fun setupPlayerControl(view: View, model: PlayerViewModel) {
+    private fun setupPlayerControl(view: ActivityPlayerBinding, model: PlayerViewModel) {
         model.playing.observe(this, Observer { playing ->
             if (playing) {
-                view.timer.start()
+                view.chunkPlayerControls?.timer?.start()
             } else {
-                view.timer.stop()
+                view.chunkPlayerControls?.timer?.stop()
             }
         })
 
         model.resetEvent.observe(this, Observer { reset ->
             if (reset)
-                view.timer.base = SystemClock.elapsedRealtime()
+                view.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime()
         })
 
         model.seekPosition.observe(this, Observer { p ->
-            view.timer.base = SystemClock.elapsedRealtime() - p
+            view.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime() - p
         })
 
-        view.timer.setOnChronometerTickListener {
+        view.chunkPlayerControls?.timer?.setOnChronometerTickListener {
             model.updatePosition()
         }
-        view.seek.setOnTouchListener({ view, motionEvent -> false })
+        view.chunkPlayerControls?.seek?.setOnTouchListener({ view, motionEvent -> false })
 
     }
 

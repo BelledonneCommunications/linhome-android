@@ -59,7 +59,7 @@ class HistoryViewModel : ViewModel() {
         } else {
             selectedForDeletion.value!!.clear()
             history.value!!.forEach {
-                selectedForDeletion.value!!.add(it.callId)
+                selectedForDeletion.value!!.add(it.callId!!)
             }
         }
         notifyDeleteSelectionListUpdated()

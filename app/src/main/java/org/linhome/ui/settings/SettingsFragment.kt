@@ -29,7 +29,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.linhome.BR
 import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
@@ -100,19 +99,19 @@ class SettingsFragment : GenericFragment() {
     val sendLogsListener = object : SettingListenerStub() {
         override fun onClicked() {
             showProgress()
-            binding.root.send_logs.isEnabled = false
+            binding.sendLogs.root.isEnabled = false
             settingsViewModel.logUploadResult.observe(viewLifecycleOwner, Observer { result ->
                 when (result.first) {
                     Core.LogCollectionUploadState.InProgress -> {
                     }
                     Core.LogCollectionUploadState.NotDelivered -> {
                         hideProgress()
-                        binding.root.send_logs.isEnabled = true
+                        binding.sendLogs.root.isEnabled = true
                         DialogUtil.error("log_upload_failed")
                     }
                     Core.LogCollectionUploadState.Delivered -> {
                         hideProgress()
-                        binding.root.send_logs.isEnabled = true
+                        binding.sendLogs.root.isEnabled = true
                         val clipboard =
                             requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val clip = ClipData.newPlainText("Logs url", result.second)

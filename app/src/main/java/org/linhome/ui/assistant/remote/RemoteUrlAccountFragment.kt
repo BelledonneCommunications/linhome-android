@@ -26,9 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_assistant_remote_url.*
-import kotlinx.android.synthetic.main.fragment_assistant_remote_url.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.linhome.GenericFragment
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantRemoteUrlBinding
@@ -52,10 +49,10 @@ class RemoteUrlAccountFragment : GenericFragment() {
         binding.model = model
         binding.validators = ValidatorFactory.Companion
 
-        binding.root.apply.root.setOnClickListener {
-            binding.root.url.validate()
+        binding.apply.setOnClickListener {
+            binding.url.validate()
             if (model.valid()) {
-                apply.root.isEnabled = false
+                binding.apply.isEnabled = false
                 hideKeyboard()
                 showProgress()
                 model.startRemoteProvisionning()
@@ -64,7 +61,7 @@ class RemoteUrlAccountFragment : GenericFragment() {
 
         model.configurationResult.observe(viewLifecycleOwner, Observer { status ->
             hideProgress()
-            apply.root.isEnabled = true
+            binding.apply.isEnabled = true
             when (status) {
                 ConfiguringState.Failed -> {
                     DialogUtil.error("remote_configuration_failed")

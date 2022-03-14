@@ -94,8 +94,8 @@ object Account {
             if (request.status == XmlRpcStatus.Ok) {
                 val pushGw = coreContext.core.createProxyConfig()
                 pushGw.idkey = PUSH_GW_ID_KEY
-                pushGw.enableRegister(true)
-                pushGw.enablePublish(false)
+                pushGw.isRegisterEnabled = true
+                pushGw.isPublishEnabled = false
                 pushGw.expires = 31536000
                 pushGw.serverAddr = "sips:${responseValues.get(1)};transport=tls"
                 pushGw.setRoutes(arrayOf(pushGw.serverAddr))

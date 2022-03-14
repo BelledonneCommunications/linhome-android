@@ -30,15 +30,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_history.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.FragmentHistoryBinding
-import org.linhome.store.HistoryEventStore
 import org.linhome.utils.DialogUtil
 
 
@@ -58,37 +54,37 @@ class HistoryFragment : GenericFragment() {
         binding.lifecycleOwner = this
         binding.model = historyViewModel
 
-        binding.root.loglist.layoutManager =
+        binding.loglist.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.root.loglist.adapter =
+        binding.loglist.adapter =
             HistoryEventsAdapter(historyViewModel.history.value!!, historyViewModel, this)
-        binding.root.loglist.setHasFixedSize(true)
+        binding.loglist.setHasFixedSize(true)
         showProgress()
-        binding.root.loglist.viewTreeObserver.addOnGlobalLayoutListener(object :
+        binding.loglist.viewTreeObserver.addOnGlobalLayoutListener(object :
             OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 hideProgress()
-                binding.root.loglist.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                binding.loglist.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
 
         historyViewModel.selectedForDeletion.observe(viewLifecycleOwner, Observer { list ->
             if (historyViewModel.editing.value!! && list.isEmpty()) {
-                mainactivity.toolbar_right_button.isEnabled = false
-                mainactivity.toolbar_right_button.alpha = 0.5f
+                mainactivity.binding.appbar.toolbarRightButton.isEnabled = false
+                mainactivity.binding.appbar.toolbarRightButton.alpha = 0.5f
             } else {
-                mainactivity.toolbar_right_button.isEnabled = true
-                mainactivity.toolbar_right_button.alpha = 1.0f
+                mainactivity.binding.appbar.toolbarRightButton.isEnabled = true
+                mainactivity.binding.appbar.toolbarRightButton.alpha = 1.0f
             }
         })
 
         historyViewModel.history.observe(viewLifecycleOwner, Observer { list ->
             mainactivity.toolbarViewModel.rightButtonVisible.value = !list.isEmpty()
-            (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs = list
-            binding.root.loglist.adapter?.notifyDataSetChanged()
+            (binding.loglist.adapter as HistoryEventsAdapter).callLogs = list
+            binding.loglist.adapter?.notifyDataSetChanged()
         })
 
-        binding.root.selectall.root.setOnClickListener {
+        binding.selectall.setOnClickListener {
             historyViewModel.toggleSelectAllForDeletion()
         }
 
@@ -102,9 +98,9 @@ class HistoryFragment : GenericFragment() {
                 "delete_history_confirm_message",
                 { _: DialogInterface, _: Int ->
                     historyViewModel.deleteSelection()
-                    (binding.root.loglist.adapter as HistoryEventsAdapter).callLogs =
+                    (binding.loglist.adapter as HistoryEventsAdapter).callLogs =
                         historyViewModel.history.value!!
-                    binding.root.loglist.adapter?.notifyDataSetChanged()
+                    binding.loglist.adapter?.notifyDataSetChanged()
                     mainactivity.tabbarViewModel.updateUnreadCount()
                     exitEdition()
                 }, (historyViewModel.selectedForDeletion.value!!.size).toString()
@@ -119,14 +115,14 @@ class HistoryFragment : GenericFragment() {
 
     override fun onResume() {
         super.onResume()
-        Theme.setIcon("icons/delete", mainactivity.toolbar_right_button_image)
-        Theme.setIcon("icons/cancel", mainactivity.toolbar_left_button_image)
-        mainactivity.toolbar_left_button_title.text = Texts.get("cancel")
-        mainactivity.toolbar_right_button_title.text = Texts.get("delete")
+        Theme.setIcon("icons/delete", mainactivity.binding.appbar.toolbarRightButtonImage)
+        Theme.setIcon("icons/cancel", mainactivity.binding.appbar.toolbarLeftButtonImage)
+        mainactivity.binding.appbar.toolbarLeftButtonTitle.text = Texts.get("cancel")
+        mainactivity.binding.appbar.toolbarRightButtonTitle.text = Texts.get("delete")
         mainactivity.toolbarViewModel.rightButtonVisible.value =
             !historyViewModel.history.value!!.isEmpty()
         coreContext.notificationsManager.dismissMissedCallNotification()
-        binding.root.loglist.adapter?.notifyDataSetChanged()
+        binding.loglist.adapter?.notifyDataSetChanged()
 
     }
 

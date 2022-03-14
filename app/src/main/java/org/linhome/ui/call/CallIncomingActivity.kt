@@ -24,8 +24,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_call_incoming.view.*
-import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.R
 import org.linhome.databinding.ActivityCallIncomingBinding
@@ -61,12 +59,12 @@ class CallIncomingActivity : CallGenericActivity() {
                     else -> finish()
                 }
             })
-            binding.root.videotogglecollapsed.setOnClickListener {
-                coreContext.core.nativeVideoWindowId = binding.root.videofullscreen
+            binding.chunkCallDeviceIconOrVideo.videotogglecollapsed.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.videofullscreen
                 callViewModel.toggleVideoFullScreen()
             }
-            binding.root.videotogglefullscreen.setOnClickListener {
-                coreContext.core.nativeVideoWindowId = binding.root.videocollapsed
+            binding.videotogglefullscreen.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.chunkCallDeviceIconOrVideo.videocollapsed
                 callViewModel.toggleVideoFullScreen()
             }
         } ?: finish()
@@ -75,7 +73,7 @@ class CallIncomingActivity : CallGenericActivity() {
     override fun onResume() {
         super.onResume()
         coreContext.core.nativeVideoWindowId =
-            if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
+            if (callViewModel.videoFullScreen.value!!) binding.videofullscreen else binding.chunkCallDeviceIconOrVideo.videocollapsed
     }
 
     override fun onPause() {

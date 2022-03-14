@@ -26,6 +26,7 @@ import org.linhome.BR
 import org.linhome.customisation.ActionTypes
 import org.linhome.customisation.ActionsMethodTypes
 import org.linhome.customisation.DeviceTypes
+import org.linhome.databinding.ItemActionEditBinding
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.store.DeviceStore
@@ -154,7 +155,7 @@ class DeviceEditorViewModel : ViewModelWithTools() {
         return true
     }
 
-    fun addAction(action: Action?, binding: ViewDataBinding) {
+    fun addAction(action: Action?, binding: ItemActionEditBinding) {
         val actionViewModel = DeviceEditorActionViewModel(this, binding, MutableLiveData(actionsViewModels.size + 1))
         binding.setVariable(BR.actionmodel, actionViewModel)
         binding.setVariable(BR.validators, ValidatorFactory.Companion)

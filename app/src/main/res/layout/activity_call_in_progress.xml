@@ -86,6 +86,7 @@
                 android:gravity="center">
 
                 <include
+                    android:id="@+id/chunk_call_device_icon_or_video"
                     layout="@layout/chunk_call_device_icon_or_video"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

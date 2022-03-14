@@ -35,9 +35,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.root
-import kotlinx.android.synthetic.main.widget_round_rect_button_with_icon.view.*
-import kotlinx.android.synthetic.main.widget_text_input.view.*
 import org.linhome.LinhomeApplication
 import org.linhome.R
 import org.linhome.customisation.*
@@ -384,7 +381,7 @@ fun foreground_selection_effect(image: ImageView, key: String) {
 
 @BindingAdapter("icon") // Todo move into class
 fun icon(b: LRoundRectButtonWithIcon, name: String) {
-    Theme.setIcon(name, b.icon)
+    Theme.setIcon(name, b.binding.icon)
 }
 
 @BindingAdapter("text") // Todo move into class
@@ -396,13 +393,13 @@ fun text(b: LRoundRectButton, name: String) {
 fun primary(b: LRoundRectButton, important: Boolean) {
     Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")
         ?.also {
-            b.root.background = it
+            b.background = it
         }
 }
 
 @BindingAdapter("android:enabled") // Todo move into class
 fun enabled(b: LRoundRectButton, enabled: Boolean) {
-    b.root.isEnabled = enabled
+    b.isEnabled = enabled
 }
 
 
@@ -416,13 +413,13 @@ fun text(b: LRoundRectButtonWithIcon, name: String) {
 fun primary(b: LRoundRectButtonWithIcon, important: Boolean) {
     Theme.roundRectButtonBackgroundStates(if (important) "primary_color" else "secondary_color")
         ?.also {
-            b.root.background = it
+            b.background = it
         }
 }
 
 @BindingAdapter("android:enabled") // Todo move into class
 fun enabled(b: LRoundRectButtonWithIcon, enabled: Boolean) {
-    b.root.isEnabled = enabled
+    b.isEnabled = enabled
 }
 
 

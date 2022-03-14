@@ -26,9 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_assistant_create_linhome.*
-import kotlinx.android.synthetic.main.fragment_assistant_create_linhome.view.*
-import kotlinx.android.synthetic.main.widget_round_rect_button.view.*
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.FragmentAssistantCreateLinhomeBinding
@@ -53,24 +50,24 @@ class CreateLinhomeAccountFragment :
         binding.model = model
         binding.validators = ValidatorFactory.Companion
 
-        binding.root.create.root.setOnClickListener {
-            binding.root.username.validate()
-            binding.root.email.validate()
-            binding.root.password.validate()
-            binding.root.password_confirmation.validate()
-            updateField(model.setUsername(model.username), binding.root.username)
-            updateField(model.setPassword(model.pass1), binding.root.password)
-            updateField(model.setEmail(model.email), binding.root.email)
+        binding.create.setOnClickListener {
+            binding.username.validate()
+            binding.email.validate()
+            binding.password.validate()
+            binding.passwordConfirmation.validate()
+            updateField(model.setUsername(model.username), binding.username)
+            updateField(model.setPassword(model.pass1), binding.password)
+            updateField(model.setEmail(model.email), binding.email)
 
             if (model.valid()) {
                 hideKeyboard()
                 showProgress()
-                create.root.isEnabled = false
+                binding.create.isEnabled = false
                 model.creationResult.observe(viewLifecycleOwner, Observer { status ->
                     hideProgress()
-                    create.root.isEnabled = true
+                    binding.create.isEnabled = true
                     when (status) {
-                        AccountCreator.Status.AccountExist -> binding.root.username.setError(
+                        AccountCreator.Status.AccountExist -> binding.username.setError(
                             Texts.get(
                                 "linhome_account_username_already_exists"
                             )
@@ -80,7 +77,7 @@ class CreateLinhomeAccountFragment :
                             DialogUtil.info("linhome_account_created", model.username.first.value!!)
                         }
                         else -> {
-                            binding.root.username.setError(
+                            binding.username.setError(
                                 Texts.get(
                                     "linhome_account_creation_failed",
                                     "$status"
@@ -91,7 +88,7 @@ class CreateLinhomeAccountFragment :
                 })
                 if (model.accountCreator.createAccount() != AccountCreator.Status.RequestOk) {
                     hideProgress()
-                    create.root.isEnabled = true
+                    binding.create.isEnabled = true
                     DialogUtil.error("linhome_account_creation_request_failed")
                 }
             }

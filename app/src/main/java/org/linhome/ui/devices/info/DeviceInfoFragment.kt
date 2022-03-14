@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.app_bar_main.*
 import org.linhome.GenericFragment
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
@@ -57,8 +56,8 @@ class DeviceInfoFragment : GenericFragment() {
 
     override fun onResume() {
         super.onResume()
-        Theme.setIcon("icons/edit", mainactivity.toolbar_right_button_image)
-        mainactivity.toolbar_right_button_title.text = Texts.get("edit")
+        Theme.setIcon("icons/edit",  mainactivity.binding.appbar.toolbarRightButtonImage)
+        mainactivity.binding.appbar.toolbarRightButtonTitle.text = Texts.get("edit")
         mainactivity.resumeNavigation()
     }
 

@@ -341,7 +341,7 @@ class NotificationsManager(private val context: Context) {
 
 
         val hasVideo = call.remoteParams?.let {
-            it.videoEnabled()
+            it.isVideoEnabled
         } ?: false
 
         remoteView.setTextViewText(
@@ -385,7 +385,7 @@ class NotificationsManager(private val context: Context) {
 
 
         val hasVideo = call.remoteParams?.let {
-            it.videoEnabled()
+            it.isVideoEnabled
         } ?: false
 
         notificationBuilder =

@@ -29,8 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_sidemenu.view.*
-import kotlinx.android.synthetic.main.item_sidemenu.view.*
 import org.linhome.MainActivity
 import org.linhome.R
 import org.linhome.customisation.Texts
@@ -58,21 +56,22 @@ class SideMenuFragment : Fragment() {
         val binding = FragmentSidemenuBinding.inflate(inflater, container, false)
 
 
-        binding.root.list.layoutManager =
+        binding.list.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.root.list.adapter =
+        binding.list.adapter =
             SideMenuAdapter(sideMenuViewModel.sideMenuOptions, getMainActivity().navController)
 
-        binding.root.label.text = Texts.get(sideMenuViewModel.sideMenuDisconnectOption.textKey)
-        Theme.setIcon(sideMenuViewModel.sideMenuDisconnectOption.iconFile, binding.root.icon)
-        binding.root.top_separator.setBackgroundColor(Theme.getColor("color_h"))
-        binding.root.top_separator.visibility = View.VISIBLE
-        binding.root.bottom_separator.visibility = View.GONE
-        binding.root.disconnect.background =
+        binding.disconnect.label.text = Texts.get(sideMenuViewModel.sideMenuDisconnectOption.textKey)
+        Theme.setIcon(sideMenuViewModel.sideMenuDisconnectOption.iconFile, binding.disconnect.icon)
+        binding.disconnect.topSeparator.setBackgroundColor(Theme.getColor("color_h"))
+        binding.disconnect.topSeparator.visibility = View.VISIBLE
+        binding.disconnect.bottomSeparator.visibility = View.GONE
+
+        binding.disconnect.root.background =
             Theme.selectionEffectAsStateListDrawable("sidemenu_option")
         binding.root.setBackgroundColor(Theme.getColor("color_b"))
 
-        binding.root.disconnect.setOnClickListener {
+        binding.disconnect.root.setOnClickListener {
             DialogUtil.confirm(
                 "menu_disconnect",
                 "disconnect_confirm_message",

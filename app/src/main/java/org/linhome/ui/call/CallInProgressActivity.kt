@@ -29,8 +29,6 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_call_in_progress.view.*
-import kotlinx.android.synthetic.main.chunk_call_device_icon_or_video.view.*
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.R
 import org.linhome.databinding.ActivityCallInProgressBinding
@@ -51,6 +49,7 @@ class CallInProgressActivity : CallGenericActivity() {
     lateinit var binding: ActivityCallInProgressBinding
     lateinit var callViewModel: CallViewModel
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -74,27 +73,27 @@ class CallInProgressActivity : CallGenericActivity() {
                     Call.State.End, Call.State.Released -> finish()
                 }
             })
-            binding.root.videotogglecollapsed.setOnClickListener {
-                coreContext.core.nativeVideoWindowId = binding.root.videofullscreen
+            binding.chunkCallDeviceIconOrVideo?.videotogglecollapsed?.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.videofullscreen
                 callViewModel.toggleVideoFullScreen()
             }
-            binding.root.videotogglefullscreen.setOnClickListener {
-                coreContext.core.nativeVideoWindowId = binding.root.videocollapsed
+            binding.videotogglefullscreen.setOnClickListener {
+                coreContext.core.nativeVideoWindowId = binding.chunkCallDeviceIconOrVideo?.videocollapsed
                 callViewModel.toggleVideoFullScreen()
             }
-            binding.root.videofullscreen.setOnTouchListener { _, event ->
+            binding.videofullscreen.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    binding.root.actions.toogleVisible()
-                    binding.root.controls?.toogleVisible()
-                    binding.root.timer.toogleVisible()
+                    binding.actions.toogleVisible()
+                    binding.controls?.toogleVisible()
+                    binding.timer.toogleVisible()
                 }
                 true
             }
             callViewModel.videoFullScreen.observe(this, Observer { full ->
                 if (!full) {
-                    binding.root.actions.forceVisible()
-                    binding.root.controls?.forceVisible()
-                    binding.root.timer.forceVisible()
+                    binding.actions.forceVisible()
+                    binding.controls?.forceVisible()
+                    binding.timer.forceVisible()
                 }
             })
             startWithPermissionCheck()
@@ -104,7 +103,7 @@ class CallInProgressActivity : CallGenericActivity() {
     override fun onResume() {
         super.onResume()
         coreContext.core.nativeVideoWindowId =
-            if (callViewModel.videoFullScreen.value!!) binding.root.videofullscreen else binding.root.videocollapsed
+            if (callViewModel.videoFullScreen.value!!) binding.videofullscreen else binding.chunkCallDeviceIconOrVideo?.videocollapsed
 
         if (coreContext.core.callsNb == 0) {
             Log.w("[Call Activity] Resuming but no call found...")

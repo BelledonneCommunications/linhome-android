@@ -53,8 +53,8 @@ class RemoteAnyAccountViewModel : ViewModel() {
 
         override fun onQrcodeFound(core: Core, qr: String?) {
             GlobalScope.launch(context = Dispatchers.Main) {
-                coreContext.core.enableQrcodeVideoPreview(false)
-                coreContext.core.enableVideoPreview(false)
+                coreContext.core.isQrcodeVideoPreviewEnabled = false
+                coreContext.core.isVideoPreviewEnabled = false
                 url.first.value = qr
                 startRemoteProvisionning()
             }

@@ -88,7 +88,7 @@ fun Core.missedCount(): Int {
 fun Core.cleanHistory() {
     coreContext.core.callLogs.forEach {
         if (it.callId != null)
-            HistoryEventStore.removeHistoryEventByCallId(it.callId)
+            HistoryEventStore.removeHistoryEventByCallId(it.callId!!)
         coreContext.core.removeCallLog(it)
     }
 }

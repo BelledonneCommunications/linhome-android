@@ -32,8 +32,8 @@ fun Call.extendedAcceptEarlyMedia() {
     if (state == Call.State.IncomingReceived) {
         val earlyMediaCallParams: CallParams? = coreContext.core.createCallParams(this)
         earlyMediaCallParams?.recordFile = callLog.historyEvent().mediaFileName
-        earlyMediaCallParams?.enableAudio(false)
-        enableCamera(false)
+        earlyMediaCallParams?.isAudioEnabled = false
+        isCameraEnabled = false
         acceptEarlyMediaWithParams(earlyMediaCallParams)
         startRecording()
     }
@@ -42,8 +42,8 @@ fun Call.extendedAcceptEarlyMedia() {
 fun Call.extendedAccept() {
     val inCallParams: CallParams? = coreContext.core.createCallParams(this)
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
-    enableCamera(false)
-    inCallParams?.enableAudio(true)
+    isCameraEnabled = false
+    inCallParams?.isAudioEnabled = true
 
     val device = DeviceStore.findDeviceByAddress(remoteAddress)
     if (device != null) {

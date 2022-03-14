@@ -67,7 +67,7 @@ class CallViewModel(val call: Call) : ViewModel() {
 
     val speakerDisabled: MutableLiveData<Boolean> =
             MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
-    val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.micEnabled())
+    val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.isMicEnabled)
 
     private var historyEvent: HistoryEvent
 
@@ -79,7 +79,7 @@ class CallViewModel(val call: Call) : ViewModel() {
                 }
                 fireActionsOnCallStateChanged(state)
                 attemptSetDeviceThumbnail(state)
-                call?.remoteParams?.videoEnabled()?.also {
+                call?.remoteParams?.isVideoEnabled?.also {
                     if (!videoContent.value!!)
                         call.requestNotifyNextVideoFrameDecoded()
                 }
@@ -110,7 +110,7 @@ class CallViewModel(val call: Call) : ViewModel() {
         call.addListener(callListener)
         fireActionsOnCallStateChanged(call.state)
         if (!videoContent.value!!) {
-            call?.remoteParams?.videoEnabled()?.also {
+            call?.remoteParams?.isVideoEnabled?.also {
                 if (it)
                     call.requestNotifyNextVideoFrameDecoded()
             }
@@ -169,8 +169,8 @@ class CallViewModel(val call: Call) : ViewModel() {
 
 
     fun toggleMute() {
-        val micEnabled = coreContext.core.micEnabled()
-        coreContext.core.enableMic(!micEnabled)
+        val micEnabled = coreContext.core.isMicEnabled
+        coreContext.core.isMicEnabled = !micEnabled
         microphoneMuted.value = micEnabled
     }
 
@@ -206,8 +206,8 @@ class CallViewModel(val call: Call) : ViewModel() {
             }
             "method_sip_message" -> {
                 var params = coreContext.core.createDefaultChatRoomParams()
-                params.enableGroup(false)
-                params.enableEncryption(false)
+                params.isGroupEnabled = false
+                params.isEncryptionEnabled = false
                 var chatRoom = coreContext.core.searchChatRoom(params,call.remoteAddress, call.remoteAddress, arrayOf(call.remoteAddress!!))
                 if (chatRoom == null) {
                     chatRoom = coreContext.core.createChatRoom(params, call.remoteAddress,  arrayOf(call.remoteAddress!!))

@@ -28,6 +28,7 @@ import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
 import org.linphone.core.*
+import org.linphone.core.tools.Log
 
 object Account {
 
@@ -58,15 +59,18 @@ object Account {
         expiration: String,
         pushReady: MutableLiveData<Boolean>
     ) {
-        val proxyConfig: ProxyConfig? = accountCreator.createProxyConfig()
-        proxyConfig?.expires = expiration.toInt()
-        if (!TextUtils.isEmpty(proxy)) {
-            proxyConfig?.serverAddr = proxy
+        accountCreator.createProxyConfig()?.also { proxyConfig ->
+            Log.i("[Account] created proxyConfig with domain ${proxyConfig.domain}")
+            proxyConfig.expires = expiration.toInt()
+            if (!TextUtils.isEmpty(proxy)) {
+                proxyConfig.serverAddr = proxy
+                Log.i("[Account] Set proxyConfig server address to ${proxyConfig.serverAddr} for proxyConfig with domain ${proxyConfig.domain}")
+            }
+            if (pushGateway() != null)
+                linkProxiesWithPushGateway(pushReady)
+            else
+                createPushGateway(pushReady)
         }
-        if (pushGateway() != null)
-            linkProxiesWithPushGateway(pushReady)
-        else
-            createPushGateway(pushReady)
     }
 
     fun pushGateway(): ProxyConfig? {

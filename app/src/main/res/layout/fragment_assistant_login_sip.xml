@@ -129,7 +129,7 @@
                 title='@{"proxy"}'
                 liveString="@{model.proxy.first}"
                 liveValidity="@{model.proxy.second}"
-                validator="@{validators.hostnameEmptyOrValidValidator}"
+                validator="@{validators.sipUri}"
                 android:inputType="@{InputType.TYPE_TEXT_VARIATION_URI}"
                 android:visibility='@{model.moreOptionsOpened ? View.VISIBLE : View.GONE }'
                 />

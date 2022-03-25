@@ -37,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
+import org.linhome.MainActivity
 import org.linhome.R
 import org.linhome.notifications.NotificationsManager
 import org.linhome.ui.call.CallInProgressActivity
@@ -55,6 +56,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
     var stopped = false
     val core: Core
     val handler: Handler = Handler(Looper.getMainLooper())
+    var closeAppUponCallFinish = false
 
     val appVersion: String by lazy {
         "${org.linhome.BuildConfig.VERSION_NAME} / versionCode: ${org.linhome.BuildConfig.VERSION_CODE}  (${org.linhome.BuildConfig.BUILD_TYPE})"

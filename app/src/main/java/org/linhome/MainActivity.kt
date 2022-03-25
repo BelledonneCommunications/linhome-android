@@ -37,6 +37,7 @@ import org.linhome.ui.tabbar.TabbarViewModel
 import org.linhome.ui.toolbar.ToobarButtonClickedListener
 import org.linhome.ui.toolbar.ToolbarViewModel
 import org.linhome.utils.DialogUtil
+import org.linphone.core.tools.Log
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
@@ -297,5 +298,12 @@ class MainActivity : GenericActivity() {
         return super.dispatchTouchEvent(event)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (LinhomeApplication.coreContext.closeAppUponCallFinish) {
+            LinhomeApplication.coreContext.closeAppUponCallFinish = false
+            finish()
+        }
+    }
 
 }

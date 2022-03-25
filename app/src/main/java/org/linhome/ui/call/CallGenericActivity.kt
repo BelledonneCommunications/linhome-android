@@ -25,6 +25,7 @@ import android.view.View
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linphone.core.Call
+import org.linphone.core.tools.Log
 
 
 abstract class CallGenericActivity : GenericActivity() {
@@ -40,8 +41,13 @@ abstract class CallGenericActivity : GenericActivity() {
         decorView.systemUiVisibility = uiOptions
 
         call = intent.getStringExtra("callId")?.let { callId ->
+            if (intent.getBooleanExtra("closeAppUponCallFinish", false)) {
+                coreContext.closeAppUponCallFinish = true
+            }
             coreContext.core.calls.filter { it.callLog.callId.equals(callId) }.firstOrNull()
         }
+
+
 
     }
 

@@ -25,6 +25,7 @@ import androidx.lifecycle.MutableLiveData
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
+import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
 import org.linphone.core.*
@@ -59,18 +60,22 @@ object Account {
         expiration: String,
         pushReady: MutableLiveData<Boolean>
     ) {
-        accountCreator.createProxyConfig()?.also { proxyConfig ->
-            Log.i("[Account] created proxyConfig with domain ${proxyConfig.domain}")
-            proxyConfig.expires = expiration.toInt()
+        val transports = arrayOf("udp","tcp","tls")
+        accountCreator.createProxyConfig()
+        coreContext.core.accountList.first()?.also { account ->
+            Log.i("[Account] created proxyConfig with domain ${account.params.domain}")
+            account.params.expires = expiration.toInt()
             if (!TextUtils.isEmpty(proxy)) {
-                proxyConfig.serverAddr = proxy
-                Log.i("[Account] Set proxyConfig server address to ${proxyConfig.serverAddr} for proxyConfig with domain ${proxyConfig.domain}")
+                val address = (if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + proxy!! + ";transport="+transports.get(accountCreator.transport.toInt())
+                account.params.serverAddr = address
+                Log.i("[Account] Set proxyConfig server address to ${account.params.serverAddr} for proxyConfig with domain ${account.params.domain}")
             }
             if (pushGateway() != null)
                 linkProxiesWithPushGateway(pushReady)
             else
                 createPushGateway(pushReady)
         }
+
     }
 
     fun pushGateway(): ProxyConfig? {

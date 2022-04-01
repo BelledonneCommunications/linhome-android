@@ -20,13 +20,17 @@
 
 package org.linhome.store
 
-import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.linphonecore.extensions.getString
 import org.linhome.linphonecore.extensions.isValid
 import org.linhome.store.StorageManager.devicesXml
+import org.linhome.utils.DialogUtil
 import org.linphone.core.*
 import org.linphone.mediastream.Log
 
@@ -37,6 +41,7 @@ object DeviceStore {
     var devices: ArrayList<Device>
 
     val local_devices_fl_name = "local_devices"
+    var localDevicesFriendList = LinhomeApplication.coreContext.core.getFriendListByName(local_devices_fl_name)
 
     private val coreListener: CoreListenerStub = object : CoreListenerStub() {
         override fun onFriendListCreated(core: Core, friendList: FriendList) {
@@ -48,12 +53,22 @@ object DeviceStore {
     }
 
     init {
+        if (localDevicesFriendList == null) {
+            localDevicesFriendList = LinhomeApplication.coreContext.core.createFriendList()
+            localDevicesFriendList?.also {
+                it.displayName = local_devices_fl_name
+                LinhomeApplication.coreContext.core.addFriendList(it)
+            }
+        }
         devicesConfig = Factory.instance().createConfig(null)
         if (devicesXml.exists()) {
-            devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
-            devices = readFromXml()
-            saveLocalDevices()
-            devicesXml.delete()
+            GlobalScope.launch(context = Dispatchers.Main) {
+                delay(1000)
+                devicesConfig.loadFromXmlFile(devicesXml.absolutePath)
+                devices = readFromXml()
+                saveLocalDevices()
+                devicesXml.delete()
+            }
         }
         devices = readFromFriends()
         LinhomeApplication.coreContext.core.addListener(coreListener)
@@ -113,25 +128,17 @@ object DeviceStore {
     }
 
     fun saveLocalDevices() {
-        val core = LinhomeApplication.coreContext.core
-        var localDevicesFriendList = core.getFriendListByName(local_devices_fl_name)
-        if (localDevicesFriendList != null) {
-            localDevicesFriendList.friends.forEach {
-                localDevicesFriendList!!.removeFriend(it)
-            }
-        } else {
-            localDevicesFriendList = core.createFriendList()
-            localDevicesFriendList.displayName = local_devices_fl_name
+        localDevicesFriendList?.friends?.forEach {
+            localDevicesFriendList!!.removeFriend(it)
         }
 
         devices.sortWith(compareBy({ it.name }, { it.address }))
         devices.forEach { device ->
             val friend = device.friend
             if (!device.isRemotelyProvisionned) {
-                localDevicesFriendList.addFriend (friend)
+                localDevicesFriendList?.addFriend (friend)
             }
         }
-        core.addFriendList(localDevicesFriendList)
     }
 
     fun persistDevice(device: Device) {

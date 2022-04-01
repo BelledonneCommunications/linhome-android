@@ -78,6 +78,7 @@ project.tasks['preBuild'].dependsOn 'getGitVersion'
 
 android {
     compileSdkVersion 31
+    buildToolsVersion '31.0.0'
 
     defaultConfig {
         applicationId "org.linhome"

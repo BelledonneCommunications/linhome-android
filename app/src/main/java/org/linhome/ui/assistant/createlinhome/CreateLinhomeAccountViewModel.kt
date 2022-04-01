@@ -51,7 +51,7 @@ class CreateLinhomeAccountViewModel :
                 creator?.also {
                     Account.linhomeAccountCreateProxyConfig(creator)
                 }
-            creationResult.postValue(status)
+            status?.also {creationResult.postValue(it)}
         }
     }
 

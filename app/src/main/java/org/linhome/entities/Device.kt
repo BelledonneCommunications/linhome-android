@@ -28,8 +28,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
-import org.linhome.customisation.ActionTypes
-import org.linhome.customisation.ActionsMethodTypes
 import org.linhome.customisation.DeviceTypes
 import org.linhome.store.StorageManager
 import org.linhome.utils.DialogUtil
@@ -61,7 +59,8 @@ data class Device(
                 friend.createVcard(name)
                 friend.vcard?.addExtendedProperty(vcard_device_type_header, type!!)
                 friend.vcard?.addSipAddress(address)
-                friend.vcard?.addExtendedProperty(vcard_action_method_type_header,actionsMethodType!!)
+                friend.vcard?.addExtendedProperty(vcard_action_method_type_header,
+                    deviceActionMethodsTovCardActionMethods().get(actionsMethodType!!)!!)
                 actions?.forEach { it ->
                     friend.vcard?.addExtendedProperty(vcard_actions_list_header,it.type!! + ";" + it.code!!)
                 }
@@ -86,8 +85,8 @@ data class Device(
         card.uid?.let{it}?:xDigitsUUID(),
         card.getExtendedPropertiesValuesByName(vcard_device_type_header).component1(),
         card.fullName!!,
-        if (isRemotelyProvisionned)  card.sipAddresses.component1()?.asStringUriOnly()!! else card.sipAddresses.component1()?.asString()!!,
-        if (isRemotelyProvisionned) serverActionMethodsToLocalMethods.get(card.getExtendedPropertiesValuesByName(vcard_action_method_type_header).component1()) else card.getExtendedPropertiesValuesByName(vcard_action_method_type_header).component1()!!,
+        card.sipAddresses.component1()?.asStringUriOnly()!!,
+        vCardActionMethodsToDeviceMethods.get(card.getExtendedPropertiesValuesByName(vcard_action_method_type_header).component1()),
         ArrayList(),
         isRemotelyProvisionned)
     {
@@ -167,8 +166,14 @@ data class Device(
         const val vcard_device_type_header = "X-LINPHONE-ACCOUNT-TYPE"
         const val vcard_actions_list_header = "X-LINPHONE-ACCOUNT-ACTION"
         const val vcard_action_method_type_header = "X-LINPHONE-ACCOUNT-DTMF-PROTOCOL"
-        val serverActionMethodsToLocalMethods = mapOf( "sipinfo" to "method_dtmf_sip_info","rfc2833" to "method_dtmf_rfc_4733","sipmessage" to "method_sip_message") // Server side method names to local app names
-
+        val vCardActionMethodsToDeviceMethods = mapOf( "sipinfo" to "method_dtmf_sip_info","rfc2833" to "method_dtmf_rfc_4733","sipmessage" to "method_sip_message") // Server side method names to local app names
+        fun deviceActionMethodsTovCardActionMethods () : HashMap<String,String> {
+            var result = hashMapOf<String,String>()
+            vCardActionMethodsToDeviceMethods.forEach {
+                result.put(it.value,it.key)
+            }
+            return result
+        }
 
         fun typeIconAsBitmap(type: String?): Bitmap? {
             return type?.let {
@@ -191,53 +196,6 @@ data class Device(
                 } else
                     null
             }
-        }
-
-        fun remoteVcardValid(card: Vcard?) : Boolean {
-            if (card == null) {
-                Log.e("[Device] vCard validation : card is null")
-                return false
-            }
-            val validType =  card.getExtendedPropertiesValuesByName(vcard_device_type_header)
-                .component1()
-                ?.let { typeKey ->
-                DeviceTypes.deviceTypeSupported(typeKey)
-            } ?:  false
-            if (!validType) {
-                Log.e("[Device] vCard validation : invalid type ${
-                    card.getExtendedPropertiesValuesByName(vcard_device_type_header).component1()
-                }")
-                return false
-            }
-
-            val validDtmf = card.getExtendedPropertiesValuesByName(vcard_action_method_type_header)
-                .component1()?.let { remoteDtmfMethod ->
-                serverActionMethodsToLocalMethods.get(remoteDtmfMethod)?.let { localDtmfMethod ->
-                    ActionsMethodTypes.methodTypeIsSupported(localDtmfMethod)
-                }?:false
-            }?:false
-            if (!validDtmf) {
-                Log.e("[Device] vCard validation : invalid dtmf sending method ${
-                    card.getExtendedPropertiesValuesByName(vcard_action_method_type_header)
-                        .component1()
-                }")
-                return false
-            }
-
-            var validActions = true
-            card.getExtendedPropertiesValuesByName(vcard_actions_list_header).forEach { action ->
-                val components = action.split(";")
-                if (components.size == 2) {
-                    validActions = validActions && ActionTypes.isValid(components.component1())
-                } else {
-                    validActions = false
-                }
-                if (!validActions) {
-                    Log.e("[Device] vCard validation : invalid action $action")
-                }
-            }
-
-            return validActions
         }
 
     }

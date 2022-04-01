@@ -25,6 +25,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.linphonecore.extensions.getString
+import org.linhome.linphonecore.extensions.isValid
 import org.linhome.store.StorageManager.devicesXml
 import org.linphone.core.*
 import org.linphone.mediastream.Log
@@ -62,15 +63,17 @@ object DeviceStore {
         val result = ArrayList<Device>()
         LinhomeApplication.coreContext.core.getFriendListByName(local_devices_fl_name)?.friends?.forEach { friend ->
             val card = friend.vcard
-            if (card != null) {
+            if (card != null && card.isValid()) {
                 result.add(Device(card, false))
+            } else {
+                Log.e("[DeviceStore] unable to create device from card (card is null or invdalid) : ${friend.vcard?.asVcard4String()} ")
             }
         }
         LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
             LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
                 serverFriendList.friends.forEach { friend ->
                     val card = friend.vcard
-                    if (Device.remoteVcardValid(card)) {
+                    if (card != null && card.isValid()) {
                         result.add(Device(card!!, true))
                     } else {
                         Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")
@@ -111,12 +114,15 @@ object DeviceStore {
 
     fun saveLocalDevices() {
         val core = LinhomeApplication.coreContext.core
-        val localDevicesFriendList:FriendList?
-        core.getFriendListByName(local_devices_fl_name)?.also {
-            core.removeFriendList(it)
+        var localDevicesFriendList = core.getFriendListByName(local_devices_fl_name)
+        if (localDevicesFriendList != null) {
+            localDevicesFriendList.friends.forEach {
+                localDevicesFriendList!!.removeFriend(it)
+            }
+        } else {
+            localDevicesFriendList = core.createFriendList()
+            localDevicesFriendList.displayName = local_devices_fl_name
         }
-        localDevicesFriendList = core.createFriendList()
-        localDevicesFriendList.displayName = local_devices_fl_name
 
         devices.sortWith(compareBy({ it.name }, { it.address }))
         devices.forEach { device ->

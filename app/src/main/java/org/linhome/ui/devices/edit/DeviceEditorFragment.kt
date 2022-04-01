@@ -117,6 +117,7 @@ class DeviceEditorFragment : GenericFragment() {
                 it.binding.code.validate()
         }
         DeviceStore.findDeviceByAddress(model.address.first.value)?.also {
+            cdlog("${args.device?.id} ${it.id}")
             if (args.device?.id != it.id) {
                 binding.address.setError(
                     Texts.get(

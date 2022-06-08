@@ -106,8 +106,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
         override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
             Log.i("[Context] Global state changed [$state]")
             if (state == GlobalState.On) {
-
-
+                Log.i("[Context] Configuration is \n : ${core.config.dump()}")
             }
         }
 

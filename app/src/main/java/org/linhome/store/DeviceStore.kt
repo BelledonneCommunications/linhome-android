@@ -80,16 +80,21 @@ object DeviceStore {
             val card = friend.vcard
             if (card != null && card.isValid()) {
                 result.add(Device(card, false))
+                Log.i("[DeviceStore] added local device : ${friend.vcard?.asVcard4String()} ")
             } else {
                 Log.e("[DeviceStore] unable to create device from card (card is null or invdalid) : ${friend.vcard?.asVcard4String()} ")
             }
         }
         LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
+            Log.i("[DeviceStore] Found contacts-vcard-list url : ${url} ")
             LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
+                Log.i("[DeviceStore] Found remote friend list : ${serverFriendList.displayName} ")
                 serverFriendList.friends.forEach { friend ->
+                    Log.i("[DeviceStore] Found remote friend  : ${friend.name} ")
                     val card = friend.vcard
                     if (card != null && card.isValid()) {
                         result.add(Device(card!!, true))
+                        Log.i("[DeviceStore] added remote device : ${friend.vcard?.asVcard4String()} ")
                     } else {
                         Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")
                     }

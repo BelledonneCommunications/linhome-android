@@ -18,6 +18,9 @@
     <entry name="stun_server" overwrite="true"></entry>
     <entry name="protocols" overwrite="true"></entry>
   </section>
+  <section name="misc">
+      <entry name="contacts-vcard-list" overwrite="true">https://subscribe.linhome.org/contacts/vcard</entry>
+  </section>
   <section name="assistant">
     <entry name="domain" overwrite="true">sip.linhome.org</entry>
     <entry name="algorithm" overwrite="true">MD5</entry>

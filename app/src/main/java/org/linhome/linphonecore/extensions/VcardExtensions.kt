@@ -30,28 +30,28 @@ import org.linphone.core.tools.Log
 
 fun Vcard.isValid():  Boolean {
    val card = this
-    val validType =  card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)
+    val validType =  if (card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header).size == 1)  (card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)
         .component1()
         ?.let { typeKey ->
             DeviceTypes.deviceTypeSupported(typeKey)
-        } ?:  false
+        } ?:  false )  else false
+
     if (!validType) {
         Log.e("[Device] vCard validation : invalid type ${
-            card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header).component1()
+            card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)
         }")
         return false
     }
 
-    val validDtmf = card.getExtendedPropertiesValuesByName(Device.vcard_action_method_type_header)
+    val validDtmf = if (card.getExtendedPropertiesValuesByName(Device.vcard_action_method_type_header).size == 1) card.getExtendedPropertiesValuesByName(Device.vcard_action_method_type_header)
         .component1()?.let { remoteDtmfMethod ->
             Device.vCardActionMethodsToDeviceMethods.get(remoteDtmfMethod)?.let { localDtmfMethod ->
                 ActionsMethodTypes.methodTypeIsSupported(localDtmfMethod)
             }?:false
-        }?:false
+        }?:false else false
     if (!validDtmf) {
         Log.e("[Device] vCard validation : invalid dtmf sending method ${
             card.getExtendedPropertiesValuesByName(Device.vcard_action_method_type_header)
-                .component1()
         }")
         return false
     }

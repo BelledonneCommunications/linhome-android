@@ -46,6 +46,7 @@ open class CreatorAssistantFragment : GenericFragment() {
             AccountCreator.UsernameStatus.Ok -> {
                 textInput.clearError()
             }
+            else -> {}
         }
     }
 
@@ -67,6 +68,7 @@ open class CreatorAssistantFragment : GenericFragment() {
             AccountCreator.PasswordStatus.Ok -> {
                 textInput.clearError()
             }
+            else -> {}
         }
     }
 
@@ -81,6 +83,7 @@ open class CreatorAssistantFragment : GenericFragment() {
             AccountCreator.EmailStatus.Ok -> {
                 textInput.clearError()
             }
+            else -> {}
         }
     }
 
@@ -92,6 +95,7 @@ open class CreatorAssistantFragment : GenericFragment() {
             AccountCreator.DomainStatus.Ok -> {
                 textInput.clearError()
             }
+            else -> {}
         }
     }
 

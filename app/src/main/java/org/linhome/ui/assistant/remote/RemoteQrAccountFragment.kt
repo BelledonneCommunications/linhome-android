@@ -64,6 +64,7 @@ class RemoteQrAccountFragment : GenericFragment() {
                         startScanner()
                     })
                 }
+                else -> {}
             }
         })
         model.pushReady.observe(viewLifecycleOwner, Observer { status ->

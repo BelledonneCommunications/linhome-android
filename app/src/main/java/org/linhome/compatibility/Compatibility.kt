@@ -19,6 +19,7 @@
  */
 package org.linphone.compatibility
 
+import android.Manifest.permission.READ_PHONE_STATE
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -45,7 +46,17 @@ import java.io.File
 
 @Suppress("DEPRECATION")
 class Compatibility {
+
     companion object {
+        // See https://developer.android.com/about/versions/11/privacy/permissions#phone-numbers
+        fun hasReadPhoneStateOrNumbersPermission(context: Context): Boolean {
+            return if (Version.sdkAboveOrEqual(Version.API30_ANDROID_11)) {
+                Api30Compatibility.hasReadPhoneNumbersPermission(context)
+            } else {
+                hasPermission(context,READ_PHONE_STATE)
+            }
+        }
+
         fun hasPermission(context: Context, permission: String): Boolean {
             return when (Version.sdkAboveOrEqual(Version.API23_MARSHMALLOW_60)) {
                 true -> Api23Compatibility.hasPermission(context, permission)

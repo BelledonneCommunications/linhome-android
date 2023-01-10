@@ -71,6 +71,7 @@ class CallInProgressActivity : CallGenericActivity() {
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
                     Call.State.End, Call.State.Released -> finish()
+                    else -> {}
                 }
             })
             binding.chunkCallDeviceIconOrVideo?.videotogglecollapsed?.setOnClickListener {

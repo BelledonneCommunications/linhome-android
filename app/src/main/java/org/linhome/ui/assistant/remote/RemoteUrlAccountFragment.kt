@@ -69,6 +69,7 @@ class RemoteUrlAccountFragment : GenericFragment() {
                 ConfiguringState.Skipped -> {
                     DialogUtil.error("remote_configuration_failed")
                 }
+                else -> {}
             }
         })
 

@@ -20,6 +20,7 @@
 package org.linhome.linphonecore
 
 
+import android.Manifest.permission.READ_PHONE_STATE
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
@@ -221,10 +222,7 @@ class CoreContext(val context: Context, coreConfig: Config) {
 
         configureCore()
 
-        val telephonyManager =
-            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        Log.i("[Context] Registering notification_phone state listener")
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+        initPhoneStateListener()
     }
 
     fun stop() {
@@ -421,6 +419,21 @@ class CoreContext(val context: Context, coreConfig: Config) {
         )
 
         return sharedPlayer
+    }
 
+    fun initPhoneStateListener() {
+        Log.i("[Context] Registering notification_phone state listener")
+        if (Compatibility.hasPermission(context,READ_PHONE_STATE)) {
+            try {
+                val telephonyManager =
+                    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+            } catch (exception: SecurityException) {
+                val hasReadPhoneStatePermission = Compatibility.hasReadPhoneStateOrNumbersPermission(context)
+               Log.e("[Context] Failed to create phone state listener: $exception, READ_PHONE_STATE permission status is $hasReadPhoneStatePermission")
+            }
+        } else {
+            Log.w("[Context] Can't create phone state listener, READ_PHONE_STATE permission isn't granted")
+        }
     }
 }

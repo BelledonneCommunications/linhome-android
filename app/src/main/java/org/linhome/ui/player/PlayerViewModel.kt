@@ -32,7 +32,7 @@ import org.linphone.core.PlayerListener
 class PlayerViewModelFactory(private val callId: String, private val player: Player) :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return PlayerViewModel(callId, player) as T
     }
 }

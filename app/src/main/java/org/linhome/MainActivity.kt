@@ -21,6 +21,7 @@
 package org.linhome
 
 import android.Manifest
+import android.Manifest.permission.READ_PHONE_STATE
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
@@ -143,13 +144,16 @@ class MainActivity : GenericActivity() {
             navController.navigate(R.id.navigation_assistant_root)
         }
 
-        if (savedInstanceState != null && savedInstanceState?.getBoolean("history_opened")) {
+        if (savedInstanceState != null && savedInstanceState?.getBoolean("history_opened") == true) {
             binding.appbar.contentmain.tabbarHistory.performClick()
         }
 
 
         if (!StorageManager.storePrivately)
-            startWithPermissionCheck()
+            storageWithPermissionCheck()
+
+        phoneWithPermissionCheck()
+        numbersWithPermissionCheck()
 
     }
 
@@ -258,19 +262,36 @@ class MainActivity : GenericActivity() {
             onRequestPermissionsResult(requestCode, grantResults)
     }
 
+    // Telephony related permissions
+
+    @NeedsPermission(Manifest.permission.READ_PHONE_NUMBERS)
+    fun numbers() { LinhomeApplication.coreContext.initPhoneStateListener() }
+
+    @OnPermissionDenied(Manifest.permission.READ_PHONE_NUMBERS)
+    fun onNumbersDenied() { DialogUtil.error("phone_state_permission_denied") }
+
+    @OnNeverAskAgain(Manifest.permission.READ_PHONE_NUMBERS)
+    fun onNumbersDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
+
+    @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
+    fun phone() { LinhomeApplication.coreContext.initPhoneStateListener() }
+
+    @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
+    fun onPhoneDenied() { DialogUtil.error("phone_state_permission_denied") }
+
+    @OnNeverAskAgain(Manifest.permission.READ_PHONE_STATE)
+    fun onPhoneDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
+
+    // Storage related permissions
+
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun start() {
-    }
+    fun storage() {}
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onStorageDenied() {
-        DialogUtil.error("write_external_storage_permission_denied")
-    }
+    fun onStorageDenied() { DialogUtil.error("write_external_storage_permission_denied") }
 
     @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onStorageDeniedNeverAsk() {
-        DialogUtil.error("write_external_storage_permission_denied_dont_ask_again")
-    }
+    fun onStorageDeniedNeverAsk() { DialogUtil.error("write_external_storage_permission_denied_dont_ask_again") }
 
 
     fun applyCommonTheme() {

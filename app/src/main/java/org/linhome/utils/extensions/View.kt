@@ -30,7 +30,7 @@ fun View.toogleVisible() {
         .alpha(if (visibility == View.VISIBLE) 0f else 1f)
         .setDuration(250)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 if (visibility == View.VISIBLE)
                     visibility = View.INVISIBLE
                 else

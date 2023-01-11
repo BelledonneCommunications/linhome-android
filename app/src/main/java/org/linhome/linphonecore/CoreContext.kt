@@ -32,20 +32,17 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.TypedValue
 import android.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.MainActivity
 import org.linhome.R
+import org.linhome.compatibility.Compatibility
 import org.linhome.notifications.NotificationsManager
 import org.linhome.ui.call.CallInProgressActivity
 import org.linhome.ui.call.CallIncomingActivity
 import org.linhome.ui.call.CallOutgoingActivity
 import org.linhome.utils.DialogUtil
-import org.linphone.compatibility.Compatibility
 import org.linphone.core.*
 import org.linphone.mediastream.Log
 import org.linphone.mediastream.Version
@@ -53,7 +50,12 @@ import java.io.File
 import java.util.*
 import kotlin.math.abs
 
-class CoreContext(val context: Context, coreConfig: Config) {
+class CoreContext(
+    val context: Context,
+    coreConfig: Config,
+    service: CoreService? = null,
+    useAutoStartDescription: Boolean = false
+) {
     var stopped = false
     val core: Core
     val handler: Handler = Handler(Looper.getMainLooper())
@@ -102,6 +104,9 @@ class CoreContext(val context: Context, coreConfig: Config) {
     private var overlayY = 0f
     private var callOverlay: View? = null
     private var isVibrating = false
+
+    val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {
         override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
@@ -202,6 +207,10 @@ class CoreContext(val context: Context, coreConfig: Config) {
     }
 
     init {
+        if (service != null) {
+            org.linphone.core.tools.Log.i("[Context] Starting foreground service")
+            notificationsManager.startForeground(service, useAutoStartDescription)
+        }
         core = Factory.instance().createCoreWithConfig(coreConfig, context)
         stopped = false
         Log.i("[Context] Ready")
@@ -223,6 +232,12 @@ class CoreContext(val context: Context, coreConfig: Config) {
         configureCore()
 
         initPhoneStateListener()
+
+        if (corePreferences.keepServiceAlive) {
+            org.linphone.core.tools.Log.i("[Context] Background mode setting is enabled, starting Service")
+            notificationsManager.startForeground()
+        }
+
     }
 
     fun stop() {
@@ -369,6 +384,20 @@ class CoreContext(val context: Context, coreConfig: Config) {
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.removeView(callOverlay)
             callOverlay = null
+        }
+    }
+
+    fun checkIfForegroundServiceNotificationCanBeRemovedAfterDelay(delayInMs: Long) {
+        coroutineScope.launch {
+            withContext(Dispatchers.Default) {
+                delay(delayInMs)
+                withContext(Dispatchers.Main) {
+                    if (core.defaultAccount != null && core.defaultAccount?.state == RegistrationState.Ok) {
+                        org.linphone.core.tools.Log.i("[Context] Default account is registered, cancel foreground service notification if possible")
+                        notificationsManager.stopForegroundNotificationIfPossible()
+                    }
+                }
+            }
         }
     }
 

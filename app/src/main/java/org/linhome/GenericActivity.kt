@@ -33,7 +33,6 @@ abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ensureCoreExists(applicationContext)
-
     }
 
     override fun onResume() {

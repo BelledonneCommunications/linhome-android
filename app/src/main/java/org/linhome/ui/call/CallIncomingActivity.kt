@@ -26,8 +26,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.R
+import org.linhome.compatibility.Compatibility
 import org.linhome.databinding.ActivityCallIncomingBinding
-import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
 
 

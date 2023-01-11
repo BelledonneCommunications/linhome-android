@@ -21,8 +21,11 @@ package org.linhome.compatibility
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.app.Notification
+import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Vibrator
@@ -32,6 +35,14 @@ import android.view.WindowManager
 @TargetApi(23)
 class Api23Compatibility {
     companion object {
+
+        fun startForegroundService(context: Context, intent: Intent) {
+            context.startService(intent)
+        }
+
+        fun startForegroundService(service: Service, notifId: Int, notif: Notification?) {
+            service.startForeground(notifId, notif)
+        }
 
         fun getDeviceName(context: Context): String {
             var name = BluetoothAdapter.getDefaultAdapter().name

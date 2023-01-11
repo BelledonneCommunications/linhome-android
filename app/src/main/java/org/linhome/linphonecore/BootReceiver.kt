@@ -25,6 +25,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
+import org.linphone.core.tools.service.CoreService
 import org.linphone.mediastream.Log
 
 class BootReceiver : BroadcastReceiver() {

@@ -22,6 +22,7 @@ package org.linhome.ui.settings
 
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
+import org.linhome.LinhomeApplication
 import org.linhome.customisation.Texts
 import org.linhome.utils.databindings.ViewModelWithTools
 import org.linphone.core.Core
@@ -35,6 +36,7 @@ class SettingsViewModel : ViewModelWithTools() {
 
     val enableIpv6 = MutableLiveData(core.isIpv6Enabled())
     val latestSnapshotShown = MutableLiveData(corePref.showLatestSnapshot)
+    var backgroundModeEnabled = MutableLiveData(corePref.keepServiceAlive)
 
 
     // Logs
@@ -88,6 +90,17 @@ class SettingsViewModel : ViewModelWithTools() {
     val enableDebugLogsListener = object : SettingListenerStub() {
         override fun onBoolValueChanged(newValue: Boolean) {
             corePref.debugLogs = newValue
+        }
+    }
+
+    val enableBackgroundMode = object : SettingListenerStub() {
+        override fun onBoolValueChanged(newValue: Boolean) {
+            corePref.keepServiceAlive = newValue
+            if (newValue) {
+                LinhomeApplication.coreContext.notificationsManager.startForeground()
+            } else {
+                LinhomeApplication.coreContext.notificationsManager.stopForegroundNotificationIfPossible()
+            }
         }
     }
 

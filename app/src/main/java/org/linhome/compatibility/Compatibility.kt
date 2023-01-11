@@ -17,11 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.linphone.compatibility
+package org.linhome.compatibility
 
 import android.Manifest.permission.READ_PHONE_STATE
 import android.app.Activity
+import android.app.Notification
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
@@ -36,10 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
-import org.linhome.compatibility.Api23Compatibility
-import org.linhome.compatibility.Api25Compatibility
-import org.linhome.compatibility.Api26Compatibility
-import org.linhome.compatibility.Api28Compatibility
 import org.linphone.mediastream.Version
 import java.io.File
 
@@ -48,6 +47,35 @@ import java.io.File
 class Compatibility {
 
     companion object {
+
+        fun getChannelImportance(
+            notificationManager: NotificationManagerCompat,
+            channelId: String
+        ): Int {
+            if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
+                return Api26Compatibility.getChannelImportance(notificationManager, channelId)
+            }
+            return NotificationManagerCompat.IMPORTANCE_DEFAULT
+        }
+
+        fun startForegroundService(context: Context, intent: Intent) {
+            if (Version.sdkAboveOrEqual(Version.API31_ANDROID_12)) {
+                Api31Compatibility.startForegroundService(context, intent)
+            } else if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
+                Api26Compatibility.startForegroundService(context, intent)
+            } else {
+                Api23Compatibility.startForegroundService(context, intent)
+            }
+        }
+
+        fun startForegroundService(service: Service, notifId: Int, notif: Notification?) {
+            if (Version.sdkAboveOrEqual(Version.API31_ANDROID_12)) {
+                Api31Compatibility.startForegroundService(service, notifId, notif)
+            } else {
+                Api23Compatibility.startForegroundService(service, notifId, notif)
+            }
+        }
+
         // See https://developer.android.com/about/versions/11/privacy/permissions#phone-numbers
         fun hasReadPhoneStateOrNumbersPermission(context: Context): Boolean {
             return if (Version.sdkAboveOrEqual(Version.API30_ANDROID_11)) {

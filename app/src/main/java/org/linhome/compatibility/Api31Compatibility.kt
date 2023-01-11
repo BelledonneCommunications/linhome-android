@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2020 Belledonne Communications SARL.
+ * Copyright (c) 2010-2021 Belledonne Communications SARL.
  *
  * This file is part of linphone-android
  * (see https://www.linphone.org).
@@ -19,22 +19,33 @@
  */
 package org.linhome.compatibility
 
-import android.Manifest
 import android.annotation.TargetApi
+import android.app.ForegroundServiceStartNotAllowedException
+import android.app.Notification
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import org.linphone.core.tools.Log
 
-@TargetApi(30)
-class Api30Compatibility {
+@TargetApi(31)
+class Api31Compatibility {
     companion object {
-        fun hasReadPhoneNumbersPermission(context: Context): Boolean {
-            val granted = Compatibility.hasPermission(context, Manifest.permission.READ_PHONE_NUMBERS)
-            if (granted) {
-                Log.d("[Permission Helper] Permission READ_PHONE_NUMBERS is granted")
-            } else {
-                Log.w("[Permission Helper] Permission READ_PHONE_NUMBERS is denied")
+
+        fun startForegroundService(service: Service, notifId: Int, notif: Notification?) {
+            try {
+                service.startForeground(notifId, notif)
+            } catch (fssnae: ForegroundServiceStartNotAllowedException) {
+                Log.e("[Api31 Compatibility] Can't start service as foreground! $fssnae")
             }
-            return granted
         }
+
+        fun startForegroundService(context: Context, intent: Intent) {
+            try {
+                context.startForegroundService(intent)
+            } catch (fssnae: ForegroundServiceStartNotAllowedException) {
+                Log.e("[Api31 Compatibility] Can't start service as foreground! $fssnae")
+            }
+        }
+
     }
 }

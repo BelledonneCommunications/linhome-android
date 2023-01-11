@@ -87,6 +87,12 @@
             listener="@{model.showLatestSnapshot}"
             checked="@={model.latestSnapshotShown}"/>
 
+        <include
+            layout="@layout/settings_widget_switch"
+            title='@{model.getText("settings_background_mode")}'
+            listener="@{model.enableBackgroundMode}"
+            checked="@={model.backgroundModeEnabled}"/>
+
 
     </LinearLayout>
     </ScrollView>

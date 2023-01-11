@@ -22,6 +22,7 @@ package org.linhome.compatibility
 import android.annotation.TargetApi
 import android.app.*
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.os.VibrationEffect
@@ -35,6 +36,21 @@ import org.linphone.core.tools.Log
 @TargetApi(26)
 class Api26Compatibility {
     companion object {
+
+
+        fun startForegroundService(context: Context, intent: Intent) {
+            context.startForegroundService(intent)
+        }
+
+        fun getChannelImportance(
+            notificationManager: NotificationManagerCompat,
+            channelId: String
+        ): Int {
+            val channel = notificationManager.getNotificationChannel(channelId)
+            return channel?.importance ?: NotificationManagerCompat.IMPORTANCE_NONE
+        }
+
+
         fun enterPipMode(activity: Activity) {
             val supportsPip = activity.packageManager
                 .hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)

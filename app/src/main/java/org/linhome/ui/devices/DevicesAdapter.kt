@@ -34,12 +34,12 @@ import org.linhome.BR
 import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
 import org.linhome.R
+import org.linhome.compatibility.Compatibility
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ItemDeviceBinding
 import org.linhome.entities.Device
 import org.linhome.store.DeviceStore
 import org.linhome.utils.DialogUtil
-import org.linphone.compatibility.Compatibility
 
 
 class SwipeToDeleteCallback(private var adapter: DevicesAdapter) :

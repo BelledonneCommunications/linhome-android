@@ -27,7 +27,7 @@ import org.linhome.customisation.Customisation
 import org.linhome.customisation.Texts
 import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.CorePreferences
-import org.linhome.linphonecore.extensions.forceSpeakerAudioRoute
+import org.linhome.linphonecore.CoreService
 import org.linhome.store.DeviceStore
 import org.linphone.core.Factory
 import org.linphone.core.LogCollectionState
@@ -43,9 +43,14 @@ class LinhomeApplication : Application() {
 
         var someActivityRunning: Boolean = false
 
-        fun ensureCoreExists(context: Context, force:Boolean = false) {
+        fun ensureCoreExists(
+            context: Context,
+            service: CoreService? = null,
+            useAutoStartDescription: Boolean = false,
+            force: Boolean = false) : Boolean {
+
             if (!force && ::coreContext.isInitialized && !coreContext.stopped) {
-                return
+                return false
             }
 
             Factory.instance().setLogCollectionPath(context.filesDir.absolutePath)
@@ -62,7 +67,7 @@ class LinhomeApplication : Application() {
 
             Factory.instance().setDebugMode(corePreferences.debugLogs, Texts.appName)
             Log.i("[Application] Core context created")
-            coreContext = CoreContext(context, config)
+            coreContext = CoreContext(context, config, service, useAutoStartDescription)
             coreContext.start()
 
             // work around https://bugs.linphone.org/view.php?id=7714 - for demo purpose
@@ -75,23 +80,31 @@ class LinhomeApplication : Application() {
             coreContext.core.isNativeRingingEnabled = true
             coreContext.core.friendsDatabasePath = context.filesDir.absolutePath+"/devices.db"
             setDefaultCodecs()
+            return true
 
         }
 
+        fun contextExists(): Boolean {
+            return ::coreContext.isInitialized
+        }
+
         fun setDefaultCodecs() {
+
+            coreContext.core.audioPayloadTypes.forEach {
+                if (!corePreferences.availableAudioCodecs.contains(it.mimeType.lowercase()))
+                    it.enable(false)
+            }
+
             if (corePreferences.config.getBool("app","default_codec_set", false)) {
                 return
             }
             corePreferences.config.setBool("app","default_codec_set", true)
 
-            val defaultVideoActive = arrayOf("h264")
-            val defaultAudioActive = arrayOf("pcmu","pcma","opus")
-
             coreContext.core.videoPayloadTypes.forEach {
-                it.enable(defaultVideoActive.contains(it.mimeType.toLowerCase()))
+                it.enable(corePreferences.enabledVideoCodecsByDefault.contains(it.mimeType.lowercase()))
             }
             coreContext.core.audioPayloadTypes.forEach {
-                it.enable(defaultAudioActive.contains(it.mimeType.toLowerCase()))
+                it.enable(corePreferences.enabledAudioCodecsByDefault.contains(it.mimeType.lowercase()))
             }
             corePreferences.config.sync()
         }

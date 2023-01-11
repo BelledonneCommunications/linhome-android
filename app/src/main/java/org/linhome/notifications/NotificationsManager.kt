@@ -42,6 +42,7 @@ import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.MainActivity
 import org.linhome.R
+import org.linhome.compatibility.Compatibility
 import org.linhome.customisation.DeviceTypes
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
@@ -54,7 +55,6 @@ import org.linhome.ui.call.CallInProgressActivity
 import org.linhome.ui.call.CallIncomingActivity
 import org.linhome.ui.call.CallOutgoingActivity
 import org.linhome.utils.extensions.existsAndIsNotEmpty
-import org.linphone.compatibility.Compatibility
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub
 import org.linphone.core.Core
@@ -219,11 +219,26 @@ class NotificationsManager(private val context: Context) {
     /* Service related */
 
     fun startForeground() {
+        val serviceChannel = Texts.get("notification_channel_service_id")
+        if (Compatibility.getChannelImportance(notificationManager, serviceChannel) == NotificationManagerCompat.IMPORTANCE_NONE) {
+            Log.w("[Notifications Manager] Service channel is disabled!")
+            return
+        }
+
         val coreService = service
         if (coreService != null) {
             startForeground(coreService, useAutoStartDescription = false)
         } else {
-            Log.e("[Notifications Manager] Can't start service as foreground, no service!")
+            Log.w("[Notifications Manager] Can't start service as foreground without a service, starting it now")
+            val intent = Intent()
+            intent.setClass(coreContext.context, CoreService::class.java)
+            try {
+                Compatibility.startForegroundService(coreContext.context, intent)
+            } catch (ise: IllegalStateException) {
+                Log.e("[Notifications Manager] Failed to start Service: $ise")
+            } catch (se: SecurityException) {
+                Log.e("[Notifications Manager] Failed to start Service: $se")
+            }
         }
     }
 
@@ -247,13 +262,19 @@ class NotificationsManager(private val context: Context) {
     }
 
     fun startForeground(coreService: CoreService, useAutoStartDescription: Boolean = true) {
-        Log.i("[Notifications Manager] Starting Service as foreground")
+        service = coreService
+
         if (serviceNotification == null) {
             createServiceNotification(useAutoStartDescription)
+            if (serviceNotification == null) {
+                Log.e("[Notifications Manager] Failed to create service notification, aborting foreground service!")
+                return
+            }
         }
+
         currentForegroundServiceNotificationId = SERVICE_NOTIF_ID
-        coreService.startForeground(currentForegroundServiceNotificationId, serviceNotification)
-        service = coreService
+        Log.i("[Notifications Manager] Starting service as foreground [$currentForegroundServiceNotificationId]")
+        Compatibility.startForegroundService(coreService, currentForegroundServiceNotificationId, serviceNotification)
     }
 
     private fun startForeground(notificationId: Int, callNotification: Notification) {
@@ -274,6 +295,7 @@ class NotificationsManager(private val context: Context) {
 
     fun stopForegroundNotificationIfPossible() {
         if (service != null && currentForegroundServiceNotificationId == SERVICE_NOTIF_ID && !corePreferences.keepServiceAlive) {
+            Log.i("[Notifications Manager] Stopping auto-started service notification [$currentForegroundServiceNotificationId]")
             stopForegroundNotification()
         }
     }
@@ -284,6 +306,16 @@ class NotificationsManager(private val context: Context) {
         }
     }
 
+    fun serviceCreated(createdService: CoreService) {
+        Log.i("[Notifications Manager] Service has been created, keeping it around")
+        service = createdService
+    }
+
+    fun serviceDestroyed() {
+        Log.i("[Notifications Manager] Service has been destroyed")
+        stopForegroundNotification()
+        service = null
+    }
 
     private fun createServiceNotification(useAutoStartDescription: Boolean = false) {
         val pendingIntent = NavDeepLinkBuilder(context)

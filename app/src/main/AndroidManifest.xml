@@ -114,7 +114,8 @@
 
         <service
             android:name="org.linhome.linphonecore.CoreService"
-            android:foregroundServiceType="phoneCall"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall|microphone"
             android:stopWithTask="false"
             android:label="@string/app_name" />
 

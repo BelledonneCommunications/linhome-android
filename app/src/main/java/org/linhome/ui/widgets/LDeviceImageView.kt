@@ -25,10 +25,10 @@ import android.os.FileObserver
 import android.util.AttributeSet
 import android.view.View
 import com.bumptech.glide.signature.ObjectKey
+import org.linhome.compatibility.Compatibility.Companion.fileObserverWithMainThreadRunnable
 import org.linhome.customisation.Theme
 import org.linhome.entities.Device
 import org.linhome.utils.extensions.existsAndIsNotEmpty
-import org.linphone.compatibility.Compatibility.Companion.fileObserverWithMainThreadRunnable
 import java.io.File
 
 

@@ -54,7 +54,7 @@ class SettingsFragment : GenericFragment() {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         settingsViewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
         initCodecsList(
-            LinhomeApplication.coreContext.core.audioPayloadTypes,
+            LinhomeApplication.coreContext.core.audioPayloadTypes.filter { LinhomeApplication.corePreferences.availableAudioCodecs.contains(it.mimeType.lowercase()) }.toTypedArray(),
             settingsViewModel.audioCodecs,
             true
         )

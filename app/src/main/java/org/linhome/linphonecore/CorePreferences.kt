@@ -21,8 +21,8 @@ package org.linhome.linphonecore
 
 import android.content.Context
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.compatibility.Compatibility
 import org.linhome.entities.Action
-import org.linphone.compatibility.Compatibility
 import org.linphone.core.Config
 import org.linphone.mediastream.Log
 import java.io.File
@@ -104,6 +104,12 @@ class CorePreferences constructor(private val context: Context) {
         }
 
 
+    /* Audio */
+
+    val availableAudioCodecs = arrayOf("pcmu","pcma","opus","g729")
+    val enabledVideoCodecsByDefault = arrayOf("h264")
+    val enabledAudioCodecsByDefault = arrayOf("pcmu","pcma","opus")
+
     /* Video */
 
     var deviceName: String
@@ -137,8 +143,6 @@ class CorePreferences constructor(private val context: Context) {
         set(value) {
             config.setBool("app", "call_overlay", value)
         }
-
-
 
     var xmlRpcServerUrl: String?
         get() = config.getString("assistant", "xmlrpc_url", null)

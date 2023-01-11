@@ -152,7 +152,7 @@ object Account {
         coreContext.core.provisioningUri = null
         coreContext.core.config.setString("misc","config-uri",null)
         coreContext.core.stop()
-        LinhomeApplication.ensureCoreExists(coreContext.context, true)
+        LinhomeApplication.ensureCoreExists(coreContext.context, force = true)
     }
 
 }

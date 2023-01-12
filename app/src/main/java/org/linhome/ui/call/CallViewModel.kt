@@ -23,6 +23,7 @@ package org.linhome.ui.call
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.common.images.Size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -38,10 +39,13 @@ import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.extensions.*
 import org.linhome.store.DeviceStore
 import org.linhome.utils.extensions.existsAndIsNotEmpty
+import org.linhome.utils.getImageDimension
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub
 import org.linphone.core.Reason
+import org.linphone.core.tools.Log
+import java.io.File
 import java.util.ArrayList
 
 
@@ -67,6 +71,8 @@ class CallViewModel(val call: Call) : ViewModel() {
     val speakerDisabled: MutableLiveData<Boolean> =
             MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.isMicEnabled)
+
+    val videoSize = MutableLiveData<Size>()
 
     private var historyEvent: HistoryEvent
 
@@ -98,6 +104,13 @@ class CallViewModel(val call: Call) : ViewModel() {
                 }
                 if (!event.mediaThumbnail.existsAndIsNotEmpty()) {
                     call.takeVideoSnapshot(event.mediaThumbnail.absolutePath)
+                    GlobalScope.launch(context = Dispatchers.Main) {
+                        delay(500) // Snapshot availability takes a little time.
+                        event.mediaThumbnail.absolutePath.getImageDimension().also {
+                            if (it.width != 0 && it.height != 0)
+                                videoSize.value = it
+                        }
+                    }
                 }
             }
         }
@@ -116,6 +129,18 @@ class CallViewModel(val call: Call) : ViewModel() {
         }
         if (LinhomeApplication.instance.tablet()) {
             coreContext.core.forceSpeakerAudioRoute()
+        }
+        device.value?.thumbNail?.also {
+            it.absolutePath.getImageDimension().also {
+                if (it.width != 0 && it.height != 0)
+                    videoSize.value = it
+            }
+        }
+        call.callLog.historyEvent().also { event ->
+            event.mediaThumbnail.absolutePath.getImageDimension().also {
+                if (it.width != 0 && it.height != 0)
+                    videoSize.value = it
+            }
         }
     }
 

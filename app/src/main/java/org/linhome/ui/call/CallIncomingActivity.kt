@@ -21,11 +21,13 @@
 package org.linhome.ui.call
 
 import android.os.Bundle
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import org.linhome.LinhomeApplication.Companion.coreContext
-import org.linhome.R
 import org.linhome.compatibility.Compatibility
 import org.linhome.databinding.ActivityCallIncomingBinding
 import org.linphone.core.Call
@@ -45,7 +47,7 @@ class CallIncomingActivity : CallGenericActivity() {
 
         binding = DataBindingUtil.setContentView(
             this,
-            R.layout.activity_call_incoming
+            org.linhome.R.layout.activity_call_incoming
         ) as ActivityCallIncomingBinding
         binding.lifecycleOwner = this
 
@@ -67,7 +69,15 @@ class CallIncomingActivity : CallGenericActivity() {
                 coreContext.core.nativeVideoWindowId = binding.chunkCallDeviceIconOrVideo.videocollapsed
                 callViewModel.toggleVideoFullScreen()
             }
+            callViewModel.videoSize.observe(this, Observer { size ->
+                binding.chunkCallVideoOrIcon.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    dimensionRatio = "H,${size.width}:${size.height}"
+                    matchConstraintPercentWidth = computePercentageWidth(size,180) //  180dp left for buttons and header
+                }
+            })
         } ?: finish()
+
+
     }
 
     override fun onResume() {

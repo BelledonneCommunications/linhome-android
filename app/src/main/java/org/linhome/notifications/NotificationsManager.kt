@@ -413,7 +413,7 @@ class NotificationsManager(private val context: Context) {
             context,
             0,
             incomingCallNotificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
 
@@ -537,7 +537,7 @@ class NotificationsManager(private val context: Context) {
             context,
             0,
             callNotificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
 
@@ -587,7 +587,7 @@ class NotificationsManager(private val context: Context) {
         answerIntent.putExtra(INTENT_NOTIF_ID, callId)
 
         val answerPendingIntent = PendingIntent.getBroadcast(
-            context, callId, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, callId, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Action.Builder(
@@ -603,7 +603,7 @@ class NotificationsManager(private val context: Context) {
         hangupIntent.putExtra(INTENT_NOTIF_ID, callId)
 
         val hangupPendingIntent = PendingIntent.getBroadcast(
-            context, callId, hangupIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, callId, hangupIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Action.Builder(

@@ -29,16 +29,16 @@
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintWidth_percent="0.4"
             android:scaleType="fitXY"
-            android:visibility='@{callmodel.videoContent ? View.GONE : View.VISIBLE, default = "visible"}'></ImageView>
+            android:visibility='@{callmodel.videoContent ? View.GONE : View.VISIBLE, default = "visible"}'/>
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:id="@+id/video_holder_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintDimensionRatio="H,4:3"
-            app:layout_constraintWidth_percent="0.95"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:visibility='@{!callmodel.videoContent ? View.GONE : View.VISIBLE, default = "gone"}'>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -55,9 +55,10 @@
                 android:layout_marginEnd="13dp"
                 app:fabCustomSize="50dp" />
 
-            <TextureView
+            <org.linhome.ui.widgets.RoundCornersTextureView
                 android:id="@+id/videocollapsed"
                 android:layout_width="match_parent"
+                app:displayMode="occupy_all_space"
                 android:layout_height="match_parent" />
 
         </RelativeLayout>

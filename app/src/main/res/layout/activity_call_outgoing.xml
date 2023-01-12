@@ -22,7 +22,7 @@
             android:id="@+id/chunk_call_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="54dp">
+            android:layout_marginTop="10dp">
             <include
                 layout="@layout/chunk_call_top"
                 android:layout_width="match_parent"

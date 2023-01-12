@@ -12,7 +12,7 @@
             type="org.linhome.ui.call.CallViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         gradientBackground='@{"dark_light_vertical_gradient"}'
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,6 +21,10 @@
 
         <TextureView
             android:id="@+id/videofullscreen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility='@{callmodel.videoFullScreen ? View.VISIBLE : View.GONE, default = "gone"}' />
@@ -33,8 +37,8 @@
             tint='@{"color_c"}'
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_gravity="end"
             android:layout_marginTop="13dp"
             android:layout_marginEnd="13dp"
@@ -43,9 +47,10 @@
 
         <LinearLayout
             android:id="@+id/chunk_call_top"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
 
@@ -55,69 +60,51 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/middle"
+        <LinearLayout
+            android:id="@+id/chunk_call_name_address"
+            app:layout_constraintTop_toBottomOf="@+id/chunk_call_top"
             android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="20dp"
             android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
-
-            <LinearLayout
-                android:id="@+id/chunk_call_name_address"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-                <include
-                    layout="@layout/chunk_call_name_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    bind:callmodel="@{callmodel}" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/chunk_call_video_or_icon"
+            <include
+                layout="@layout/chunk_call_name_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/chunk_call_name_address"
-                android:layout_marginTop="27dp"
-                android:gravity="center">
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
 
-                <include
-                    android:id="@+id/chunk_call_device_icon_or_video"
-                    layout="@layout/chunk_call_device_icon_or_video"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    bind:callmodel="@{callmodel}" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/chunk_some_text"
+        <LinearLayout
+            android:id="@+id/chunk_call_video_or_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintDimensionRatio="H,4:3"
+            app:layout_constraintWidth_percent="0.85"
+            android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+            >
+            <include
+                android:id="@+id/chunk_call_device_icon_or_video"
+                layout="@layout/chunk_call_device_icon_or_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/chunk_call_video_or_icon"
-                android:layout_marginTop="27dp"
-                android:gravity="center">
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
 
-                <TextView
-                    style='@{"view_call_device_address"}'
-                    text='@{"incoming_someone_at_your_door"}'
-                    android:layout_width="320dp"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </RelativeLayout>
 
 
         <LinearLayout
             android:id="@+id/buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/middle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:gravity="center_horizontal|bottom">
 
             <include
@@ -128,5 +115,5 @@
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

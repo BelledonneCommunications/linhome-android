@@ -6,5 +6,14 @@
 		<attr name="ld_rb_important" format="boolean" /> <!-- Orange or black -->
 	</declare-styleable>
 
+	<declare-styleable name="RoundCornersTextureView">
+		<attr name="alignTopRight" format="boolean" />
+		<attr name="displayMode" format="enum">
+			<enum name="black_bars" value="0"/>
+			<enum name="occupy_all_space" value="1"/>
+			<enum name="hybrid" value="2"/>
+		</attr>
+		<attr name="radius" format="float" />
+	</declare-styleable>
 
 </resources>

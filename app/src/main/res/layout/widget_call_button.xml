@@ -32,7 +32,7 @@
 
     <LinearLayout
         android:layout_width="120dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -76,7 +76,6 @@
             style='@{"call_action_button"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="6dp"
             android:gravity="center"
             android:visibility='@{off ? View.GONE : View.VISIBLE, default = "visible"}'
             android:lines="2"
@@ -89,7 +88,6 @@
             style='@{"call_action_button"}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="6dp"
             android:gravity="center"
             android:visibility='@{off ? View.VISIBLE : View.GONE, default = "gone"}'
             android:lines="2"

@@ -26,6 +26,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -96,6 +98,18 @@ class CallInProgressActivity : CallGenericActivity() {
                     binding.controls?.forceVisible()
                     binding.timer.forceVisible()
                 }
+            })
+            callViewModel.videoSize.observe(this, Observer { size ->
+                binding.chunkCallVideoOrIcon.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    dimensionRatio = "H,${size.width}:${size.height}"
+                    val deviceHasButtons = callViewModel.device.value?.actions?.size?.let {
+                        it > 0
+                    } ?: false
+                    matchConstraintPercentWidth = computePercentageWidth(size,if (deviceHasButtons) 280 else 180) //  180dp left for buttons and header if no actions, 300dp otherwise
+                }
+            })
+            callViewModel.videoContent.observe(this, {
+                callViewModel.videoFullScreen.value = it
             })
             startWithPermissionCheck()
         } ?: finish()

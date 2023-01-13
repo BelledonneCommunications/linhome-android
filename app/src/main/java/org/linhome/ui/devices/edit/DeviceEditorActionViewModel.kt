@@ -20,7 +20,6 @@
 
 package org.linhome.ui.devices.edit
 
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.linhome.databinding.ItemActionEditBinding

@@ -35,7 +35,6 @@ import android.view.*
 import kotlinx.coroutines.*
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
-import org.linhome.MainActivity
 import org.linhome.R
 import org.linhome.compatibility.Compatibility
 import org.linhome.notifications.NotificationsManager

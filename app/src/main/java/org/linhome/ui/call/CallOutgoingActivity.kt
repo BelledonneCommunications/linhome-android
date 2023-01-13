@@ -26,7 +26,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import org.linhome.R
 import org.linhome.databinding.ActivityCallOutgoingBinding
-import org.linhome.utils.DialogUtil
 import org.linphone.core.Call
 
 

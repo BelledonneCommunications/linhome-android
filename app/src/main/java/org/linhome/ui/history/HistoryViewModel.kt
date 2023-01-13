@@ -24,6 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.linhome.LinhomeApplication
 import org.linhome.linphonecore.extensions.callLogsWithNonEmptyCallId
+import org.linhome.linphonecore.extensions.historyEvent
 import org.linhome.store.HistoryEventStore
 import org.linphone.core.CallLog
 import org.linphone.core.Core
@@ -76,6 +77,13 @@ class HistoryViewModel : ViewModel() {
                 LinhomeApplication.coreContext.core.removeCallLog(log)
             }
             history.value = LinhomeApplication.coreContext.core.callLogsWithNonEmptyCallId()
+        }
+    }
+
+    fun markEventsAsRead() {
+        history.value?.forEach {
+            it.historyEvent().viewedByUser = true
+            it.historyEvent().persist()
         }
     }
 }

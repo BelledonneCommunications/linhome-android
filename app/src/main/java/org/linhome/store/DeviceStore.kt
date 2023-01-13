@@ -30,7 +30,6 @@ import org.linhome.entities.Device
 import org.linhome.linphonecore.extensions.getString
 import org.linhome.linphonecore.extensions.isValid
 import org.linhome.store.StorageManager.devicesXml
-import org.linhome.utils.DialogUtil
 import org.linphone.core.*
 import org.linphone.mediastream.Log
 

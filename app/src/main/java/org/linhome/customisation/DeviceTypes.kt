@@ -23,9 +23,8 @@ package org.linhome.customisation
 import android.graphics.Bitmap
 import org.linhome.customisation.Customisation.deviceTypesConfig
 import org.linhome.entities.Device
-import org.linhome.ui.widgets.SpinnerItem
-import java.util.*
 import org.linhome.linphonecore.extensions.getString
+import org.linhome.ui.widgets.SpinnerItem
 
 
 object DeviceTypes {

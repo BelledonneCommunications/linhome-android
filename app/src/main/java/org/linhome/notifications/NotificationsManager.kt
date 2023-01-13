@@ -61,7 +61,6 @@ import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 import org.linphone.core.tools.Log
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.concurrent.fixedRateTimer
 
 
@@ -455,8 +454,11 @@ class NotificationsManager(private val context: Context) {
         val fakeTextureView = TextureView(LinhomeApplication.instance.applicationContext)
         coreContext.core.nativeVideoWindowId = fakeTextureView
         call.addListener(callListener)
-        call.extendedAcceptEarlyMedia()
-        scheduleSnapShots(call)
+        GlobalScope.launch(context = Dispatchers.Main) {
+            call.extendedAcceptEarlyMedia()
+            scheduleSnapShots(call)
+        }
+
     }
 
 

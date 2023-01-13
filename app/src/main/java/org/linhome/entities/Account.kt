@@ -25,8 +25,6 @@ import androidx.lifecycle.MutableLiveData
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
-import org.linhome.linphonecore.CoreContext
-import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
 import org.linphone.core.*
 import org.linphone.core.tools.Log

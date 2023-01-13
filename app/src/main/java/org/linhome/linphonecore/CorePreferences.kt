@@ -23,13 +23,13 @@ import android.content.Context
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.compatibility.Compatibility
 import org.linhome.entities.Action
+import org.linhome.linphonecore.extensions.getString
 import org.linphone.core.Config
 import org.linphone.mediastream.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
-import org.linhome.linphonecore.extensions.getString
 
 class CorePreferences constructor(private val context: Context) {
     private var _config: Config? = null

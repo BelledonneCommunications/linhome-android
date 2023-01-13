@@ -141,6 +141,7 @@ class HistoryFragment : GenericFragment() {
 
 
     override fun onPause() {
+        historyViewModel.markEventsAsRead()
         mainactivity.tabbarViewModel.updateUnreadCount()
         super.onPause()
     }

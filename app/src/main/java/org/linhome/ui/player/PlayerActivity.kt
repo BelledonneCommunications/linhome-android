@@ -25,7 +25,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.TextureView
 import android.view.View
-import android.view.View.OnTouchListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,7 +34,6 @@ import org.linhome.R
 import org.linhome.databinding.ActivityPlayerBinding
 import org.linhome.linphonecore.extensions.historyEvent
 import org.linhome.store.HistoryEventStore
-import org.linhome.utils.cdlog
 import org.linphone.core.Player
 import org.linphone.core.tools.Log
 

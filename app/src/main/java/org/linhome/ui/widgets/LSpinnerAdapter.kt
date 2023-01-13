@@ -21,7 +21,6 @@
 package org.linhome.ui.widgets
 
 import android.database.DataSetObserver
-import android.text.style.LineHeightSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,6 @@ import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ItemSpinnerBinding
-import org.linhome.utils.cdlog
 
 class SpinnerItem(val textKey: String, val iconFile: String? = null, val backingKey: String? = null)
 class LSpinnerAdapter(private val options: ArrayList<SpinnerItem>, val spinner: Spinner, val lSpinner:LSpinner, var selectedIndex: Int?) :

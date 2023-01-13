@@ -35,7 +35,6 @@ import org.linhome.customisation.DeviceTypes
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.entities.HistoryEvent
-import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.extensions.*
 import org.linhome.store.DeviceStore
 import org.linhome.utils.extensions.existsAndIsNotEmpty
@@ -44,9 +43,6 @@ import org.linphone.core.AudioDevice
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub
 import org.linphone.core.Reason
-import org.linphone.core.tools.Log
-import java.io.File
-import java.util.ArrayList
 
 
 class CallViewModelFactory(private val call: Call) :
@@ -106,9 +102,8 @@ class CallViewModel(val call: Call) : ViewModel() {
                     call.takeVideoSnapshot(event.mediaThumbnail.absolutePath)
                     GlobalScope.launch(context = Dispatchers.Main) {
                         delay(500) // Snapshot availability takes a little time.
-                        event.mediaThumbnail.absolutePath.getImageDimension().also {
-                            if (it.width != 0 && it.height != 0)
-                                videoSize.value = it
+                        event.mediaThumbnail.absolutePath.getImageDimension()?.also {
+                            videoSize.value = it
                         }
                     }
                 }
@@ -131,25 +126,25 @@ class CallViewModel(val call: Call) : ViewModel() {
             coreContext.core.forceSpeakerAudioRoute()
         }
         device.value?.thumbNail?.also {
-            it.absolutePath.getImageDimension().also {
-                if (it.width != 0 && it.height != 0)
-                    videoSize.value = it
+            it.absolutePath.getImageDimension()?.also {
+                videoSize.value = it
             }
         }
         call.callLog.historyEvent().also { event ->
-            event.mediaThumbnail.absolutePath.getImageDimension().also {
-                if (it.width != 0 && it.height != 0)
-                    videoSize.value = it
+            event.mediaThumbnail.absolutePath.getImageDimension()?.also {
+                videoSize.value = it
             }
         }
     }
 
     private fun fireActionsOnCallStateChanged(cstate: Call.State) {
-        if (cstate == Call.State.IncomingReceived) {
-            call.extendedAcceptEarlyMedia()
-        }
-        if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
-            call.startRecording()
+        GlobalScope.launch(context = Dispatchers.Main) {
+            if (cstate == Call.State.IncomingReceived) {
+                call.extendedAcceptEarlyMedia()
+            } else
+                if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
+                    call.startRecording()
+                }
         }
     }
 

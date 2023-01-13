@@ -20,7 +20,6 @@
 
 package org.linhome.ui.devices
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,9 +33,7 @@ import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
 import org.linhome.databinding.FragmentDevicesBinding
 import org.linhome.entities.Device
-import org.linhome.store.DeviceStore
 import org.linhome.utils.DialogUtil
-import org.linphone.core.Core
 
 class DevicesFragment : GenericFragment() {
 

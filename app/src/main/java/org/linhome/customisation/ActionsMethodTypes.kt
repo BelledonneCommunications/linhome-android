@@ -21,9 +21,8 @@
 package org.linhome.customisation
 
 import org.linhome.customisation.Customisation.actionsMethodTypesConfig
-import org.linhome.ui.widgets.SpinnerItem
-import java.util.*
 import org.linhome.linphonecore.extensions.getString
+import org.linhome.ui.widgets.SpinnerItem
 
 
 object ActionsMethodTypes {

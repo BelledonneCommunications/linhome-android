@@ -26,7 +26,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import org.linhome.R
-import org.linhome.customisation.Customisation
 import org.linphone.mediastream.video.capture.CaptureTextureView
 
 class RoundCornersTextureView : CaptureTextureView {

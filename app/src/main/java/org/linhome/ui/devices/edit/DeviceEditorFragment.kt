@@ -40,7 +40,6 @@ import org.linhome.entities.Action
 import org.linhome.store.DeviceStore
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
-import org.linhome.utils.cdlog
 
 class DeviceEditorFragment : GenericFragment() {
 
@@ -117,7 +116,6 @@ class DeviceEditorFragment : GenericFragment() {
                 it.binding.code.validate()
         }
         DeviceStore.findDeviceByAddress(model.address.first.value)?.also {
-            cdlog("${args.device?.id} ${it.id}")
             if (args.device?.id != it.id) {
                 binding.address.setError(
                     Texts.get(

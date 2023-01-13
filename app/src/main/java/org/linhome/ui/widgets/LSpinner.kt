@@ -32,7 +32,6 @@ import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.WidgetSpinnerBinding
 import java.lang.reflect.Method
-import java.util.*
 
 
 interface LSpinnerListener {

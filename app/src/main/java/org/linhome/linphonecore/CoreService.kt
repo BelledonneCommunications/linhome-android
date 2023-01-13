@@ -20,9 +20,9 @@
 package org.linhome.linphonecore
 
 import android.content.Intent
-import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.LinhomeApplication.Companion.ensureCoreExists
 import org.linphone.core.tools.Log
 import org.linphone.core.tools.service.CoreService

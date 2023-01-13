@@ -20,7 +20,9 @@
 
 package org.linhome.linphonecore.extensions
 
-import org.linhome.LinhomeApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.store.DeviceStore
@@ -35,7 +37,9 @@ fun Call.extendedAcceptEarlyMedia() {
         earlyMediaCallParams?.isAudioEnabled = false
         isCameraEnabled = false
         acceptEarlyMediaWithParams(earlyMediaCallParams)
-        startRecording()
+        GlobalScope.launch(context = Dispatchers.Main) {
+            startRecording()
+        }
     }
 }
 

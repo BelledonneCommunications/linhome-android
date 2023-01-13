@@ -27,7 +27,3 @@ fun stackStrace(point: String) {
         e.printStackTrace()
     }
 }
-
-fun cdlog(message: String) {
-    println("cdes>${message}")
-}

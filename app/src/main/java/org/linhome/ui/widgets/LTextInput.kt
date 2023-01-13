@@ -23,7 +23,6 @@ package org.linhome.ui.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater.from
-import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil

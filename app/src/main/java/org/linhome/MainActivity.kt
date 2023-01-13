@@ -21,7 +21,6 @@
 package org.linhome
 
 import android.Manifest
-import android.Manifest.permission.READ_PHONE_STATE
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
@@ -38,7 +37,6 @@ import org.linhome.ui.tabbar.TabbarViewModel
 import org.linhome.ui.toolbar.ToobarButtonClickedListener
 import org.linhome.ui.toolbar.ToolbarViewModel
 import org.linhome.utils.DialogUtil
-import org.linphone.core.tools.Log
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied

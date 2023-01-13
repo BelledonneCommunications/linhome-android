@@ -23,6 +23,7 @@ package org.linhome.utils
 import android.graphics.BitmapFactory
 import com.google.android.gms.common.images.Size
 import org.linhome.LinhomeApplication
+import org.linhome.utils.extensions.existsAndIsNotEmpty
 import java.io.File
 
 
@@ -34,9 +35,15 @@ fun pxFromDp(dp: Float): Float {
     return dp * LinhomeApplication.instance.resources.displayMetrics.density
 }
 
-fun String.getImageDimension(): Size {
+fun String.getImageDimension(): Size? {
+    val file = File(this)
+    if (!file.existsAndIsNotEmpty())
+        return null
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
     BitmapFactory.decodeFile(this, options)
-    return Size(options.outWidth, options.outHeight)
+    if (options.outWidth > 0 && options.outHeight > 0)
+        return Size(options.outWidth, options.outHeight)
+    else
+        return null
 }

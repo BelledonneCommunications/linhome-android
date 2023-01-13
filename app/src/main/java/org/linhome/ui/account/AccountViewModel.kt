@@ -26,7 +26,10 @@ import org.linhome.LinhomeApplication
 import org.linhome.customisation.Texts
 import org.linhome.entities.Account
 import org.linhome.linphonecore.extensions.toHumanReadable
-import org.linphone.core.*
+import org.linphone.core.Core
+import org.linphone.core.CoreListenerStub
+import org.linphone.core.ProxyConfig
+import org.linphone.core.RegistrationState
 
 class AccountViewModel : ViewModel() {
     val account = Account.get()

@@ -22,13 +22,11 @@ package org.linhome.ui.call
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Half.toFloat
 import android.view.View
 import com.google.android.gms.common.images.Size
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linphone.core.Call
-import org.linphone.core.tools.Log
 
 
 abstract class CallGenericActivity : GenericActivity() {

@@ -37,7 +37,7 @@ fun Call.extendedAcceptEarlyMedia() {
     if (state == Call.State.IncomingReceived) {
         val earlyMediaCallParams: CallParams? = coreContext.core.createCallParams(this)
         earlyMediaCallParams?.recordFile = callLog.historyEvent().mediaFileName
-        earlyMediaCallParams?.isAudioEnabled = false
+        earlyMediaCallParams?.isAudioEnabled = true
         isCameraEnabled = false
         acceptEarlyMediaWithParams(earlyMediaCallParams)
         GlobalScope.launch(context = Dispatchers.Main) {

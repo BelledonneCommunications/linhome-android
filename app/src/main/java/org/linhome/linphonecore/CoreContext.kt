@@ -37,6 +37,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
 import org.linhome.compatibility.Compatibility
+import org.linhome.linphonecore.extensions.extendedAccept
 import org.linhome.notifications.NotificationsManager
 import org.linhome.ui.call.CallInProgressActivity
 import org.linhome.ui.call.CallIncomingActivity
@@ -75,7 +76,7 @@ class CoreContext(
         NotificationsManager(context)
     }
 
-    private var gsmCallActive = false
+    var gsmCallActive = false
     private val phoneStateListener = object : PhoneStateListener() {
         override fun onCallStateChanged(state: Int, phoneNumber: String?) {
             gsmCallActive = when (state) {
@@ -130,9 +131,7 @@ class CoreContext(
                     }
 
                 if (gsmCallActive) {
-                    Log.w("[Context] Refusing the call with reason busy because a GSM call is active")
-                    call.decline(Reason.Busy)
-                    return
+                    Log.w("[Context] Receiving a Linhome call while a GSM call is active")
                 }
 
                 if (core.callsNb == 1 && corePreferences.vibrateWhileIncomingCall) {
@@ -292,9 +291,7 @@ class CoreContext(
 
     fun answerCall(call: Call) {
         Log.i("[Context] Answering call $call")
-        val params = core.createCallParams(call)
-        //params.recordFile = LinphoneUtils.getRecordingFilePathForAddress(call.remoteAddress)
-        call.acceptWithParams(params)
+        call.extendedAccept()
     }
 
     fun declineCall(call: Call) {

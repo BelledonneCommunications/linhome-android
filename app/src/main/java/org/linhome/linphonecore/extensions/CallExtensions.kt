@@ -20,12 +20,15 @@
 
 package org.linhome.linphonecore.extensions
 
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.store.DeviceStore
+import org.linhome.utils.DialogUtil
 import org.linphone.core.Call
 import org.linphone.core.CallParams
 
@@ -44,6 +47,12 @@ fun Call.extendedAcceptEarlyMedia() {
 }
 
 fun Call.extendedAccept() {
+
+    if (LinhomeApplication.coreContext.gsmCallActive) {
+        DialogUtil.toast("unable_to_accept_call_gsm_call_in_progress")
+        return
+    }
+
     val inCallParams: CallParams? = coreContext.core.createCallParams(this)
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
     isCameraEnabled = false

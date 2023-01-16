@@ -216,10 +216,12 @@ class CallViewModel(val call: Call) : ViewModel() {
         } ?: corePreferences.defaultActionsMethodType
         when (actionMethodType) {
             "method_dtmf_sip_info" -> {
+                coreContext.core.useRfc2833ForDtmf = false
                 coreContext.core.useInfoForDtmf = true
                 action.code?.let { call.sendDtmfs(it) }
             }
             "method_dtmf_rfc_4733" -> {
+                coreContext.core.useInfoForDtmf = false
                 coreContext.core.useRfc2833ForDtmf = true
                 action.code?.let { call.sendDtmfs(it) }
             }

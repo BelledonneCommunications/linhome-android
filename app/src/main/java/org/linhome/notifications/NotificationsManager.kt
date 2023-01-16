@@ -437,9 +437,12 @@ class NotificationsManager(private val context: Context) {
                 .setColor(ContextCompat.getColor(context, R.color.color_a))
                 .setFullScreenIntent(pendingIntent, true)
                 .addAction(getCallDeclineAction(notifiable.notificationId))
-                .addAction(getCallAnswerAction(notifiable.notificationId))
                 .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
                 .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
+
+        if (!coreContext.gsmCallActive) {
+            notificationBuilder.addAction(getCallAnswerAction(notifiable.notificationId))
+        }
 
         val notification = notificationBuilder.build()
 

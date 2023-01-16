@@ -108,6 +108,20 @@ class DeviceEditorFragment : GenericFragment() {
         model.addAction(action, binding)
     }
 
+    private fun rebindActions() {
+        model.actionBindings.value?.clear()
+        model.actionsViewModels.forEach {
+            val binding = DataBindingUtil.inflate<ViewDataBinding>(
+                LayoutInflater.from(requireContext()),
+                R.layout.item_action_edit,
+                null,
+                false
+            ) as ItemActionEditBinding
+            binding.lifecycleOwner = this
+            model.bindAction(binding,it)
+        }
+    }
+
     override fun onToolbarRightButtonClicked() {
         binding.name.validate()
         binding.address.validate()
@@ -147,6 +161,8 @@ class DeviceEditorFragment : GenericFragment() {
 
         mainactivity.toolbarViewModel.rightButtonVisible.value = true
         mainactivity.toolbarViewModel.leftButtonVisible.value = true
+
+        rebindActions()
     }
 
 }

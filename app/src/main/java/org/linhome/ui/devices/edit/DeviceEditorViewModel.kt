@@ -157,17 +157,22 @@ class DeviceEditorViewModel : ViewModelWithTools() {
 
     fun addAction(action: Action?, binding: ItemActionEditBinding) {
         val actionViewModel = DeviceEditorActionViewModel(this, binding, MutableLiveData(actionsViewModels.size + 1))
-        binding.setVariable(BR.actionmodel, actionViewModel)
-        binding.setVariable(BR.validators, ValidatorFactory.Companion)
         action?.also {
             actionViewModel.code.first.value = action.code
             actionViewModel.type.value = indexByBackingKey(action.type, availableActionTypes)
         }
         actionsViewModels.add(actionViewModel)
-        actionBindings.value?.add(binding)
+        bindAction(binding,actionViewModel)
         refreshActions.postValue(true)
     }
 
+    fun bindAction(binding: ItemActionEditBinding, actionViewModel:DeviceEditorActionViewModel) {
+        binding.setVariable(BR.actionmodel, actionViewModel)
+        binding.setVariable(BR.validators, ValidatorFactory.Companion)
+        actionViewModel.binding = binding
+        actionBindings.value?.add(binding)
+        refreshActions.postValue(true)
+    }
 
     fun removeActionViewModel(viewModel: DeviceEditorActionViewModel) {
         actionsViewModels.remove(viewModel)

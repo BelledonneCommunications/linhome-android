@@ -20,12 +20,14 @@
 
 package org.linhome.ui.assistant.loginsip
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantLoginSipBinding
 import org.linhome.entities.Account
@@ -70,8 +72,11 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
                     model.accountCreator,
                     model.proxy.first.value,
                     model.expiration.first.value!!,
-                    model.pushReady
+                    model.pushReady,
+                    model.sipRegistered
                 )
+            } else {
+                DialogUtil.toast("ouille")
             }
         }
         model.pushReady.observe(viewLifecycleOwner, Observer { pushready ->
@@ -82,6 +87,21 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             } else
                 DialogUtil.error("failed_creating_pushgateway")
         })
+
+        model.sipRegistered.observe(viewLifecycleOwner, Observer { sipRegistered ->
+            hideProgress()
+            if (!sipRegistered) {
+                DialogUtil.confirm(
+                    null,
+                    "failed_sip_login_modify_parameters",
+                    { _: DialogInterface, _: Int ->
+                        Account.delete()
+                    },
+                    cancelTextKey = "no",
+                    confirmTextKey = "yes")
+            }
+        })
+
 
         return binding.root
     }

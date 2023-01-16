@@ -20,18 +20,16 @@
 
 package org.linhome.ui.validators
 
-class ValidatorFactory {
-    companion object {
-        val nonEmptyStringValidator = NonEmptyStringValidator()
-        val uriValidator = NonEmptyUrlFormatValidator()
-        val hostnameEmptyOrValidValidator =
-            RegExpFormatValidator("^[a-zA-Z0-9.]*$", "invalid_host_name")
-        val numberEmptyOrValidValidator = RegExpFormatValidator("^[0-9]*$", "invalid_number")
-        val numberNonEmptyOrValidValidator = RegExpFormatValidator("^[0-9]+$", "invalid_number")
-        val sipUri =
-            NonEmptyWithRegExpFormatValidator("^(sip|sips):(.+)@(.+)\$", "invalid_sip_uri")
-        val optionalSipUri =
-            EmptyWithRegExpFormatValidator("^(sip|sips):(.+)@(.+)\$", "invalid_sip_uri")
-        val actionCode = RegExpFormatValidator("^[0-9#*]+$", "invalid_action_code")
+import android.text.TextUtils
+import org.linhome.customisation.Texts
+
+class EmptyWithRegExpFormatValidator(private val reggExp: String, errorTextKey: String) :
+    GenericStringValidator(errorTextKey) {
+    override fun validity(s: CharSequence): Pair<Boolean, String?> {
+        if (TextUtils.isEmpty(s))
+            return Pair(true, null)
+        if (!reggExp.toRegex().matches(s))
+            return Pair(false, errorText)
+        return Pair(true, null)
     }
 }

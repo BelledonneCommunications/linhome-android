@@ -68,9 +68,9 @@ class AccountViewModel : ViewModel() {
     }
 
 
-    fun getDescription(key:String, proxyConfig: ProxyConfig?): String? {
-        return proxyConfig?.state?.toHumanReadable()?.let {
-            proxyConfig?.identityAddress?.asStringUriOnly()?.let { it1 ->
+    fun getDescription(key:String, account: org.linphone.core.Account?): String? {
+        return account?.state?.toHumanReadable()?.let {
+            account?.params?.identityAddress?.asStringUriOnly()?.let { it1 ->
                 Texts.get(key, it1,
                     it
                 )

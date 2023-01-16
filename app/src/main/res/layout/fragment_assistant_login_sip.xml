@@ -47,6 +47,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 title='@{"username"}'
+                hint='@{"sip_user_hint"}'
                 liveString="@{model.username.first}"
                 liveValidity="@{model.username.second}"
                 validator="@{validators.nonEmptyStringValidator}"
@@ -62,6 +63,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 title='@{"domain"}'
+                hint='@{"sip_domain_hint"}'
                 liveString="@{model.domain.first}"
                 liveValidity="@{model.domain.second}"
                 validator="@{validators.nonEmptyStringValidator}"
@@ -126,10 +128,11 @@
                 app:layout_constraintBottom_toTopOf="@id/expiration"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                title='@{"proxy"}'
+                title='@{"sip_proxy"}'
+                hint='@{"sip_proxy_hint"}'
                 liveString="@{model.proxy.first}"
                 liveValidity="@{model.proxy.second}"
-                validator="@{validators.sipUri}"
+                validator="@{validators.optionalSipUri}"
                 android:inputType="@{InputType.TYPE_TEXT_VARIATION_URI}"
                 android:visibility='@{model.moreOptionsOpened ? View.VISIBLE : View.GONE }'
                 />

@@ -48,10 +48,10 @@ class LoginSipAccountViewModel :
 
     val moreOptionsOpened = MutableLiveData(false)
     val pushReady = MutableLiveData<Boolean>()
+    val sipRegistered = MutableLiveData<Boolean>()
 
 
     fun valid(): Boolean {
-
-        return username.second.value!! && domain.second.value!! && pass1.second.value!! && proxy.second.value!! && expiration.second.value!!
+        return username.second.value!! && domain.second.value!! && pass1.second.value!! && expiration.second.value!!
     }
 }

@@ -26,6 +26,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import org.linhome.R
+import org.linhome.customisation.Customisation
 import org.linphone.mediastream.video.capture.CaptureTextureView
 
 class RoundCornersTextureView : CaptureTextureView {
@@ -66,7 +67,7 @@ class RoundCornersTextureView : CaptureTextureView {
                     2 -> DisplayMode.HYBRID
                     else -> DisplayMode.BLACK_BARS
                 }
-                mRadius = 20.0f // Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f)
+                mRadius = Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f)
             } finally {
                 recycle()
             }

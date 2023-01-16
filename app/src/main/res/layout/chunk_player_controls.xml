@@ -33,7 +33,6 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/play"
             backgroundeffect='@{"primary_color"}'
-            android:onClick='@{() -> playermodel.togglePlay()}'
             tint='@{"color_c"}'
             icon='@{playermodel.playing ? "icons/pause" : "icons/play"}'
             app:fabCustomSize="40dp"
@@ -49,6 +48,7 @@
 
         <SeekBar
             android:id="@+id/seek"
+            android:visibility="@{playermodel.trackingAllowed ? View.VISIBLE : View.GONE}"
             android:enabled="false"
             android:layout_centerInParent="true"
             android:max="@{playermodel.duration}"
@@ -62,6 +62,22 @@
             android:progress="@{playermodel.position}"
             android:onProgressChanged="@{(seekBar, progress, fromUser) -> fromUser ? playermodel.setTargetSeek(progress) : null}"
             android:onStopTrackingTouch="@{(seekBar) -> playermodel.seek()}"
+            android:thumbTint="@color/color_a" />
+
+        <ProgressBar
+            android:visibility="@{!playermodel.trackingAllowed ? View.VISIBLE : View.GONE}"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:enabled="false"
+            android:layout_centerInParent="true"
+            android:max="@{playermodel.duration}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/color_a"
+            android:tint="@color/color_a"
+            android:layout_toStartOf="@+id/timer"
+            android:layout_toEndOf="@+id/play"
+            android:layout_marginEnd="7dp"
+            android:progress="@{playermodel.position}"
             android:thumbTint="@color/color_a" />
 
 

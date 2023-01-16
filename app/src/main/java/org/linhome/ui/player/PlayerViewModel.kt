@@ -27,6 +27,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.linphonecore.extensions.historyEvent
 import org.linphone.core.Player
 import org.linphone.core.PlayerListener
+import org.linphone.core.tools.Log
 
 
 class PlayerViewModelFactory(private val callId: String, private val player: Player) :
@@ -45,6 +46,7 @@ class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
     val position = MutableLiveData(0)
     val resetEvent = MutableLiveData(false)
     val seekPosition = MutableLiveData(0)
+    val trackingAllowed = MutableLiveData(false)
 
     var targetSeek: Int = 0
 
@@ -65,6 +67,8 @@ class PlayerViewModel(val callId: String, val player: Player) : ViewModel() {
         player.addListener(listener)
         if (historyEvent != null) {
             player.open(historyEvent.mediaFileName)
+            Log.i(historyEvent.mediaFileName,LinhomeApplication.coreContext.core.config.dump())
+            trackingAllowed.value = LinhomeApplication.coreContext.core.config.getString("recording_formats", historyEvent.mediaFileName,"")?.lowercase()?.contains("h26") != true
         }
     }
 

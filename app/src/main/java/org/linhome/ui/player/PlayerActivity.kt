@@ -83,6 +83,9 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                             setTextureView(binding.video, player, seekTo, playing)
                         }
                         HistoryEventStore.markAsRead(event.id)
+                        binding.chunkPlayerControls?.play?.setOnClickListener {
+                            togglePlay()
+                        }
                     }
             }
 
@@ -181,6 +184,16 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
     override fun onDestroy() {
         playerViewModel?.close()
         super.onDestroy()
+    }
+
+    fun togglePlay() {
+        if (playerViewModel.playing.value == true)
+            binding.chunkPlayerControls?.timer?.stop()
+        else {
+            binding.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime() - playerViewModel.position.value!!
+            binding.chunkPlayerControls?.timer?.start()
+        }
+        playerViewModel.togglePlay()
     }
 
 }

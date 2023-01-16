@@ -27,6 +27,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.view.TextureView
 import android.widget.RemoteViews
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -104,6 +105,7 @@ class NotificationsManager(private val context: Context) {
     var service: CoreService? = null
 
     private val coreListener: CoreListenerStub = object : CoreListenerStub() {
+        @RequiresPermission("android.permission.POST_NOTIFICATIONS")
         override fun onCallStateChanged(
             core: Core,
             call: Call,
@@ -138,6 +140,7 @@ class NotificationsManager(private val context: Context) {
                 incomingCallSnapshotTimer?.cancel()
         }
 
+        @RequiresPermission("android.permission.POST_NOTIFICATIONS")
         override fun onNextVideoFrameDecoded(call: Call) {
             if (call != null) {
                 call.takeVideoSnapshot(call.callLog.historyEvent().mediaThumbnail.absolutePath)
@@ -196,6 +199,7 @@ class NotificationsManager(private val context: Context) {
         coreContext.core.removeListener(coreListener)
     }
 
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     private fun notify(id: Int, notification: Notification) {
         Log.i("[Notifications Manager] Notifying $id")
         notificationManager.notify(id, notification)
@@ -216,7 +220,7 @@ class NotificationsManager(private val context: Context) {
     }
 
     /* Service related */
-
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun startForeground() {
         val serviceChannel = Texts.get("notification_channel_service_id")
         if (Compatibility.getChannelImportance(notificationManager, serviceChannel) == NotificationManagerCompat.IMPORTANCE_NONE) {
@@ -240,7 +244,7 @@ class NotificationsManager(private val context: Context) {
             }
         }
     }
-
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun startCallForeground(coreService: CoreService) {
         service = coreService
         when {
@@ -397,7 +401,7 @@ class NotificationsManager(private val context: Context) {
         return remoteView
     }
 
-
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     private fun displayIncomingCallNotification(call: Call, useAsForeground: Boolean = false) {
 
         val notifiable = getNotifiableForCall(call)
@@ -475,7 +479,7 @@ class NotificationsManager(private val context: Context) {
         }
     }
 
-
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun displayMissedCallNotification(call: Call) {
         val missedCallCount: Int = call.core.missedCallsCount
         val body: String
@@ -517,6 +521,7 @@ class NotificationsManager(private val context: Context) {
         cancel(MISSED_CALLS_NOTIF_ID)
     }
 
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun displayCallNotification(call: Call, useAsForeground: Boolean = false) {
         val notifiable = getNotifiableForCall(call)
 

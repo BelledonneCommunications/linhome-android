@@ -22,8 +22,11 @@ package org.linhome
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.DrawableCompat.applyTheme
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -147,12 +150,10 @@ class MainActivity : GenericActivity() {
         }
 
 
-        if (!StorageManager.storePrivately)
-            storageWithPermissionCheck()
-
-        phoneWithPermissionCheck()
-        numbersWithPermissionCheck()
-
+        if (StorageManager.storePrivately)
+            startWihInternalStorageWithPermissionCheck()
+        else
+            startWihExternalStorageWithPermissionCheck()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -248,7 +249,6 @@ class MainActivity : GenericActivity() {
         }
     }
 
-
     @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -260,19 +260,31 @@ class MainActivity : GenericActivity() {
             onRequestPermissionsResult(requestCode, grantResults)
     }
 
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS)
+    fun startWihExternalStorage() { LinhomeApplication.coreContext.initPhoneStateListener()}
+
+    @NeedsPermission(Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS)
+    fun startWihInternalStorage() { LinhomeApplication.coreContext.initPhoneStateListener()}
+
+    // Notifications permissions
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @OnPermissionDenied(Manifest.permission.POST_NOTIFICATIONS)
+    fun onNotificationDenied() { DialogUtil.error("notifications_permission_denied") }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @OnNeverAskAgain(Manifest.permission.POST_NOTIFICATIONS)
+    fun onNotificationsDeniedNeverAsk() { DialogUtil.error("notifications_permission_denied_dont_ask_again") }
+
     // Telephony related permissions
 
-    @NeedsPermission(Manifest.permission.READ_PHONE_NUMBERS)
-    fun numbers() { LinhomeApplication.coreContext.initPhoneStateListener() }
-
+    @RequiresApi(Build.VERSION_CODES.O)
     @OnPermissionDenied(Manifest.permission.READ_PHONE_NUMBERS)
     fun onNumbersDenied() { DialogUtil.error("phone_state_permission_denied") }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OnNeverAskAgain(Manifest.permission.READ_PHONE_NUMBERS)
     fun onNumbersDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
-
-    @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
-    fun phone() { LinhomeApplication.coreContext.initPhoneStateListener() }
 
     @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
     fun onPhoneDenied() { DialogUtil.error("phone_state_permission_denied") }
@@ -281,9 +293,6 @@ class MainActivity : GenericActivity() {
     fun onPhoneDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
 
     // Storage related permissions
-
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun storage() {}
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun onStorageDenied() { DialogUtil.error("write_external_storage_permission_denied") }

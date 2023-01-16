@@ -123,6 +123,7 @@
                 layout="@layout/chunk_call_in_progress_actions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="@{callmodel.device.actions.size() > 0 ? View.VISIBLE : View.GONE}"
                 bind:callmodel="@{callmodel}" />
         </LinearLayout>
 

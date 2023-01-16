@@ -20,6 +20,7 @@
 
 package org.linhome.ui.call
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -71,7 +72,7 @@ class CallIncomingActivity : CallGenericActivity() {
             callViewModel.videoSize.observe(this, Observer { size ->
                 binding.chunkCallVideoOrIcon.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     dimensionRatio = "H,${size.width}:${size.height}"
-                    matchConstraintPercentWidth = computePercentageWidth(size,180) //  180dp left for buttons and header
+                    matchConstraintPercentWidth = computePercentageWidth(size,250) //  250dp left for buttons and header
                 }
             })
         } ?: finish()

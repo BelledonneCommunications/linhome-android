@@ -27,6 +27,7 @@ import com.google.android.gms.common.images.Size
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linphone.core.Call
+import org.linphone.core.tools.Log
 
 
 abstract class CallGenericActivity : GenericActivity() {
@@ -58,6 +59,8 @@ abstract class CallGenericActivity : GenericActivity() {
         val videoRatio: Float = videoSize.width.toFloat() / videoSize.height.toFloat()
         val availableWidthPx = availableHeightPx * videoRatio
         val result =  availableWidthPx / screenWidth
+        Log.i("Computing video metrics : screen=$screenWidth/$screenHeight videoSize=${videoSize.width}/${videoSize.height} reservedpxheight=$pxReservedHeight computed withpct=$result")
+        Log.i("Computing video metrics : video height should not exceed : $availableHeightPx and is ${result*screenWidth}")
         return if (result > 0.95f) 0.95f else result
     }
 }

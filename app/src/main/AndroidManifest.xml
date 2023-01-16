@@ -63,6 +63,7 @@
             android:name="org.linhome.ui.call.CallIncomingActivity"
             android:label="@string/app_name"
             android:theme="@style/LinhomeTheme"
+            android:screenOrientation="sensor"
             >
         </activity>
 
@@ -70,6 +71,7 @@
             android:name="org.linhome.ui.call.CallOutgoingActivity"
             android:label="@string/app_name"
             android:theme="@style/LinhomeTheme"
+            android:screenOrientation="sensor"
             >
         </activity>
 
@@ -77,6 +79,7 @@
             android:name="org.linhome.ui.call.CallInProgressActivity"
             android:label="@string/app_name"
             android:theme="@style/LinhomeTheme"
+            android:screenOrientation="sensor"
             >
         </activity>
 

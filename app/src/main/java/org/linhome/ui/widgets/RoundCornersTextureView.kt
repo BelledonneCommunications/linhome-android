@@ -67,7 +67,7 @@ class RoundCornersTextureView : CaptureTextureView {
                     2 -> DisplayMode.HYBRID
                     else -> DisplayMode.BLACK_BARS
                 }
-                mRadius = Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f)
+                mRadius = 20.0f // Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f)
             } finally {
                 recycle()
             }

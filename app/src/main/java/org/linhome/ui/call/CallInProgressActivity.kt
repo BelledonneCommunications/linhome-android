@@ -22,6 +22,7 @@ package org.linhome.ui.call
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
@@ -104,7 +105,7 @@ class CallInProgressActivity : CallGenericActivity() {
                     val deviceHasButtons = callViewModel.device.value?.actions?.size?.let {
                         it > 0
                     } ?: false
-                    matchConstraintPercentWidth = computePercentageWidth(size,if (deviceHasButtons) 280 else 180) //  180dp left for buttons and header if no actions, 300dp otherwise
+                    matchConstraintPercentWidth = computePercentageWidth(size,if (deviceHasButtons) 400 else 300) //  300 left for buttons and header if no actions, 400 otherwise
                 }
             })
             callViewModel.videoContent.observe(this, {

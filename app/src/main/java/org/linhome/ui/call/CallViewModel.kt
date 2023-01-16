@@ -90,6 +90,10 @@ class CallViewModel(val call: Call) : ViewModel() {
         }
 
         override fun onNextVideoFrameDecoded(call: Call) {
+            call.params.recordFile?.let {
+                coreContext.core.config.setString("recording_formats",
+                    it,call.currentParams.usedVideoPayloadType?.mimeType)
+            }
             if (!videoContent.value!!) {
                 videoContent.value = true
             }
@@ -104,6 +108,7 @@ class CallViewModel(val call: Call) : ViewModel() {
                         delay(500) // Snapshot availability takes a little time.
                         event.mediaThumbnail.absolutePath.getImageDimension()?.also {
                             videoSize.value = it
+                            coreContext.core.config.setString("detected_video_dimensions",call.remoteAddress.asStringUriOnly(),"${it.width},${it.height}")
                         }
                     }
                 }
@@ -125,15 +130,8 @@ class CallViewModel(val call: Call) : ViewModel() {
         if (LinhomeApplication.instance.tablet()) {
             coreContext.core.forceSpeakerAudioRoute()
         }
-        device.value?.thumbNail?.also {
-            it.absolutePath.getImageDimension()?.also {
-                videoSize.value = it
-            }
-        }
-        call.callLog.historyEvent().also { event ->
-            event.mediaThumbnail.absolutePath.getImageDimension()?.also {
-                videoSize.value = it
-            }
+        coreContext.core.config.getString("detected_video_dimensions",call.remoteAddress.asStringUriOnly(),null)?.split(",")?.also {
+            videoSize.value = Size(it.first().toInt(),it.last().toInt())
         }
     }
 

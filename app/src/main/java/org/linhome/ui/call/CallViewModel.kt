@@ -37,6 +37,7 @@ import org.linhome.entities.Device
 import org.linhome.entities.HistoryEvent
 import org.linhome.linphonecore.extensions.*
 import org.linhome.store.DeviceStore
+import org.linhome.utils.DialogUtil
 import org.linhome.utils.extensions.existsAndIsNotEmpty
 import org.linhome.utils.getImageDimension
 import org.linphone.core.AudioDevice
@@ -216,12 +217,18 @@ class CallViewModel(val call: Call) : ViewModel() {
             "method_dtmf_sip_info" -> {
                 coreContext.core.useRfc2833ForDtmf = false
                 coreContext.core.useInfoForDtmf = true
-                action.code?.let { call.sendDtmfs(it) }
+                action.code?.let {
+                    call.sendDtmfs(it)
+                    DialogUtil.toast("action_sent", oneArg = action.actionText())
+                }
             }
             "method_dtmf_rfc_4733" -> {
                 coreContext.core.useInfoForDtmf = false
                 coreContext.core.useRfc2833ForDtmf = true
-                action.code?.let { call.sendDtmfs(it) }
+                action.code?.let {
+                    call.sendDtmfs(it)
+                    DialogUtil.toast("action_sent", oneArg = action.actionText())
+                }
             }
             "method_sip_message" -> {
                 var params = coreContext.core.createDefaultChatRoomParams()
@@ -233,6 +240,7 @@ class CallViewModel(val call: Call) : ViewModel() {
                 }
                 val message = chatRoom?.createMessageFromUtf8(action.code)
                 message?.send()
+                DialogUtil.toast("action_sent", oneArg = action.actionText())
             }
         }
     }

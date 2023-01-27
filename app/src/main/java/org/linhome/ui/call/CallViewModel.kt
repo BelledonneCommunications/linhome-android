@@ -47,7 +47,7 @@ import org.linphone.core.Reason
 
 
 class CallViewModelFactory(private val call: Call) :
-        ViewModelProvider.NewInstanceFactory() {
+    ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CallViewModel(call) as T
     }
@@ -55,7 +55,7 @@ class CallViewModelFactory(private val call: Call) :
 
 class CallViewModel(val call: Call) : ViewModel() {
     val device: MutableLiveData<Device?> =
-            MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
+        MutableLiveData(DeviceStore.findDeviceByAddress(call.remoteAddress))
     val defaultDeviceType: MutableLiveData<String?> = MutableLiveData(DeviceTypes.defaultType)
     val actions: ArrayList<Action> = device.value?.let {
         it.actions
@@ -66,7 +66,7 @@ class CallViewModel(val call: Call) : ViewModel() {
     val videoFullScreen: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val speakerDisabled: MutableLiveData<Boolean> =
-            MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
+        MutableLiveData(coreContext.core.outputAudioDevice?.type != AudioDevice.Type.Speaker)
     val microphoneMuted: MutableLiveData<Boolean> = MutableLiveData(!coreContext.core.isMicEnabled)
 
     val videoSize = MutableLiveData<Size>()

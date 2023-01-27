@@ -59,7 +59,8 @@
                     layout="@layout/chunk_call_device_icon_or_video"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    bind:callmodel="@{callmodel}" />
+                    bind:callmodel="@{callmodel}"
+                    bind:incomingView="@{false}"/>
             </LinearLayout>
 
 

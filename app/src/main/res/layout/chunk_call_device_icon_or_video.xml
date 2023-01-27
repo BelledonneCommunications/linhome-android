@@ -4,12 +4,14 @@
     <data>
 
         <import type="android.view.View" />
-
         <import type="android.widget.RelativeLayout.LayoutParams" />
 
         <variable
             name="callmodel"
             type="org.linhome.ui.call.CallViewModel" />
+        <variable
+            name="incomingView"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +22,7 @@
         android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
 
         <ImageView
+            android:id="@+id/icon"
             deviceTypeIconCircle="@{callmodel.device != null &amp;&amp; callmodel.device.type != null ? callmodel.device.type : callmodel.defaultDeviceType}"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -30,6 +33,17 @@
             app:layout_constraintWidth_percent="0.4"
             android:scaleType="fitXY"
             android:visibility='@{callmodel.videoContent ? View.GONE : View.VISIBLE, default = "visible"}'/>
+
+        <TextView
+            style='@{"view_call_device_address"}'
+            text='@{"incoming_someone_at_your_door"}'
+            app:layout_constraintTop_toBottomOf="@+id/icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:visibility='@{callmodel.videoContent  || !incomingView ? View.GONE : View.VISIBLE, default = "visible"}'/>
 
         <RelativeLayout
             android:id="@+id/video_holder_layout"

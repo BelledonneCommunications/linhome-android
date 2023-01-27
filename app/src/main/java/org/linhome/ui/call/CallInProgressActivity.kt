@@ -105,7 +105,7 @@ class CallInProgressActivity : CallGenericActivity() {
                     val deviceHasButtons = callViewModel.device.value?.actions?.size?.let {
                         it > 0
                     } ?: false
-                    matchConstraintPercentWidth = computePercentageWidth(size,if (deviceHasButtons) 400 else 300) //  300 left for buttons and header if no actions, 400 otherwise
+                    matchConstraintPercentWidth = computePercentageWidth(size,if (deviceHasButtons) 300 else 200) //  200 left for buttons and header if no actions, 300 otherwise
                 }
             })
             callViewModel.videoContent.observe(this, {

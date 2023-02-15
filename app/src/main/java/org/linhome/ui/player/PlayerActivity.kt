@@ -40,7 +40,6 @@ import org.linphone.core.tools.Log
 
 class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
 
-
     lateinit var binding: ActivityPlayerBinding
     lateinit var playerViewModel: PlayerViewModel
     var playingOnPause = false
@@ -110,14 +109,16 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
             }
         })
 
-        model.resetEvent.observe(this, Observer { reset ->
-            if (reset)
-                view.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime()
-        })
+        model.playing.observe(this) { p ->
+            view.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime() - playerViewModel.position.value!!
+        }
 
-        model.seekPosition.observe(this, Observer { p ->
-            view.chunkPlayerControls?.timer?.base = SystemClock.elapsedRealtime() - p
-        })
+        model.userTrackingPosition.observe(this) { p ->
+            if (model.userTracking.value == true) {
+                binding.chunkPlayerControls?.timer?.text =
+                    String.format("%02d:%02d", (p / 1000) / 60, (p / 1000) % 60);
+            }
+        }
 
         view.chunkPlayerControls?.timer?.setOnChronometerTickListener {
             model.updatePosition()
@@ -154,21 +155,6 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                     Log.i("[Player] Surface texture should be available now seekTo = ${seekTo}")
                     player.setWindowId(textureView.surfaceTexture)
                     playerViewModel.playFromStart()
-                    if (!playing)
-                        playerViewModel?.pausePlay()
-
-                    /* Temporarily disable until seek is fixed in lib for H264
-                    if (seekTo == 0)
-                        playerViewModel.playFromStart()
-                    else {
-                        playerViewModel.targetSeek = seekTo
-                        playerViewModel.seekPosition.value = seekTo
-                        playerViewModel.playing.value = true
-                        playerViewModel.seek()
-                        if (!playing)
-                            playerViewModel.togglePlay()
-                    }
-                     */
                 }
             }
         }

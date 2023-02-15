@@ -59,7 +59,6 @@ class HistoryFragment : GenericFragment() {
         binding.loglist.adapter =
             HistoryEventsAdapter(historyViewModel.history.value!!, historyViewModel, this)
         binding.loglist.setHasFixedSize(true)
-        showProgress()
         binding.loglist.viewTreeObserver.addOnGlobalLayoutListener(object :
             OnGlobalLayoutListener {
             override fun onGlobalLayout() {

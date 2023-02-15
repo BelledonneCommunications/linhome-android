@@ -14,17 +14,17 @@
         backgoundcolor='@{"color_j"}'
         >
 
-        <TextureView
+        <org.linhome.ui.widgets.RoundCornersTextureView
             android:id="@+id/video"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_margin="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility='@{model.historyEvent.hasVideo ? View.VISIBLE : View.INVISIBLE}'
-            app:layout_constraintDimensionRatio="H,4:3" />
+            app:layout_constraintBottom_toTopOf="@+id/controls"
+            android:visibility='@{model.historyEvent.hasVideo ? View.VISIBLE : View.GONE, default=visible}'
+             />
 
 
         <ImageView
@@ -38,9 +38,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility='@{model.historyEvent.hasVideo ? View.INVISIBLE : View.VISIBLE}'
-            app:layout_constraintDimensionRatio="H,4:3" />
+            app:layout_constraintBottom_toTopOf="@+id/controls"
+            android:visibility='@{model.historyEvent.hasVideo ? View.GONE : View.VISIBLE, default=gone}'
+            />
 
 
         <LinearLayout
@@ -63,8 +63,9 @@
             android:id="@+id/cancel"
             src='@{"icons/cancel"}'
             tint='@{"color_c"}'
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
             android:layout_margin="16dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

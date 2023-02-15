@@ -38,18 +38,17 @@ class AccountViewModel : ViewModel() {
     val pushGWDesc = MutableLiveData(getDescription("push_account_info",pushGw))
 
     private val coreListener = object : CoreListenerStub() {
-        override fun onRegistrationStateChanged(
-            lc: Core,
-            cfg: ProxyConfig,
-            cstate: RegistrationState?,
+
+        override fun onAccountRegistrationStateChanged(
+            core: Core,
+            cfg: org.linphone.core.Account,
+            state: RegistrationState?,
             message: String
         ) {
-            if (cfg != null) {
-                if (cfg == account)
-                    accountDesc.value = getDescription("account_info",account)
-                if (cfg == pushGw)
-                    pushGWDesc.value = getDescription("push_account_info",pushGw)
-            }
+            if (cfg == account)
+                accountDesc.value = getDescription("account_info",account)
+            if (cfg == pushGw)
+                pushGWDesc.value = getDescription("push_account_info",pushGw)
         }
     }
 

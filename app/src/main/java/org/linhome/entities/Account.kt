@@ -32,7 +32,7 @@ import org.linphone.core.tools.Log
 
 object Account {
 
-    private const val PUSH_GW_ID_KEY = "linhome_pushgateway"
+    const val PUSH_GW_ID_KEY = "linhome_pushgateway"
 
     private lateinit var coreListener : CoreListenerStub
 

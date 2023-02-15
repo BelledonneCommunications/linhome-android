@@ -84,8 +84,10 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             if (pushready) {
                 DialogUtil.info("sip_account_created")
                 mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-            } else
+            } else {
                 DialogUtil.error("failed_creating_pushgateway")
+                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+            }
         })
 
         model.sipRegistered.observe(viewLifecycleOwner, Observer { sipRegistered ->

@@ -167,6 +167,11 @@ object Account {
             coreContext.core.accountList.forEach {
                 if (it.params.idkey != PUSH_GW_ID_KEY) {
                     it.dependency = pgw
+                    pgw.params.clone().also { clonedParams ->
+                        clonedParams.expires = it.params.expires
+                        pgw.params = clonedParams
+                        pgw.refreshRegister()
+                    }
                 }
             }
         }

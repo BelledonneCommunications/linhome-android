@@ -39,7 +39,7 @@ class DevicesViewModel : ViewModel() {
         override fun onSyncStatusChanged(
             friendList: FriendList,
             status: FriendList.SyncStatus?,
-            message: String
+            message: String?
         ) {
             if (status == FriendList.SyncStatus.Successful || status == FriendList.SyncStatus.Failure) {
                 devices.value = DeviceStore.devices

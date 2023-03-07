@@ -164,7 +164,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    implementation "org.linphone:linphone-sdk-android:5.2.11-pre.2+e9f845b"
+    implementation "org.linphone:linphone-sdk-android:5.2.30-pre.2+16de264"
     implementation 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.2'
     kapt 'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2'
     implementation "com.google.android.material:material:1.7.0"

@@ -252,7 +252,7 @@ object Theme {
         }
         textView.isAllCaps = themeConfig.getBool(section, "allcaps", false)
         themeConfig.getString("textview-style.$textViewKey", "size", null)?.let {
-            val growFactor = if (LinhomeApplication.instance.tablet()) 1.25f else 1f
+            val growFactor = if (LinhomeApplication.instance.tablet()) 1.1f else 1f
             textView.textSize = growFactor * it.toFloat()
         }
         themeConfig.getString(section, "align", null)?.let {

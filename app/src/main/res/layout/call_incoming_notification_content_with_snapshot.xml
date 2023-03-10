@@ -44,7 +44,7 @@
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_linhome_icon"
+        android:src="@drawable/ic_linhome_icon_tinted"
         android:layout_below="@+id/header"
         android:layout_centerVertical="true"
         />

@@ -98,6 +98,8 @@ class CallInProgressActivity : CallGenericActivity() {
                     binding.controls?.forceVisible()
                     binding.timer.forceVisible()
                 }
+                coreContext.core.nativeVideoWindowId =
+                    if (callViewModel.videoFullScreen.value!!) binding.videofullscreen else binding.chunkCallDeviceIconOrVideo?.videocollapsed
             })
             callViewModel.videoSize.observe(this, Observer { size ->
                 binding.chunkCallVideoOrIcon.updateLayoutParams<ConstraintLayout.LayoutParams> {

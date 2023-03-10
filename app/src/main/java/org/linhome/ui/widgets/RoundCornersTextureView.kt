@@ -20,6 +20,7 @@
 package org.linhome.ui.widgets
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Outline
 import android.graphics.Rect
 import android.util.AttributeSet
@@ -67,11 +68,15 @@ class RoundCornersTextureView : CaptureTextureView {
                     2 -> DisplayMode.HYBRID
                     else -> DisplayMode.BLACK_BARS
                 }
-                mRadius = Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f)
+                mRadius = dpToPx(Customisation.themeConfig.getFloat("arbitrary-values", "video_view_corner_radius", 20.0f))
             } finally {
                 recycle()
             }
         }
+    }
+
+    fun dpToPx(dp: Float): Float {
+        return (dp * Resources.getSystem().getDisplayMetrics().density)
     }
 
     private fun setRoundCorners() {

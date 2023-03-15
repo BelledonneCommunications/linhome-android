@@ -30,15 +30,13 @@ import org.linphone.core.tools.Log
 
 fun Vcard.isValid():  Boolean {
    val card = this
-    val validType =  if (card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header).size == 1)  (card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)
-        .component1()
-        ?.let { typeKey ->
-            DeviceTypes.deviceTypeSupported(typeKey)
-        } ?:  false )  else false
+    val validType =  card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)?.first()?.let {
+        DeviceTypes.deviceTypeSupported(it)
+    }?:false
 
     if (!validType) {
         Log.e("[Device] vCard validation : invalid type ${
-            card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)
+            card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header).first()
         }")
         return false
     }

@@ -92,7 +92,9 @@ object DeviceStore {
                     Log.i("[DeviceStore] Found remote friend  : ${friend.name} ")
                     val card = friend.vcard
                     if (card != null && card.isValid()) {
-                        result.add(Device(card!!, true))
+                        val device = Device(card!!, true)
+                        if (result.filter { it.address == device.address }.isEmpty())
+                            result.add(device)
                         Log.i("[DeviceStore] added remote device : ${friend.vcard?.asVcard4String()} ")
                     } else {
                         Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")

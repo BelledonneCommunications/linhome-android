@@ -91,7 +91,7 @@ class DevicesFragment : GenericFragment() {
             }
         }
 
-        binding.swiperefresh?.isEnabled = false
+        binding.swiperefresh?.isEnabled = true
         devicesViewModel.friendListUpdatedOk.observe(viewLifecycleOwner, { updateOk ->
             (binding.deviceList.adapter as RecyclerView.Adapter).notifyDataSetChanged()
             binding.swiperefresh?.isRefreshing = false

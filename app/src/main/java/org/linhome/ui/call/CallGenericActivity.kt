@@ -50,17 +50,19 @@ abstract class CallGenericActivity : GenericActivity() {
         }
     }
 
-    fun computePercentageWidth(videoSize : Size, dpReservedHeight: Int) : Float {
-        val displayMetrics = Resources.getSystem().displayMetrics
-        val screenHeight: Int = displayMetrics.heightPixels
-        val screenWidth: Int = displayMetrics.widthPixels
-        val pxReservedHeight = dpReservedHeight * displayMetrics.density
-        val availableHeightPx = screenHeight - pxReservedHeight
-        val videoRatio: Float = videoSize.width.toFloat() / videoSize.height.toFloat()
-        val availableWidthPx = availableHeightPx * videoRatio
-        val result =  availableWidthPx / screenWidth
-        Log.i("Computing video metrics : screen=$screenWidth/$screenHeight videoSize=${videoSize.width}/${videoSize.height} reservedpxheight=$pxReservedHeight computed withpct=$result")
-        Log.i("Computing video metrics : video height should not exceed : $availableHeightPx and is ${result*screenWidth}")
-        return if (result > 0.95f) 0.95f else result
-    }
+   companion object {
+       fun computePercentageWidth(videoSize: Size, dpReservedHeight: Int): Float {
+           val displayMetrics = Resources.getSystem().displayMetrics
+           val screenHeight: Int = displayMetrics.heightPixels
+           val screenWidth: Int = displayMetrics.widthPixels
+           val pxReservedHeight = dpReservedHeight * displayMetrics.density
+           val availableHeightPx = screenHeight - pxReservedHeight
+           val videoRatio: Float = videoSize.width.toFloat() / videoSize.height.toFloat()
+           val availableWidthPx = availableHeightPx * videoRatio
+           val result = availableWidthPx / screenWidth
+           Log.i("Computing video metrics : screen=$screenWidth/$screenHeight videoSize=${videoSize.width}/${videoSize.height} reservedpxheight=$pxReservedHeight computed withpct=$result")
+           Log.i("Computing video metrics : video height should not exceed : $availableHeightPx and is ${result * screenWidth}")
+           return if (result > 0.95f) 0.95f else result
+       }
+   }
 }

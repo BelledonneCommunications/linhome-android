@@ -25,6 +25,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.TextureView
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +36,9 @@ import org.linhome.R
 import org.linhome.databinding.ActivityPlayerBinding
 import org.linhome.linphonecore.extensions.historyEvent
 import org.linhome.store.HistoryEventStore
+import org.linhome.ui.call.CallGenericActivity
+import org.linhome.ui.call.CallGenericActivity.Companion.computePercentageWidth
+import org.linhome.utils.getImageDimension
 import org.linphone.core.Player
 import org.linphone.core.tools.Log
 
@@ -85,6 +90,11 @@ class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
                         binding.chunkPlayerControls?.play?.setOnClickListener {
                             togglePlay()
                         }
+                        event.mediaThumbnail.absolutePath.getImageDimension()?.also { size ->
+                            binding.video.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                                dimensionRatio = "H,${size.width}:${size.height}"
+                                matchConstraintPercentWidth = CallGenericActivity.computePercentageWidth(size,200) //  240Dp left for buttons and header
+                            }                        }
                     }
             }
 

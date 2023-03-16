@@ -32,6 +32,7 @@ import org.linhome.customisation.DeviceTypes
 import org.linhome.store.StorageManager
 import org.linhome.utils.DialogUtil
 import org.linhome.utils.extensions.existsAndIsNotEmpty
+import org.linhome.utils.extensions.md5
 import org.linhome.utils.extensions.xDigitsUUID
 import org.linphone.core.CallParams
 import org.linphone.core.Friend
@@ -81,8 +82,7 @@ data class Device(
         xDigitsUUID(), type, name, address, actionsMethodType, actions, isRemotelyProvisionned
     )
 
-    constructor (card:Vcard, isRemotelyProvisionned:Boolean) : this(
-        card.uid?.let{it}?:xDigitsUUID(),
+    constructor (card:Vcard, isRemotelyProvisionned:Boolean) : this(card.sipAddresses.component1()?.asStringUriOnly()!!.md5(),
         card.getExtendedPropertiesValuesByName(vcard_device_type_header).component1(),
         card.fullName!!,
         card.sipAddresses.component1()?.asStringUriOnly()!!,

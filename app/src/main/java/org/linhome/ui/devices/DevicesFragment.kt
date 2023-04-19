@@ -131,7 +131,6 @@ class DevicesFragment : GenericFragment() {
         } else {
             binding.newDevice.visibility = View.VISIBLE
         }
-
     }
 
 }

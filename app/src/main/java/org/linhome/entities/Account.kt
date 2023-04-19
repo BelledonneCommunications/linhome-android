@@ -26,6 +26,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
+import org.linhome.store.DeviceStore
 import org.linphone.core.*
 import org.linphone.core.Account
 import org.linphone.core.tools.Log
@@ -193,6 +194,7 @@ object Account {
         coreContext.core.config.setString("misc","config-uri",null)
         coreContext.core.stop()
         LinhomeApplication.ensureCoreExists(coreContext.context, force = true)
+        DeviceStore.clearRemoteProvisionnedDevicesUponLogout()
     }
 
     fun delete() {

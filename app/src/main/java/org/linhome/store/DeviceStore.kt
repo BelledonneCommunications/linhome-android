@@ -178,4 +178,14 @@ object DeviceStore {
         }
     }
 
+    fun clearRemoteProvisionnedDevicesUponLogout() {
+        LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
+            Log.i("[DeviceStore] Found contacts-vcard-list url : ${url} ")
+            LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
+                LinhomeApplication.coreContext.core.removeFriendList(serverFriendList)
+                devices = readFromFriends()
+            }
+        }
+    }
+
 }

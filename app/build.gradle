@@ -75,6 +75,7 @@ task getGitVersion() {
 }
 project.tasks['preBuild'].dependsOn 'getGitVersion'
 
+def crashlyticsForNdkEnabled = new File(projectDir.absolutePath +'/google-services.json').exists() && new File(LinphoneSdkBuildDir + '/libs/').exists() && new File(LinphoneSdkBuildDir + '/libs-debug/').exists()
 
 android {
     compileSdkVersion 33
@@ -120,15 +121,19 @@ android {
             minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir "build/intermediates/merged_native_libs/release/out/lib"
+            if (crashlyticsForNdkEnabled) {
+                firebaseCrashlytics {
+                    nativeSymbolUploadEnabled true
+                    unstrippedNativeLibsDir file(LinphoneSdkBuildDir + '/libs-debug/').toString()
+                }
             }
         }
         debug {
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir "build/intermediates/merged_native_libs/debug/out/lib"
+            if (crashlyticsForNdkEnabled) {
+                firebaseCrashlytics {
+                    nativeSymbolUploadEnabled true
+                    unstrippedNativeLibsDir file(LinphoneSdkBuildDir + '/libs-debug/').toString()
+                }
             }
         }
 
@@ -153,7 +158,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
@@ -165,7 +170,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation "org.linphone:linphone-sdk-android:5.2.30"
+    implementation "org.linphone:linphone-sdk-android:5.2.55"
     implementation 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.2'
     kapt 'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2'
     implementation "com.google.android.material:material:1.8.0"
@@ -175,13 +180,24 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
-    implementation 'com.google.firebase:firebase-analytics:21.2.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.5'
+    implementation 'com.google.firebase:firebase-analytics:21.2.2'
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.7'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation "androidx.media:media:1.6.0"
-    implementation 'com.google.firebase:firebase-crashlytics-ndk:18.3.5'
+    if (crashlyticsForNdkEnabled) {
+        implementation 'com.google.firebase:firebase-crashlytics-ndk:18.3.7'
+    } else {
+        compileOnly 'com.google.firebase:firebase-crashlytics-ndk:18.3.7'
+    }
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
+}
+
+if (crashlyticsForNdkEnabled) {
+    afterEvaluate {
+        assembleRelease.finalizedBy(uploadCrashlyticsSymbolFileRelease)
+        assembleDebug.finalizedBy(uploadCrashlyticsSymbolFileDebug)
+    }
 }
 
 

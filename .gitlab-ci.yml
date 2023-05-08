@@ -23,7 +23,7 @@ job-android:
 
   stage: build
   tags: [ "docker-android" ]
-  image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:20210903_java11_android31
+  image: gitlab.linphone.org:4567/bc/public/linphone-android/bc-dev-android:20220609_android_33
 
 
   script:

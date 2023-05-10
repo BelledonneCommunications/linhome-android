@@ -81,6 +81,12 @@ class DevicesFragment : GenericFragment() {
                     mainactivity.navController.navigate(actionDetail)
                 }
             })
+        } else {
+            devicesViewModel.selectedDevice.observe(viewLifecycleOwner, Observer { device ->
+                device?.also {
+                    binding.fragmentDeviceInfo?.editDevice?.visibility = if (it.isRemotelyProvisionned) View.GONE else View.VISIBLE
+                }
+            })
         }
 
         if (LinhomeApplication.instance.tablet()) {

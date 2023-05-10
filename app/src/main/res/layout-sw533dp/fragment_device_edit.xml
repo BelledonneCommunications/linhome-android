@@ -26,7 +26,9 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 app:layout_constraintBottom_toTopOf="@id/name"
@@ -41,7 +43,9 @@
             <TextView
                 android:id="@+id/your_device"
                 android:layout_marginTop="40dp"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 app:layout_constraintBottom_toTopOf="@id/name"
@@ -54,7 +58,9 @@
 
             <org.linhome.ui.widgets.LTextInput
                 android:id="@+id/name"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/your_device"
@@ -69,7 +75,9 @@
 
             <org.linhome.ui.widgets.LTextInput
                 android:id="@+id/address"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@id/name"
@@ -85,7 +93,9 @@
 
             <TextView
                 android:id="@+id/select_type_section_title"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@id/address"
@@ -99,7 +109,9 @@
 
             <org.linhome.ui.widgets.LSpinner
                 android:id="@+id/devicetype"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@id/select_type_section_title"
@@ -113,7 +125,9 @@
 
             <TextView
                 android:id="@+id/select_method_section_title"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 app:layout_constraintTop_toBottomOf="@id/devicetype"
@@ -127,7 +141,9 @@
 
             <org.linhome.ui.widgets.LSpinner
                 android:id="@+id/method"
-                android:layout_width="600dp"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@id/select_method_section_title"
@@ -141,7 +157,9 @@
 
            <LinearLayout
                android:id="@+id/actions"
-               android:layout_width="600dp"
+               android:layout_width="match_parent"
+               android:layout_marginStart="20dp"
+               android:layout_marginEnd="20dp"
                android:layout_height="wrap_content"
                android:layout_marginTop="10dp"
                android:orientation="vertical"

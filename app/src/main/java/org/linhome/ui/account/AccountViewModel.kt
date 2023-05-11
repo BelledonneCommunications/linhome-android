@@ -77,5 +77,11 @@ class AccountViewModel : ViewModel() {
         } ?: Texts.get("no_account_configured")
     }
 
+    fun isLinhome() : Boolean {
+        return Account.get()?.let {
+            it.params.domain == LinhomeApplication.corePreferences.loginDomain
+        }?:false
+    }
+
 
 }

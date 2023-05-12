@@ -49,6 +49,12 @@ object DeviceStore {
                 devices = readFromFriends()
             }
         }
+
+        override fun onConfiguringStatus(core: Core, status: ConfiguringState?, message: String?) {
+            if (status == ConfiguringState.Successful) {
+                localDevicesFriendList = LinhomeApplication.coreContext.core.getFriendListByName(local_devices_fl_name)
+            }
+        }
     }
 
     init {

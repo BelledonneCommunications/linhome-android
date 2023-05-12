@@ -72,7 +72,7 @@ class CallIncomingActivity : CallGenericActivity() {
             callViewModel.videoSize.observe(this, Observer { size ->
                 binding.chunkCallVideoOrIcon.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     dimensionRatio = "H,${size.width}:${size.height}"
-                    matchConstraintPercentWidth = computePercentageWidth(size,200) //  240Dp left for buttons and header
+                    matchConstraintPercentWidth = computePercentageWidth(size,250) //  Space for buttons and header
                 }
             })
         } ?: finish()

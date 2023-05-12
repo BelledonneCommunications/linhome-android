@@ -21,6 +21,7 @@
 package org.linhome.linphonecore.extensions
 
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.store.HistoryEventStore
 import org.linphone.core.AudioDevice
 import org.linphone.core.CallLog
@@ -91,5 +92,15 @@ fun Core.cleanHistory() {
             HistoryEventStore.removeHistoryEventByCallId(it.callId!!)
         coreContext.core.removeCallLog(it)
     }
+}
+
+
+// Early media phase - work around to avoid playing audio back to user, but still have the stream
+fun Core.muteAudioPLayBack() {
+    playbackGainDb = -1000.0f
+}
+
+fun Core.unMuteAudioPLayBack() {
+    playbackGainDb = 0.0f
 }
 

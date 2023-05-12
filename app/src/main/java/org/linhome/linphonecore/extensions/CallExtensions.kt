@@ -20,7 +20,10 @@
 
 package org.linhome.linphonecore.extensions
 
-import android.widget.Toast
+import android.content.Context
+import android.content.Context.AUDIO_SERVICE
+import android.media.AudioManager
+import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,10 +40,10 @@ fun Call.extendedAcceptEarlyMedia() {
     if (state == Call.State.IncomingReceived) {
         val earlyMediaCallParams: CallParams? = coreContext.core.createCallParams(this)
         earlyMediaCallParams?.recordFile = callLog.historyEvent().mediaFileName
-        earlyMediaCallParams?.isAudioEnabled = true
         isCameraEnabled = false
         acceptEarlyMediaWithParams(earlyMediaCallParams)
         GlobalScope.launch(context = Dispatchers.Main) {
+            core.muteAudioPLayBack()
             startRecording()
         }
     }
@@ -48,7 +51,7 @@ fun Call.extendedAcceptEarlyMedia() {
 
 fun Call.extendedAccept() {
 
-    if (LinhomeApplication.coreContext.gsmCallActive) {
+    if (coreContext.gsmCallActive) {
         DialogUtil.toast("unable_to_accept_call_gsm_call_in_progress")
         return
     }
@@ -56,8 +59,7 @@ fun Call.extendedAccept() {
     val inCallParams: CallParams? = coreContext.core.createCallParams(this)
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
     isCameraEnabled = false
-    inCallParams?.isAudioEnabled = true
-
+    core.unMuteAudioPLayBack()
     val device = DeviceStore.findDeviceByAddress(remoteAddress)
     if (device != null) {
         coreContext.core.useRfc2833ForDtmf = device.actionsMethodType == "method_dtmf_rfc_4733"

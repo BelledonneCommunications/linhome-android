@@ -74,6 +74,10 @@ object Account {
     ) {
         val transports = arrayOf("udp","tcp","tls")
         accountCreator.createProxyConfig()
+        if (coreContext.core.accountList.isEmpty()) {
+            sipRegistered.value = false
+            return
+        }
         coreContext.core.accountList.first()?.also { account ->
             Log.i("[Account] created proxyConfig with domain ${account.params.domain}")
             account.params.clone().also { newParams ->

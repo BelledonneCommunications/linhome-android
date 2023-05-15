@@ -25,7 +25,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
+import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
 import org.linhome.customisation.Texts
@@ -74,7 +78,11 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                             Account.linhomeAccountCreateProxyConfig(model.accountCreator)
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                             DialogUtil.info("linhome_account_loggedin")
-                        } else {
+                            GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards
+                                coreContext.core.stop()
+                                coreContext.core.start()
+                            }
+                            } else {
                             binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
                         }
                     }

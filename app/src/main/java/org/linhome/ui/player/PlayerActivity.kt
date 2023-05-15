@@ -43,7 +43,7 @@ import org.linphone.core.Player
 import org.linphone.core.tools.Log
 
 
-class PlayerActivity : GenericActivity(allowsLandscapeOnSmartPhones = true) {
+class PlayerActivity : GenericActivity() {
 
     lateinit var binding: ActivityPlayerBinding
     lateinit var playerViewModel: PlayerViewModel

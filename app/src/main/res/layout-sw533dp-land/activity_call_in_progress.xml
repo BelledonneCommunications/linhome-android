@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="org.linphone.core.Call.State" />
+
+        <variable
+            name="callmodel"
+            type="org.linhome.ui.call.CallViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        gradientBackground='@{"dark_light_vertical_gradient"}'
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+
+
+
+        <TextureView
+            android:id="@+id/videofullscreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility='@{callmodel.videoFullScreen ? View.VISIBLE : View.GONE, default = "gone"}' />
+
+        <LinearLayout
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
+            android:gravity="left">
+
+            <Chronometer
+                android:id="@+id/call_timer"
+                style='@{"view_call_device_address"}'
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/videotogglefullscreen"
+            backgroundeffect='@{"primary_color"}'
+            icon='@{"icons/fullscreen_stop"}'
+            tint='@{"color_c"}'
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_gravity="end"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="13dp"
+            android:visibility='@{callmodel.videoFullScreen ? View.VISIBLE : View.GONE, default = "gone"}'
+            app:fabCustomSize="50dp" />
+
+        <LinearLayout
+            android:id="@+id/chunk_call_top"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+
+            <include
+                layout="@layout/chunk_call_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chunk_call_name_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/chunk_call_top"
+            android:visibility='@{callmodel.videoFullScreen ? View.INVISIBLE : View.VISIBLE, default = "visible"}'>
+
+            <include
+                layout="@layout/chunk_call_name_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:callmodel="@{callmodel}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chunk_call_video_or_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/chunk_call_name_address"
+            app:layout_constraintTop_toBottomOf="@+id/chunk_call_name_address"
+            app:layout_constraintBottom_toTopOf="@+id/actions_and_controls"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintDimensionRatio="H,4:3"
+            app:layout_constraintWidth_percent="0.85"
+            android:gravity="center">
+
+            <include
+                android:id="@+id/chunk_call_device_icon_or_video"
+                layout="@layout/chunk_call_device_icon_or_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:callmodel="@{callmodel}"
+                bind:incomingView="@{false}"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/actions_and_controls"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:id="@+id/controls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <include
+                    layout="@layout/chunk_call_in_progress_controls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:id="@+id/actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <include
+                    layout="@layout/chunk_call_in_progress_actions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{callmodel.device.actions.size() > 0 ? View.VISIBLE : View.GONE}"
+                    bind:callmodel="@{callmodel}" />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

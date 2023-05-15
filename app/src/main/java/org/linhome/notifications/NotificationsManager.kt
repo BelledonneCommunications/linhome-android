@@ -123,6 +123,10 @@ class NotificationsManager(private val context: Context) {
                 Call.State.Released -> {
                     if (call.callLog?.status == Call.Status.Missed) {
                         displayMissedCallNotification(call)
+                    } else if (call.callLog?.status == Call.Status.DeclinedElsewhere) {
+                        displayElsewhere(call,true)
+                    } else if (call.callLog?.status == Call.Status.AcceptedElsewhere) {
+                        displayElsewhere(call,false)
                     }
                 }
                 else -> displayCallNotification(call)
@@ -505,6 +509,31 @@ class NotificationsManager(private val context: Context) {
             .setContentTitle(Texts.get("notif_missed_call_title"))
             .setContentText(body)
             .setSmallIcon(R.drawable.notification_missed)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setCategory(Notification.CATEGORY_EVENT)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setWhen(System.currentTimeMillis())
+            .setShowWhen(true)
+            .setNumber(coreContext.core.missedCount())
+            .setColor(Theme.getColor("color_s"))
+            .build()
+        notify(MISSED_CALLS_NOTIF_ID, notification)
+    }
+
+    fun displayElsewhere(call: Call, declined: Boolean) {
+
+        val pendingIntent = NavDeepLinkBuilder(context)
+            .setComponentName(MainActivity::class.java)
+            .setGraph(R.navigation.fragments_graph)
+            .setDestination(R.id.navigation_history)
+            .createPendingIntent()
+
+        val notification = NotificationCompat.Builder(
+            context, Texts.get("notification_channel_incoming_call_id")
+        )
+            .setContentTitle(Texts.get(if (declined) "notif_declined_elsewhere_call_title" else "notif_accepted_elsewhere_call_title"))
+            .setSmallIcon((if (declined) R.drawable.notification_decline else R.drawable.notification_phone))
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setCategory(Notification.CATEGORY_EVENT)

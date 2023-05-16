@@ -52,13 +52,13 @@ class DevicesViewModel : ViewModel() {
         override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
             Log.i("[Context] Global state changed [$state]")
             if (state == GlobalState.On) {
-                DeviceStore.devices = DeviceStore.readFromFriends()
+                DeviceStore.readDevicesFromFriends()
                 devices.value = DeviceStore.devices
             }
         }
         override fun onFriendListCreated(core: Core, friendList: FriendList) {
             Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
-            DeviceStore.devices = DeviceStore.readFromFriends()
+            DeviceStore.readDevicesFromFriends()
             devices.value = DeviceStore.devices
             friendListUpdatedOk.value = true
         }

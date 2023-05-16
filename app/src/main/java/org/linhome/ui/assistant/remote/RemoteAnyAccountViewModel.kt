@@ -26,7 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication.Companion.coreContext
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linphone.core.ConfiguringState
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
@@ -43,10 +43,10 @@ class RemoteAnyAccountViewModel : ViewModel() {
     private val coreListener = object : CoreListenerStub() {
         override fun onConfiguringStatus(core: Core, status: ConfiguringState, message: String?) {
             if (status == ConfiguringState.Successful) {
-                if (Account.pushGateway() != null) {
-                    Account.linkProxiesWithPushGateway(pushReady)
+                if (LinhomeAccount.pushGateway() != null) {
+                    LinhomeAccount.linkProxiesWithPushGateway(pushReady)
                 } else
-                    Account.createPushGateway(pushReady)
+                    LinhomeAccount.createPushGateway(pushReady)
             }
             configurationResult.postValue(status)
         }

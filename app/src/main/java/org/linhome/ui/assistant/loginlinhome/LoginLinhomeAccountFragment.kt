@@ -34,7 +34,7 @@ import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.FragmentAssistantLoginLinhomeBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.ui.assistant.CreatorAssistantFragment
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
@@ -75,7 +75,7 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                     hideProgress()
                     if (request != null) {
                         if (request.stringResponse == "OK") {
-                            Account.linhomeAccountCreateProxyConfig(model.accountCreator)
+                            LinhomeAccount.linhomeAccountCreateProxyConfig(model.accountCreator)
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                             DialogUtil.info("linhome_account_loggedin")
                             GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards

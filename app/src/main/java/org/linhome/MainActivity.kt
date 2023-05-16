@@ -26,7 +26,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.drawable.DrawableCompat.applyTheme
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -34,7 +33,7 @@ import androidx.navigation.findNavController
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ActivityMainBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.store.StorageManager
 import org.linhome.ui.tabbar.TabbarViewModel
 import org.linhome.ui.toolbar.ToobarButtonClickedListener
@@ -141,7 +140,7 @@ class MainActivity : GenericActivity() {
             onToolbarBackButtonClicked()
         }
 
-        if (!Account.configured() && (savedInstanceState == null || !savedInstanceState.getBoolean("ignored_no_account"))) {
+        if (!LinhomeAccount.configured() && (savedInstanceState == null || !savedInstanceState.getBoolean("ignored_no_account"))) {
             navController.navigate(R.id.navigation_assistant_root)
         }
 

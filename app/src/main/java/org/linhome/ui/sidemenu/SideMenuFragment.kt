@@ -34,7 +34,7 @@ import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.FragmentSidemenuBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.utils.DialogUtil
 
 class SideMenuFragment : Fragment() {
@@ -76,7 +76,7 @@ class SideMenuFragment : Fragment() {
                 "menu_disconnect",
                 "disconnect_confirm_message",
                 { _: DialogInterface, _: Int ->
-                    Account.disconnect()
+                    LinhomeAccount.disconnect()
                     getMainActivity().navControllerSideMenu.navigateUp()
                     getMainActivity().navController.navigate(R.id.navigation_assistant_root)
                 })

@@ -68,6 +68,7 @@ class LinhomeApplication : Application() {
             Factory.instance().setDebugMode(corePreferences.debugLogs, Texts.appName)
             Log.i("[Application] Core context created")
             coreContext = CoreContext(context, config, service, useAutoStartDescription)
+            DeviceStore // will add listener to core
             coreContext.start()
 
             // work around https://bugs.linphone.org/view.php?id=7714 - for demo purpose

@@ -32,7 +32,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import org.linhome.LinhomeApplication
 import org.linhome.databinding.FragmentAccountBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.utils.DialogUtil
 
 
@@ -65,7 +65,7 @@ class AccountFragment : Fragment() {
                 "menu_disconnect",
                 "disconnect_confirm_message",
                 { _: DialogInterface, _: Int ->
-                    Account.disconnect()
+                    LinhomeAccount.disconnect()
                     findNavController().navigateUp()
                 })
         }

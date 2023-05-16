@@ -27,10 +27,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantLoginSipBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.ui.assistant.CreatorAssistantFragment
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
@@ -68,7 +67,7 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             if (model.valid()) {
                 hideKeyboard()
                 showProgress()
-                Account.sipAccountLogin(
+                LinhomeAccount.sipAccountLogin(
                     model.accountCreator,
                     model.proxy.first.value,
                     model.expiration.first.value!!,
@@ -97,7 +96,7 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
                     null,
                     "failed_sip_login_modify_parameters",
                     { _: DialogInterface, _: Int ->
-                        Account.delete()
+                        LinhomeAccount.delete()
                     },
                     cancelTextKey = "no",
                     confirmTextKey = "yes")

@@ -24,16 +24,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.linhome.LinhomeApplication
 import org.linhome.customisation.Texts
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.linphonecore.extensions.toHumanReadable
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
-import org.linphone.core.ProxyConfig
 import org.linphone.core.RegistrationState
 
 class AccountViewModel : ViewModel() {
-    val account = Account.get()
-    val pushGw = Account.pushGateway()
+    val account = LinhomeAccount.get()
+    val pushGw = LinhomeAccount.pushGateway()
     val accountDesc = MutableLiveData(getDescription("account_info",account))
     val pushGWDesc = MutableLiveData(getDescription("push_account_info",pushGw))
 
@@ -78,7 +77,7 @@ class AccountViewModel : ViewModel() {
     }
 
     fun isLinhome() : Boolean {
-        return Account.get()?.let {
+        return LinhomeAccount.get()?.let {
             it.params.domain == LinhomeApplication.corePreferences.loginDomain
         }?:false
     }

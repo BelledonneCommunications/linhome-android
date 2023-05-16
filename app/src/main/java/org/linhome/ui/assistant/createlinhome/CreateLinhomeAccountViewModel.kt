@@ -22,7 +22,7 @@ package org.linhome.ui.assistant.createlinhome
 
 import androidx.lifecycle.MutableLiveData
 import org.linhome.LinhomeApplication.Companion.corePreferences
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.ui.assistant.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
@@ -49,7 +49,7 @@ class CreateLinhomeAccountViewModel :
         ) {
             if (status == AccountCreator.Status.AccountCreated)
                 creator?.also {
-                    Account.linhomeAccountCreateProxyConfig(creator)
+                    LinhomeAccount.linhomeAccountCreateProxyConfig(creator)
                 }
             status?.also {creationResult.postValue(it)}
         }

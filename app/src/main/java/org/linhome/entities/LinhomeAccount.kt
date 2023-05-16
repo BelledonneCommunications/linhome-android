@@ -31,7 +31,7 @@ import org.linphone.core.*
 import org.linphone.core.Account
 import org.linphone.core.tools.Log
 
-object Account {
+object LinhomeAccount {
 
     const val PUSH_GW_ID_KEY = "linhome_pushgateway"
 

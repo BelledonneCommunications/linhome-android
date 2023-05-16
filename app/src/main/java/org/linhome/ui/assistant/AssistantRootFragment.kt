@@ -28,7 +28,7 @@ import android.view.ViewGroup
 import org.linhome.GenericFragment
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantRootBinding
-import org.linhome.entities.Account
+import org.linhome.entities.LinhomeAccount
 import org.linhome.utils.DialogUtil
 
 class AssistantRootFragment : GenericFragment() {
@@ -56,12 +56,12 @@ class AssistantRootFragment : GenericFragment() {
     }
 
     private fun navigateToCompotent(componentResource: Int)  {
-        if (Account.configured()) {
+        if (LinhomeAccount.configured()) {
             DialogUtil.confirm(
                 "assistant_using_will_disconnect_title",
                 "assistant_using_will_disconnect_message",
                 { _: DialogInterface, _: Int ->
-                    Account.disconnect()
+                    LinhomeAccount.disconnect()
                     mainactivity.navController.navigate(componentResource)
                 })
         } else

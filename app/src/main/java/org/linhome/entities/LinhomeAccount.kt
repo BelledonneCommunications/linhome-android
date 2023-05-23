@@ -122,6 +122,14 @@ object LinhomeAccount {
     }
 
     fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
+
+        if (!corePreferences.automaticallyCreatePushGatewayAccount) {
+            Log.i("Skipping push gateway creation as disabled in config (section app/auto_create_push_gateway_account)")
+            pushReady.value = true
+            return
+        }
+
+
         coreContext.core.loadConfigFromXml(corePreferences.linhomeAccountDefaultValuesPath)
 
 

@@ -41,6 +41,12 @@ class CorePreferences constructor(private val context: Context) {
 
 
     /* Linhome */
+
+    val automaticallyCreatePushGatewayAccount: Boolean
+        get() {
+            return config.getBool("app", "auto_create_push_gateway_account", true)
+        }
+
     var showLatestSnapshot: Boolean
         get() {
             return config.getBool("devices", "latest_snapshot", true)

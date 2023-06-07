@@ -85,7 +85,7 @@ android {
         applicationId "org.linhome"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 27
+        versionCode 28
         versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -170,7 +170,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation "org.linphone:linphone-sdk-android:5.2.55"
+    implementation "org.linphone:linphone-sdk-android:5.2.65-pre.2+5688d2a"
     implementation 'com.github.permissions-dispatcher:permissionsdispatcher:4.9.2'
     kapt 'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2'
     implementation "com.google.android.material:material:1.8.0"

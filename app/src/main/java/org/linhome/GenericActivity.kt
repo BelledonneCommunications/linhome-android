@@ -23,6 +23,7 @@ package org.linhome
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.ensureCoreExists
 import org.linhome.utils.DialogUtil
@@ -33,6 +34,7 @@ abstract class GenericActivity(val allowsLandscapeOnSmartPhones: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ensureCoreExists(applicationContext)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     override fun onResume() {

@@ -192,7 +192,7 @@ class MainActivity : GenericActivity() {
         binding.appbar.progress.setBackgroundColor(Theme.getColor("color_j"))
     }
 
-    private fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup): Boolean {
+    fun tabBarLayoutClicked(clicked: ViewGroup, unclicked: ViewGroup): Boolean {
         if (clicked.isSelected)
             return false
         clicked.isSelected = true

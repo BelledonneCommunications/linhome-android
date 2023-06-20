@@ -122,7 +122,7 @@ class HistoryFragment : GenericFragment() {
             !historyViewModel.history.value!!.isEmpty()
         coreContext.notificationsManager.dismissMissedCallNotification()
         binding.loglist.adapter?.notifyDataSetChanged()
-
+        mainactivity.tabBarLayoutClicked(mainactivity.binding.appbar.contentmain.tabbarHistory, mainactivity.binding.appbar.contentmain.tabbarDevices)
     }
 
     fun enterEdition() {

@@ -33,6 +33,8 @@ import org.linhome.linphonecore.extensions.getString
 import org.linhome.linphonecore.extensions.isValid
 import org.linhome.store.DeviceStore.devices
 import org.linhome.store.DeviceStore.local_devices_fl_name
+import org.linhome.store.DeviceStore.readDevicesFromFriends
+import org.linhome.store.DeviceStore.saveLocalDevices
 import org.linhome.store.StorageManager.devicesXml
 import org.linphone.core.*
 import org.linphone.mediastream.Log
@@ -57,7 +59,8 @@ object DeviceStore {
                 if (core.getFriendListByName(local_devices_fl_name) == null) {
                     val localDevicesFriendList = core.createFriendList()
                     localDevicesFriendList?.displayName = local_devices_fl_name
-                    core.addFriendList(localDevicesFriendList) }
+                    core.addFriendList(localDevicesFriendList)
+                }
             }
             GlobalScope.launch(context = Dispatchers.Main) { // Leave one cycle to the core to create the friend list
                 if (!storageMigrated) {
@@ -176,11 +179,16 @@ object DeviceStore {
         devices.forEach { device ->
             val friend = device.friend
             if (!device.isRemotelyProvisionned) {
-                core.getFriendListByName(local_devices_fl_name)?.addFriend (friend)?.also {
-                    if (it != FriendList.Status.OK)
-                        Log.e("[DeviceStore] unable to save device to local friend list status: $it")
+                var localDevicesFriendList = core.getFriendListByName(local_devices_fl_name)
+                if (localDevicesFriendList == null) {
+                    Log.w("[DeviceStore] could not retrieve local friend list, creating a new one.")
+                    localDevicesFriendList = core.createFriendList()
+                    localDevicesFriendList.displayName = local_devices_fl_name
+                    core.addFriendList(localDevicesFriendList)
                 }
-
+                val addResult = localDevicesFriendList.addFriend(friend)
+                if (addResult != FriendList.Status.OK)
+                    Log.e("[DeviceStore] unable to save device to local friend list. status : $addResult")
             }
         }
     }

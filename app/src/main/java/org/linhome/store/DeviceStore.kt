@@ -176,8 +176,11 @@ object DeviceStore {
         devices.forEach { device ->
             val friend = device.friend
             if (!device.isRemotelyProvisionned) {
-                if (core.getFriendListByName(local_devices_fl_name)?.addFriend (friend) != FriendList.Status.OK)
-                    Log.e("[DeviceStore] unable to save device to local friend list.")
+                core.getFriendListByName(local_devices_fl_name)?.addFriend (friend)?.also {
+                    if (it != FriendList.Status.OK)
+                        Log.e("[DeviceStore] unable to save device to local friend list status: $it")
+                }
+
             }
         }
     }

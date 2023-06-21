@@ -57,4 +57,8 @@ class CallOutgoingActivity : CallGenericActivity() {
         } ?: finish()
     }
 
+    override fun onBackPressed() {
+
+    }
+
 }

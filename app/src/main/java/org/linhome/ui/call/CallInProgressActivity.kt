@@ -164,4 +164,8 @@ class CallInProgressActivity : CallGenericActivity() {
         DialogUtil.error("record_audio_permission_denied_dont_ask_again")
     }
 
+    override fun onBackPressed() {
+
+    }
+
 }

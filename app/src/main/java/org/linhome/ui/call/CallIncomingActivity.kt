@@ -28,6 +28,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import org.linhome.LinhomeApplication.Companion.coreContext
+import org.linhome.R
 import org.linhome.compatibility.Compatibility
 import org.linhome.databinding.ActivityCallIncomingBinding
 import org.linphone.core.Call
@@ -89,6 +90,10 @@ class CallIncomingActivity : CallGenericActivity() {
     override fun onPause() {
         coreContext.core.nativeVideoWindowId = null
         super.onPause()
+    }
+
+    override fun onBackPressed() {
+
     }
 
 }

@@ -624,6 +624,7 @@ class NotificationsManager(private val context: Context) {
         val answerIntent = Intent(context, NotificationBroadcastReceiver::class.java)
         answerIntent.action = INTENT_ANSWER_CALL_NOTIF_ACTION
         answerIntent.putExtra(INTENT_NOTIF_ID, callId)
+        answerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         val answerPendingIntent = PendingIntent.getBroadcast(
             context, callId, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

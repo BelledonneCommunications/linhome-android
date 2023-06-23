@@ -85,7 +85,7 @@ android {
         applicationId "org.linhome"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 28
+        versionCode 29
         versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -155,7 +155,6 @@ android {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.core:core-ktx:1.10.0'

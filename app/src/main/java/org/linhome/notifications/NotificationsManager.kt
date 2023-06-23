@@ -21,6 +21,7 @@ package org.linhome.notifications
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -87,7 +88,6 @@ class NotificationsManager(private val context: Context) {
     companion object {
         const val INTENT_NOTIF_ID = "NOTIFICATION_ID"
         const val INTENT_HANGUP_CALL_NOTIF_ACTION = "org.linhome.HANGUP_CALL_ACTION"
-        const val INTENT_ANSWER_CALL_NOTIF_ACTION = "org.linhome.ANSWER_CALL_ACTION"
 
         private const val SERVICE_NOTIF_ID = 1
         private const val MISSED_CALLS_NOTIF_ID = 2
@@ -449,7 +449,17 @@ class NotificationsManager(private val context: Context) {
                 .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
 
         if (!coreContext.gsmCallActive) {
-            notificationBuilder.addAction(getCallAnswerAction(notifiable.notificationId))
+            val notificationTrampolineActivityIntent =
+                Intent(context.applicationContext, MainActivity::class.java)
+            notificationTrampolineActivityIntent.putExtra("acceptCall",true)
+            val resultPendingIntent = TaskStackBuilder.create(context).run {
+                addNextIntentWithParentStack(notificationTrampolineActivityIntent)
+                getPendingIntent(
+                    0, PendingIntent.FLAG_UPDATE_CURRENT or
+                            PendingIntent.FLAG_IMMUTABLE
+                )
+            }
+            notificationBuilder.addAction(R.drawable.notification_phone, Texts.get("call_button_accept"), resultPendingIntent)
         }
 
         val notification = notificationBuilder.build()
@@ -521,6 +531,7 @@ class NotificationsManager(private val context: Context) {
         notify(MISSED_CALLS_NOTIF_ID, notification)
     }
 
+    @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun displayElsewhere(call: Call, declined: Boolean) {
 
         val pendingIntent = NavDeepLinkBuilder(context)
@@ -618,24 +629,6 @@ class NotificationsManager(private val context: Context) {
 
 
     /* Notifications actions */
-
-    private fun getCallAnswerAction(callId: Int): NotificationCompat.Action {
-
-        val answerIntent = Intent(context, NotificationBroadcastReceiver::class.java)
-        answerIntent.action = INTENT_ANSWER_CALL_NOTIF_ACTION
-        answerIntent.putExtra(INTENT_NOTIF_ID, callId)
-        answerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-        val answerPendingIntent = PendingIntent.getBroadcast(
-            context, callId, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        return NotificationCompat.Action.Builder(
-            R.drawable.notification_phone,
-            Texts.get("call_button_accept"),
-            answerPendingIntent
-        ).build()
-    }
 
     private fun getCallDeclineAction(callId: Int): NotificationCompat.Action {
         val hangupIntent = Intent(context, NotificationBroadcastReceiver::class.java)

@@ -34,7 +34,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra(NotificationsManager.INTENT_NOTIF_ID, 0)
 
-        if (intent.action == NotificationsManager.INTENT_ANSWER_CALL_NOTIF_ACTION || intent.action == NotificationsManager.INTENT_HANGUP_CALL_NOTIF_ACTION) {
+        if (intent.action == NotificationsManager.INTENT_HANGUP_CALL_NOTIF_ACTION) {
             val remoteAddress: String? =
                 coreContext.notificationsManager.getSipUriForCallNotificationId(notificationId)
             val core: Core = coreContext.core
@@ -44,15 +44,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 Log.e("[Notification Broadcast Receiver] Couldn't find call from remote address $remoteAddress")
                 return
             }
-
-            if (intent.action == NotificationsManager.INTENT_ANSWER_CALL_NOTIF_ACTION) {
-                call.extendedAccept()
-            } else {
-                if (call.state == Call.State.IncomingReceived || call.state == Call.State.IncomingEarlyMedia)
-                    call.decline(Reason.Declined)
-                else
-                    call.terminate()
-            }
+            if (call.state == Call.State.IncomingReceived || call.state == Call.State.IncomingEarlyMedia)
+                call.decline(Reason.Declined)
+            else
+                call.terminate()
         }
     }
 

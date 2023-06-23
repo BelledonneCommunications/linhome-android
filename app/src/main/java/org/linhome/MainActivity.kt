@@ -34,6 +34,7 @@ import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ActivityMainBinding
 import org.linhome.entities.LinhomeAccount
+import org.linhome.linphonecore.extensions.extendedAccept
 import org.linhome.store.StorageManager
 import org.linhome.ui.tabbar.TabbarViewModel
 import org.linhome.ui.toolbar.ToobarButtonClickedListener
@@ -153,6 +154,10 @@ class MainActivity : GenericActivity() {
             startWihInternalStorageWithPermissionCheck()
         else
             startWihExternalStorageWithPermissionCheck()
+
+        if (intent.extras?.getBoolean("acceptCall") == true) {
+            LinhomeApplication.coreContext.core.currentCall?.extendedAccept()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

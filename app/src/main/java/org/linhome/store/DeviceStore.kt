@@ -96,14 +96,26 @@ object DeviceStore {
         saveLocalDevices()
         readDevicesFromFriends()
         devicesXml.delete()
-        val isLinhomeAccount = !core.accountList.filter{it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY}.isEmpty() && core.accountList.filter{it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY}.first()?.params?.domain == LinhomeApplication.corePreferences.loginDomain
+        fetchVCards()
+        Log.i("[DeviceStore] migration done")
+    }
+
+    fun fetchVCards() {
+        val core = LinhomeApplication.coreContext.core
+        val isLinhomeAccount =
+            !core.accountList.filter { it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY }
+                .isEmpty() && core.accountList.filter { it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY }
+                .first()?.params?.domain == LinhomeApplication.corePreferences.loginDomain
         if (isLinhomeAccount) {
-            core.config?.setString( "misc", "contacts-vcard-list", "https://subscribe.linhome.org/contacts/vcard")
+            core.config?.setString(
+                "misc",
+                "contacts-vcard-list",
+                "https://subscribe.linhome.org/contacts/vcard"
+            )
             core.config?.sync()
             core.stop()
             core.start()
         }
-        Log.i("[DeviceStore] migration done")
     }
 
     init {

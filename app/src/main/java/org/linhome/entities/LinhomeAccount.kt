@@ -22,6 +22,9 @@ package org.linhome.entities
 
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
@@ -105,6 +108,9 @@ object LinhomeAccount {
                             linkProxiesWithPushGateway(pushReady)
                         else
                             createPushGateway(pushReady)
+                        GlobalScope.launch(context = Dispatchers.Main) {
+                            DeviceStore.fetchVCards()
+                        }
                     }
                     if (state == RegistrationState.Failed) {
                         coreContext.core.removeListener(coreListener)

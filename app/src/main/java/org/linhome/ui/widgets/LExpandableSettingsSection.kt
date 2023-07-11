@@ -56,6 +56,7 @@ class LExpandableSettingsSection : LinearLayout {
                 }
                 them.last().setVariable(BR.hideseparator, true)
             }
+            field = value
         }
 
     var title: String? = null
@@ -63,16 +64,19 @@ class LExpandableSettingsSection : LinearLayout {
             value?.also {
                 binding.title = Texts.get(it)
             }
+            field = value
         }
     var subtitle: String? = null
         set(value) {
             value?.also {
                 binding.subtitle = Texts.get(it)
             }
+            field = value
         }
     var enabled: Boolean? = null
         set(value) {
             binding.enabled = value
+            field = value
         }
 
     private fun init(

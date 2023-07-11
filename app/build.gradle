@@ -79,7 +79,7 @@ android {
         applicationId "org.linhome"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 29
+        versionCode 30
         versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

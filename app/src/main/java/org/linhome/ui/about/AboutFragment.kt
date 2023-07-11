@@ -50,6 +50,14 @@ class AboutFragment : Fragment() {
             startActivity(browserIntent)
         }
 
+        binding.privacyPolicy.setOnClickListener {
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(Texts.get("privacy_policy_link"))
+            )
+            startActivity(browserIntent)
+        }
+
         return binding.root
     }
 }

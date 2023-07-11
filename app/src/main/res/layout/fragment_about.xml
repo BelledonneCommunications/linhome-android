@@ -126,6 +126,17 @@
             text='@{"copyright_text"}'
             />
 
+        <TextView
+            android:id="@+id/privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="23dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/copyright"
+            style='@{"about_text"}'
+            text='@{"privacy_policy_text"}'
+            />
+
+
 
     </RelativeLayout>
 

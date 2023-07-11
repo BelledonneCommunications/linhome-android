@@ -24,6 +24,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -51,6 +52,7 @@ class LExpandableSettingsSection : LinearLayout {
             binding.items.removeAllViews()
             value?.also { them ->
                 for (i in them) {
+                    ((i.root.parent) as? ViewGroup)?.removeView(i.root)
                     binding.items.addView(i.root)
                     i.setVariable(BR.subsection, true)
                 }

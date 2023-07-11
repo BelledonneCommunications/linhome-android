@@ -107,6 +107,7 @@ object DeviceStore {
                 .isEmpty() && core.accountList.filter { it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY }
                 .first()?.params?.domain == LinhomeApplication.corePreferences.loginDomain
         if (isLinhomeAccount) {
+            Log.i("[DeviceStore] fetching vCards")
             core.config?.setString(
                 "misc",
                 "contacts-vcard-list",
@@ -115,7 +116,8 @@ object DeviceStore {
             core.config?.sync()
             core.stop()
             core.start()
-        }
+        } else
+            Log.i("[DeviceStore] No vards to fetch, as account not from the main domain ${LinhomeApplication.corePreferences.loginDomain}")
     }
 
     init {

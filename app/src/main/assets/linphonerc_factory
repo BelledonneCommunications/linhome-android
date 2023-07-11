@@ -48,5 +48,7 @@ max_calls=1
 history_max_size=100
 store_friends=1
 
+[proxy_default_values]
+reg_expires=31536000
 
 ## End of factory rc

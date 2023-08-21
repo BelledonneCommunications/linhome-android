@@ -30,6 +30,10 @@ import org.linphone.core.tools.Log
 
 fun Vcard.isValid():  Boolean {
    val card = this
+
+    if (card.sipAddresses.size == 0)
+        return false
+
     val validType =  card.getExtendedPropertiesValuesByName(Device.vcard_device_type_header)?.first()?.let {
         DeviceTypes.deviceTypeSupported(it)
     }?:false

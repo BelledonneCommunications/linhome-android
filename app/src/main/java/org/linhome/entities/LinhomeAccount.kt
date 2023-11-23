@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
+import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
 import org.linhome.store.DeviceStore
 import org.linphone.core.*
@@ -128,6 +129,15 @@ object LinhomeAccount {
     }
 
     fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
+
+        if (get()?.params?.domain == corePreferences.loginDomain) {
+            get()?.params?.clone()?.also { newParams ->
+                newParams?.pushNotificationAllowed = true
+                get()?.params = newParams
+            }
+            Log.i("No need to create a push gateway for this account, as it supports push notifications. setting push notification parameters instead")
+            return
+        }
 
         if (!corePreferences.automaticallyCreatePushGatewayAccount) {
             Log.i("Skipping push gateway creation as disabled in config (section app/auto_create_push_gateway_account)")

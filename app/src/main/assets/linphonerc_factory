@@ -51,4 +51,10 @@ store_friends=1
 [proxy_default_values]
 reg_expires=31536000
 
+[account_creator]
+backend=1
+url=https://subscribe.linhome.org/api/
+account_creation_token_retry_minutes=60
+
+
 ## End of factory rc

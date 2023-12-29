@@ -20,20 +20,14 @@
 
 package org.linhome.entities
 
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
-import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.cleanHistory
 import org.linhome.store.DeviceStore
-import org.linphone.core.*
 import org.linphone.core.Account
-import org.linphone.core.tools.Log
+import org.linphone.core.CoreListenerStub
 
 object LinhomeAccount {
 
@@ -45,7 +39,7 @@ object LinhomeAccount {
         return coreContext.core.accountList.isNotEmpty()
     }
 
-    fun get(): org.linphone.core.Account? {
+    fun get(): Account? {
         coreContext.core.accountList.forEach {
             if (PUSH_GW_ID_KEY != it.params.idkey)
                 return it
@@ -53,156 +47,23 @@ object LinhomeAccount {
         return null
     }
 
-    fun linhomeAccountCreateProxyConfig(accountCreator: AccountCreator) {
-        accountCreator.createProxyConfig()
-        coreContext.core.accountList.first()?.also { account ->
-            account.findAuthInfo()?.also { authInfo ->
-                authInfo.clone().also { clonedAuthInfo ->
-                    coreContext.core.removeAuthInfo(authInfo)
-                    clonedAuthInfo.algorithm = corePreferences.passwordAlgo
-                    coreContext.core.addAuthInfo(clonedAuthInfo)
-                }
-            }
-            val params = account.params.clone()
-            params.pushNotificationAllowed = true
-            account.params = params
-        }
-    }
-
-    fun sipAccountLogin(
-        accountCreator: AccountCreator,
-        proxy: String?,
-        expiration: String,
-        pushReady: MutableLiveData<Boolean>,
-        sipRegistered: MutableLiveData<Boolean>
-    ) {
-        val transports = arrayOf("udp","tcp","tls")
-        accountCreator.createProxyConfig()
-        if (coreContext.core.accountList.isEmpty()) {
-            sipRegistered.value = false
-            return
-        }
-        coreContext.core.accountList.first()?.also { account ->
-            Log.i("[Account] created proxyConfig with domain ${account.params.domain}")
-            account.params.clone().also { newParams ->
-                newParams.expires = expiration.toInt()
-                if (!TextUtils.isEmpty(proxy)) {
-                    Factory.instance().createAddress((if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + proxy!! + ";transport="+transports.get(accountCreator.transport.toInt())).also {
-                        newParams.setRoutesAddresses(arrayOf(it))
-                    }
-                    Log.i("[Account] Set proxyConfig server address to ${newParams.routesAddresses} for proxyConfig with domain $newParams.domain}")
-                }
-                account.params = newParams
-            }
-
-            coreListener = object : CoreListenerStub() {
-                override fun onAccountRegistrationStateChanged(
-                    core: Core,
-                    account: Account,
-                    state: RegistrationState?,
-                    message: String
-                ) {
-                    if (state == RegistrationState.Ok) {
-                        coreContext.core.removeListener(coreListener)
-                        sipRegistered.value = true
-                        if (pushGateway() != null)
-                            linkProxiesWithPushGateway(pushReady)
-                        else
-                            createPushGateway(pushReady)
-                        GlobalScope.launch(context = Dispatchers.Main) {
-                            DeviceStore.fetchVCards()
-                        }
-                    }
-                    if (state == RegistrationState.Failed) {
-                        coreContext.core.removeListener(coreListener)
-                        sipRegistered.value = false
-                    }
-                }
-            }
-            coreContext.core.addListener(coreListener)
-            account.refreshRegister()
-        }
-    }
-
-    fun pushGateway(): org.linphone.core.Account? {
+    fun pushGateway(): Account? {
         return coreContext.core.getAccountByIdkey(PUSH_GW_ID_KEY)
     }
 
-    fun createPushGateway(pushReady: MutableLiveData<Boolean>) {
-
-        if (get()?.params?.domain == corePreferences.loginDomain) {
-            get()?.params?.clone()?.also { newParams ->
-                newParams?.pushNotificationAllowed = true
-                get()?.params = newParams
-            }
-            Log.i("No need to create a push gateway for this account, as it supports push notifications. setting push notification parameters instead")
-            return
-        }
-
-        if (!corePreferences.automaticallyCreatePushGatewayAccount) {
-            Log.i("Skipping push gateway creation as disabled in config (section app/auto_create_push_gateway_account)")
-            pushReady.value = true
-            return
-        }
-
-
-        coreContext.core.loadConfigFromXml(corePreferences.linhomeAccountDefaultValuesPath)
-
-
-        val xmlRpcSession = corePreferences.xmlRpcServerUrl?.let {
-            coreContext.core.createXmlRpcSession(
-                it
-            )
-        }
-        val xmlRpcRequest =
-            xmlRpcSession?.createRequest(XmlRpcArgType.StringStruct, "create_push_account")
-        xmlRpcRequest?.addStringArg(coreContext.core.userAgent)
-        corePreferences.loginDomain?.let { xmlRpcRequest?.addStringArg(it) }
-        corePreferences.passwordAlgo?.let { xmlRpcRequest?.addStringArg(it) }
-
-        xmlRpcRequest?.addListener { request ->
-            val responseValues = request.listResponse
-            if (request.status == XmlRpcStatus.Ok) {
-                coreContext.core.createAccountParams().also { params ->
-                    params.idkey = PUSH_GW_ID_KEY
-                    params.isRegisterEnabled = true
-                    params.isPublishEnabled = false
-                    params.expires = 31536000
-                    Factory.instance().createAddress("sips:${responseValues.get(1)};transport=tls")?.also {
-                        params.setRoutesAddresses(arrayOf(it))
-                    }
-                    params.pushNotificationAllowed = true
-                    coreContext.core.createAddress("sip:${responseValues.get(0)}@${responseValues.get(1)}")?.let {
-                        params.setIdentityAddress(it)
-                    }
-                    val authInfo = Factory.instance().createAuthInfo(responseValues.get(0),responseValues.get(0),null,responseValues.get(2),responseValues.get(1),responseValues.get(1))
-                    coreContext.core.addAuthInfo(authInfo)
-                    val pushGw = coreContext.core.createAccount(params)
-                    coreContext.core.addAccount(pushGw)
-                    linkProxiesWithPushGateway(pushReady)
-                }
-            } else {
-                pushReady.value = false
-            }
-        }
-        if (xmlRpcRequest != null) {
-            xmlRpcSession.sendRequest(xmlRpcRequest)
-        }
-
-    }
-
-    fun linkProxiesWithPushGateway(pushReady: MutableLiveData<Boolean>) {
-        pushGateway()?.also { pgw ->
+    fun linkProxiesWithPushAccount(pushReady: MutableLiveData<Boolean>) {
+        pushGateway()?.also { pushAccount ->
             coreContext.core.accountList.forEach {
                 if (it.params.idkey != PUSH_GW_ID_KEY) {
-                    it.dependency = pgw
-                    pgw.params.clone().also { clonedParams ->
+                    it.dependency = pushAccount
+                    pushAccount.params.clone().also { clonedParams ->
                         clonedParams.expires = it.params.expires
-                        pgw.params = clonedParams
-                        pgw.refreshRegister()
+                        pushAccount.params = clonedParams
+                        pushAccount.refreshRegister()
                     }
                 }
             }
+            enablePushAccount(pushAccount)
         }
         pushReady.value = true
     }
@@ -210,12 +71,16 @@ object LinhomeAccount {
 
     fun disconnect() {
         coreContext.core.accountList.forEach {
-            it.params.clone().also { newParams ->
-                newParams.expires = 0
-                newParams.pushNotificationAllowed = false
-                it.params = newParams
+            if (it.params?.idkey == PUSH_GW_ID_KEY) {
+                disablePushAccount(it)
+            } else {
+                it.params.clone().also { newParams ->
+                    newParams.expires = 0
+                    it.params = newParams
+                }
+                it.refreshRegister()
+                coreContext.core.removeAccount(it)
             }
-            coreContext.core.removeAccount(it)
         }
         coreContext.core.cleanHistory()
         coreContext.core.provisioningUri = null
@@ -225,9 +90,19 @@ object LinhomeAccount {
         DeviceStore.clearRemoteProvisionnedDevicesUponLogout()
     }
 
-    fun delete() {
-        coreContext.core.accountList.forEach {
-            coreContext.core.removeAccount(it)
+     fun disablePushAccount(pushAccount:Account) {
+        pushAccount.params.clone().also {
+            it.expires = 0
+            pushAccount.params = it
+            pushAccount.refreshRegister()
+        }
+    }
+
+    fun enablePushAccount(pushAccount:Account) {
+        pushAccount.params.clone().also {
+            it.expires = corePreferences.config.getInt( "proxy_default_values","reg_expires", 31536000)
+            pushAccount.params = it
+            pushAccount.refreshRegister()
         }
     }
 

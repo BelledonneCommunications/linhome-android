@@ -27,26 +27,26 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.entities.LinhomeAccount
+import org.linhome.ui.assistant.shared.FlexiApiPushAccountCreationViewModel
 import org.linphone.core.Config.ConfiguringState
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 
 
-class RemoteAnyAccountViewModel : ViewModel() {
+class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel() {
 
     var url: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> = Pair(MutableLiveData(), MutableLiveData(false))
 
     var configurationResult = MutableLiveData<ConfiguringState>()
-    val pushReady = MutableLiveData<Boolean>()
 
 
     private val coreListener = object : CoreListenerStub() {
         override fun onConfiguringStatus(core: Core, status: ConfiguringState, message: String?) {
             if (status == ConfiguringState.Successful) {
                 if (LinhomeAccount.pushGateway() != null) {
-                    LinhomeAccount.linkProxiesWithPushGateway(pushReady)
+                    LinhomeAccount.linkProxiesWithPushAccount(pushReady)
                 } else
-                    LinhomeAccount.createPushGateway(pushReady)
+                    createPushAccount()
             }
             configurationResult.postValue(status)
         }

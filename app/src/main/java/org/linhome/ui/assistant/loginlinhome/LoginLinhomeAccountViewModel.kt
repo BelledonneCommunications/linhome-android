@@ -22,7 +22,9 @@ package org.linhome.ui.assistant.loginlinhome
 
 import androidx.lifecycle.MutableLiveData
 import org.linhome.LinhomeApplication.Companion.corePreferences
-import org.linhome.ui.assistant.CreatorAssistantViewModel
+import org.linhome.ui.assistant.shared.CreatorAssistantViewModel
+import org.linphone.core.AccountCreator
+import org.linphone.core.AccountCreatorListenerStub
 
 class LoginLinhomeAccountViewModel :
     CreatorAssistantViewModel(corePreferences.linhomeAccountDefaultValuesPath) {
@@ -32,8 +34,38 @@ class LoginLinhomeAccountViewModel :
     var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
+    var accountCreatorResult = MutableLiveData<AccountCreator.Status>()
+
     fun fieldsValid(): Boolean {
         return username.second.value!! && pass1.second.value!!
     }
+
+    init {
+        creatorListener = object : AccountCreatorListenerStub() {
+            override fun onIsAccountExist(
+                creator: AccountCreator,
+                status: AccountCreator.Status?,
+                response: String?
+            ) {
+                status?.also {
+                    accountCreatorResult.value = it
+                }
+                accountCreator.removeListener(creatorListener)
+            }
+        }
+    }
+
+    fun fireLogin() {
+        if (accountCreator.isAccountExist() == AccountCreator.Status.RequestOk) {
+            accountCreator.addListener(creatorListener)
+        } else {
+            accountCreatorResult.value = AccountCreator.Status.UnexpectedError
+        }
+    }
+
+    // Login does not require token
+    override fun onFlexiApiTokenReceived() {}
+
+    override fun onFlexiApiTokenRequestError() {}
 
 }

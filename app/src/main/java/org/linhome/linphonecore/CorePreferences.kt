@@ -70,22 +70,25 @@ class CorePreferences constructor(private val context: Context) {
         get() = config.getString("default_actions", "action_1_type", null)?.let { type ->
             config.getString("default_actions", "action_1_code", null)?.let { code ->
                 Action(type,code)
-            } ?: null
-        } ?:null
+            }
+        }
 
     val defaultAction2: Action?
         get() = config.getString("default_actions", "action_2_type", null)?.let { type ->
             config.getString("default_actions", "action_2_code", null)?.let { code ->
                 Action(type,code)
-            } ?: null
-        } ?:null
+            }
+        }
 
     val defaultAction3: Action?
         get() = config.getString("default_actions", "action_3_type", null)?.let { type ->
             config.getString("default_actions", "action_3_code", null)?.let { code ->
                 Action(type,code)
-            } ?: null
-        } ?:null
+            }
+        }
+
+    val flexiApiTimeOutSeconds: Int
+        get() = config.getInt( "assistant",  "flexiapi_token_request_timeout_seconds", 10)
 
 
     // Todo - review necessary portion (copied from Linphone)
@@ -235,4 +238,28 @@ class CorePreferences constructor(private val context: Context) {
             md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())
         ).toString(16).padStart(32, '0')
     }
+
+    var flexiApiToken: String?
+        get () {
+            val token = config.getString("account_creator", "account_creation_token", "")
+            if (token.isNullOrEmpty()) {
+                return null
+            }
+            val tokenValidity = config.getInt64( "account_creator","account_creation_token_retry_minutes", 60)
+            val tokenStoreTime = config.getInt64( "account_creator", "account_creation_token_store_time", 0)
+            val epoch = System.currentTimeMillis() / 1000
+            if (tokenStoreTime + tokenValidity * 60 > epoch) {
+                return token
+            } else {
+                config.setString("account_creator", "account_creation_token", "")
+                return null
+            }
+        }
+        set(value)  {
+            config.setString("account_creator", "account_creation_token", value)
+            val epoch = System.currentTimeMillis() / 1000
+            config.setInt64("account_creator","account_creation_token_store_time",
+                (if (value != null) epoch else 0).toInt()
+            )
+        }
 }

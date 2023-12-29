@@ -14,13 +14,6 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
-    maven {
-        name "linphone.org maven repository"
-        url "https://linphone.org/maven_repository"
-        content {
-            includeGroup "org.linphone"
-        }
-    }
 }
 
 task zipTheme(type: Zip){
@@ -137,11 +130,6 @@ android {
                 }
             }
         }
-
-        /*packagingOptions {
-            exclude 'META-INF/DEPENDENCIES'
-        }*/
-
     }
 
     compileOptions {

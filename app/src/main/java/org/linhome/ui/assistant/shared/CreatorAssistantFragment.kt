@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.linhome.ui.assistant
+package org.linhome.ui.assistant.shared
 
 import org.linhome.GenericFragment
 import org.linhome.customisation.Texts

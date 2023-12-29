@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,9 +36,11 @@ import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.FragmentAssistantLoginLinhomeBinding
 import org.linhome.entities.LinhomeAccount
-import org.linhome.ui.assistant.CreatorAssistantFragment
+import org.linhome.ui.assistant.shared.CreatorAssistantFragment
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
+import org.linphone.core.AccountCreator
+import org.linphone.core.Core
 import org.linphone.core.XmlRpcArgType
 
 
@@ -64,40 +67,21 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
             if (model.fieldsValid()) {
                 hideKeyboard()
                 showProgress()
-                val xmlRpcSession = corePreferences.xmlRpcServerUrl?.let { it1 ->
-                    LinhomeApplication.coreContext.core.createXmlRpcSession(
-                        it1
-                    )
-                }
-                val xmlRpcRequest =
-                    xmlRpcSession?.createRequest(XmlRpcArgType.String, "check_authentication")
-                xmlRpcRequest?.addListener { request ->
+                model.accountCreatorResult.observe(viewLifecycleOwner) { response ->
                     hideProgress()
-                    if (request != null) {
-                        if (request.stringResponse == "OK") {
-                            LinhomeAccount.linhomeAccountCreateProxyConfig(model.accountCreator)
-                            mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                            DialogUtil.info("linhome_account_loggedin")
-                            GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards
-                                coreContext.core.stop()
-                                coreContext.core.start()
-                            }
-                            } else {
-                            binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
+                    if (response == AccountCreator.Status.AccountExist) {
+                        model.linhomeAccountCreateProxyConfig(model.accountCreator)
+                        mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+                        DialogUtil.info("linhome_account_loggedin")
+                        GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards
+                            coreContext.core.stop()
+                            coreContext.core.start()
                         }
+                    } else {
+                        binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
                     }
                 }
-                xmlRpcRequest?.addStringArg(model.username.first.value!!)
-                xmlRpcRequest?.addStringArg(
-                    corePreferences.encryptedPass(
-                        model.username.first.value!!,
-                        model.pass1.first.value!!
-                    )
-                )
-                corePreferences.loginDomain?.let { it1 -> xmlRpcRequest?.addStringArg(it1) }
-                if (xmlRpcRequest != null) {
-                    xmlRpcSession?.sendRequest(xmlRpcRequest)
-                }
+                model.fireLogin()
             }
         }
 

@@ -21,11 +21,14 @@
 package org.linhome.ui.assistant.createlinhome
 
 import androidx.lifecycle.MutableLiveData
+import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.entities.LinhomeAccount
-import org.linhome.ui.assistant.CreatorAssistantViewModel
+import org.linhome.linphonecore.CorePreferences
+import org.linhome.ui.assistant.shared.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
+import org.linphone.core.tools.Log
 
 class CreateLinhomeAccountViewModel :
     CreatorAssistantViewModel(corePreferences.linhomeAccountDefaultValuesPath) {
@@ -39,23 +42,61 @@ class CreateLinhomeAccountViewModel :
     var pass2: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
-    var creationResult = MutableLiveData<AccountCreator.Status>()
-
-    private val creatorListener = object : AccountCreatorListenerStub() {
-        override fun onCreateAccount(
-            creator: AccountCreator,
-            status: AccountCreator.Status?,
-            resp: String?
-        ) {
-            if (status == AccountCreator.Status.AccountCreated)
-                creator?.also {
-                    LinhomeAccount.linhomeAccountCreateProxyConfig(creator)
-                }
-            status?.also {creationResult.postValue(it)}
-        }
-    }
+    var creationResult = MutableLiveData<AccountCreator.Status?>()
 
     init {
+        creatorListener = object : AccountCreatorListenerStub() {
+            override fun onCreateAccount(
+                creator: AccountCreator,
+                status: AccountCreator.Status?,
+                resp: String?
+            ) {
+                if (status == AccountCreator.Status.AccountCreated) {
+                    Log.i("[Assistant] [Account Creation] Account created")
+                    corePreferences.flexiApiToken = null
+                    linhomeAccountCreateProxyConfig(creator)
+                    creationResult.value = status
+                } else if (status == AccountCreator.Status.MissingArguments) {
+                    Log.i("[Assistant] [Account Creation] Creation request not authorized, requesting a new token.")
+                    corePreferences.flexiApiToken = null
+                    requestFlexiApiToken()
+                } else {
+                    creationResult.value = status!!
+                    Log.e("[Assistant] [Account Creation] fail creating an account $status")
+                }
+            }
+
+            override fun onIsAccountExist(
+                creator: AccountCreator,
+                status: AccountCreator.Status?,
+                response: String?
+            ) {
+                if (status == AccountCreator.Status.AccountExist) {
+                    Log.i("[Assistant] [Account Creation] Account exists")
+                    creationResult.value = status
+                } else if (status == AccountCreator.Status.AccountNotExist) {
+                    val status = accountCreator.createAccount()
+                    Log.i("[Assistant] [Account Creation] Account create returned $status")
+                    if (status != AccountCreator.Status.RequestOk) {
+                        creationResult.value = status
+                    }
+                } else {
+                    creationResult.value = status
+                    Log.e("[Assistant] [Account Creation] fail verifying if account exists $status")
+                }
+            }
+
+            override fun onSendToken(
+                creator: AccountCreator,
+                status: AccountCreator.Status?,
+                response: String?
+            ) {
+                Log.i("[Assistant] [Account Creation] get push token $status $response")
+                if (status == AccountCreator.Status.RequestTooManyRequests) {
+                    creationResult.value = status
+                }
+            }
+        }
         accountCreator.addListener(creatorListener)
     }
 
@@ -66,6 +107,32 @@ class CreateLinhomeAccountViewModel :
     override fun onCleared() {
         accountCreator.removeListener(creatorListener)
         super.onCleared()
+    }
+
+
+    fun create() {
+        val token = corePreferences.flexiApiToken
+        if (token != null) {
+            accountCreator.token = token
+            Log.i("[Assistant] [Account Creation] We already have an auth token from FlexiAPI ${token}, continue")
+            onFlexiApiTokenReceived()
+        } else {
+            Log.i("[Assistant] [Account Creation] Requesting an auth token from FlexiAPI")
+            requestFlexiApiToken()
+        }
+    }
+    override fun onFlexiApiTokenReceived() {
+        Log.i("[Assistant] [Account Creation] Using FlexiAPI auth token ${accountCreator.token}]")
+        val status = accountCreator.isAccountExist()
+        Log.i("[Assistant] [Account Creation] Account exists returned ${status})")
+        if (status != AccountCreator.Status.RequestOk) {
+            creationResult.value = status
+        }
+    }
+
+    override fun onFlexiApiTokenRequestError() {
+        Log.e("[Assistant] [Account Creation] Failed to get an auth token from FlexiAPI")
+        creationResult.value = AccountCreator.Status.UnexpectedError
     }
 
 

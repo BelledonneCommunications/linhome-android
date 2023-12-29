@@ -30,7 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantLoginSipBinding
 import org.linhome.entities.LinhomeAccount
-import org.linhome.ui.assistant.CreatorAssistantFragment
+import org.linhome.ui.assistant.shared.CreatorAssistantFragment
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
 import org.linphone.core.TransportType
@@ -67,15 +67,13 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             if (model.valid()) {
                 hideKeyboard()
                 showProgress()
-                LinhomeAccount.sipAccountLogin(
+                model.sipAccountLogin(
                     model.accountCreator,
                     model.proxy.first.value,
                     model.expiration.first.value!!,
                     model.pushReady,
                     model.sipRegistered
                 )
-            } else {
-                DialogUtil.toast("ouille")
             }
         }
         model.pushReady.observe(viewLifecycleOwner, Observer { pushready ->
@@ -90,13 +88,12 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
         })
 
         model.sipRegistered.observe(viewLifecycleOwner, Observer { sipRegistered ->
-            hideProgress()
             if (!sipRegistered) {
                 DialogUtil.confirm(
                     null,
                     "failed_sip_login_modify_parameters",
                     { _: DialogInterface, _: Int ->
-                        LinhomeAccount.delete()
+                        LinhomeAccount.disconnect()
                     },
                     cancelTextKey = "no",
                     confirmTextKey = "yes")

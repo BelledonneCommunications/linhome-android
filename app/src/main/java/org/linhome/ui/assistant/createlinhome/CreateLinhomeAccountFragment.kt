@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.linhome.R
 import org.linhome.customisation.Texts
 import org.linhome.databinding.FragmentAssistantCreateLinhomeBinding
-import org.linhome.ui.assistant.CreatorAssistantFragment
+import org.linhome.ui.assistant.shared.CreatorAssistantFragment
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
 import org.linphone.core.AccountCreator
@@ -76,6 +76,20 @@ class CreateLinhomeAccountFragment :
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                             DialogUtil.info("linhome_account_created", model.username.first.value!!)
                         }
+                        AccountCreator.Status.RequestTooManyRequests -> {
+                            binding.username.setError(
+                                Texts.get(
+                                    "account_creator_token_requests_failed_too_many"
+                                )
+                            )
+                        }
+                        AccountCreator.Status.UnexpectedError -> {
+                            binding.username.setError(
+                                Texts.get(
+                                    "account_creator_token_requests_failed_generic"
+                                )
+                            )
+                        }
                         else -> {
                             binding.username.setError(
                                 Texts.get(
@@ -86,11 +100,7 @@ class CreateLinhomeAccountFragment :
                         }
                     }
                 })
-                if (model.accountCreator.createAccount() != AccountCreator.Status.RequestOk) {
-                    hideProgress()
-                    binding.create.isEnabled = true
-                    DialogUtil.error("linhome_account_creation_request_failed")
-                }
+                model.create()
             }
         }
 

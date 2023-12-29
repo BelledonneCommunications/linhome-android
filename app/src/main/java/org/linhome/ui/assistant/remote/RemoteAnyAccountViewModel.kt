@@ -27,7 +27,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.entities.LinhomeAccount
-import org.linphone.core.ConfiguringState
+import org.linphone.core.Config.ConfiguringState
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 

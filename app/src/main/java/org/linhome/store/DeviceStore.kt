@@ -70,8 +70,8 @@ object DeviceStore {
                 }
             }
         }
-        override fun onConfiguringStatus(core: Core, status: ConfiguringState?, message: String?) {
-            if (status == ConfiguringState.Successful) {
+        override fun onConfiguringStatus(core: Core, status: Config.ConfiguringState?, message: String?) {
+            if (status == Config.ConfiguringState.Successful) {
                 readDevicesFromFriends()
             }
         }

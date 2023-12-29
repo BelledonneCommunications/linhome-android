@@ -28,6 +28,7 @@ import org.linhome.LinhomeApplication
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.entities.LinhomeAccount
+import org.linhome.linphonecore.CoreContext
 import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.getString
 import org.linhome.linphonecore.extensions.isValid
@@ -223,7 +224,8 @@ object DeviceStore {
 
     fun findDeviceByAddress(address: Address): Device? {
         devices.forEach {
-            if (it.address.equals(address.asStringUriOnly()))
+            val deviceAddress = LinhomeApplication.coreContext.core.createAddress(it.address)
+            if (deviceAddress?.username == address.username && deviceAddress?.domain == address.domain)
                 return it
         }
         return null

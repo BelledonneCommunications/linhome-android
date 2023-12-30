@@ -23,6 +23,7 @@ package org.linhome
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,6 +39,7 @@ class SplashActivity : GenericActivity() {
         val uiOptions: Int =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         decorView.systemUiVisibility = uiOptions
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         DataBindingUtil.setContentView(this, R.layout.activity_splash) as ActivitySplashBinding
 

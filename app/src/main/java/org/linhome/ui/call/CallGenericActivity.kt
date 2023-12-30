@@ -23,6 +23,7 @@ package org.linhome.ui.call
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import com.google.android.gms.common.images.Size
 import org.linhome.GenericActivity
 import org.linhome.LinhomeApplication.Companion.coreContext
@@ -41,6 +42,8 @@ abstract class CallGenericActivity : GenericActivity() {
         val uiOptions: Int =
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         decorView.systemUiVisibility = uiOptions
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
 
         call = intent.getStringExtra("callId")?.let { callId ->
             if (intent.getBooleanExtra("closeAppUponCallFinish", false)) {

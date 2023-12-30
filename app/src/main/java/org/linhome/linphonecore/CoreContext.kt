@@ -212,7 +212,7 @@ class CoreContext(
     init {
         if (service != null) {
             org.linphone.core.tools.Log.i("[Context] Starting foreground service")
-            notificationsManager.startForeground(service, useAutoStartDescription)
+            notificationsManager.startForegroundToKeepAppAlive(service, useAutoStartDescription)
         }
         core = Factory.instance().createCoreWithConfig(coreConfig, context)
         stopped = false

@@ -39,6 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
+import org.linphone.compatibility.Api34Compatibility
 import org.linphone.mediastream.Version
 import java.io.File
 
@@ -193,7 +194,7 @@ class Compatibility {
 
 
 
-        // Lindoor
+        // Linhome
 
         fun fileObserverWithMainThreadRunnable(file: File, runnable: Runnable): FileObserver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -214,5 +215,36 @@ class Compatibility {
                 }
             }
         }
+        fun startCallForegroundService(
+            service: Service,
+            notifId: Int,
+            notif: Notification,
+            isCallActive: Boolean
+        ) {
+            if (Version.sdkAboveOrEqual(Version.API34_ANDROID_14_UPSIDE_DOWN_CAKE)) {
+                Api34Compatibility.startCallForegroundService(service, notifId, notif, isCallActive)
+            } else {
+                startForegroundService(service, notifId, notif)
+            }
+        }
+
+        fun startDataSyncForegroundService(
+            service: Service,
+            notifId: Int,
+            notif: Notification,
+            isCallActive: Boolean
+        ) {
+            if (Version.sdkAboveOrEqual(Version.API34_ANDROID_14_UPSIDE_DOWN_CAKE)) {
+                Api34Compatibility.startDataSyncForegroundService(
+                    service,
+                    notifId,
+                    notif,
+                    isCallActive
+                )
+            } else {
+                startForegroundService(service, notifId, notif)
+            }
+        }
     }
+
 }

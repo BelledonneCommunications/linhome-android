@@ -234,7 +234,7 @@ class NotificationsManager(private val context: Context) {
 
         val coreService = service
         if (coreService != null) {
-            startForeground(coreService, useAutoStartDescription = false)
+            startForeground(coreService)
         } else {
             Log.w("[Notifications Manager] Can't start service as foreground without a service, starting it now")
             val intent = Intent()
@@ -268,35 +268,107 @@ class NotificationsManager(private val context: Context) {
         }
     }
 
-    fun startForeground(coreService: CoreService, useAutoStartDescription: Boolean = true) {
+    private fun startForeground(coreService: CoreService) {
         service = coreService
 
-        if (serviceNotification == null) {
-            createServiceNotification(useAutoStartDescription)
-            if (serviceNotification == null) {
-                Log.e("[Notifications Manager] Failed to create service notification, aborting foreground service!")
-                return
-            }
+        val notification = serviceNotification ?: createServiceNotification(false)
+        if (notification == null) {
+            Log.e(
+                "[Notifications Manager] Failed to create service notification, aborting foreground service!"
+            )
+            return
         }
 
         currentForegroundServiceNotificationId = SERVICE_NOTIF_ID
-        Log.i("[Notifications Manager] Starting service as foreground [$currentForegroundServiceNotificationId]")
-        Compatibility.startForegroundService(coreService, currentForegroundServiceNotificationId, serviceNotification)
+        Log.i(
+            "[Notifications Manager] Starting service as foreground [$currentForegroundServiceNotificationId]"
+        )
+
+        val core = coreContext.core
+        val isActiveCall = if (core.callsNb > 0) {
+            val currentCall = core.currentCall ?: core.calls.first()
+            when (currentCall.state) {
+                Call.State.IncomingReceived, Call.State.IncomingEarlyMedia, Call.State.OutgoingInit, Call.State.OutgoingProgress, Call.State.OutgoingRinging -> false
+                else -> true
+            }
+        } else {
+            false
+        }
+
+        Compatibility.startDataSyncForegroundService(
+            coreService,
+            currentForegroundServiceNotificationId,
+            notification,
+            isActiveCall
+        )
     }
 
-    private fun startForeground(notificationId: Int, callNotification: Notification) {
-        if (currentForegroundServiceNotificationId == 0 && service != null) {
-            Log.i("[Notifications Manager] Starting Service as foreground using call notification")
-            currentForegroundServiceNotificationId = notificationId
-            service?.startForeground(currentForegroundServiceNotificationId, callNotification)
+    fun startForegroundToKeepAppAlive(
+        coreService: CoreService,
+        useAutoStartDescription: Boolean = true
+    ) {
+        service = coreService
+
+        val notification = serviceNotification ?: createServiceNotification(useAutoStartDescription)
+        if (notification == null) {
+            Log.e(
+                "[Notifications Manager] Failed to create service notification, aborting foreground service!"
+            )
+            return
+        }
+
+        currentForegroundServiceNotificationId = SERVICE_NOTIF_ID
+        Log.i(
+            "[Notifications Manager] Starting service as foreground [$currentForegroundServiceNotificationId]"
+        )
+
+        Compatibility.startDataSyncForegroundService(
+            coreService,
+            currentForegroundServiceNotificationId,
+            notification,
+            false
+        )
+    }
+
+    private fun startForeground(
+        notificationId: Int,
+        callNotification: Notification,
+        isCallActive: Boolean
+    ) {
+        val coreService = service
+        if (coreService != null && (currentForegroundServiceNotificationId == 0 || currentForegroundServiceNotificationId == notificationId)) {
+            Log.i(
+                "[Notifications Manager] Starting service as foreground using call notification [$notificationId]"
+            )
+            try {
+                currentForegroundServiceNotificationId = notificationId
+
+                Compatibility.startCallForegroundService(
+                    coreService,
+                    currentForegroundServiceNotificationId,
+                    callNotification,
+                    isCallActive
+                )
+            } catch (e: Exception) {
+                Log.e("[Notifications Manager] Foreground service wasn't allowed! $e")
+                currentForegroundServiceNotificationId = 0
+            }
+        } else {
+            Log.w(
+                "[Notifications Manager] Can't start foreground service using notification id [$notificationId] (current foreground service notification id is [$currentForegroundServiceNotificationId]) and service [$coreService]"
+            )
         }
     }
 
-    private fun stopForegroundNotification() {
+    fun stopForegroundNotification() {
         if (service != null) {
-            Log.i("[Notifications Manager] Stopping Service as foreground")
+            if (currentForegroundServiceNotificationId != 0) {
+                Log.i(
+                    "[Notifications Manager] Stopping service as foreground [$currentForegroundServiceNotificationId]"
+                )
+                currentForegroundServiceNotificationId = 0
+            }
             service?.stopForeground(true)
-            currentForegroundServiceNotificationId = 0
         }
     }
 
@@ -324,7 +396,7 @@ class NotificationsManager(private val context: Context) {
         service = null
     }
 
-    private fun createServiceNotification(useAutoStartDescription: Boolean = false) {
+    private fun createServiceNotification(useAutoStartDescription: Boolean = false): Notification? {
         val pendingIntent = NavDeepLinkBuilder(context)
             .setComponentName(MainActivity::class.java)
             .setGraph(R.navigation.fragments_graph)
@@ -348,6 +420,7 @@ class NotificationsManager(private val context: Context) {
                 .setOngoing(true)
                 .setColor(ContextCompat.getColor(context, R.color.color_a))
                 .build()
+        return serviceNotification;
     }
 
     /* Call related */
@@ -469,7 +542,7 @@ class NotificationsManager(private val context: Context) {
 
 
         if (useAsForeground) {
-            startForeground(notifiable.notificationId, notification)
+            startForeground(notifiable.notificationId, notification, false)
         }
 
         val fakeTextureView = TextureView(LinhomeApplication.instance.applicationContext)
@@ -614,7 +687,7 @@ class NotificationsManager(private val context: Context) {
         notify(notifiable.notificationId, notification)
 
         if (useAsForeground) {
-            startForeground(notifiable.notificationId, notification)
+            startForeground(notifiable.notificationId, notification, false)
         }
     }
 

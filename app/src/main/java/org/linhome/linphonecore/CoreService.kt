@@ -38,12 +38,12 @@ class CoreService : CoreService() {
         if (LinhomeApplication.corePreferences.keepServiceAlive) {
             Log.i("[Service] Starting as foreground to keep app alive in background")
             if (!ensureCoreExists(applicationContext, service = this, useAutoStartDescription = false, force = false)) {
-                coreContext.notificationsManager.startForeground(this, false)
+                coreContext.notificationsManager.startForegroundToKeepAppAlive(this, false)
             }
         } else if (intent?.extras?.get("StartForeground") == true) {
             Log.i("[Service] Starting as foreground due to device boot or app update")
             if (!ensureCoreExists(applicationContext, service = this, useAutoStartDescription = true, force = false)) {
-                coreContext.notificationsManager.startForeground(this, true)
+                coreContext.notificationsManager.startForegroundToKeepAppAlive(this, true)
             }
             coreContext.checkIfForegroundServiceNotificationCanBeRemovedAfterDelay(5000)
         } else {

@@ -109,6 +109,11 @@ class CoreContext(
 
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {
+
+        override fun onPushNotificationReceived(core: Core, payload: String?) {
+            org.linphone.core.tools.Log.i("[Context] Push notification received: $payload")
+        }
+
         override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
             Log.i("[Context] Global state changed [$state]")
             if (state == GlobalState.On) {
@@ -125,7 +130,7 @@ class CoreContext(
             Log.i("[Context] Call state changed [$state]")
             if (state == Call.State.IncomingReceived) {
 
-                if (state == Call.State.IncomingReceived && core.callsNb > 1) {
+                if (core.callsNb > 1) {
                     call.decline(Reason.Busy)
                     return
                     }

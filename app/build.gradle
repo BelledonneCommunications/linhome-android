@@ -9,6 +9,9 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
     maven {
+        url "https://linphone.org/maven_repository"
+    }
+    maven {
         url file('../linphone-sdk/maven_repository/')
     }
     maven {

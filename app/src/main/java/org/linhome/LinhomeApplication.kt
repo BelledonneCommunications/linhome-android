@@ -47,7 +47,8 @@ class LinhomeApplication : Application() {
             context: Context,
             service: CoreService? = null,
             useAutoStartDescription: Boolean = false,
-            force: Boolean = false) : Boolean {
+            force: Boolean = false,
+            startService: Boolean = true) : Boolean {
 
             if (!force && ::coreContext.isInitialized && !coreContext.stopped) {
                 return false
@@ -69,7 +70,7 @@ class LinhomeApplication : Application() {
             Log.i("[Application] Core context created")
             coreContext = CoreContext(context, config, service, useAutoStartDescription)
             DeviceStore // will add listener to core
-            coreContext.start()
+            coreContext.start(startService = startService)
 
             // work around https://bugs.linphone.org/view.php?id=7714 - for demo purpose
             if (corePreferences.config.getBool("app","first_launch", true)) {

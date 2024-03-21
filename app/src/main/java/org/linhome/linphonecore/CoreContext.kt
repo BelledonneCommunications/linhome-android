@@ -20,6 +20,7 @@
 package org.linhome.linphonecore
 
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_PHONE_STATE
 import android.content.Context
 import android.content.Intent
@@ -46,6 +47,7 @@ import org.linhome.utils.DialogUtil
 import org.linphone.core.*
 import org.linphone.mediastream.Log
 import org.linphone.mediastream.Version
+import permissions.dispatcher.RuntimePermissions
 import java.io.File
 import java.util.*
 import kotlin.math.abs
@@ -219,7 +221,8 @@ class CoreContext(
         Log.i("[Context] Ready")
     }
 
-    fun start(isPush: Boolean = false) {
+
+    fun start(isPush: Boolean = false, startService: Boolean = true) {
         Log.i("[Context] Starting")
 
         notificationsManager.onCoreReady()
@@ -236,7 +239,8 @@ class CoreContext(
 
         initPhoneStateListener()
 
-        if (corePreferences.keepServiceAlive) {
+        if (corePreferences.keepServiceAlive && Compatibility.hasPermission(context,
+                POST_NOTIFICATIONS)) {
             org.linphone.core.tools.Log.i("[Context] Background mode setting is enabled, starting Service")
             notificationsManager.startForeground()
         }

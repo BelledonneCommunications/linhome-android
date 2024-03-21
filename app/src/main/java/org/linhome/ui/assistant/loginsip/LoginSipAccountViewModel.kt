@@ -44,12 +44,12 @@ class LoginSipAccountViewModel :
     FlexiApiPushAccountCreationViewModel() {
 
     var username: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
+        Pair(MutableLiveData("cd1"), MutableLiveData<Boolean>(false))
     var domain: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
+        Pair(MutableLiveData("sip.linphone.org"), MutableLiveData<Boolean>(false))
     var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
-    var transport: MutableLiveData<Int> = MutableLiveData<Int>(0)
+        Pair(MutableLiveData("cd1"), MutableLiveData<Boolean>(false))
+    var transport: MutableLiveData<Int> = MutableLiveData<Int>(2)
     var proxy: Pair<MutableLiveData<String?>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var expiration: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> = Pair(

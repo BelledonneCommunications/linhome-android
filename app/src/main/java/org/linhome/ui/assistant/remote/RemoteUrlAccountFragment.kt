@@ -31,7 +31,7 @@ import org.linhome.R
 import org.linhome.databinding.FragmentAssistantRemoteUrlBinding
 import org.linhome.ui.validators.ValidatorFactory
 import org.linhome.utils.DialogUtil
-import org.linphone.core.Config.ConfiguringState
+import org.linphone.core.ConfiguringState
 
 class RemoteUrlAccountFragment : GenericFragment() {
 

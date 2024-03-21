@@ -34,7 +34,7 @@ import org.linhome.databinding.FragmentAssistantRemoteQrBinding
 import org.linhome.utils.DialogUtil
 import org.linhome.utils.extensions.invisible
 import org.linhome.utils.extensions.toogleVisible
-import org.linphone.core.Config.ConfiguringState
+import org.linphone.core.ConfiguringState
 import org.linphone.core.tools.Log
 
 class RemoteQrAccountFragment : GenericFragment() {

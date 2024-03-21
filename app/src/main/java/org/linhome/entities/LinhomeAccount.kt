@@ -86,7 +86,7 @@ object LinhomeAccount {
         coreContext.core.provisioningUri = null
         coreContext.core.config.setString("misc","config-uri",null)
         coreContext.core.stop()
-        LinhomeApplication.ensureCoreExists(coreContext.context, force = true)
+        LinhomeApplication.ensureCoreExists(coreContext.context, force = true, startService = false)
         DeviceStore.clearRemoteProvisionnedDevicesUponLogout()
     }
 

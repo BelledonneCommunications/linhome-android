@@ -26,7 +26,7 @@ import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
 import org.linphone.core.tools.Log
 
-open class  FlexiApiPushAccountCreationViewModel : CreatorAssistantViewModel(LinhomeApplication.corePreferences.linhomeAccountDefaultValuesPath) {
+open class  FlexiApiPushAccountCreationViewModel(defaultValuePath: String) : CreatorAssistantViewModel(defaultValuePath) {
 
     val pushReady = MutableLiveData<Boolean>()
 

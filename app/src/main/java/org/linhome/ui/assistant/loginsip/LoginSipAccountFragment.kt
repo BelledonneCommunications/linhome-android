@@ -68,10 +68,8 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
                 hideKeyboard()
                 showProgress()
                 model.sipAccountLogin(
-                    model.accountCreator,
                     model.proxy.first.value,
                     model.expiration.first.value!!,
-                    model.pushReady,
                     model.sipRegistered
                 )
             }

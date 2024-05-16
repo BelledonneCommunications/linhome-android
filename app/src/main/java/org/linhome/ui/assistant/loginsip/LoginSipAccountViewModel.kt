@@ -41,14 +41,14 @@ import org.linphone.core.TransportType
 import org.linphone.core.tools.Log
 
 class LoginSipAccountViewModel :
-    FlexiApiPushAccountCreationViewModel() {
+    FlexiApiPushAccountCreationViewModel(corePreferences.sipAccountDefaultValuesPath) {
 
     var username: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData("cd1"), MutableLiveData<Boolean>(false))
+        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var domain: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData("sip.linphone.org"), MutableLiveData<Boolean>(false))
+        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
-        Pair(MutableLiveData("cd1"), MutableLiveData<Boolean>(false))
+        Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var transport: MutableLiveData<Int> = MutableLiveData<Int>(2)
     var proxy: Pair<MutableLiveData<String?>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
@@ -67,20 +67,18 @@ class LoginSipAccountViewModel :
     var coreListener : CoreListenerStub? = null
 
     fun sipAccountLogin(
-        accountCreator: AccountCreator,
         proxy: String?,
         expiration: String,
-        pushReady: MutableLiveData<Boolean>,
         sipRegistered: MutableLiveData<Boolean>
     ) {
         val transports = arrayOf("udp","tcp","tls")
-        accountCreator.createProxyConfig()
+        accountCreator.createAccountInCore()
         if (LinhomeApplication.coreContext.core.accountList.isEmpty()) {
             sipRegistered.value = false
             return
         }
         LinhomeApplication.coreContext.core.accountList.first()?.also { account ->
-            Log.i("[Account] created proxyConfig with domain ${account.params.domain}")
+            Log.i("[Account] created Account with domain ${account.params.domain}")
             account.params.clone().also { newParams ->
                 newParams.expires = expiration.toInt()
                 if (!TextUtils.isEmpty(proxy)) {

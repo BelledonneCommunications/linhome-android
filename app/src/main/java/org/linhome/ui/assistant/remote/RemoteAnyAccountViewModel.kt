@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.entities.LinhomeAccount
 import org.linhome.ui.assistant.shared.FlexiApiPushAccountCreationViewModel
@@ -33,7 +34,7 @@ import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 
 
-class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel() {
+class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel(LinhomeApplication.corePreferences.linhomeAccountDefaultValuesPath) {
 
     var url: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> = Pair(MutableLiveData(), MutableLiveData(false))
 

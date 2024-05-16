@@ -61,7 +61,7 @@ class AssistantRootFragment : GenericFragment() {
                 "assistant_using_will_disconnect_title",
                 "assistant_using_will_disconnect_message",
                 { _: DialogInterface, _: Int ->
-                    LinhomeAccount.disconnect()
+                    LinhomeAccount.disconnect(deletePushAccount = componentResource == R.id.navigation_assistant_remote_root)
                     mainactivity.navController.navigate(componentResource)
                 })
         } else

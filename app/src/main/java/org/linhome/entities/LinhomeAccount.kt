@@ -69,9 +69,9 @@ object LinhomeAccount {
     }
 
 
-    fun disconnect() {
+    fun disconnect(deletePushAccount:Boolean = false) {
         coreContext.core.accountList.forEach {
-            if (it.params?.idkey == PUSH_GW_ID_KEY) {
+            if (!deletePushAccount && it.params?.idkey == PUSH_GW_ID_KEY) {
                 disablePushAccount(it)
             } else {
                 it.params.clone().also { newParams ->

@@ -37,7 +37,7 @@ import org.linphone.core.CoreListenerStub
 import org.linphone.core.tools.Log
 
 
-class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel(LinhomeApplication.corePreferences.linhomeAccountDefaultValuesPath) {
+class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel(corePreferences.linhomeAccountDefaultValuesPath) {
 
     var url: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> = Pair(MutableLiveData(), MutableLiveData(false))
 
@@ -47,17 +47,7 @@ class RemoteAnyAccountViewModel : FlexiApiPushAccountCreationViewModel(LinhomeAp
     private val coreListener = object : CoreListenerStub() {
         override fun onConfiguringStatus(core: Core, status: ConfiguringState, message: String?) {
             if (status == ConfiguringState.Successful) {
-                GlobalScope.launch(context = Dispatchers.Main) {
-                    if (LinhomeAccount.get()?.params?.domain != corePreferences.loginDomain) {
-                        if (LinhomeAccount.pushGateway() != null) {
-                            LinhomeAccount.linkProxiesWithPushAccount(pushReady)
-                        } else
-                            createPushAccount()
-                    } else {
-                        pushReady.value = true
-                        Log.i("Remote provisioning - no need to create/link push gateway, as domain ${corePreferences.loginDomain} is managed by flexisip already.")
-                    }
-                }
+                handlePushAccount()
             }
             configurationResult.postValue(status)
         }

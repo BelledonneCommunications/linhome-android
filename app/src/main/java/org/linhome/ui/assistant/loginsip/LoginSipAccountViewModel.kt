@@ -100,10 +100,7 @@ class LoginSipAccountViewModel :
                     if (state == RegistrationState.Ok) {
                         LinhomeApplication.coreContext.core.removeListener(coreListener)
                         sipRegistered.value = true
-                        if (LinhomeAccount.pushGateway() != null)
-                            LinhomeAccount.linkProxiesWithPushAccount(pushReady)
-                        else
-                            createPushAccount()
+                        handlePushAccount()
                         GlobalScope.launch(context = Dispatchers.Main) {
                             DeviceStore.fetchVCards()
                         }

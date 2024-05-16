@@ -20,6 +20,9 @@
 package org.linhome.ui.assistant.shared
 
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linhome.entities.LinhomeAccount
 import org.linphone.core.AccountCreator
@@ -107,6 +110,20 @@ open class  FlexiApiPushAccountCreationViewModel(defaultValuePath: String) : Cre
     override fun onFlexiApiTokenRequestError() {
         Log.e("[Assistant] [Push Account Creation] Failed to get an auth token from FlexiAPI")
         pushReady.value = false
+    }
+
+    fun handlePushAccount() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            if (LinhomeAccount.get()?.params?.domain != LinhomeApplication.corePreferences.loginDomain) {
+                if (LinhomeAccount.pushGateway() != null) {
+                    LinhomeAccount.linkProxiesWithPushAccount(pushReady)
+                } else
+                    createPushAccount()
+            } else {
+                pushReady.value = true
+                Log.i("[Assistant] - no need to create/link push gateway, as domain ${LinhomeApplication.corePreferences.loginDomain} is managed by flexisip already.")
+            }
+        }
     }
 
 }

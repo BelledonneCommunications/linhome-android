@@ -45,7 +45,7 @@ class CorePreferences constructor(private val context: Context) {
 
     val automaticallyCreatePushGatewayAccount: Boolean
         get() {
-            return config.getBool("app", "auto_create_push_gateway_account", true)
+            return config.getBool("app", "auto_create_push_gateway_account", false)
         }
 
     var showLatestSnapshot: Boolean

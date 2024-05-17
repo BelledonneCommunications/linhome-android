@@ -20,26 +20,28 @@
 
 package org.linhome.store
 
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
+import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.entities.Action
 import org.linhome.entities.Device
 import org.linhome.entities.LinhomeAccount
-import org.linhome.linphonecore.CoreContext
-import org.linhome.linphonecore.CorePreferences
 import org.linhome.linphonecore.extensions.getString
 import org.linhome.linphonecore.extensions.isValid
-import org.linhome.store.DeviceStore.devices
-import org.linhome.store.DeviceStore.local_devices_fl_name
-import org.linhome.store.DeviceStore.readDevicesFromFriends
-import org.linhome.store.DeviceStore.saveLocalDevices
 import org.linhome.store.StorageManager.devicesXml
-import org.linphone.core.*
+import org.linphone.core.Address
+import org.linphone.core.Config
+import org.linphone.core.ConfiguringState
+import org.linphone.core.Core
+import org.linphone.core.CoreListenerStub
+import org.linphone.core.Factory
+import org.linphone.core.FriendList
+import org.linphone.core.FriendListListenerStub
+import org.linphone.core.GlobalState
 import org.linphone.mediastream.Log
-import kotlin.text.Typography.section
 
 object DeviceStore {
 
@@ -50,6 +52,27 @@ object DeviceStore {
     val local_devices_fl_name = "local_devices"
 
     var storageMigrated = false
+
+    var serverFriendList: FriendList? = null
+
+    var mutableDevices: MutableLiveData<ArrayList<Device>>? = null
+    var syncFailed: MutableLiveData<Boolean>? = null
+
+    private val  serverFriendListListener: FriendListListenerStub = object : FriendListListenerStub() {
+        override fun onSyncStatusChanged(
+            friendList: FriendList,
+            status: FriendList.SyncStatus?,
+            message: String?
+        ) {
+            Log.i("[DeviceStore] remote list onSyncStatusChanged ${friendList.displayName} ${status} ${message}")
+            if (status == FriendList.SyncStatus.Successful) {
+                readDevicesFromFriends()
+            }
+            if (status == FriendList.SyncStatus.Failure) {
+                syncFailed?.value = true
+            }
+        }
+    }
 
 
     private val coreListener: CoreListenerStub = object : CoreListenerStub() {
@@ -77,8 +100,21 @@ object DeviceStore {
             }
         }
         override fun onFriendListCreated(core: Core, friendList: FriendList) {
+            Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
+            if (corePreferences.vcardListUrl.equals(friendList.displayName) && serverFriendList == null) {
+                serverFriendList = friendList
+                friendList.addListener(serverFriendListListener)
+            }
             if (core.globalState == GlobalState.On) {
                 Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
+                readDevicesFromFriends()
+            }
+        }
+        override fun onFriendListRemoved(core: Core, friendList: FriendList) {
+            Log.i("[DeviceStore] friend list removed. ${friendList.displayName}")
+            if (corePreferences.vcardListUrl.equals(friendList.displayName)) {
+                serverFriendList = null
+                friendList.removeListener(serverFriendListListener)
                 readDevicesFromFriends()
             }
         }
@@ -102,6 +138,7 @@ object DeviceStore {
     }
 
     fun fetchVCards() {
+        Log.i("[DeviceStore] fetchVCards")
         val core = LinhomeApplication.coreContext.core
         val isLinhomeAccount =
             !core.accountList.filter { it.params?.idkey != LinhomeAccount.PUSH_GW_ID_KEY }
@@ -136,26 +173,20 @@ object DeviceStore {
                 Log.e("[DeviceStore] unable to create device from card (card is null or invdalid) : ${friend.vcard?.asVcard4String()} ")
             }
         }
-        LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
-            Log.i("[DeviceStore] Found contacts-vcard-list url : ${url} ")
-            LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
-                Log.i("[DeviceStore] Found remote friend list : ${serverFriendList.displayName} ")
-                serverFriendList.friends.forEach { friend ->
-                    Log.i("[DeviceStore] Found remote friend  : ${friend.name} ")
-                    val card = friend.vcard
-                    if (card != null && card.isValid()) {
-                        val device = Device(card!!, true)
-                        if (devices.filter { it.address == device.address }.isEmpty())
-                            devices.add(device)
-                        Log.i("[DeviceStore] added remote device : ${friend.vcard?.asVcard4String()} ")
-                    } else {
-                        Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")
-                    }
-                }
+        serverFriendList?.friends?.forEach { friend ->
+            Log.i("[DeviceStore] Found remote friend  : ${friend.name} ")
+            val card = friend.vcard
+            if (card != null && card.isValid()) {
+                val device = Device(card!!, true)
+                if (devices.filter { it.address == device.address }.isEmpty())
+                    devices.add(device)
+                Log.i("[DeviceStore] added remote device : ${friend.vcard?.asVcard4String()} ")
+            } else {
+                Log.e("[DeviceStore] received invalid or malformed vCard from remote : ${friend.vcard?.asVcard4String()} ")
             }
         }
-
         devices.sortWith(compareBy({ it.name }, { it.address }))
+        mutableDevices?.value = devices
     }
 
     fun readFromXml(): ArrayList<Device> {
@@ -241,12 +272,10 @@ object DeviceStore {
     }
 
     fun clearRemoteProvisionnedDevicesUponLogout() {
-        LinhomeApplication.coreContext.core.config.getString("misc","contacts-vcard-list",null)?.also { url ->
-            Log.i("[DeviceStore] Found contacts-vcard-list url : ${url} ")
-            LinhomeApplication.coreContext.core.getFriendListByName(url)?.also { serverFriendList ->
-                LinhomeApplication.coreContext.core.removeFriendList(serverFriendList)
-                readDevicesFromFriends()
-            }
+        serverFriendList?.also { serverFriendList ->
+            Log.i("[DeviceStore] removing server friend list (remotely provisionning devices)")
+            LinhomeApplication.coreContext.core.removeFriendList(serverFriendList)
+            readDevicesFromFriends()
         }
     }
 

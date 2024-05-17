@@ -33,7 +33,9 @@ import org.linhome.GenericFragment
 import org.linhome.LinhomeApplication
 import org.linhome.databinding.FragmentDevicesBinding
 import org.linhome.entities.Device
+import org.linhome.store.DeviceStore
 import org.linhome.utils.DialogUtil
+import org.linphone.mediastream.Log
 
 class DevicesFragment : GenericFragment() {
 
@@ -97,13 +99,16 @@ class DevicesFragment : GenericFragment() {
             }
         }
 
-        binding.swiperefresh?.isEnabled = true
-        devicesViewModel.friendListUpdatedOk.observe(viewLifecycleOwner, { updateOk ->
+        devicesViewModel.devices.observe(viewLifecycleOwner, { devices ->
+            Log.i("[DevicesFragment] $devices ")
             (binding.deviceList.adapter as RecyclerView.Adapter).notifyDataSetChanged()
             binding.swiperefresh?.isRefreshing = false
-            if (updateOk != true) {
+        })
+
+        devicesViewModel.syncFailed.observe(viewLifecycleOwner, { syncFailed ->
+            binding.swiperefresh?.isRefreshing = false
+            if (syncFailed)
                 DialogUtil.error("vcard_sync_failed")
-            }
         })
 
         binding.swiperefresh?.setOnRefreshListener {
@@ -111,12 +116,7 @@ class DevicesFragment : GenericFragment() {
                 binding.swiperefresh?.isRefreshing = false
                 DialogUtil.error("no_network")
             } else if (LinhomeApplication.coreContext.core.callsNb == 0) {
-                LinhomeApplication.coreContext.core.config?.getString("misc", "contacts-vcard-list", null)?.also  { remoteFlName ->
-                    LinhomeApplication.coreContext.core.getFriendListByName(remoteFlName)?.also { serverFriendList ->
-                        serverFriendList.addListener(devicesViewModel.friendListListener)
-                        serverFriendList.synchronizeFriendsFromServer()
-                    }
-                }
+                DeviceStore.serverFriendList?.synchronizeFriendsFromServer()
             }
         }
 
@@ -133,10 +133,10 @@ class DevicesFragment : GenericFragment() {
                 binding.newDevice.visibility = View.VISIBLE
                 binding.newDeviceNoneConfigured?.visibility = View.GONE
             }
-
         } else {
             binding.newDevice.visibility = View.VISIBLE
         }
+        binding.swiperefresh?.isEnabled = DeviceStore.serverFriendList != null
     }
 
 }

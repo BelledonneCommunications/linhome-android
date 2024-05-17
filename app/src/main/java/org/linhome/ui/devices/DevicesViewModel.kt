@@ -33,43 +33,16 @@ class DevicesViewModel : ViewModel() {
         value = DeviceStore.devices
     }
     var selectedDevice = MutableLiveData<Device?>()
-    var friendListUpdatedOk = MutableLiveData<Boolean>()
-
-    val friendListListener: FriendListListenerStub = object : FriendListListenerStub() {
-        override fun onSyncStatusChanged(
-            friendList: FriendList,
-            status: FriendList.SyncStatus?,
-            message: String?
-        ) {
-            if (status == FriendList.SyncStatus.Successful || status == FriendList.SyncStatus.Failure) {
-                devices.value = DeviceStore.devices
-                friendListUpdatedOk.value = status == FriendList.SyncStatus.Successful
-            }
-        }
-    }
-
-    private val coreListener: CoreListenerStub = object : CoreListenerStub() {
-        override fun onGlobalStateChanged(core: Core, state: GlobalState, message: String) {
-            Log.i("[Context] Global state changed [$state]")
-            if (state == GlobalState.On) {
-                DeviceStore.readDevicesFromFriends()
-                devices.value = DeviceStore.devices
-            }
-        }
-        override fun onFriendListCreated(core: Core, friendList: FriendList) {
-            Log.i("[DeviceStore] friend list created. ${friendList.displayName}")
-            DeviceStore.readDevicesFromFriends()
-            devices.value = DeviceStore.devices
-            friendListUpdatedOk.value = true
-        }
-    }
+    var syncFailed = MutableLiveData<Boolean>(false)
 
     init {
-        LinhomeApplication.coreContext.core.addListener(coreListener)
+        DeviceStore.mutableDevices = devices
+        DeviceStore.syncFailed = syncFailed
     }
 
     override fun onCleared() {
-        LinhomeApplication.coreContext.core.removeListener(coreListener)
+        DeviceStore.mutableDevices = null
+        DeviceStore.syncFailed = null
     }
 
 }

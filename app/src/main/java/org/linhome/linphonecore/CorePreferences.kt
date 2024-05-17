@@ -30,6 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.text.Typography.section
 
 class CorePreferences constructor(private val context: Context) {
     private var _config: Config? = null
@@ -171,6 +172,13 @@ class CorePreferences constructor(private val context: Context) {
             config.setString("assistant", "domain", value)
         }
 
+    /* VCard */
+
+    var vcardListUrl: String?
+        get() = config.getString("misc", "contacts-vcard-list", null)
+        set(value) {
+            config.setString("misc", "contacts-vcard-list", value)
+        }
 
     /* Assets stuff */
 

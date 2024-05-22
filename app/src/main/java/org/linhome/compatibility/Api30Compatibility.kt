@@ -27,14 +27,6 @@ import org.linphone.core.tools.Log
 @TargetApi(30)
 class Api30Compatibility {
     companion object {
-        fun hasReadPhoneNumbersPermission(context: Context): Boolean {
-            val granted = Compatibility.hasPermission(context, Manifest.permission.READ_PHONE_NUMBERS)
-            if (granted) {
-                Log.d("[Permission Helper] Permission READ_PHONE_NUMBERS is granted")
-            } else {
-                Log.w("[Permission Helper] Permission READ_PHONE_NUMBERS is denied")
-            }
-            return granted
-        }
+
     }
 }

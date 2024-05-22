@@ -81,14 +81,6 @@ class Compatibility {
             }
         }
 
-        // See https://developer.android.com/about/versions/11/privacy/permissions#phone-numbers
-        fun hasReadPhoneStateOrNumbersPermission(context: Context): Boolean {
-            return if (Version.sdkAboveOrEqual(Version.API30_ANDROID_11)) {
-                Api30Compatibility.hasReadPhoneNumbersPermission(context)
-            } else {
-                hasPermission(context,READ_PHONE_STATE)
-            }
-        }
 
         fun hasPermission(context: Context, permission: String): Boolean {
             return when (Version.sdkAboveOrEqual(Version.API23_MARSHMALLOW_60)) {

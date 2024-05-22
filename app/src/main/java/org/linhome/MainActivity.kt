@@ -21,15 +21,22 @@
 package org.linhome
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ActivityMainBinding
@@ -40,6 +47,7 @@ import org.linhome.ui.tabbar.TabbarViewModel
 import org.linhome.ui.toolbar.ToobarButtonClickedListener
 import org.linhome.ui.toolbar.ToolbarViewModel
 import org.linhome.utils.DialogUtil
+import org.linphone.core.tools.Log
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
@@ -149,14 +157,14 @@ class MainActivity : GenericActivity() {
             binding.appbar.contentmain.tabbarHistory.performClick()
         }
 
-
-        if (StorageManager.storePrivately)
-            startWihInternalStorageWithPermissionCheck()
-        else
-            startWihExternalStorageWithPermissionCheck()
-
         if (intent.extras?.getBoolean("acceptCall") == true) {
             LinhomeApplication.coreContext.core.currentCall?.extendedAccept()
+        }
+
+        if (!StorageManager.storePrivately) {
+            externalStorageWithPermissionCheck()
+        } else {
+            phoneStateWithPermissionCheck()
         }
     }
 
@@ -253,7 +261,6 @@ class MainActivity : GenericActivity() {
         }
     }
 
-    @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -264,46 +271,69 @@ class MainActivity : GenericActivity() {
             onRequestPermissionsResult(requestCode, grantResults)
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS)
-    fun startWihExternalStorage() { LinhomeApplication.coreContext.initPhoneStateListener()}
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun externalStorage() {
+        phoneStateWithPermissionCheck()
+    }
 
-    @NeedsPermission(Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS)
-    fun startWihInternalStorage() { LinhomeApplication.coreContext.initPhoneStateListener()}
+    @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
+    fun phoneState() {
+        LinhomeApplication.coreContext.initPhoneStateListener()
+        notificationsWithPermissionCheck()
+    }
 
-    // Notifications permissions
+    @NeedsPermission(Manifest.permission.POST_NOTIFICATIONS)
+    fun notifications() {}
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @OnPermissionDenied(Manifest.permission.POST_NOTIFICATIONS)
-    fun onNotificationDenied() { DialogUtil.error("notifications_permission_denied") }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @OnNeverAskAgain(Manifest.permission.POST_NOTIFICATIONS)
-    fun onNotificationsDeniedNeverAsk() { DialogUtil.error("notifications_permission_denied_dont_ask_again") }
-
-    // Telephony related permissions
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    @OnPermissionDenied(Manifest.permission.READ_PHONE_NUMBERS)
-    fun onNumbersDenied() { DialogUtil.error("phone_state_permission_denied") }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    @OnNeverAskAgain(Manifest.permission.READ_PHONE_NUMBERS)
-    fun onNumbersDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
-
-    @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
-    fun onPhoneDenied() { DialogUtil.error("phone_state_permission_denied") }
-
-    @OnNeverAskAgain(Manifest.permission.READ_PHONE_STATE)
-    fun onPhoneDeniedNeverAsk() { DialogUtil.error("phone_state_permission_denied_dont_ask_again") }
-
-    // Storage related permissions
+    // Permissions denial
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onStorageDenied() { DialogUtil.error("write_external_storage_permission_denied") }
-
+    fun onStorageDenied() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("write_external_storage_permission_denied",{ _: DialogInterface, _: Int ->
+                phoneStateWithPermissionCheck()
+            })
+        }
+    }
     @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun onStorageDeniedNeverAsk() { DialogUtil.error("write_external_storage_permission_denied_dont_ask_again") }
+    fun onStorageDeniedNeverAsk() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("write_external_storage_permission_denied_dont_ask_again",{ _: DialogInterface, _: Int ->
+                phoneStateWithPermissionCheck()
+            })
+        }
+    }
 
+    @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
+    fun onPhoneDenied() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("phone_state_permission_denied",{ _: DialogInterface, _: Int ->
+                notificationsWithPermissionCheck()
+            })
+        }
+    }
+    @OnNeverAskAgain(Manifest.permission.READ_PHONE_STATE)
+    fun onPhoneDeniedNeverAsk() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("phone_state_permission_denied_dont_ask_again",{ _: DialogInterface, _: Int ->
+                notificationsWithPermissionCheck()
+            })
+        }
+    }
+
+    @OnPermissionDenied(Manifest.permission.POST_NOTIFICATIONS)
+    fun onNotificationDenied() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("notifications_permission_denied")
+        }
+    }
+
+    @OnNeverAskAgain(Manifest.permission.POST_NOTIFICATIONS)
+    fun onNotificationsDeniedNeverAsk() {
+        GlobalScope.launch(context = Dispatchers.Main) {
+            DialogUtil.error("notifications_permission_denied_dont_ask_again")
+        }
+    }
 
     fun applyCommonTheme() {
         window.also { window ->

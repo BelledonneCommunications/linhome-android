@@ -26,14 +26,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.AudioManager
-import android.os.Handler
-import android.os.Looper
 import android.os.Vibrator
-import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.TypedValue
-import android.view.*
-import kotlinx.coroutines.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.linhome.LinhomeApplication
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.R
@@ -45,12 +52,21 @@ import org.linhome.ui.call.CallIncomingActivity
 import org.linhome.ui.call.CallOutgoingActivity
 import org.linhome.utils.DialogUtil
 import org.linphone.compatibility.PhoneStateInterface
-import org.linphone.core.*
+import org.linphone.core.AudioDevice
+import org.linphone.core.Call
+import org.linphone.core.Config
+import org.linphone.core.Core
+import org.linphone.core.CoreListenerStub
+import org.linphone.core.Factory
+import org.linphone.core.GlobalState
+import org.linphone.core.Player
+import org.linphone.core.Reason
+import org.linphone.core.RegistrationState
 import org.linphone.mediastream.Log
 import org.linphone.mediastream.Version
-import permissions.dispatcher.RuntimePermissions
 import java.io.File
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.math.abs
 
 class CoreContext(
@@ -61,9 +77,8 @@ class CoreContext(
 ) {
     var stopped = false
     val core: Core
-    val handler: Handler = Handler(Looper.getMainLooper())
     var closeAppUponCallFinish = false
-    private lateinit var phoneStateListener: PhoneStateInterface
+    private var phoneStateListener: PhoneStateInterface? = null
 
     val appVersion: String by lazy {
         "${org.linhome.BuildConfig.VERSION_NAME} / versionCode: ${org.linhome.BuildConfig.VERSION_CODE}  (${org.linhome.BuildConfig.BUILD_TYPE})"
@@ -89,7 +104,7 @@ class CoreContext(
 
 
     fun gsmCallActive() : Boolean {
-        return phoneStateListener.isInCall()
+        return phoneStateListener?.isInCall() == true
     }
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {

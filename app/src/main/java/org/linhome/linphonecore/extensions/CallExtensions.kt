@@ -51,7 +51,7 @@ fun Call.extendedAcceptEarlyMedia() {
 
 fun Call.extendedAccept() {
 
-    if (coreContext.gsmCallActive) {
+    if (coreContext.gsmCallActive()) {
         DialogUtil.toast("unable_to_accept_call_gsm_call_in_progress")
         return
     }

@@ -521,7 +521,7 @@ class NotificationsManager(private val context: Context) {
                 .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
                 .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
 
-        if (!coreContext.gsmCallActive) {
+        if (!coreContext.gsmCallActive()) {
             val notificationTrampolineActivityIntent =
                 Intent(context.applicationContext, MainActivity::class.java)
             notificationTrampolineActivityIntent.putExtra("acceptCall",true)

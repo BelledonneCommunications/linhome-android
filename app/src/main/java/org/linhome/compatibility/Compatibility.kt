@@ -33,6 +33,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.FileObserver
 import android.os.Vibrator
+import android.telephony.TelephonyManager
 import android.view.WindowManager
 import androidx.core.app.NotificationManagerCompat
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linphone.compatibility.Api34Compatibility
+import org.linphone.compatibility.PhoneStateInterface
+import org.linphone.compatibility.PhoneStateListener
+import org.linphone.compatibility.TelephonyListener
 import org.linphone.mediastream.Version
 import java.io.File
 
@@ -243,6 +247,14 @@ class Compatibility {
                 )
             } else {
                 startForegroundService(service, notifId, notif)
+            }
+        }
+
+        fun createPhoneListener(telephonyManager: TelephonyManager): PhoneStateInterface {
+            return if (Version.sdkStrictlyBelow(Version.API31_ANDROID_12)) {
+                PhoneStateListener(telephonyManager)
+            } else {
+                TelephonyListener(telephonyManager)
             }
         }
     }

@@ -44,6 +44,7 @@ import org.linhome.ui.call.CallInProgressActivity
 import org.linhome.ui.call.CallIncomingActivity
 import org.linhome.ui.call.CallOutgoingActivity
 import org.linhome.utils.DialogUtil
+import org.linphone.compatibility.PhoneStateInterface
 import org.linphone.core.*
 import org.linphone.mediastream.Log
 import org.linphone.mediastream.Version
@@ -62,6 +63,7 @@ class CoreContext(
     val core: Core
     val handler: Handler = Handler(Looper.getMainLooper())
     var closeAppUponCallFinish = false
+    private lateinit var phoneStateListener: PhoneStateInterface
 
     val appVersion: String by lazy {
         "${org.linhome.BuildConfig.VERSION_NAME} / versionCode: ${org.linhome.BuildConfig.VERSION_CODE}  (${org.linhome.BuildConfig.BUILD_TYPE})"
@@ -78,30 +80,6 @@ class CoreContext(
         NotificationsManager(context)
     }
 
-    var gsmCallActive = false
-    private val phoneStateListener = object : PhoneStateListener() {
-        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
-            gsmCallActive = when (state) {
-                TelephonyManager.CALL_STATE_OFFHOOK -> {
-                    Log.i("[Context] Phone state is off hook")
-                    true
-                }
-                TelephonyManager.CALL_STATE_RINGING -> {
-                    Log.i("[Context] Phone state is ringing")
-                    true
-                }
-                TelephonyManager.CALL_STATE_IDLE -> {
-                    Log.i("[Context] Phone state is idle")
-                    false
-                }
-                else -> {
-                    Log.w("[Context] Phone state is unexpected: $state")
-                    false
-                }
-            }
-        }
-    }
-
     private var overlayX = 0f
     private var overlayY = 0f
     private var callOverlay: View? = null
@@ -109,6 +87,10 @@ class CoreContext(
 
     val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
+
+    fun gsmCallActive() : Boolean {
+        return phoneStateListener.isInCall()
+    }
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {
 
@@ -137,7 +119,7 @@ class CoreContext(
                     return
                     }
 
-                if (gsmCallActive) {
+                if (gsmCallActive()) {
                     Log.w("[Context] Receiving a Linhome call while a GSM call is active")
                 }
 
@@ -249,11 +231,6 @@ class CoreContext(
 
     fun stop() {
         Log.i("[Context] Stopping")
-
-        val telephonyManager =
-            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        Log.i("[Context] Unregistering notification_phone state listener")
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
 
         notificationsManager.destroy()
 
@@ -459,12 +436,13 @@ class CoreContext(
         Log.i("[Context] Registering notification_phone state listener")
         if (Compatibility.hasPermission(context,READ_PHONE_STATE)) {
             try {
-                val telephonyManager =
-                    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+                phoneStateListener =
+                    Compatibility.createPhoneListener(
+                        context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                    )
             } catch (exception: SecurityException) {
-                val hasReadPhoneStatePermission = Compatibility.hasReadPhoneStateOrNumbersPermission(context)
-               Log.e("[Context] Failed to create phone state listener: $exception, READ_PHONE_STATE permission status is $hasReadPhoneStatePermission")
+                val hasReadPhoneStatePermission = Compatibility.hasPermission(context,READ_PHONE_STATE)
+                Log.e("[Context] Failed to create phone state listener: $exception, READ_PHONE_STATE permission status is $hasReadPhoneStatePermission")
             }
         } else {
             Log.w("[Context] Can't create phone state listener, READ_PHONE_STATE permission isn't granted")

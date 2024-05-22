@@ -13,6 +13,7 @@ variables:
    - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then echo -e "Host gitlab.linphone.org\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config; fi
    - if ! [ -z ${SCP_PRIVATE_KEY+x} ]; then eval $(ssh-agent -s); fi
    - if ! [ -z ${SCP_PRIVATE_KEY+x} ]; then echo "$SCP_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null; fi
+   - if ! [ -z ${ANDROID_SETTINGS_GRADLE+x} ]; then echo "$ANDROID_SETTINGS_GRADLE" > settings.gradle; fi
 
  after_script:
    - if ! [ -z ${LINDOOR_USER_KEY+x} ]; then rm -rf ~/.ssh || true; fi

@@ -35,6 +35,8 @@ class LoginLinhomeAccountViewModel :
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var accountCreatorResult = MutableLiveData<AccountCreator.Status>()
+    var sipRegistrationResult = MutableLiveData<Boolean>()
+
 
     fun fieldsValid(): Boolean {
         return username.second.value!! && pass1.second.value!!

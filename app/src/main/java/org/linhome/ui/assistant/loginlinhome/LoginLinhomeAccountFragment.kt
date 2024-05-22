@@ -70,18 +70,25 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                 model.accountCreatorResult.observe(viewLifecycleOwner) { response ->
                     hideProgress()
                     if (response == AccountCreator.Status.AccountExist) {
-                        model.linhomeAccountCreateProxyConfig(model.accountCreator)
-                        mainactivity.navController.popBackStack(R.id.navigation_devices, false)
-                        DialogUtil.info("linhome_account_loggedin")
-                        GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards
-                            coreContext.core.stop()
-                            coreContext.core.start()
-                        }
+                        model.linhomeAccountCreateProxyConfig(model.accountCreator,true, model.sipRegistrationResult)
                     } else {
                         binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
                     }
                 }
                 model.fireLogin()
+            }
+        }
+
+        model.sipRegistrationResult.observe(viewLifecycleOwner) { sipOk ->
+            if (sipOk) {
+                mainactivity.navController.popBackStack(R.id.navigation_devices, false)
+                DialogUtil.info("linhome_account_loggedin")
+                GlobalScope.launch(context = Dispatchers.Main) { // Fetch vcards
+                    coreContext.core.stop()
+                    coreContext.core.start()
+                }
+            } else {
+                binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
             }
         }
 

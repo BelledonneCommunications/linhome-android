@@ -33,10 +33,13 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
+import org.linphone.core.Account
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
+import org.linphone.core.ProxyConfig
+import org.linphone.core.RegistrationState
 import org.linphone.core.TransportType
 import org.linphone.core.tools.Log
 import java.util.Locale
@@ -48,6 +51,8 @@ abstract class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel()
 
     private var waitingForPushToken = false
     private var waitForPushJob: Job? = null
+
+    private var sipRegistrationCoreListener : CoreListenerStub? = null
 
     private val coreListener = object : CoreListenerStub() {
         override fun onPushNotificationReceived(core: Core, payload: String?) {
@@ -143,7 +148,7 @@ abstract class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel()
 
     // Local proxy config creation
 
-    fun linhomeAccountCreateProxyConfig(accountCreator: AccountCreator) {
+    fun linhomeAccountCreateProxyConfig(accountCreator: AccountCreator, checkRegistration:Boolean = false, registrationOk:MutableLiveData<Boolean>? = null) {
         val account = accountCreator.createAccountInCore()
         account?.findAuthInfo()?.also { authInfo ->
             authInfo.clone().also { clonedAuthInfo ->
@@ -155,6 +160,27 @@ abstract class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel()
         account?.params?.clone()?.also { params ->
             params.pushNotificationAllowed = true
             account.params = params
+        }
+        if (checkRegistration) {
+            sipRegistrationCoreListener = object : CoreListenerStub() {
+                override fun onAccountRegistrationStateChanged(
+                    core: Core,
+                    account: Account,
+                    state: RegistrationState?,
+                    message: String
+                ) {
+                    if (state == RegistrationState.Ok) {
+                        core.removeListener(sipRegistrationCoreListener)
+                        registrationOk?.value = true
+                    }
+                    if (state == RegistrationState.Failed) {
+                        core.removeListener(sipRegistrationCoreListener)
+                        registrationOk?.value = false
+                    }
+                }
+            }
+            coreContext.core.addListener(sipRegistrationCoreListener)
+            account?.refreshRegister()
         }
     }
 

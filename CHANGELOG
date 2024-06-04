@@ -10,6 +10,10 @@ Group changes to describe their impact on the project, as follows:
     Fixed for any bug fixes.
     Security to invite users to upgrade in case of vulnerabilities.
 
+## [1.3.0]
+- Migration to Flexiapi for account management
+- Update to Linphone SDK 5.3 
+
 ## [1.2.0]
 - Locally defined Devices are now stored inside VCards 4.0 - inside Linphone Friend List (those can be edited / removed)
 - Devices can remotely provisionned, (they appear as read only - e.g. not deletable, not editable) inside the app.

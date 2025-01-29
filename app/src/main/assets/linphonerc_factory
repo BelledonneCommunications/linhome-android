@@ -22,6 +22,7 @@ incoming_calls_early_media=0
 [sound]
 #remove this property for any application that is not Linphone public version itself
 ec_calibrator_cool_tones=1
+playback_gain_db=0
 
 [video]
 displaytype=MSAndroidTextureDisplay

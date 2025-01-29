@@ -95,12 +95,3 @@ fun Core.cleanHistory() {
 }
 
 
-// Early media phase - work around to avoid playing audio back to user, but still have the stream
-fun Core.muteAudioPLayBack() {
-    playbackGainDb = -1000.0f
-}
-
-fun Core.unMuteAudioPLayBack() {
-    playbackGainDb = 0.0f
-}
-

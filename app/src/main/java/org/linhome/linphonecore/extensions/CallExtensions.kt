@@ -34,6 +34,7 @@ import org.linhome.store.DeviceStore
 import org.linhome.utils.DialogUtil
 import org.linphone.core.Call
 import org.linphone.core.CallParams
+import org.linphone.core.Core
 
 
 fun Call.extendedAcceptEarlyMedia() {
@@ -43,7 +44,7 @@ fun Call.extendedAcceptEarlyMedia() {
         isCameraEnabled = false
         acceptEarlyMediaWithParams(earlyMediaCallParams)
         GlobalScope.launch(context = Dispatchers.Main) {
-            core.muteAudioPLayBack()
+            muteAudioPLayBack()
             startRecording()
         }
     }
@@ -59,7 +60,7 @@ fun Call.extendedAccept() {
     val inCallParams: CallParams? = coreContext.core.createCallParams(this)
     inCallParams?.recordFile = callLog.historyEvent().mediaFileName
     isCameraEnabled = false
-    core.unMuteAudioPLayBack()
+    unMuteAudioPLayBack()
     val device = DeviceStore.findDeviceByAddress(remoteAddress)
     if (device != null) {
         coreContext.core.useRfc2833ForDtmf = device.actionsMethodType == "method_dtmf_rfc_4733"
@@ -75,3 +76,11 @@ fun Call.extendedAccept() {
 }
 
 
+// Early media phase - work around to avoid playing audio back to user, but still have the stream
+fun Call.muteAudioPLayBack() {
+    speakerVolumeGain = -1000.0f
+}
+
+fun Call.unMuteAudioPLayBack() {
+    speakerVolumeGain = 0.0f
+}

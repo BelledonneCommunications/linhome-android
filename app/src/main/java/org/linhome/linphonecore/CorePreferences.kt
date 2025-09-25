@@ -240,7 +240,7 @@ class CorePreferences constructor(private val context: Context) {
     }
 
     fun encryptedPass(user: String, clearPass: String): String {
-        val md = MessageDigest.getInstance(passwordAlgo?.toUpperCase())
+        val md = MessageDigest.getInstance(passwordAlgo?.lowercase())
         return BigInteger(
             1,
             md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())

@@ -23,6 +23,7 @@ package org.linhome
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import org.linhome.compatibility.Compatibility
 import org.linhome.customisation.Customisation
 import org.linhome.customisation.Texts
 import org.linhome.linphonecore.CoreContext
@@ -120,6 +121,7 @@ class LinhomeApplication : Application() {
         Customisation
         Texts
         ensureCoreExists(applicationContext)
+        Compatibility.setupAppStartupListener(applicationContext)
         DeviceStore
     }
 

@@ -20,6 +20,7 @@
 package org.linhome.compatibility
 
 import android.Manifest.permission.READ_PHONE_STATE
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Notification
 import android.app.Service
@@ -41,6 +42,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
 import org.linphone.compatibility.Api34Compatibility
+import org.linphone.compatibility.Api35Compatibility
 import org.linphone.compatibility.PhoneStateInterface
 import org.linphone.compatibility.PhoneStateListener
 import org.linphone.compatibility.TelephonyListener
@@ -48,10 +50,16 @@ import org.linphone.mediastream.Version
 import java.io.File
 
 
-@Suppress("DEPRECATION")
+@SuppressLint("NewApi")
 class Compatibility {
 
     companion object {
+
+        fun setupAppStartupListener(context: Context) {
+            if (Version.sdkAboveOrEqual(Version.API35_ANDROID_15_VANILLA_ICE_CREAM)) {
+                Api35Compatibility.setupAppStartupListener(context)
+            }
+        }
 
         fun getChannelImportance(
             notificationManager: NotificationManagerCompat,

@@ -35,5 +35,5 @@ fun String.sha256(): String {
 }
 
 fun xDigitsUUID(count: Int = 10): String {
-    return UUID.randomUUID().toString().replace("-".toRegex(), "").toLowerCase().substring(0, count)
+    return UUID.randomUUID().toString().replace("-".toRegex(), "").lowercase().substring(0, count)
 }

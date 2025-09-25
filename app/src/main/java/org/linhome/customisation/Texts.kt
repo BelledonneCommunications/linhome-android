@@ -39,7 +39,7 @@ object Texts {
     }
 
     private fun pureGet(key: String):String {
-        val deviceLanguage = Locale.getDefault().language.toLowerCase(Locale.ROOT)
+        val deviceLanguage = Locale.getDefault().language.lowercase(Locale.ROOT)
         return textsConfig.let { config ->
             config.getString(key,deviceLanguage,null)?.also { translation ->
                 return translation

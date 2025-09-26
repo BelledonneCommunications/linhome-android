@@ -66,6 +66,15 @@ class LoginSipAccountViewModel :
     val sipRegistered = MutableLiveData<Boolean>()
     var coreListener : CoreListenerStub? = null
 
+    protected fun transportToString(transport: TransportType) : String {
+        when (transport) {
+            TransportType.Tls -> return "tls"
+            TransportType.Tcp -> return "tcp"
+            TransportType.Udp -> return "udp"
+            TransportType.Dtls -> return "dtls"
+        }
+    }
+
     fun sipAccountLogin(
         proxy: String?,
         expiration: String,
@@ -81,8 +90,9 @@ class LoginSipAccountViewModel :
             Log.i("[Account] created Account with domain ${account.params.domain}")
             account.params.clone().also { newParams ->
                 newParams.expires = expiration.toInt()
+                newParams.transport = accountCreator.transport
                 if (!TextUtils.isEmpty(proxy)) {
-                    Factory.instance().createAddress((if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + proxy!! + ";transport="+transports.get(accountCreator.transport.toInt())).also {
+                    Factory.instance().createAddress((if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + proxy!! + ";transport="+transportToString(accountCreator.transport)).also {
                         newParams.setRoutesAddresses(arrayOf(it))
                     }
                     Log.i("[Account] Set proxyConfig server address to ${newParams.routesAddresses} for proxyConfig with domain $newParams.domain}")

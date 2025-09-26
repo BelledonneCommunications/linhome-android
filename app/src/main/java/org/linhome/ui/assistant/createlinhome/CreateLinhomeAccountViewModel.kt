@@ -21,13 +21,21 @@
 package org.linhome.ui.assistant.createlinhome
 
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.linhome.LinhomeApplication
+import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.entities.LinhomeAccount
 import org.linhome.linphonecore.CorePreferences
 import org.linhome.ui.assistant.shared.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
 import org.linphone.core.AccountCreatorListenerStub
+import org.linphone.core.AccountManagerServices
+import org.linphone.core.AccountManagerServicesRequest
+import org.linphone.core.AccountManagerServicesRequestListenerStub
+import org.linphone.core.Dictionary
 import org.linphone.core.tools.Log
 
 class CreateLinhomeAccountViewModel :
@@ -44,7 +52,40 @@ class CreateLinhomeAccountViewModel :
 
     var creationResult = MutableLiveData<AccountCreator.Status?>()
 
+    // New api for account creation
+
+    var accountManagerServices: AccountManagerServices = coreContext.core.createAccountManagerServices()
+    lateinit var accountManagerServicesRequestListener: AccountManagerServicesRequestListenerStub
+
     init {
+        accountManagerServicesRequestListener = object : AccountManagerServicesRequestListenerStub() {
+            override fun onRequestSuccessful(
+                request: AccountManagerServicesRequest,
+                data: String?
+            ) {
+                when (request.type) {
+                    AccountManagerServicesRequest.Type.CreateAccountUsingToken -> {
+                        GlobalScope.launch(context = Dispatchers.Main) {
+                            creatorListener.onCreateAccount(
+                                accountCreator,
+                                AccountCreator.Status.AccountCreated,
+                                null
+                            )
+                        }
+                    }
+                    else -> {}
+                }
+            }
+
+            override fun onRequestError(
+                request: AccountManagerServicesRequest,
+                statusCode: Int,
+                errorMessage: String?,
+                parameterErrors: Dictionary?
+            ) {
+                creationResult.value = AccountCreator.Status.UnexpectedError!!
+            }
+        }
         creatorListener = object : AccountCreatorListenerStub() {
             override fun onCreateAccount(
                 creator: AccountCreator,
@@ -75,10 +116,15 @@ class CreateLinhomeAccountViewModel :
                     Log.i("[Assistant] [Account Creation] Account exists")
                     creationResult.value = status
                 } else if (status == AccountCreator.Status.AccountNotExist) {
-                    val status = accountCreator.createAccount()
-                    Log.i("[Assistant] [Account Creation] Account create returned $status")
-                    if (status != AccountCreator.Status.RequestOk) {
-                        creationResult.value = status
+                    GlobalScope.launch(context = Dispatchers.Main) {
+                        val request = accountManagerServices.createNewAccountUsingTokenRequest(
+                            username.first.value!!,
+                            pass1.first.value!!,
+                            corePreferences.passwordAlgo,
+                            corePreferences.flexiApiToken!!
+                        )
+                        request.addListener(accountManagerServicesRequestListener)
+                        request.submit()
                     }
                 } else {
                     creationResult.value = status
@@ -134,6 +180,5 @@ class CreateLinhomeAccountViewModel :
         Log.e("[Assistant] [Account Creation] Failed to get an auth token from FlexiAPI")
         creationResult.value = AccountCreator.Status.UnexpectedError
     }
-
 
 }

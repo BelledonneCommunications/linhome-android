@@ -46,7 +46,7 @@ import java.util.Locale
 
 abstract class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel() {
 
-    var accountCreator: AccountCreator = coreContext.core.createAccountCreator(corePreferences.xmlRpcServerUrl)
+    var accountCreator: AccountCreator = coreContext.core.createAccountCreator(null)
     lateinit var creatorListener : AccountCreatorListenerStub
 
     private var waitingForPushToken = false
@@ -77,6 +77,7 @@ abstract class CreatorAssistantViewModel(defaultValuePath: String) : ViewModel()
                         if (token.isNotEmpty()) {
                             Log.i("[Assistant] Extracted token [$token] from push payload")
                             accountCreator.token = token
+                            corePreferences.flexiApiToken = token
                             onFlexiApiTokenReceived()
                         } else {
                             Log.e("[Assistant] Push payload JSON object has an empty 'token'!")

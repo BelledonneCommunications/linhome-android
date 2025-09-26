@@ -154,14 +154,8 @@ class CorePreferences constructor(private val context: Context) {
             config.setBool("app", "call_overlay", value)
         }
 
-    var xmlRpcServerUrl: String?
-        get() = config.getString("assistant", "xmlrpc_url", null)
-        set(value) {
-            config.setString("assistant", "xmlrpc_url", value)
-        }
-
-    var passwordAlgo: String?
-        get() = config.getString("assistant", "password_algo", null)
+    var passwordAlgo: String
+        get() = config.getString("assistant", "password_algo", "SHA-256")!!
         set(value) {
             config.setString("assistant", "password_algo", value)
         }
@@ -240,7 +234,7 @@ class CorePreferences constructor(private val context: Context) {
     }
 
     fun encryptedPass(user: String, clearPass: String): String {
-        val md = MessageDigest.getInstance(passwordAlgo?.lowercase())
+        val md = MessageDigest.getInstance(passwordAlgo.lowercase())
         return BigInteger(
             1,
             md.digest(("${user}:${loginDomain}:${clearPass}").toByteArray())

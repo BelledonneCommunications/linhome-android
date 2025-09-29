@@ -251,6 +251,10 @@ class NotificationsManager(private val context: Context) {
     @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     fun startCallForeground(coreService: CoreService) {
         service = coreService
+        if (service != null) {
+            Log.i("[Notifications Manager] Starting service as foreground")
+            startForeground(coreService)
+        }
         when {
             currentForegroundServiceNotificationId != 0 -> {
                 Log.e("[Notifications Manager] There is already a foreground service notification")

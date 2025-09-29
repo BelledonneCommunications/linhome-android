@@ -102,9 +102,6 @@ class DialogUtil {
                 titleKey?.also {
                     dialog.setTitle(Texts.get(it))
                 }
-                dialog.setOnDismissListener { dialog ->
-                    cancelFunction.invoke(dialog, 0)
-                }
                 dialog.setCancelable(false)
                 dialog.show()
             }

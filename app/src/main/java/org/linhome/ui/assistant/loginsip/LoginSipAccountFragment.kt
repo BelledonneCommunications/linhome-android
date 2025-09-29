@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.R
 import org.linhome.databinding.FragmentAssistantLoginSipBinding
 import org.linhome.entities.LinhomeAccount
@@ -55,6 +56,7 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
         }
 
         binding.loginsip.setOnClickListener {
+            model.accountCreator = coreContext.core.createAccountCreator(null)
             binding.username.validate()
             binding.password.validate()
             binding.domain.validate()

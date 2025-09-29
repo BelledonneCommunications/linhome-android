@@ -24,6 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.linhome.LinhomeApplication.Companion.coreContext
 import org.linhome.LinhomeApplication.Companion.corePreferences
 import org.linhome.ui.assistant.shared.CreatorAssistantViewModel
 import org.linphone.core.AccountCreator
@@ -55,17 +56,17 @@ class LoginLinhomeAccountViewModel :
                 status?.also {
                     accountCreatorResult.value = it
                 }
+                GlobalScope.launch(context = Dispatchers.Main) {
+                    accountCreator.removeListener(creatorListener)
+                }
             }
         }
     }
 
-    private var listenerAdded = false
 
     fun fireLogin() {
         if (accountCreator.isAccountExist() == AccountCreator.Status.RequestOk) {
-            if (!listenerAdded)
                 accountCreator.addListener(creatorListener)
-            listenerAdded = true
         } else {
             accountCreatorResult.value = AccountCreator.Status.UnexpectedError
         }

@@ -44,6 +44,7 @@ import org.linphone.core.AudioDevice
 import org.linphone.core.Call
 import org.linphone.core.CallListenerStub
 import org.linphone.core.Reason
+import org.linphone.core.tools.Log
 
 
 class CallViewModelFactory(private val call: Call) :
@@ -213,6 +214,7 @@ class CallViewModel(val call: Call) : ViewModel() {
         val actionMethodType = device.value?.let { d->
             d.actionsMethodType
         } ?: corePreferences.defaultActionsMethodType
+        Log.i("[CallViewModel] received user request to send DTMF: ${action.code} via $actionMethodType")
         when (actionMethodType) {
             "method_dtmf_sip_info" -> {
                 coreContext.core.useRfc2833ForDtmf = false

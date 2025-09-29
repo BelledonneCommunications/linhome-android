@@ -114,7 +114,7 @@
                 option1TextKey='@{"udp"}'
                 option2TextKey='@{"tcp"}'
                 option3TextKey='@{"tls"}'
-                defaultSelected='@{0}'
+                defaultSelected='@{2}'
                 liveIndex='@{model.transport}'
                 android:visibility='@{model.moreOptionsOpened ? View.VISIBLE : View.GONE }'
                 />

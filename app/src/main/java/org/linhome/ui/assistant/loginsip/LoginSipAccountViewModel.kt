@@ -49,7 +49,7 @@ class LoginSipAccountViewModel :
         Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var pass1: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
-    var transport: MutableLiveData<Int> = MutableLiveData<Int>(2)
+    var transport: MutableLiveData<Int> = MutableLiveData<Int>(TransportType.Tls.toInt())
     var proxy: Pair<MutableLiveData<String?>, MutableLiveData<Boolean>> =
         Pair(MutableLiveData(), MutableLiveData<Boolean>(false))
     var expiration: Pair<MutableLiveData<String>, MutableLiveData<Boolean>> = Pair(
@@ -92,10 +92,12 @@ class LoginSipAccountViewModel :
                 newParams.expires = expiration.toInt()
                 newParams.transport = accountCreator.transport
                 if (!TextUtils.isEmpty(proxy)) {
-                    Factory.instance().createAddress((if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + proxy!! + ";transport="+transportToString(accountCreator.transport)).also {
+                    val cleanProxy = if (proxy?.startsWith("sip") == true) proxy.replace("sip:","")
+                        .replace("sips:","") else proxy
+                    Factory.instance().createAddress((if (accountCreator.transport == TransportType.Tls)  "sips:" else "sip:") + cleanProxy!! + ";transport="+transportToString(accountCreator.transport))?.also {
+                        Log.i("[Account] Setting route address to ${it.asString()}")
                         newParams.setRoutesAddresses(arrayOf(it))
                     }
-                    Log.i("[Account] Set proxyConfig server address to ${newParams.routesAddresses} for proxyConfig with domain $newParams.domain}")
                 }
                 account.params = newParams
             }

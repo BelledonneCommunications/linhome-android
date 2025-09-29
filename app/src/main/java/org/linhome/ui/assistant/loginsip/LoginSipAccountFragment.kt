@@ -65,6 +65,7 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
             updateField(model.setDomain(model.domain), binding.domain)
             model.setTransport(TransportType.values()[model.transport.value!!])
             if (model.valid()) {
+                binding.loginsip.isEnabled = false
                 hideKeyboard()
                 showProgress()
                 model.sipAccountLogin(
@@ -87,11 +88,16 @@ class LoginSipAccountFragment : CreatorAssistantFragment() {
 
         model.sipRegistered.observe(viewLifecycleOwner, Observer { sipRegistered ->
             if (!sipRegistered) {
+                binding.loginsip.isEnabled = true
+                hideProgress()
                 DialogUtil.confirm(
                     null,
                     "failed_sip_login_modify_parameters",
                     { _: DialogInterface, _: Int ->
                         LinhomeAccount.disconnect()
+                    },
+                    cancelFunction = {_: DialogInterface, _: Int ->
+                        mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                     },
                     cancelTextKey = "no",
                     confirmTextKey = "yes")

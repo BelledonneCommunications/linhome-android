@@ -66,12 +66,14 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
             updateField(model.setPassword(model.pass1), binding.password)
             if (model.fieldsValid()) {
                 hideKeyboard()
+                binding.login.isEnabled = false
                 showProgress()
                 model.accountCreatorResult.observe(viewLifecycleOwner) { response ->
                     hideProgress()
                     if (response == AccountCreator.Status.AccountExist) {
                         model.linhomeAccountCreateProxyConfig(model.accountCreator,true, model.sipRegistrationResult)
                     } else {
+                        binding.login.isEnabled = true
                         binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
                     }
                 }
@@ -88,6 +90,8 @@ class LoginLinhomeAccountFragment : CreatorAssistantFragment() {
                     coreContext.core.start()
                 }
             } else {
+                hideProgress()
+                binding.login.isEnabled = true
                 binding.username.setError(Texts.get("linhome_account_login_failed_unknown_user_or_wroong_password"))
             }
         }

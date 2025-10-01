@@ -70,7 +70,6 @@ open class  FlexiApiPushAccountCreationViewModel(defaultValuePath: String) : Cre
                 }
             }
         }
-        accountCreator.addListener(creatorListener)
     }
 
     override fun onCleared() {
@@ -83,7 +82,8 @@ open class  FlexiApiPushAccountCreationViewModel(defaultValuePath: String) : Cre
             pushReady.value = true
             return
         }
-
+        accountCreator.removeListener(creatorListener)
+        accountCreator.addListener(creatorListener)
         val token = LinhomeApplication.corePreferences.flexiApiToken
         if (token != null) {
             accountCreator.token = token

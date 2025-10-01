@@ -42,7 +42,6 @@ open class  FlexiApiPushAccountCreationViewModel(defaultValuePath: String) : Cre
             ) {
                 Log.i("[Assistant] [Push Account Creation] Account creation response $status")
                 if (status == AccountCreator.Status.AccountCreated) {
-                    LinhomeApplication.corePreferences.flexiApiToken = null
                     creator.createAccountInCore()?.also { pushAccount ->
                         pushAccount.params.clone().also { clonedParams ->
                             clonedParams.idkey = LinhomeAccount.PUSH_GW_ID_KEY

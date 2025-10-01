@@ -35,7 +35,9 @@ import org.linphone.core.AccountCreatorListenerStub
 import org.linphone.core.AccountManagerServices
 import org.linphone.core.AccountManagerServicesRequest
 import org.linphone.core.AccountManagerServicesRequestListenerStub
+import org.linphone.core.Address
 import org.linphone.core.Dictionary
+import org.linphone.core.Factory
 import org.linphone.core.tools.Log
 
 class CreateLinhomeAccountViewModel :
@@ -51,6 +53,9 @@ class CreateLinhomeAccountViewModel :
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var creationResult = MutableLiveData<AccountCreator.Status?>()
+    var requestOtp = MutableLiveData<Boolean>()
+    var otpError = MutableLiveData<Boolean>()
+    var identity: Address? = null
 
     // New api for account creation
 
@@ -66,12 +71,27 @@ class CreateLinhomeAccountViewModel :
                 when (request.type) {
                     AccountManagerServicesRequest.Type.CreateAccountUsingToken -> {
                         GlobalScope.launch(context = Dispatchers.Main) {
-                            creatorListener.onCreateAccount(
-                                accountCreator,
-                                AccountCreator.Status.AccountCreated,
-                                null
-                            )
+                            linhomeAccountCreateProxyConfig(accountCreator)
+                            data?.also {
+                                identity = Factory.instance().createAddress(it)
+                                identity?.also {
+                                    val request = accountManagerServices.createSendEmailLinkingCodeByEmailRequest(
+                                        it,
+                                        email.first.value!!
+                                    )
+                                    request.addListener(accountManagerServicesRequestListener)
+                                    request.submit()
+                                }
+                            }
+
                         }
+                    }
+                    AccountManagerServicesRequest.Type.SendEmailLinkingCodeByEmail -> {
+                        requestOtp.postValue(true)
+                    }
+                    AccountManagerServicesRequest.Type.LinkEmailUsingCode -> {
+                        LinhomeAccount.get()?.refreshRegister()
+                        creationResult.value = AccountCreator.Status.AccountCreated
                     }
                     else -> {}
                 }
@@ -83,7 +103,13 @@ class CreateLinhomeAccountViewModel :
                 errorMessage: String?,
                 parameterErrors: Dictionary?
             ) {
-                creationResult.value = AccountCreator.Status.UnexpectedError!!
+                Log.e(
+                    "Request  ${request.type} returned an error with status code [$statusCode] and message [$errorMessage] parameters : $parameterErrors"
+                )
+                if (request.type == AccountManagerServicesRequest.Type.LinkEmailUsingCode) {
+                    otpError.postValue(true )
+                } else
+                    creationResult.value = AccountCreator.Status.UnexpectedError!!
             }
         }
         creatorListener = object : AccountCreatorListenerStub() {
@@ -92,12 +118,7 @@ class CreateLinhomeAccountViewModel :
                 status: AccountCreator.Status?,
                 resp: String?
             ) {
-                if (status == AccountCreator.Status.AccountCreated) {
-                    Log.i("[Assistant] [Account Creation] Account created")
-                    corePreferences.flexiApiToken = null
-                    linhomeAccountCreateProxyConfig(creator)
-                    creationResult.value = status
-                } else if (status == AccountCreator.Status.MissingArguments) {
+                if (status == AccountCreator.Status.MissingArguments) {
                     Log.i("[Assistant] [Account Creation] Creation request not authorized, requesting a new token.")
                     corePreferences.flexiApiToken = null
                     requestFlexiApiToken()
@@ -179,6 +200,18 @@ class CreateLinhomeAccountViewModel :
     override fun onFlexiApiTokenRequestError() {
         Log.e("[Assistant] [Account Creation] Failed to get an auth token from FlexiAPI")
         creationResult.value = AccountCreator.Status.UnexpectedError
+    }
+
+    fun validateOtp(code:String) {
+        identity?.also {
+            val request = accountManagerServices.createLinkEmailToAccountUsingCodeRequest(
+                identity!!,
+                code
+            )
+            request.addListener(accountManagerServicesRequestListener)
+            request.submit()
+        }
+
     }
 
 }

@@ -24,6 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.linhome.LinhomeApplication
 import org.linhome.linphonecore.extensions.missedCount
+import org.linphone.core.Call
 import org.linphone.core.CallLog
 import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
@@ -32,6 +33,14 @@ class TabbarViewModel : ViewModel() {
     var unreadCount = MutableLiveData(0)
 
     private val coreListener = object : CoreListenerStub() {
+        override fun onCallStateChanged(
+            core: Core,
+            call: Call,
+            state: Call.State?,
+            message: String
+        ) {
+            updateUnreadCount()
+        }
         override fun onCallLogUpdated(lc: Core, newcl: CallLog) {
             updateUnreadCount()
         }

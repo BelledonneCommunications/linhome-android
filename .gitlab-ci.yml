@@ -43,8 +43,8 @@ job-android:
     paths:
      - ./app/build/outputs/apk/debug/linhome-android-debug-*.apk
      - ./app/build/outputs/apk/release/linhome-android-release-*.apk
-     - ./app/build/outputs/bundle/debug/linhome-android-debug-*.aab
-     - ./app/build/outputs/bundle/release/linhome-android-release-*.aab
+     - ./app/build/outputs/bundle/debug/app-debug.aab
+     - ./app/build/outputs/bundle/release/app-release.aab
 
     when: always
     expire_in: 1 week

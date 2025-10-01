@@ -53,14 +53,14 @@ class CreateLinhomeAccountViewModel :
         Pair(MutableLiveData<String>(), MutableLiveData<Boolean>(false))
 
     var creationResult = MutableLiveData<AccountCreator.Status?>()
-    var requestOtp = MutableLiveData<Boolean>()
-    var otpError = MutableLiveData<Boolean>()
-    var identity: Address? = null
 
     // New api for account creation
 
     var accountManagerServices: AccountManagerServices = coreContext.core.createAccountManagerServices()
     lateinit var accountManagerServicesRequestListener: AccountManagerServicesRequestListenerStub
+    var requestOtp = MutableLiveData<Boolean>()
+    var otpError = MutableLiveData<Boolean>()
+    var identity: Address? = null
 
     init {
         accountManagerServicesRequestListener = object : AccountManagerServicesRequestListenerStub() {
@@ -211,7 +211,6 @@ class CreateLinhomeAccountViewModel :
             request.addListener(accountManagerServicesRequestListener)
             request.submit()
         }
-
     }
 
 }

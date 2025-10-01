@@ -85,6 +85,7 @@ class CreateLinhomeAccountFragment :
                         confirmTextKey = "otp_try_again_button",
                         cancelTextKey = "otp_do_not_try_again",
                         cancelFunction = { _: DialogInterface, _: Int ->
+                            hideProgress()
                             DialogUtil.info("otp_cancelled")
                             mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                         })
@@ -182,6 +183,7 @@ class CreateLinhomeAccountFragment :
                 }
                 .setNegativeButton(Texts.get("cancel"), { _: DialogInterface, _: Int ->
                     DialogUtil.info("otp_cancelled")
+                    hideProgress()
                     mainactivity.navController.popBackStack(R.id.navigation_devices, false)
                 })
 

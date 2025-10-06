@@ -63,7 +63,7 @@ data class Device(
                 friend.vcard?.addExtendedProperty(vcard_action_method_type_header,
                     deviceActionMethodsTovCardActionMethods().get(actionsMethodType!!)!!)
                 actions?.forEach { it ->
-                    friend.vcard?.addExtendedProperty(vcard_actions_list_header,it.type!! + ";" + it.code!!)
+                    friend.vcard?.addExtendedProperty(vcard_actions_list_header,it.type!! + "~" + it.code!!)
                 }
                 Log.i("[Device] created vCard for device: $name ${friend.vcard?.asVcard4String()}")
                 friend
@@ -91,7 +91,10 @@ data class Device(
         isRemotelyProvisionned)
     {
         card.getExtendedPropertiesValuesByName(vcard_actions_list_header).forEach { action ->
-            val components = action.split(";")
+            var components = action.split(";")
+            if (components.size != 2)  {
+                components = action.split("~")
+            }
             if (components.size != 2)  {
                 Log.e("Unable to create action from VCard $action")
             } else {

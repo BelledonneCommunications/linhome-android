@@ -60,16 +60,12 @@ fun Vcard.isValid():  Boolean {
 
     var validActions = true
     card.getExtendedPropertiesValuesByName(Device.vcard_actions_list_header).forEach { action ->
-        var components = action.split(";")
+        val actionCleaned = action.replace("\\;","~").replace(";","~")
+        var components = actionCleaned.split("~")
         if (components.size == 2) {
             validActions = validActions && ActionTypes.isValid(components.component1())
         } else {
-            components = action.split("~")
-            if (components.size == 2) {
-                validActions = validActions && ActionTypes.isValid(components.component1())
-            } else {
-                validActions = false
-            }
+            validActions = false
         }
         if (!validActions) {
             Log.e("[Device] vCard validation : invalid action $action")

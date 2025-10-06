@@ -91,10 +91,8 @@ data class Device(
         isRemotelyProvisionned)
     {
         card.getExtendedPropertiesValuesByName(vcard_actions_list_header).forEach { action ->
-            var components = action.split(";")
-            if (components.size != 2)  {
-                components = action.split("~")
-            }
+            var actionCleaned = action.replace("\\;","~").replace(";","~")
+            var components = actionCleaned.split("~")
             if (components.size != 2)  {
                 Log.e("Unable to create action from VCard $action")
             } else {

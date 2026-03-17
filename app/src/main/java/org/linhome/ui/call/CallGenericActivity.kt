@@ -45,11 +45,22 @@ abstract class CallGenericActivity : GenericActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
 
+        if (intent.getBooleanExtra("closeAppUponCallFinish", false)) {
+            coreContext.closeAppUponCallFinish = true
+        }
         call = intent.getStringExtra("callId")?.let { callId ->
-            if (intent.getBooleanExtra("closeAppUponCallFinish", false)) {
-                coreContext.closeAppUponCallFinish = true
-            }
             coreContext.core.calls.filter { it.callLog.callId.equals(callId) }.firstOrNull()
+        }
+        // Fallback: if call not found by callId (can happen with notification full-screen intent
+        // on Android 14+ due to timing), use the current call
+        if (call == null) {
+            Log.w("[CallGenericActivity] Call not found by callId, falling back to currentCall")
+            call = coreContext.core.currentCall
+        }
+        if (call == null) {
+            Log.w("[CallGenericActivity] No active call found, finishing")
+            coreContext.closeAppUponCallFinish = false
+            finish()
         }
     }
 

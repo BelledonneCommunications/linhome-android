@@ -46,6 +46,7 @@ import org.linphone.compatibility.Api35Compatibility
 import org.linphone.compatibility.PhoneStateInterface
 import org.linphone.compatibility.PhoneStateListener
 import org.linphone.compatibility.TelephonyListener
+import org.linphone.core.tools.Log
 import org.linphone.mediastream.Version
 import java.io.File
 
@@ -255,6 +256,22 @@ class Compatibility {
                 PhoneStateListener(telephonyManager)
             } else {
                 TelephonyListener(telephonyManager)
+            }
+        }
+
+        fun hasFullScreenIntentPermission(context: Context): Boolean {
+            if (Version.sdkAboveOrEqual(Version.API34_ANDROID_14_UPSIDE_DOWN_CAKE)) {
+                return Api34Compatibility.hasFullScreenIntentPermission(context)
+            }
+            return true
+        }
+
+        fun checkAndRequestFullScreenIntentPermission(context: Context) {
+            if (Version.sdkAboveOrEqual(Version.API34_ANDROID_14_UPSIDE_DOWN_CAKE)) {
+                if (!Api34Compatibility.hasFullScreenIntentPermission(context)) {
+                    Log.w("[Compatibility] Full screen intent permission not granted, requesting it")
+                    Api34Compatibility.requestFullScreenIntentPermission(context)
+                }
             }
         }
     }

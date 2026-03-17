@@ -58,7 +58,10 @@ class CallIncomingActivity : CallGenericActivity() {
             binding.callmodel = callViewModel
             callViewModel.callState.observe(this, Observer { callState ->
                 when (callState) {
-                    Call.State.IncomingEarlyMedia, Call.State.IncomingReceived -> return@Observer
+                    Call.State.IncomingEarlyMedia,
+                    Call.State.IncomingReceived,
+                    Call.State.EarlyUpdating,
+                    Call.State.EarlyUpdatedByRemote -> return@Observer
                     else -> finish()
                 }
             })
@@ -76,7 +79,7 @@ class CallIncomingActivity : CallGenericActivity() {
                     matchConstraintPercentWidth = computePercentageWidth(size,250) //  Space for buttons and header
                 }
             })
-        } ?: finish()
+        }
 
 
     }

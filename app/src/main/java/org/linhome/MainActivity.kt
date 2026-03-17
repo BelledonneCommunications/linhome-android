@@ -37,6 +37,7 @@ import androidx.navigation.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.linhome.compatibility.Compatibility
 import org.linhome.customisation.Texts
 import org.linhome.customisation.Theme
 import org.linhome.databinding.ActivityMainBinding
@@ -283,7 +284,9 @@ class MainActivity : GenericActivity() {
     }
 
     @NeedsPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun notifications() {}
+    fun notifications() {
+        Compatibility.checkAndRequestFullScreenIntentPermission(this)
+    }
 
     // Permissions denial
 

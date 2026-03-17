@@ -45,6 +45,7 @@ class SplashActivity : GenericActivity() {
 
         GlobalScope.launch(context = Dispatchers.Main) {
             delay(Theme.arbitraryValue("splash_display_duration_ms", "2000").toLong())
+            LinhomeApplication.coreContext.closeAppUponCallFinish = false
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()

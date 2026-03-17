@@ -25,7 +25,9 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.view.TextureView
 import android.widget.RemoteViews
 import androidx.annotation.RequiresPermission
@@ -484,6 +486,10 @@ class NotificationsManager(private val context: Context) {
 
     @RequiresPermission("android.permission.POST_NOTIFICATIONS")
     private fun displayIncomingCallNotification(call: Call, useAsForeground: Boolean = false) {
+        if (LinhomeApplication.someActivityRunning) {
+            Log.i("[Notifications Manager] App is in foreground, skipping incoming call notification")
+            return
+        }
 
         val notifiable = getNotifiableForCall(call)
         val displayName =
@@ -505,38 +511,72 @@ class NotificationsManager(private val context: Context) {
             it.isVideoEnabled
         } ?: false
 
-        notificationBuilder =
-            NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setSmallIcon(R.drawable.notification_phone)
-                .setContentTitle(displayName)
-                .setContentText(Texts.get(if (hasVideo)  "notif_incoming_call_video" else "notif_incoming_call_audio"))
-                .setContentIntent(pendingIntent)
-                .setCategory(NotificationCompat.CATEGORY_CALL)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(false)
-                .setShowWhen(true)
-                .setOngoing(true)
-                .setColor(ContextCompat.getColor(context, R.color.color_a))
-                .setFullScreenIntent(pendingIntent, true)
-                .addAction(getCallDeclineAction(notifiable.notificationId))
-                .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
-                .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
+        val declineAction = getCallDeclineAction(notifiable.notificationId)
 
-        if (!coreContext.gsmCallActive()) {
+        val acceptPendingIntent = if (!coreContext.gsmCallActive()) {
             val notificationTrampolineActivityIntent =
                 Intent(context.applicationContext, MainActivity::class.java)
-            notificationTrampolineActivityIntent.putExtra("acceptCall",true)
-            val resultPendingIntent = TaskStackBuilder.create(context).run {
+            notificationTrampolineActivityIntent.putExtra("acceptCall", true)
+            TaskStackBuilder.create(context).run {
                 addNextIntentWithParentStack(notificationTrampolineActivityIntent)
                 getPendingIntent(
                     0, PendingIntent.FLAG_UPDATE_CURRENT or
                             PendingIntent.FLAG_IMMUTABLE
                 )
             }
-            notificationBuilder.addAction(R.drawable.notification_phone, Texts.get("call_button_accept"), resultPendingIntent)
+        } else null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Use CallStyle on API 31+ for proper system handling on lock screen
+            val caller = androidx.core.app.Person.Builder()
+                .setName(displayName)
+                .setImportant(true)
+                .build()
+
+            val callStyle = NotificationCompat.CallStyle.forIncomingCall(
+                caller,
+                declineAction.actionIntent!!,
+                acceptPendingIntent ?: pendingIntent
+            )
+
+            notificationBuilder =
+                NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
+                    .setStyle(callStyle)
+                    .setSmallIcon(R.drawable.notification_phone)
+                    .setContentIntent(pendingIntent)
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setWhen(System.currentTimeMillis())
+                    .setAutoCancel(false)
+                    .setShowWhen(true)
+                    .setOngoing(true)
+                    .setColor(Color.WHITE)
+                    .setFullScreenIntent(pendingIntent, true)
+        } else {
+            notificationBuilder =
+                NotificationCompat.Builder(context, Texts.get("notification_channel_incoming_call_id"))
+                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                    .setSmallIcon(R.drawable.notification_phone)
+                    .setContentTitle(displayName)
+                    .setContentText(Texts.get(if (hasVideo) "notif_incoming_call_video" else "notif_incoming_call_audio"))
+                    .setContentIntent(pendingIntent)
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setWhen(System.currentTimeMillis())
+                    .setAutoCancel(false)
+                    .setShowWhen(true)
+                    .setOngoing(true)
+                    .setColor(ContextCompat.getColor(context, R.color.color_a))
+                    .setFullScreenIntent(pendingIntent, true)
+                    .addAction(declineAction)
+                    .setCustomContentView(fillIncomingRemoteViewsForCall(call, false))
+                    .setCustomBigContentView(fillIncomingRemoteViewsForCall(call, false))
+
+            if (acceptPendingIntent != null) {
+                notificationBuilder.addAction(R.drawable.notification_phone, Texts.get("call_button_accept"), acceptPendingIntent)
+            }
         }
 
         val notification = notificationBuilder.build()

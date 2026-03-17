@@ -26,6 +26,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.AudioManager
+import android.os.PowerManager
 import android.os.Vibrator
 import android.telephony.TelephonyManager
 import android.util.TypedValue
@@ -154,8 +155,21 @@ class CoreContext(
                     }
                 }
 
-                // Starting SDK 24 (Android 7.0) we rely on the fullscreen intent of the call incoming notification
-                if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70) || LinhomeApplication.someActivityRunning) {
+                val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+                if (!powerManager.isInteractive) {
+                    // Screen is off: acquire a wake lock to turn screen on so the notification's
+                    // full-screen intent will be honored by the system.
+                    // Do NOT call onIncomingReceived() here — on Android 16+ direct startActivity
+                    // from background creates an invisible activity (BAL_BLOCK) that conflicts
+                    // with the notification's full-screen intent launch.
+                    @Suppress("DEPRECATION")
+                    val wakeLock = powerManager.newWakeLock(
+                        PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                        "linhome:incoming_call"
+                    )
+                    wakeLock.acquire(10000)
+                    Log.i("[Context] Screen was off, acquired wake lock for incoming call")
+                } else if (Version.sdkStrictlyBelow(Version.API24_NOUGAT_70) || LinhomeApplication.someActivityRunning) {
                     onIncomingReceived(call)
                 }
 

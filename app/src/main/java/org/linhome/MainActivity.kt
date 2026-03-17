@@ -162,6 +162,12 @@ class MainActivity : GenericActivity() {
             LinhomeApplication.coreContext.core.currentCall?.extendedAccept()
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appbar.contentmain.tabbar) { view, insets ->
+            val navBarInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, navBarInsets.bottom)
+            insets
+        }
+
         if (!StorageManager.storePrivately) {
             externalStorageWithPermissionCheck()
         } else {

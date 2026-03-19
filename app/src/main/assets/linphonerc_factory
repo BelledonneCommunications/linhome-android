@@ -47,6 +47,7 @@ video_rtp_port=-1
 max_calls=1
 history_max_size=100
 store_friends=1
+log_collection_upload_server_url=https://files.linphone.org/http-file-transfer-server/hft.php
 
 [proxy_default_values]
 reg_expires=31536000

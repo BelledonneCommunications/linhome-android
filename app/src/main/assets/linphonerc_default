@@ -30,7 +30,7 @@ port=443
 
 [misc]
 version_check_url_root=https://www.linphone.org/releases
-log_collection_upload_server_url=https://www.linphone.org:444/lft.php
+log_collection_upload_server_url=https://files.linphone.org/http-file-transfer-server/hft.php
 history_max_size=100
 
 

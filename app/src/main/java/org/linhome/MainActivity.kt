@@ -30,6 +30,8 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -206,6 +208,7 @@ class MainActivity : GenericActivity() {
 
 
     private fun applyTheme() { //Todo move into bindings when validated
+        binding.drawerLayout.setBackgroundColor(Theme.getColor("color_j"))
         binding.appbar.toolbar.setBackgroundColor(Theme.getColor("color_a"))
         binding.appbar.contentmain.tabbar.setBackgroundColor(Theme.getColor("color_j"))
         binding.appbar.progress.indeterminateTintList = Theme.buildSingleColorStateList("color_a")

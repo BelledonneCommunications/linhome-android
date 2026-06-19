@@ -142,8 +142,12 @@ class CallViewModel(val call: Call) : ViewModel() {
             if (cstate == Call.State.IncomingReceived) {
                 call.extendedAcceptEarlyMedia()
             } else
-                if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing && !call.isRecording) {
-                    call.startRecording()
+                if (cstate == Call.State.StreamsRunning && call.callLog?.dir == Call.Dir.Outgoing) {
+                    if (!call.isRecording) {
+                        call.startRecording()
+                    }
+                    coreContext.core.forceSpeakerAudioRoute()
+                    speakerDisabled.value = false
                 }
         }
     }

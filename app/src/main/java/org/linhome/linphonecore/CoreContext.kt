@@ -118,6 +118,7 @@ class CoreContext(
             Log.i("[Context] Global state changed [$state]")
             if (state == GlobalState.On) {
                 Log.d("[Context] Configuration is \n : ${core.config.dump()}")
+                reAssertKeepAliveForegroundServiceAfterStartup()
             }
         }
 
@@ -395,6 +396,19 @@ class CoreContext(
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.removeView(callOverlay)
             callOverlay = null
+        }
+    }
+
+    private fun reAssertKeepAliveForegroundServiceAfterStartup() {
+        if (!corePreferences.keepServiceAlive || !Compatibility.hasPermission(context, POST_NOTIFICATIONS)) {
+            return
+        }
+        coroutineScope.launch {
+            delay(2000)
+            if (corePreferences.keepServiceAlive && core.callsNb == 0) {
+                org.linphone.core.tools.Log.i("[Context] Re-asserting keep alive foreground service notification after startup")
+                notificationsManager.startForeground()
+            }
         }
     }
 

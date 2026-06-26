@@ -233,14 +233,14 @@ class Compatibility {
             }
         }
 
-        fun startDataSyncForegroundService(
+        fun startKeepAliveForegroundService(
             service: Service,
             notifId: Int,
             notif: Notification,
             isCallActive: Boolean
         ) {
             if (Version.sdkAboveOrEqual(Version.API34_ANDROID_14_UPSIDE_DOWN_CAKE)) {
-                Api34Compatibility.startDataSyncForegroundService(
+                Api34Compatibility.startKeepAliveForegroundService(
                     service,
                     notifId,
                     notif,

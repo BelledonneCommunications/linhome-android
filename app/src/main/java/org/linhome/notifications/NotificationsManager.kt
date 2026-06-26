@@ -301,7 +301,7 @@ class NotificationsManager(private val context: Context) {
             false
         }
 
-        Compatibility.startDataSyncForegroundService(
+        Compatibility.startKeepAliveForegroundService(
             coreService,
             currentForegroundServiceNotificationId,
             notification,
@@ -328,7 +328,7 @@ class NotificationsManager(private val context: Context) {
             "[Notifications Manager] Starting service as foreground [$currentForegroundServiceNotificationId]"
         )
 
-        Compatibility.startDataSyncForegroundService(
+        Compatibility.startKeepAliveForegroundService(
             coreService,
             currentForegroundServiceNotificationId,
             notification,
